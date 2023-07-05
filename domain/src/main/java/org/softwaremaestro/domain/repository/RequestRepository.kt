@@ -4,5 +4,5 @@ import org.softwaremaestro.domain.model.Request
 
 interface RequestRepository {
     suspend fun sendRequest(request: Request)
-    suspend fun receiveRequests(): List<Request>
+    suspend fun getRequests(): List<Request>
 }

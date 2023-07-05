@@ -7,7 +7,7 @@ import org.softwaremaestro.domain.model.Request
 import org.softwaremaestro.domain.repository.RequestRepository
 import kotlin.coroutines.CoroutineContext
 
-class SendRequestUseCase(val requestRepository: RequestRepository) {
+class SendRequestUseCase(private val requestRepository: RequestRepository) {
 
     operator fun invoke(
         scope: CoroutineScope,
