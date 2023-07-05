@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_gragh"
+    app:startDestination="@id/loginFragment">
 
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="org.softwaremaestro.presenter.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerRoleFragment"
+            app:destination="@id/registerRoleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerRoleFragment"
+        android:name="org.softwaremaestro.presenter.RegisterRoleFragment"
+        android:label="fragment_register_role"
+        tools:layout="@layout/fragment_register_role" >
+        <action
+            android:id="@+id/action_registerRoleFragment_to_registerInfoFragment"
+            app:destination="@id/registerInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerInfoFragment"
+        android:name="org.softwaremaestro.presenter.RegisterInfoFragment"
+        android:label="fragment_register_info"
+        tools:layout="@layout/fragment_register_info" >
+        <action
+            android:id="@+id/action_registerInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

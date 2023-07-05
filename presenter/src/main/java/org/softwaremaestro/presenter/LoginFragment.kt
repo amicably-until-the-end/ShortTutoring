@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 
 // 앱에 들어왔을 때 보이는 첫 화면.
@@ -20,6 +21,11 @@ class LoginFragment : Fragment() {
     ): View? {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        binding.btnLogin.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_loginFragment_to_registerRoleFragment)
+        }
+
         return binding.root
     }
 }
