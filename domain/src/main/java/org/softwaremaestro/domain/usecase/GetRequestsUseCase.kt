@@ -6,8 +6,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.model.vo.RequestVO
 import org.softwaremaestro.domain.repository.RequestRepository
+import javax.inject.Inject
 
-class GetRequestsUseCase(private val requestRepository: RequestRepository) {
+class GetRequestsUseCase @Inject constructor(private val requestRepository: RequestRepository) {
 
     operator fun invoke(
         scope: CoroutineScope,
