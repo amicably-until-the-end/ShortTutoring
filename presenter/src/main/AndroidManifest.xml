@@ -3,6 +3,9 @@
 
     <application>
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".StudentHomeActivity"
             android:exported="false" />
     </application>
