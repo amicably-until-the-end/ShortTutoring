@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter
+package org.softwaremaestro.presenter.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

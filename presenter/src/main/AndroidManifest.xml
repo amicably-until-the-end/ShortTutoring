@@ -3,16 +3,13 @@
 
     <application>
         <activity
-            android:name=".TestActivity"
+            android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".student_home.StudentHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".StudentHomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StudentHomeActivity"
+            android:name=".teacher_home.TeacherHomeActivity"
             android:exported="false" />
     </application>
 

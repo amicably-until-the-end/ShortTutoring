@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter
+package org.softwaremaestro.presenter.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 
 // 앱에 들어왔을 때 보이는 첫 화면.

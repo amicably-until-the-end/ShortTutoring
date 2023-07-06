@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="org.softwaremaestro.presenter.LoginFragment"
+        android:name="org.softwaremaestro.presenter.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerRoleFragment"
-        android:name="org.softwaremaestro.presenter.RegisterRoleFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterRoleFragment"
         android:label="fragment_register_role"
         tools:layout="@layout/fragment_register_role" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerInfoFragment"
-        android:name="org.softwaremaestro.presenter.RegisterInfoFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterInfoFragment"
         android:label="fragment_register_info"
         tools:layout="@layout/fragment_register_info" >
         <action

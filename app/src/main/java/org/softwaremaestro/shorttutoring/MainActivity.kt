@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.LoginActivity
+import org.softwaremaestro.presenter.login.LoginActivity
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
