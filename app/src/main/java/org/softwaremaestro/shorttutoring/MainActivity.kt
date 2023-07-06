@@ -1,11 +1,15 @@
 package org.softwaremaestro.shorttutoring
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.login.LoginActivity
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -16,6 +20,25 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_next).setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+        }
+
+        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar_main).also {
+            setSupportActionBar(it)
+        }
+
+        val actionBar = supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
