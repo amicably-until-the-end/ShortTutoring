@@ -7,15 +7,53 @@
     android:layout_height="match_parent"
     tools:context=".login.RegisterRoleFragment">
 
-    <Button
-        android:id="@+id/btn_register_role"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="register role"
-        android:textSize="100sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="어떤 회원으로 가입할까요?"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="100dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_question"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/tv_student"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="학생 👨‍🎓"
+                android:textSize="30sp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@id/tv_teacher"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="선생님 👩‍🏫"
+                android:textSize="30sp"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toBottomOf="@+id/tv_student"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
