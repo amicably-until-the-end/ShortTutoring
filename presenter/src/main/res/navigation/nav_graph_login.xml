@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_gragh"
+    app:startDestination="@id/logoFragment">
+
+    <fragment
+        android:id="@+id/logoFragment"
+        android:name="org.softwaremaestro.presenter.login.LogoFragment"
+        android:label="fragment_logo"
+        tools:layout="@layout/fragment_logo" >
+        <action
+            android:id="@+id/action_logoFragment_to_registerRoleFragment"
+            app:destination="@id/registerRoleFragment" />
+        <action
+            android:id="@+id/action_logoFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerRoleFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterRoleFragment"
+        android:label="fragment_register_role"
+        tools:layout="@layout/fragment_register_role" >
+        <action
+            android:id="@+id/action_registerRoleFragment_to_registerTeacherInfoFragment"
+            app:destination="@id/registerTeacherInfoFragment" />
+        <action
+            android:id="@+id/action_registerRoleFragment_to_registerStudentInfoFragment"
+            app:destination="@id/registerStudentInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerStudentInfoFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterStudentInfoFragment"
+        android:label="fragment_register_student_info"
+        tools:layout="@layout/fragment_register_student_info" >
+        <action
+            android:id="@+id/action_registerStudentInfoFragment_to_logoFragment"
+            app:destination="@id/logoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerTeacherInfoFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterTeacherInfoFragment"
+        android:label="fragment_register_teacher_info"
+        tools:layout="@layout/fragment_register_teacher_info" >
+        <action
+            android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
+            app:destination="@id/logoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="org.softwaremaestro.presenter.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerRoleFragment"
+            app:destination="@id/registerRoleFragment" />
+    </fragment>
+</navigation>

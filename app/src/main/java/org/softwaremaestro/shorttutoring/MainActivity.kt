@@ -17,18 +17,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.btn_next).setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
 
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar_main).also {
-            setSupportActionBar(it)
-        }
+        // 액션바 설정
+        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar_main)
+        if (toolbar != null)
+            setSupportActionBar(toolbar)
 
-        val actionBar = supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-        }
+        // 뒤로가기 버튼
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

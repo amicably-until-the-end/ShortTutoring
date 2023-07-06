@@ -23,8 +23,12 @@ class RegisterRoleFragment : Fragment() {
 
         binding = FragmentRegisterRoleBinding.inflate(inflater, container, false)
 
-        binding.btnRegisterRole.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_registerRoleFragment_to_registerInfoFragment)
+        binding.tvStudent.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_registerRoleFragment_to_registerStudentInfoFragment)
+        }
+
+        binding.tvTeacher.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_registerRoleFragment_to_registerTeacherInfoFragment)
         }
 
         return binding.root
