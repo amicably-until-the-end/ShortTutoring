@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_logoFragment_to_registerRoleFragment"
             app:destination="@id/registerRoleFragment" />
-        <action
-            android:id="@+id/action_logoFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerRoleFragment"
@@ -34,26 +31,11 @@
         android:name="org.softwaremaestro.presenter.login.RegisterStudentInfoFragment"
         android:label="fragment_register_student_info"
         tools:layout="@layout/fragment_register_student_info" >
-        <action
-            android:id="@+id/action_registerStudentInfoFragment_to_logoFragment"
-            app:destination="@id/logoFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerTeacherInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterTeacherInfoFragment"
         android:label="fragment_register_teacher_info"
         tools:layout="@layout/fragment_register_teacher_info" >
-        <action
-            android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
-            app:destination="@id/logoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="org.softwaremaestro.presenter.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_registerRoleFragment"
-            app:destination="@id/registerRoleFragment" />
     </fragment>
 </navigation>

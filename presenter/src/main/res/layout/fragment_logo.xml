@@ -36,10 +36,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/container_login_by_kakao"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintRight_toRightOf="parent">
 
             <TextView
                 android:id="@+id/tv_login_by_google"
@@ -58,37 +58,16 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@id/container_login_by_email"
+            app:layout_constraintTop_toBottomOf="@id/container_login_by_google"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/container_login_by_google">
+            app:layout_constraintRight_toRightOf="parent">
 
             <TextView
                 android:id="@+id/tv_login_by_kakao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="카카오 계정으로 시작하기"
-                android:textColor="@android:color/black"
-                android:textSize="30sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/container_login_by_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/container_login_by_kakao">
-
-            <TextView
-                android:id="@+id/tv_login_by_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이메일로 시작하기"
                 android:textColor="@android:color/black"
                 android:textSize="30sp" />
 

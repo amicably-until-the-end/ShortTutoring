@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
+import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 
 // 회원가입 두 번째 화면.
 // 개인정보를 입력한다.
@@ -22,6 +24,17 @@ class RegisterTeacherInfoFragment : Fragment() {
     ): View? {
 
         binding = FragmentRegisterTeacherInfoBinding.inflate(inflater, container, false)
+
+        binding.btnComplete.setOnClickListener {
+            if (true) {
+                val intent = Intent(activity, StudentHomeActivity::class.java)
+                startActivity(intent)
+            }
+            else {
+
+            }
+        }
+
         return binding.root
     }
 }

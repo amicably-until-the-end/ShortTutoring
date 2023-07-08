@@ -31,10 +31,6 @@ class LogoFragment : Fragment() {
             Navigation.findNavController(it).navigate(R.id.action_logoFragment_to_registerRoleFragment)
         }
 
-        binding.containerLoginByEmail.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_logoFragment_to_loginFragment)
-        }
-
         return binding.root
     }
 }
