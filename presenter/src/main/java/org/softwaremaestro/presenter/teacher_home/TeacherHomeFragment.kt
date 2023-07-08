@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 
 class TeacherHomeFragment : Fragment() {
+
     private lateinit var binding: FragmentTeacherHomeBinding
     private lateinit var dialog: WaitingDialog
 
