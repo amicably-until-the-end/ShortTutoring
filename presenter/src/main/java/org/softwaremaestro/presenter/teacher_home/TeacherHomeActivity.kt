@@ -9,6 +9,6 @@ import org.softwaremaestro.presenter.R
 class TeacherHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_student_home)
+        setContentView(R.layout.activity_teacher_home)
     }
 }

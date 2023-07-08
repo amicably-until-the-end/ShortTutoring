@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLogoBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
+import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 
 // 앱에 들어왔을 때 보이는 첫 화면.
 // 로그인 창과 소셜 로그인 버튼이 있다.
@@ -27,7 +28,7 @@ class LogoFragment : Fragment() {
         binding = FragmentLogoBinding.inflate(inflater, container, false)
 
         binding.containerLoginByGoogle.setOnClickListener {
-            val intent = Intent(activity, StudentHomeActivity::class.java)
+            val intent = Intent(activity, TeacherHomeActivity::class.java)
             startActivity(intent)
         }
 

@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.FragmentLogoBinding
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.teacher_home.WaitingDialog
 
 class StudentHomeFragment : Fragment() {
 
@@ -19,7 +18,6 @@ class StudentHomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentStudentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 }
