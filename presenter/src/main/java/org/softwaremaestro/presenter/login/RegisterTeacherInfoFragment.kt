@@ -27,8 +27,7 @@ class RegisterTeacherInfoFragment : Fragment() {
 
         binding.btnComplete.setOnClickListener {
             if (true) {
-                val intent = Intent(activity, StudentHomeActivity::class.java)
-                startActivity(intent)
+                Navigation.findNavController(it).navigate(R.id.action_registerTeacherInfoFragment_to_logoFragment)
             }
             else {
 
