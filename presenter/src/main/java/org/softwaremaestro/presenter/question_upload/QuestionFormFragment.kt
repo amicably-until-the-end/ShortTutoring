@@ -5,15 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 
 class QuestionFormFragment : Fragment() {
 
+    lateinit var binding: FragmentQuestionFormBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_question_form, container, false)
+
+        binding = FragmentQuestionFormBinding.inflate(inflater,container,false)
+
+
+
+        return binding.root
     }
 }

@@ -11,6 +11,7 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
+import android.hardware.camera2.TotalCaptureResult
 import android.media.ImageReader
 import android.os.Build
 import android.os.Bundle
@@ -30,10 +31,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.getExternalFilesDirs
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.R
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.databinding.FragmentQuestionCameraBinding
+import org.softwaremaestro.presenter.R
 import java.io.File
 import java.io.FileOutputStream
 
@@ -58,6 +62,7 @@ class QuestionCameraFragment : Fragment(){
     private lateinit var mSession: CameraCaptureSession
     private lateinit var mImageReader: ImageReader
 
+    private lateinit var navController: NavController
 
 
     private var mHandler: Handler? = null
@@ -105,20 +110,17 @@ class QuestionCameraFragment : Fragment(){
         mHandler = Handler(handlerThread.looper)
         openCamera()
         mImageReader = ImageReader.newInstance(500,500,ImageFormat.JPEG,1)
-        mImageReader.setOnImageAvailableListener(object:ImageReader.OnImageAvailableListener{
-            override fun onImageAvailable(p0: ImageReader?) {
-                var image = p0?.acquireLatestImage()
-                var buffer = image!!.planes[0].buffer
-                var bytes = ByteArray(buffer.remaining())
-                buffer.get(bytes)
-                var file = File(questionUploadActivity.filesDir,"capTest.jpeg")
-                var opStream =  FileOutputStream(file)
+        mImageReader.setOnImageAvailableListener({ imageReader ->
+            var image = imageReader?.acquireLatestImage()
+            var buffer = image!!.planes[0].buffer
+            var bytes = ByteArray(buffer.remaining())
+            buffer.get(bytes)
+            var file = File(questionUploadActivity.filesDir,"capTest.jpeg")
+            var opStream =  FileOutputStream(file)
 
-                opStream.write(bytes)
-                opStream.close()
-                image.close()
-                Toast.makeText(questionUploadActivity,"image capture",Toast.LENGTH_SHORT).show();
-            }
+            opStream.write(bytes)
+            opStream.close()
+            image.close()
         },mHandler)
     }
 
@@ -126,18 +128,7 @@ class QuestionCameraFragment : Fragment(){
     private fun openCamera(){
         try {
             val mCameraManager = questionUploadActivity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-            val characteristics = mCameraManager.getCameraCharacteristics(mCameraId)
-            val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
 
-            val largestPreviewSize = map!!.getOutputSizes(ImageFormat.JPEG)[0]
-            setAspectRatioTextureView(largestPreviewSize.height, largestPreviewSize.width)
-
-            mImageReader = ImageReader.newInstance(
-                largestPreviewSize.width,
-                largestPreviewSize.height,
-                ImageFormat.JPEG,
-                7
-            )
             if (ActivityCompat.checkSelfPermission(questionUploadActivity, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED
             ) return
@@ -182,17 +173,6 @@ class QuestionCameraFragment : Fragment(){
         override fun onConfigured(session: CameraCaptureSession) {
             mSession = session
             try {
-                // Key-Value 구조로 설정
-                // 오토포커싱이 계속 동작
-                mPreviewBuilder.set(
-                    CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
-                )
-                //필요할 경우 플래시가 자동으로 켜짐
-                mPreviewBuilder.set(
-                    CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
-                )
                 mSession.setRepeatingRequest(mPreviewBuilder.build(), null, mHandler)
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
@@ -205,24 +185,6 @@ class QuestionCameraFragment : Fragment(){
         }
     }
 
-    private fun setAspectRatioTextureView(ResolutionWidth: Int, ResolutionHeight: Int) {
-        if (ResolutionWidth > ResolutionHeight) {
-            val newWidth = mWidth
-            val newHeight = mWidth * ResolutionWidth / ResolutionHeight
-            updateTextureViewSize(newWidth, newHeight)
-
-        } else {
-            val newWidth = mWidth
-            val newHeight = mWidth * ResolutionHeight / ResolutionWidth
-            updateTextureViewSize(newWidth, newHeight)
-        }
-
-    }
-
-    private fun updateTextureViewSize(viewWidth: Int, viewHeight: Int) {
-        Log.d("ViewSize", "TextureView Width : $viewWidth TextureView Height : $viewHeight")
-        //surfaceView.layoutParams = FrameLayout.LayoutParams(viewWidth, viewHeight)
-    }
 
     private fun getPermission(){
         var permissionList = arrayOf<String>()
@@ -252,7 +214,17 @@ class QuestionCameraFragment : Fragment(){
         binding.btnShutter.setOnClickListener{
                 mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
                 mPreviewBuilder.addTarget(mImageReader.surface)
-                mSession.capture(mPreviewBuilder.build(),null,null)
+                mSession.capture(mPreviewBuilder.build(), object: CameraCaptureSession.CaptureCallback(){
+                    override fun onCaptureCompleted(
+                        session: CameraCaptureSession,
+                        request: CaptureRequest,
+                        result: TotalCaptureResult
+                    ) {
+                        super.onCaptureCompleted(session, request, result)
+                        Navigation.findNavController(it).navigate(R.id.action_questionCameraFragment_to_questionFormFragment)
+                    }
+                }, null)
+
         }
 
         return binding.root
