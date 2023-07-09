@@ -9,6 +9,10 @@ android {
     namespace 'org.softwaremaestro.data'
     compileSdk 33
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         minSdk 24
         targetSdk 33
