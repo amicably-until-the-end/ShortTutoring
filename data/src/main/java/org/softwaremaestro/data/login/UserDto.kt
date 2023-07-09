@@ -1,4 +1,4 @@
-package org.softwaremaestro.data.dto
+package org.softwaremaestro.data.login
 
 import com.google.gson.annotations.SerializedName
 
