@@ -11,7 +11,7 @@
         android:label="fragment_camera"
         tools:layout="@layout/fragment_question_camera">
         <action
-            android:id="@+id/action_cameraToDetail"
+            android:id="@+id/action_questionCameraFragment_to_questionFormFragment"
             app:destination="@id/questionFormFragment" />
     </fragment>
     <fragment

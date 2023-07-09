@@ -95,6 +95,7 @@
     </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <Button
+        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="질문 올리기"
