@@ -2,17 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/question_nav.xml"
-    app:startDestination="@id/questionFormFragment">
+    android:id="@+id/question_nav"
+    app:startDestination="@id/questionCameraFragment">
 
     <fragment
-        android:id="@+id/cameraFragment"
-        android:name="org.softwaremaestro.presenter.question_upload.CameraFragment"
+        android:id="@+id/questionCameraFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionCameraFragment"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera">
+        tools:layout="@layout/fragment_question_camera">
         <action
             android:id="@+id/action_cameraToDetail"
-            app:destination="@id/cameraFragment" />
+            app:destination="@id/questionFormFragment" />
     </fragment>
     <fragment
         android:id="@+id/questionFormFragment"
