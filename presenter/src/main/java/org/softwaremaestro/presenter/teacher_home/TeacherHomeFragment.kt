@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.model.vo.QuestionVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 
 class TeacherHomeFragment : Fragment() {
@@ -35,9 +35,17 @@ class TeacherHomeFragment : Fragment() {
 
     private fun setQuestionRecyclerView() {
         val items = mutableListOf(
-            QuestionVO(byteArrayOf(1, 2, 3), 1, 2, 3, listOf(4,5,6)),
-            QuestionVO(byteArrayOf(1, 2, 3), 1, 2, 3, listOf(4,5,6)),
-            QuestionVO(byteArrayOf(1, 2, 3), 1, 2, 3, listOf(4,5,6)),
+            QuestionGetResultVO(
+                "사진",
+                "고등학교",
+                "지수함수",
+                "수학1",
+                "어려움",
+                "못 풀겠어요",
+                listOf("리뷰 1", "리뷰 2", "리뷰 3"),
+                listOf("선생님id"),
+                "학생id"
+            )
         )
 
         binding.rvQuestion.apply {
