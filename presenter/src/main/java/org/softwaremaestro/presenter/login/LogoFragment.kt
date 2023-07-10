@@ -27,6 +27,11 @@ class LogoFragment : Fragment() {
 
         binding = FragmentLogoBinding.inflate(inflater, container, false)
 
+        binding.tvLogo.setOnClickListener {
+            val intent = Intent(activity, StudentHomeActivity::class.java)
+            startActivity(intent)
+        }
+        
         binding.containerLoginByGoogle.setOnClickListener {
             val intent = Intent(activity, TeacherHomeActivity::class.java)
             startActivity(intent)
