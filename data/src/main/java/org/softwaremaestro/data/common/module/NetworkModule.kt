@@ -21,18 +21,21 @@ object NetworkModule {
         return Retrofit.Builder().apply {
             addConverterFactory(GsonConverterFactory.create())
             client(okHttp)
-            baseUrl("https://localhost/")
+            baseUrl("https://localhost:3000/")
         }.build()
     }
 
     @Singleton
     @Provides
-    fun provideOkHttp(requestInterceptor: RequestInterceptor): OkHttpClient {
+    fun provideOkHttp() : OkHttpClient {
         return OkHttpClient.Builder().apply {
             connectTimeout(60, TimeUnit.SECONDS)
             readTimeout(60, TimeUnit.SECONDS)
             writeTimeout(60, TimeUnit.SECONDS)
-            addInterceptor(requestInterceptor)
         }.build()
     }
+
+
+
+
 }
