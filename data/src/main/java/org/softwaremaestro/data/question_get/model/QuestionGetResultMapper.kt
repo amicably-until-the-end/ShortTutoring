@@ -3,21 +3,21 @@ package org.softwaremaestro.data.question_get.model
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 
 object QuestionGetResultMapper {
-    fun asDomain(questionGetResultDto: QuestionGetResultDto): QuestionGetResultVO {
+    fun asDomain(questionsGetResultDto: QuestionsGetResultDto): QuestionGetResultVO {
         return QuestionGetResultVO(
-            questionGetResultDto.problemBase64Image,
-            questionGetResultDto.problemSchoolLevel,
-            questionGetResultDto.problemSchoolChapter,
-            questionGetResultDto.problemSchoolSubject,
-            questionGetResultDto.problemDifficulty,
-            questionGetResultDto.problemDescription,
-            questionGetResultDto.reviews,
-            questionGetResultDto.teacherIds,
-            questionGetResultDto.studentId,
+            questionsGetResultDto.problem?.imageUrl ?: "",
+            questionsGetResultDto.problem?.schoolLevel ?: "",
+            questionsGetResultDto.problem?.schoolLevel ?: "",
+            questionsGetResultDto.problem?.schoolSubject ?: "",
+            questionsGetResultDto.problem?.difficulty ?: "",
+            questionsGetResultDto.problem?.description ?: "",
+            questionsGetResultDto.reviews ?: emptyList(),
+            questionsGetResultDto.teacherIds ?: emptyList(),
+            questionsGetResultDto.student?.id ?: ""
         )
     }
 }
 
-fun QuestionGetResultDto.asDomain(): QuestionGetResultVO {
+fun QuestionsGetResultDto.asDomain(): QuestionGetResultVO {
     return QuestionGetResultMapper.asDomain(this)
 }

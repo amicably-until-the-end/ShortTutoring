@@ -6,5 +6,5 @@ import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 
 
 interface QuestionGetRepository {
-    suspend fun getQuestion(): Flow<BaseResult<QuestionGetResultVO, String>>
+    suspend fun getQuestions(): Flow<BaseResult<List<QuestionGetResultVO>, String>>
 }
