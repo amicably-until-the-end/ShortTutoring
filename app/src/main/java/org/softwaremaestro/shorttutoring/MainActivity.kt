@@ -3,12 +3,10 @@ package org.softwaremaestro.shorttutoring
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.login.LoginActivity
+import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 
 
 @AndroidEntryPoint
@@ -17,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, QuestionUploadActivity::class.java)
         startActivity(intent)
 
         // 액션바 설정
