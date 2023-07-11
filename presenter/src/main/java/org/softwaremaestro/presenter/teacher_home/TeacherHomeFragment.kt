@@ -7,80 +7,85 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
+import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
+import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
+import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherHomeBinding
-    private lateinit var dialog: WaitingDialog
-    private val viewModel : TeacherHomeViewModel by viewModels()
+    private val questionsViewModel : QuestionsViewModel by viewModels()
+    private val answerViewModel : AnswerViewModel by viewModels()
     private lateinit var questionAdapter: QuestionAdapter
+    private lateinit var jobGetQuestions: Job
+    private lateinit var watingDialog: WaitingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
-        dialog = WaitingDialog(requireActivity())
+        binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
         questionAdapter = QuestionAdapter(object: OnItemClickListener {
             override fun onItemClick() {
-                dialog.show()
+                watingDialog.show()
+                uploadAnswer()
             }
         })
+        watingDialog = WaitingDialog(requireActivity())
+        jobGetQuestions = getJobGetQuestions(1000L).apply { start() }
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
             layoutManager = LinearLayoutManager(requireActivity())
         }
 
-//        questionAdapter.setItem(listOf(
-//            QuestionGetResultVO(
-//                "",
-//                "고등학교",
-//                "수학1",
-//                "지수함수",
-//                "어려움",
-//                "이해를 못하겠어요",
-//                listOf("#이해가 빨라요", "#기초가 탄탄해요", ""),
-//                listOf("teacher_id"),
-//                "student_id"
-//            )
-//        ))
+        observeQuestions()
 
-        viewModel.questions.observe(viewLifecycleOwner) {
-            questionAdapter.setItem(it)
-            questionAdapter.notifyDataSetChanged()
-        }
+        observeAnswer()
 
-        val job = startRepeatingJob(1000L)
 
 
         return binding.root
     }
 
-    private fun startRepeatingJob(timeInterval: Long): Job {
-        return viewLifecycleOwner.lifecycleScope.launch {
+    private fun observeQuestions() {
+        questionsViewModel.questions.observe(viewLifecycleOwner) {
+            questionAdapter.setItem(it)
+            questionAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun observeAnswer() {
+        answerViewModel.answer.observe(viewLifecycleOwner) {
+            Log.d("answer", it.exampleData)
+        }
+    }
+
+    private fun getJobGetQuestions(timeInterval: Long): Job {
+        return viewLifecycleOwner.lifecycleScope.launch(start = CoroutineStart.LAZY) {
             while (NonCancellable.isActive) {
-                viewModel.getQuestions()
-                waitUntilPick()
+                if (!watingDialog.isShowing) {
+                    questionsViewModel.getQuestions()
+                }
                 delay(timeInterval)
             }
         }
     }
 
-    private fun waitUntilPick() {
-
-
+    private fun uploadAnswer() {
+//        val problemId = "this should be properly set, or error occurs"
+//        answerViewModel.uploadAnswer(AnswerUploadVO(problemId, TeacherVO("teacherId")))
     }
 }

@@ -1,17 +1,15 @@
 package org.softwaremaestro.presenter.teacher_home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.indices
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val listener: OnItemClickListener): RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
+class QuestionAdapter(private val answerBtnClickListener: OnItemClickListener): RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
     private var items: List<QuestionGetResultVO> = emptyList()
 
@@ -47,7 +45,7 @@ class QuestionAdapter(private val listener: OnItemClickListener): RecyclerView.A
             }
 
             binding.btnAnswer.setOnClickListener {
-                listener.onItemClick()
+                answerBtnClickListener.onItemClick()
             }
         }
     }

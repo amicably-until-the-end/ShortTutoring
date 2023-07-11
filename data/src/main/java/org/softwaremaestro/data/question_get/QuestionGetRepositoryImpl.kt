@@ -20,8 +20,11 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
                 response.body()!!
                     .map { it.asDomain() }
                     .let { emit(BaseResult.Success(it)) }
-            } else {
-                val errorString = "error"
+            }
+            else {
+                val errorString =
+                    "error in ${this@QuestionGetRepositoryImpl::class.java.name}\n" +
+                            "message: ${response.message()}"
                 emit(BaseResult.Error(errorString))
             }
         }

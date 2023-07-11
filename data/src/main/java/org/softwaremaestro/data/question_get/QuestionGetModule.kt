@@ -25,5 +25,4 @@ class QuestionGetModule {
     fun provideQuestionGetRepository(questionGetApi: QuestionGetApi): QuestionGetRepository {
         return QuestionGetRepositoryImpl(questionGetApi)
     }
-
 }
