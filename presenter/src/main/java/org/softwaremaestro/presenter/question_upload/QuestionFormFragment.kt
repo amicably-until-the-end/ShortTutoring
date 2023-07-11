@@ -73,7 +73,6 @@ class QuestionFormFragment : Fragment() {
         setSubjectSpinner()
         setObserver()
         setSpinnerListener()
-        Log.d("bundle", arguments.toString())
         setPicture(arguments?.getString("fileName")!!)
         return binding.root
     }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 
@@ -19,6 +20,8 @@ class TeacherSelectFragment : Fragment() {
     private val viewModel: TeacherSelectViewModel by viewModels()
 
 
+    lateinit var teacherListAdapter: TeacherAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,25 +30,36 @@ class TeacherSelectFragment : Fragment() {
 
         binding = FragmentTeacherSelectBinding.inflate(layoutInflater, container, false)
 
+
+        viewModel.startGetTeacherList(arguments?.getString("question_id")!!)
         setTeacherRecycler()
+        setObserver()
 
         return binding.root
     }
 
+    private fun setObserver() {
+        viewModel.teacherList.observe(viewLifecycleOwner, Observer {
+
+        })
+    }
+
     private fun setTeacherRecycler() {
-        binding.rvTeacherList.apply {
-            adapter = TeacherAdapter(viewModel.teacherList.value!!, object : OnItemClickListener {
+        teacherListAdapter =
+            TeacherAdapter(viewModel.teacherList.value!!, object : OnItemClickListener {
                 override fun onAcceptBtnClicked(teacherId: String) {
+                    // TODO : implement below
                     //check valid accept via viewmodel
                     //if valid goto tutoring room
-                    //else show something
+                    //else show somethings
                     Toast.makeText(context, teacherId, Toast.LENGTH_SHORT)
                 }
 
             })
+
+        binding.rvTeacherList.apply {
+            adapter = teacherListAdapter
         }
 
     }
-
-
 }

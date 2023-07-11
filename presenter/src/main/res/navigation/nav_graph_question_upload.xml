@@ -23,6 +23,19 @@
             android:name="fileName"
             app:argType="string"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_questionFormFragment_to_teacherSelectFragment"
+            app:destination="@id/teacherSelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherSelectFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.TeacherSelectFragment"
+        android:label="fragment_teacher_select"
+        tools:layout="@layout/fragment_teacher_select">
+        <argument
+            android:name="quesionId"
+            app:argType="string"
+            app:nullable="false" />
     </fragment>
 
 
