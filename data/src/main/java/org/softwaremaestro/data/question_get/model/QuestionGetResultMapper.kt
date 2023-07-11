@@ -5,15 +5,15 @@ import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 object QuestionGetResultMapper {
     fun asDomain(questionsGetResultDto: QuestionsGetResultDto): QuestionGetResultVO {
         return QuestionGetResultVO(
-            questionsGetResultDto.problem?.imageUrl ?: "",
-            questionsGetResultDto.problem?.schoolLevel ?: "",
-            questionsGetResultDto.problem?.schoolLevel ?: "",
-            questionsGetResultDto.problem?.schoolSubject ?: "",
-            questionsGetResultDto.problem?.difficulty ?: "",
-            questionsGetResultDto.problem?.description ?: "",
-            questionsGetResultDto.reviews ?: emptyList(),
-            questionsGetResultDto.teacherIds ?: emptyList(),
-            questionsGetResultDto.student?.id ?: ""
+            questionsGetResultDto.problem?.imageUrl,
+            questionsGetResultDto.problem?.schoolLevel,
+            questionsGetResultDto.problem?.schoolLevel,
+            questionsGetResultDto.problem?.schoolSubject,
+            questionsGetResultDto.problem?.difficulty,
+            questionsGetResultDto.problem?.description,
+            questionsGetResultDto.reviews,
+            questionsGetResultDto.teacherIds,
+            questionsGetResultDto.student?.id
         )
     }
 }
