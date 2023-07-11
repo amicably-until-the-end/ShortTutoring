@@ -2,11 +2,16 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.domain.model.vo.QuestionVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
-class QuestionAdapter(val items: List<QuestionVO>, val listener: OnItemClickListener): RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
+private const val EMPTY_STRING = "-"
+
+class QuestionAdapter(private val answerBtnClickListener: OnItemClickListener): RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
+
+    private var items: List<QuestionGetResultVO> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionAdapter.ViewHolder {
         val view = ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,19 +26,26 @@ class QuestionAdapter(val items: List<QuestionVO>, val listener: OnItemClickList
         return items.size
     }
 
+    fun setItem(items: List<QuestionGetResultVO>) {
+        this.items = items
+    }
+
     inner class ViewHolder(private val binding: ItemQuestionBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: QuestionVO) {
+        fun onBind(item: QuestionGetResultVO) {
+
             // Todo: 수정 필요함
             binding.ivPhoto.setImageBitmap(null)
-            binding.tvSubject.text = item.subject.toString()
-            binding.tvTime.text = item.time.toString()
-            binding.tvGrade.text = item.grade.toString()
-            binding.tvReview1.text = item.reviews[0].toString()
-            binding.tvReview2.text = item.reviews[1].toString()
-            binding.tvReview3.text = item.reviews[2].toString()
+            binding.tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
+            binding.tvChapter.text = item.problemSchoolChapter ?: EMPTY_STRING
+            binding.tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
+            binding.tvDesciption.text = item.problemDescription ?: EMPTY_STRING
+            for (i in 0..2) {
+                (binding.containerReview.getChildAt(i) as TextView).text = item.reviews?.get(i) ?: EMPTY_STRING
+            }
+
             binding.btnAnswer.setOnClickListener {
-                listener.onItemClick()
+                answerBtnClickListener.onItemClick()
             }
         }
     }
