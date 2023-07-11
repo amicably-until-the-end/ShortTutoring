@@ -56,6 +56,15 @@
                     android:textColor="@android:color/black"
                     android:layout_marginLeft="30dp"/>
 
+                <TextView
+                    android:id="@+id/tv_chapter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지수함수"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginLeft="30dp"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -71,15 +80,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="예상 소요 시간"
+                    android:text="예상 난이도"
                     android:textSize="30sp"
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:id="@+id/tv_time"
+                    android:id="@+id/tv_difficulty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="30분"
+                    android:text="어려움"
                     android:textSize="30sp"
                     android:textColor="@android:color/black"
                     android:layout_marginLeft="30dp"/>
@@ -104,10 +113,10 @@
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:id="@+id/tv_grade"
+                    android:id="@+id/tv_desciption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="고등학교 2학년"
+                    android:text="못 풀겠어요"
                     android:textSize="30sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="10dp"/>

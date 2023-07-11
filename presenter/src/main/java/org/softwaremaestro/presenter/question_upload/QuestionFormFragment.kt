@@ -21,7 +21,6 @@ class QuestionFormFragment : Fragment() {
 
     private val viewModel : QuestionUploadViewModel by viewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
