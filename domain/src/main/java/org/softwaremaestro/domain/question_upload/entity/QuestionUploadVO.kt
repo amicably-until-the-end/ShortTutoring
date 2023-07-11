@@ -1,6 +1,11 @@
 package org.softwaremaestro.domain.question_upload.entity
 
 data class QuestionUploadVO(
-    var title:String,
-    var detail:String,
+    var studentId: String,
+    var description: String,
+    var imageEncoding: String,
+    var schoolLevel: String,
+    var schoolSubject: String,
+    var schoolChapter: String,
+    var problemDifficulty: String,
 )

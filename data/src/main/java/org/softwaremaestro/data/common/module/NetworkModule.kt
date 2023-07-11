@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import org.softwaremaestro.data.common.utils.RequestInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -21,21 +20,20 @@ object NetworkModule {
         return Retrofit.Builder().apply {
             addConverterFactory(GsonConverterFactory.create())
             client(okHttp)
-            baseUrl("http://shorttutoring-493721324.ap-northeast-2.elb.amazonaws.com")
+            baseUrl("http://shorttutoring-493721324.ap-northeast-2.elb.amazonaws.com/")
+
         }.build()
     }
 
     @Singleton
     @Provides
-    fun provideOkHttp() : OkHttpClient {
+    fun provideOkHttp(): OkHttpClient {
         return OkHttpClient.Builder().apply {
             connectTimeout(60, TimeUnit.SECONDS)
             readTimeout(60, TimeUnit.SECONDS)
             writeTimeout(60, TimeUnit.SECONDS)
         }.build()
     }
-
-
 
 
 }

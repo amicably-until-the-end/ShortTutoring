@@ -16,25 +16,23 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionUploadViewModel @Inject constructor(private val questionUploadUseCase: QuestionUploadUseCase) :
     ViewModel() {
-    //private var title:String =""
-    //private var detail:String = ""
-
-    private val _result: MutableLiveData<String> = MutableLiveData();
-    val resultString: LiveData<String> get() = _result
 
 
-    fun uploadQuestion(detail: String) {
+    private val _uploadResult: MutableLiveData<String> = MutableLiveData();
+    val uploadResult: LiveData<String> get() = _uploadResult
+
+
+    fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
         viewModelScope.launch {
-            questionUploadUseCase.execute(QuestionUploadVO("title is title", detail))
-                .catch { exception ->
-                    _result.value = exception.message.toString()
-                }
+            questionUploadUseCase.execute(questionUploadVO)
+                .catch { exception -> _uploadResult.value = exception.message.toString() }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _result.value = "success"
-                        is BaseResult.Error -> _result.value = "fail"
+                        is BaseResult.Success -> _uploadResult.value = "success"
+                        is BaseResult.Error -> _uploadResult.value = "fail"
                     }
                 }
+
         }
     }
 

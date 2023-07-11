@@ -17,8 +17,13 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     override suspend fun uploadQuestion(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>> {
         return flow {
             val dto = QuestionUploadRequestDto(
-                questionUploadVO.title,
-                questionUploadVO.detail
+                questionUploadVO.studentId,
+                questionUploadVO.description,
+                questionUploadVO.imageEncoding,
+                questionUploadVO.schoolLevel,
+                questionUploadVO.schoolSubject,
+                questionUploadVO.schoolChapter,
+                questionUploadVO.problemDifficulty,
             )
             val response = questionUploadApi.uploadQuestion(dto)
             if (response.isSuccessful) {
