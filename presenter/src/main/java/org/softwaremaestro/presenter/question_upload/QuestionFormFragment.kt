@@ -1,6 +1,9 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 @AndroidEntryPoint
@@ -27,10 +32,12 @@ class QuestionFormFragment : Fragment() {
 
     private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
 
+    var pictureBitmap: Bitmap? = null
+
     var schoolSelected: String = "고등학교"
-    var subjectSelected: String = ""
-    var chapterCodeSelected: Int = 0
-    var chapterSelected: String = ""
+    var subjectSelected: String? = null
+    var chapterCodeSelected: Int? = null
+    var chapterSelected: String? = null
     var difficultySelected: String = "normal"
 
     private fun parseMathSubjectJson() {
@@ -66,7 +73,19 @@ class QuestionFormFragment : Fragment() {
         setSubjectSpinner()
         setObserver()
         setSpinnerListener()
+        Log.d("bundle", arguments.toString())
+        setPicture(arguments?.getString("fileName")!!)
         return binding.root
+    }
+
+    private fun setPicture(fileName: String) {
+        val file = File(requireContext().filesDir, fileName)
+        if (file.exists()) {
+            pictureBitmap = BitmapFactory.decodeFile(file.absolutePath)
+            binding.ivPhoto.setImageBitmap(pictureBitmap)
+            Log.d("mymy", "fileexist")
+        }
+
     }
 
     private fun setObserver() {
@@ -75,16 +94,23 @@ class QuestionFormFragment : Fragment() {
         }
     }
 
+    fun bitmapToBase64(bitmap: Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
     private fun setButtons() {
         binding.btnSubmit.setOnClickListener {
             viewModel.uploadQuestion(
                 QuestionUploadVO(
                     "testID",
                     binding.etDetail.text.toString(),
-                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+                    bitmapToBase64(pictureBitmap!!),
                     schoolSelected,
-                    subjectSelected,
-                    chapterSelected,
+                    subjectSelected ?: "",
+                    chapterSelected ?: "",
                     difficultySelected
                 )
             )

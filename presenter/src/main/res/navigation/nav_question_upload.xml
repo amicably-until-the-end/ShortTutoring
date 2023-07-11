@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/question_nav"
-    app:startDestination="@id/questionFormFragment">
+    app:startDestination="@id/questionCameraFragment">
 
     <fragment
         android:id="@+id/questionCameraFragment"
@@ -18,6 +18,12 @@
         android:id="@+id/questionFormFragment"
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormFragment"
         android:label="fragment_question_form"
-        tools:layout="@layout/fragment_question_form" />
+        tools:layout="@layout/fragment_question_form">
+        <argument
+            android:name="fileName"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
 
 </navigation>
