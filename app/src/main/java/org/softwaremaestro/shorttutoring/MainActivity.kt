@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.login.LoginActivity
 
 
 @AndroidEntryPoint
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, QuestionUploadActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
 
         // 액션바 설정
