@@ -27,8 +27,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionCameraBinding
@@ -54,18 +53,10 @@ class QuestionCameraFragment : Fragment() {
     private lateinit var mSession: CameraCaptureSession
     private lateinit var mImageReader: ImageReader
 
-    private lateinit var navController: NavController
-
 
     private var mHandler: Handler? = null
-
     private lateinit var questionUploadActivity: QuestionUploadActivity
-
-    private var mHeight: Int = 0
-    private var mWidth: Int = 0
-
     private var capturedFileName: String? = null;
-
     var mCameraId = "0"
 
 
@@ -77,6 +68,8 @@ class QuestionCameraFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getPermission()
+        setCaptureImageReader()
+
     }
 
     override fun onCreateView(
@@ -87,67 +80,14 @@ class QuestionCameraFragment : Fragment() {
         binding = FragmentQuestionCameraBinding.inflate(inflater, container, false)
         setViewHolder()
         setShutterListener()
-
         return binding.root
     }
 
-    private fun setShutterListener() {
-        binding.btnShutter.setOnClickListener {
-            mPreviewBuilder =
-                mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-            mPreviewBuilder.addTarget(mImageReader.surface)
-            mSession.capture(
-                mPreviewBuilder.build(),
-                object : CameraCaptureSession.CaptureCallback() {
-                    override fun onCaptureCompleted(
-                        session: CameraCaptureSession,
-                        request: CaptureRequest,
-                        result: TotalCaptureResult
-                    ) {
-                        super.onCaptureCompleted(session, request, result)
-
-                        val bundle = bundleOf("fileName" to capturedFileName!!)
-
-                        Log.d("mymymy", capturedFileName!!)
-
-                        //캡처가 끝나면 navigate
-                        Navigation.findNavController(it)
-                            .navigate(
-                                R.id.action_questionCameraFragment_to_questionFormFragment,
-                                bundle
-                            )
-                    }
-                },
-                null
-            )
-        }
-    }
-
-    private fun setViewHolder() {
-        mSurfaceViewHolder = binding.surfaceView.holder
-        mSurfaceViewHolder.addCallback(object : SurfaceHolder.Callback {
-            override fun surfaceCreated(p0: SurfaceHolder) {
-                initCameraPreview()
-            }
-
-            override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun surfaceDestroyed(p0: SurfaceHolder) {
-                mCameraDevice.close()
-            }
-
-        })
-    }
-
-    private fun initCameraPreview() {
-        val handlerThread = HandlerThread("CAMERA2")
-        handlerThread.start()
-        mHandler = Handler(handlerThread.looper)
-        openCamera()
+    private fun setCaptureImageReader() {
         mImageReader = ImageReader.newInstance(500, 500, ImageFormat.JPEG, 1)
         mImageReader.setOnImageAvailableListener({ imageReader ->
+
+            Log.d("mymy", "captureimage")
             var image = imageReader?.acquireLatestImage()
             var buffer = image!!.planes[0].buffer
             var bytes = ByteArray(buffer.remaining())
@@ -169,6 +109,72 @@ class QuestionCameraFragment : Fragment() {
         }, mHandler)
     }
 
+    private fun setViewHolder() {
+        mSurfaceViewHolder = binding.surfaceView.holder
+        mSurfaceViewHolder.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceCreated(p0: SurfaceHolder) {
+                initCameraPreview()
+            }
+
+            override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun surfaceDestroyed(p0: SurfaceHolder) {
+                mCameraDevice.close()
+            }
+
+        })
+    }
+
+    private fun setShutterListener() {
+        binding.btnShutter.setOnClickListener {
+            takePicture()
+        }
+    }
+
+    private fun takePicture() {
+        mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+        mPreviewBuilder.addTarget(mImageReader.surface)
+        mSession.capture(
+            mPreviewBuilder.build(),
+            object : CameraCaptureSession.CaptureCallback() {
+                override fun onCaptureCompleted(
+                    session: CameraCaptureSession,
+                    request: CaptureRequest,
+                    result: TotalCaptureResult
+                ) {
+                    super.onCaptureCompleted(session, request, result)
+
+                    Log.d("mymym", capturedFileName!!)
+
+                    val bundle = bundleOf("fileName" to capturedFileName!!)
+                    //캡처가 끝나면 navigate
+                    findNavController().navigate(
+                        R.id.action_questionCameraFragment_to_questionFormFragment,
+                        bundle
+                    )
+                }
+            },
+            null
+        )
+    }
+
+
+    private fun initCameraPreview() {
+
+        // make handler for async image retrieve from os
+        val handlerThread = HandlerThread("CAMERA2")
+        handlerThread.start()
+        mHandler = Handler(handlerThread.looper)
+
+        // camera service 실행, service에 handler, cameraId, device callback 이 들어감
+        openCamera()
+
+        //카메라에서 가져온 image를 담는 객체 생성
+
+    }
+
     @SuppressLint("MissingPermission")
     private fun openCamera() {
         try {
@@ -186,6 +192,7 @@ class QuestionCameraFragment : Fragment() {
         } catch (e: CameraAccessException) {
         }
     }
+
 
     private val deviceStateCallback = object : CameraDevice.StateCallback() {
 
@@ -208,18 +215,27 @@ class QuestionCameraFragment : Fragment() {
         }
     }
 
-    @Throws(CameraAccessException::class)
     fun takePreview() {
-        mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        mPreviewBuilder.addTarget(mSurfaceViewHolder.surface)
-        mCameraDevice.createCaptureSession(
-            listOf(mSurfaceViewHolder.surface, mImageReader.surface),
-            mSessionPreviewStateCallback,
-            mHandler
-        )
+        try {
+            //실제로 하드웨어 카메라 이미지를 요청하는 부분
+            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            //ui-surface를 target으로 지정해줌
+            mPreviewBuilder.addTarget(mSurfaceViewHolder.surface)
+
+
+            mCameraDevice.createCaptureSession(
+                listOf(mSurfaceViewHolder.surface, mImageReader.surface),
+                mSessionPreviewStateCallback,
+                mHandler
+            )
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
     }
 
     private val mSessionPreviewStateCallback = object : CameraCaptureSession.StateCallback() {
+
+        //매 프레임 마다 호출되는 콜백
         override fun onConfigured(session: CameraCaptureSession) {
             mSession = session
             try {
@@ -227,14 +243,12 @@ class QuestionCameraFragment : Fragment() {
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
             }
-
         }
 
         override fun onConfigureFailed(session: CameraCaptureSession) {
-            Toast.makeText(questionUploadActivity, "카메라 구성 실패", Toast.LENGTH_SHORT).show()
+            Toast.makeText(questionUploadActivity, "fail to get frame", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun getPermission() {
         var permissionList = arrayOf<String>()

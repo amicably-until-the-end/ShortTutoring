@@ -10,9 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -88,8 +89,11 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun setObserver() {
-        viewModel.uploadResult.observe(viewLifecycleOwner) {
-            Toast.makeText(context, viewModel.uploadResult.value, Toast.LENGTH_SHORT).show()
+        viewModel.questionId.observe(viewLifecycleOwner) {
+            if (viewModel.questionId != null) {
+                val bundle = bundleOf("questionId" to viewModel.questionId.value)
+                findNavController().navigate(R.id.action_questionFormFragment_to_teacherSelectFragment)
+            }
         }
     }
 
