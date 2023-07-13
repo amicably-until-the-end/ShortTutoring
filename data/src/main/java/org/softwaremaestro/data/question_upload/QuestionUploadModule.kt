@@ -12,11 +12,11 @@ import javax.inject.Singleton
 
 @Module(includes = [NetworkModule::class])
 @InstallIn(SingletonComponent::class)
-class QuestionModule {
+class QuestionUploadModule {
 
     @Singleton
     @Provides
-    fun provideQuestionsApi(retrofit: Retrofit): QuestionUploadApi {
+    fun provideQuestionUploadApi(retrofit: Retrofit): QuestionUploadApi {
         return retrofit.create(QuestionUploadApi::class.java)
     }
 
@@ -25,5 +25,4 @@ class QuestionModule {
     fun provideQuestionUploadRepository(questionUploadApi: QuestionUploadApi): QuestionUploadRepository {
         return QuestionUploadRepositoryImpl(questionUploadApi)
     }
-
 }

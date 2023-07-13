@@ -10,15 +10,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
+import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 
 @AndroidEntryPoint
@@ -27,6 +28,7 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var binding: FragmentTeacherHomeBinding
     private val questionsViewModel : QuestionsViewModel by viewModels()
     private val answerViewModel : AnswerViewModel by viewModels()
+    private val checkViewModel : CheckViewModel by viewModels()
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var jobGetQuestions: Job
     private lateinit var watingDialog: WaitingDialog
@@ -44,20 +46,23 @@ class TeacherHomeFragment : Fragment() {
             }
         })
         watingDialog = WaitingDialog(requireActivity())
-        jobGetQuestions = getJobGetQuestions(1000L).apply { start() }
+        keepGettingQuestions(1000L)
+        keepCheckingQuestionAfterSelect(1000L)
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
             layoutManager = LinearLayoutManager(requireActivity())
         }
 
-        observeQuestions()
-
-        observeAnswer()
-
-
+        observe()
 
         return binding.root
+    }
+
+    private fun observe() {
+        observeQuestions()
+        observeAnswer()
+        observeCheck()
     }
 
     private fun observeQuestions() {
@@ -73,8 +78,15 @@ class TeacherHomeFragment : Fragment() {
         }
     }
 
-    private fun getJobGetQuestions(timeInterval: Long): Job {
-        return viewLifecycleOwner.lifecycleScope.launch(start = CoroutineStart.LAZY) {
+
+    private fun observeCheck() {
+        checkViewModel.check.observe(viewLifecycleOwner) {
+            Log.d("check", it.toString())
+        }
+    }
+
+    private fun keepGettingQuestions(timeInterval: Long) {
+        viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 if (!watingDialog.isShowing) {
                     questionsViewModel.getQuestions()
@@ -84,8 +96,21 @@ class TeacherHomeFragment : Fragment() {
         }
     }
 
-    private fun uploadAnswer() {
-//        val problemId = "this should be properly set, or error occurs"
-//        answerViewModel.uploadAnswer(AnswerUploadVO(problemId, TeacherVO("teacherId")))
+    private fun keepCheckingQuestionAfterSelect(timeInterval: Long) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            while (NonCancellable.isActive) {
+                if (!watingDialog.isShowing) {
+                    checkViewModel.checkQuestion("test-request-id", QuestionCheckRequestVO("test-teacher-id"))
+                }
+                delay(timeInterval)
+            }
+        }
     }
+
+    private fun uploadAnswer() {
+        val problemId = "this should be properly set, or error occurs"
+        answerViewModel.uploadAnswer(AnswerUploadVO(problemId, TeacherVO("teacherId")))
+    }
+
+
 }
