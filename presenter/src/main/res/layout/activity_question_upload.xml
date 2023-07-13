@@ -13,5 +13,5 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:navGraph="@navigation/nav_question_upload" />
+        app:navGraph="@navigation/nav_graph_question_upload" />
 </androidx.constraintlayout.widget.ConstraintLayout>

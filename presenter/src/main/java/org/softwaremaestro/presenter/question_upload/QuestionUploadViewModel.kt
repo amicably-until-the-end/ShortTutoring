@@ -18,18 +18,18 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     ViewModel() {
 
 
-    private val _uploadResult: MutableLiveData<String> = MutableLiveData();
-    val uploadResult: LiveData<String> get() = _uploadResult
+    private val _questionId: MutableLiveData<String> = MutableLiveData();
+    val questionId: LiveData<String> get() = _questionId
 
 
     fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)
-                .catch { exception -> _uploadResult.value = exception.message.toString() }
+                .catch { exception -> _questionId.value = exception.message.toString() }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _uploadResult.value = "success"
-                        is BaseResult.Error -> _uploadResult.value = "fail"
+                        is BaseResult.Success -> _questionId.value = result.data.question_id
+                        is BaseResult.Error -> _questionId.value = "fail"
                     }
                 }
 

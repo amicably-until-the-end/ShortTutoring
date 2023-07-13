@@ -21,7 +21,6 @@ object NetworkModule {
             addConverterFactory(GsonConverterFactory.create())
             client(okHttp)
             baseUrl("http://shorttutoring-493721324.ap-northeast-2.elb.amazonaws.com/")
-
         }.build()
     }
 
