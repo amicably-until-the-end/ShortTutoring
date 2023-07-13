@@ -18,11 +18,13 @@ import android.hardware.camera2.CaptureRequest
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
+import android.util.Log
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.lang.NullPointerException
 
 
 class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
@@ -38,7 +40,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
         ) {
             val cameraManager = mContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val cameraId = getBackFacingCameraId(cameraManager)
-            previewSize = openCamera(cameraManager, cameraId)
+            previewSize = openCamera(cameraManager, cameraId ?: "0")
         }
 
         override fun onSurfaceTextureSizeChanged(

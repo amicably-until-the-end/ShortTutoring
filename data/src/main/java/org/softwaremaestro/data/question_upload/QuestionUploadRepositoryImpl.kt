@@ -62,4 +62,8 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
             }
         }
     }
+
+    override suspend fun pickTeacher(teacherId: String): Flow<BaseResult<String, String>> {
+        TODO("Not yet implemented")
+    }
 }

@@ -20,4 +20,8 @@ interface QuestionUploadApi {
     @GET("/response/teacherList/{questionId}")
     suspend fun getTeacherList(@Path("questionId") questionId: String): Response<List<TeacherDto>>
 
+    @GET("/response/select")
+    suspend fun pickTeacher(@Body pickTeacherDto: String): Response<List<TeacherDto>>
+
+
 }
