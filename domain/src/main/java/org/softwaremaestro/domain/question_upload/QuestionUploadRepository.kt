@@ -11,5 +11,5 @@ interface QuestionUploadRepository {
     suspend fun uploadQuestion(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>>
     suspend fun getTeacherList(questionId: String): Flow<BaseResult<List<TeacherVO>, String>>
 
-
+    suspend fun pickTeacher(teacherId: String): Flow<BaseResult<String, String>>
 }
