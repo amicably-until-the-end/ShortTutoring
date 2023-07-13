@@ -191,9 +191,9 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun parseMathSubjectJson() {
-        val assestManager = resources.assets
+        val assetsManager = resources.assets
         try {
-            val inputStream = assestManager.open("mathSubjectLabels.json")
+            val inputStream = assetsManager.open("mathSubjectLabels.json")
             val reader = inputStream.bufferedReader()
             val gson = Gson()
             // Define the type of the outermost structure
