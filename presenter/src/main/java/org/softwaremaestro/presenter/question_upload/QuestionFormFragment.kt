@@ -41,21 +41,6 @@ class QuestionFormFragment : Fragment() {
     var chapterSelected: String? = null
     var difficultySelected: String = "normal"
 
-    private fun parseMathSubjectJson() {
-        val assestManager = resources.assets
-        try {
-            val inputStream = assestManager.open("mathSubjectLabels.json")
-            val reader = inputStream.bufferedReader()
-            val gson = Gson()
-            // Define the type of the outermost structure
-            val type =
-                object : TypeToken<HashMap<String, HashMap<String, HashMap<String, Int>>>>() {}.type
-            // Parse the JSON string and populate mathSubjects
-            mathSubjects = gson.fromJson(reader, type)
-        } catch (e: Exception) {
-            return
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,30 +59,28 @@ class QuestionFormFragment : Fragment() {
         setSubjectSpinner()
         setObserver()
         setSpinnerListener()
-        setPicture(arguments?.getString("fileName")!!)
+        setPicture(QuestionFormFragmentArgs.fromBundle(requireArguments()).image)
         return binding.root
     }
 
-    private fun setPicture(fileName: String) {
-        val file = File(requireContext().filesDir, fileName)
-        if (file.exists()) {
-            pictureBitmap = BitmapFactory.decodeFile(file.absolutePath)
-            binding.ivPhoto.setImageBitmap(pictureBitmap)
-            Log.d("mymy", "fileexist")
-        }
-
+    private fun setPicture(image: Bitmap) {
+        binding.ivPhoto.setImageBitmap(image)
+        pictureBitmap = image
     }
 
     private fun setObserver() {
         viewModel.questionId.observe(viewLifecycleOwner) {
-            if (viewModel.questionId != null) {
+            if (viewModel.questionId.value != null) {
                 val bundle = bundleOf("questionId" to viewModel.questionId.value)
-                findNavController().navigate(R.id.action_questionFormFragment_to_teacherSelectFragment)
+                findNavController().navigate(
+                    R.id.action_questionFormFragment_to_teacherSelectFragment,
+                    bundle
+                )
             }
         }
     }
 
-    fun bitmapToBase64(bitmap: Bitmap): String {
+    private fun bitmapToBase64(bitmap: Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
@@ -110,7 +93,7 @@ class QuestionFormFragment : Fragment() {
                 QuestionUploadVO(
                     "testID",
                     binding.etDetail.text.toString(),
-                    bitmapToBase64(pictureBitmap!!),
+                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
                     schoolSelected,
                     subjectSelected ?: "",
                     chapterSelected ?: "",
@@ -205,6 +188,22 @@ class QuestionFormFragment : Fragment() {
                 }
 
             }
+    }
+
+    private fun parseMathSubjectJson() {
+        val assestManager = resources.assets
+        try {
+            val inputStream = assestManager.open("mathSubjectLabels.json")
+            val reader = inputStream.bufferedReader()
+            val gson = Gson()
+            // Define the type of the outermost structure
+            val type =
+                object : TypeToken<HashMap<String, HashMap<String, HashMap<String, Int>>>>() {}.type
+            // Parse the JSON string and populate mathSubjects
+            mathSubjects = gson.fromJson(reader, type)
+        } catch (e: Exception) {
+            return
+        }
     }
 
 }

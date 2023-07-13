@@ -11,10 +11,13 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface QuestionUploadApi {
-    @POST("/request")
-    suspend fun uploadQuestion(@Body questionUploadRequestDto: QuestionUploadRequestDto): Response<QuestionUploadResultDto>
+    @POST("/request/{id}")
+    suspend fun uploadQuestion(
+        @Path("id") studentId: String,
+        @Body questionUploadRequestDto: QuestionUploadRequestDto
+    ): Response<QuestionUploadResultDto>
 
-    @GET("/response/{questionId}")
-    suspend fun getTeacherList(@Path("questionId") questionId: String): Response<WrappedListResponse<TeacherDto>>
+    @GET("/response/teacherList/{questionId}")
+    suspend fun getTeacherList(@Path("questionId") questionId: String): Response<List<TeacherDto>>
 
 }

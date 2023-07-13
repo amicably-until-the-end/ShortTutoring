@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.question_upload
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
@@ -26,12 +27,13 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
                 questionUploadVO.schoolChapter,
                 questionUploadVO.problemDifficulty,
             )
-            val response = questionUploadApi.uploadQuestion(dto)
+            val response = questionUploadApi.uploadQuestion(questionUploadVO.studentId, dto)
             if (response.isSuccessful) {
                 val body = response.body()!!
                 val resultVO = QuestionUploadResultVO(body?.questionId!!)
                 emit(BaseResult.Success(resultVO))
             } else {
+                Log.d("mymymy", response.toString()!!)
                 val errorString = "error"
                 emit(BaseResult.Error(errorString))
             }
@@ -40,10 +42,11 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
 
     override suspend fun getTeacherList(questionId: String): Flow<BaseResult<List<TeacherVO>, String>> {
         return flow {
+            Log.d("mymymy", "${questionId} is question id in before api call")
             val response = questionUploadApi.getTeacherList(questionId)
             if (response.isSuccessful) {
                 val body = response.body()
-                val teacherDtoList = body?.data!!
+                val teacherDtoList = body ?: emptyList()
                 val teacherList = teacherDtoList.map { teacherDto ->
                     TeacherVO(
                         name = "undefined", // Set the appropriate values for name, school, bio, imageUrl, and teacherId

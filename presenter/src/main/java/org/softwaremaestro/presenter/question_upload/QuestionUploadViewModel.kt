@@ -28,7 +28,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
                 .catch { exception -> _questionId.value = exception.message.toString() }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _questionId.value = "success"
+                        is BaseResult.Success -> _questionId.value = result.data.question_id
                         is BaseResult.Error -> _questionId.value = "fail"
                     }
                 }

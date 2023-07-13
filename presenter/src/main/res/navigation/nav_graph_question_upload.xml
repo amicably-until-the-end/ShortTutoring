@@ -20,8 +20,8 @@
         android:label="fragment_question_form"
         tools:layout="@layout/fragment_question_form">
         <argument
-            android:name="fileName"
-            app:argType="string"
+            android:name="image"
+            app:argType="android.graphics.Bitmap"
             app:nullable="false" />
         <action
             android:id="@+id/action_questionFormFragment_to_teacherSelectFragment"

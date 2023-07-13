@@ -4,6 +4,7 @@
     android:id="@+id/view_teacher_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/material_dynamic_tertiary95"
     android:padding="20dp"
     app:layout_constraintTop_toTopOf="parent">
 

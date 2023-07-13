@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,24 +36,30 @@ class TeacherSelectViewModel @Inject constructor(private val teacherListGetUseCa
         timer.schedule(object : TimerTask() {
             override fun run() {
                 viewModelScope.launch(Dispatchers.IO) {
+                    Log.d("mymymy", "thread is working")
                     getTeacherList(questionId)
                 }
             }
         }, 0, 1000) // Execute every one second (1000 milliseconds)
     }
 
-    private fun getTeacherList(questionId: String) {
-        viewModelScope.launch {
-            teacherListGetUseCase.execute(questionId)
-                .catch { exception -> _errorMsg.value = exception.message.toString() }
-                .collect { result ->
-                    when (result) {
-                        is BaseResult.Success -> _teacherList.value = result.data
-                        is BaseResult.Error -> _errorMsg.value = result.rawResponse
+    suspend fun getTeacherList(questionId: String) {
+        teacherListGetUseCase.execute(questionId)
+            .catch { exception ->
+                Log.d("mymymy", exception.toString())
+                _errorMsg.postValue(exception.message.toString())
+            }
+            .collect { result ->
+                Log.d("mymymy", result.toString())
+                when (result) {
+                    is BaseResult.Success -> {
+                        _teacherList.postValue(result.data)
                     }
-                }
 
-        }
+                    is BaseResult.Error -> _errorMsg.postValue(result.rawResponse)
+                }
+            }
+
 
     }
 
