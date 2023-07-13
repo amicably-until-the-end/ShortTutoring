@@ -8,8 +8,6 @@ import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 object QuestionCheckResponseMapper {
     fun asDomain(questionCheckResponseDto: QuestionCheckResponseDto): QuestionCheckResultVO {
         return QuestionCheckResultVO(
-            questionCheckResponseDto.requestId,
-            questionCheckResponseDto.studentId,
             questionCheckResponseDto.status,
             questionCheckResponseDto.tutoringId
         )

@@ -7,5 +7,8 @@ import org.softwaremaestro.domain.question_check.entity.QuestionCheckResultVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 
 interface QuestionCheckRepository {
-    suspend fun checkQuestion(questionCheckRequestVO: QuestionCheckRequestVO): Flow<BaseResult<QuestionCheckResultVO, String>>
+    suspend fun checkQuestion(
+        requestId: String,
+        questionCheckRequestVO: QuestionCheckRequestVO
+    ): Flow<BaseResult<QuestionCheckResultVO, String>>
 }

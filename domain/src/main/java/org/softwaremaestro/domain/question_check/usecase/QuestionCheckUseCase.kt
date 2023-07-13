@@ -11,7 +11,10 @@ import javax.inject.Inject
 
 class QuestionCheckUseCase @Inject constructor(private val repository: QuestionCheckRepository) {
 
-    suspend fun execute(questionCheckRequestVO: QuestionCheckRequestVO): Flow<BaseResult<QuestionCheckResultVO, String>> {
-        return repository.checkQuestion(questionCheckRequestVO)
+    suspend fun execute(
+        requestId: String,
+        questionCheckRequestVO: QuestionCheckRequestVO
+    ): Flow<BaseResult<QuestionCheckResultVO, String>> {
+        return repository.checkQuestion(requestId, questionCheckRequestVO)
     }
 }

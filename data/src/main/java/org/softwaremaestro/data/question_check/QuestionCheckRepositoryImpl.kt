@@ -14,10 +14,13 @@ import javax.inject.Inject
 class QuestionCheckRepositoryImpl @Inject constructor(private val questionCheckApi: QuestionCheckApi) :
     QuestionCheckRepository {
 
-    override suspend fun checkQuestion(questionCheckRequestVO: QuestionCheckRequestVO): Flow<BaseResult<QuestionCheckResultVO, String>> {
+    override suspend fun checkQuestion(
+        requestId: String,
+        questionCheckRequestVO: QuestionCheckRequestVO
+    ): Flow<BaseResult<QuestionCheckResultVO, String>> {
         return flow {
             val dto = QuestionCheckRequestDto(questionCheckRequestVO.teacherId)
-            val response = questionCheckApi.checkQuestion(dto)
+            val response = questionCheckApi.checkQuestion(requestId, dto)
             if (response.isSuccessful) {
                 val vo = response.body()!!.data?.asDomain()
                 if (vo != null)
