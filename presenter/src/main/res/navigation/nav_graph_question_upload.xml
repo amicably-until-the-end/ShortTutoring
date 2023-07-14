@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/question_nav"
-    app:startDestination="@id/questionFormFragment">
+    app:startDestination="@id/questionCameraFragment">
 
     <fragment
         android:id="@+id/questionCameraFragment"
