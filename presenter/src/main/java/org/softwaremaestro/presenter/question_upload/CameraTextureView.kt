@@ -22,6 +22,7 @@ import android.util.Log
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.lang.NullPointerException
@@ -32,6 +33,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
     private val REQUEST_CAMERA = 1
     var cameraDevice: CameraDevice? = null
     var previewSize: Size? = null
+
     private var surfaceTextureListener: SurfaceTextureListener = object : SurfaceTextureListener {
         override fun onSurfaceTextureAvailable(
             surfaceTexture: SurfaceTexture,
@@ -40,7 +42,12 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
         ) {
             val cameraManager = mContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val cameraId = getBackFacingCameraId(cameraManager)
-            previewSize = openCamera(cameraManager, cameraId ?: "0")
+            if (cameraId == null) {
+                Log.d("mymymy", "Fail to get camera info")
+                previewSize = null
+                return
+            }
+            previewSize = openCamera(cameraManager, cameraId)
         }
 
         override fun onSurfaceTextureSizeChanged(
@@ -86,6 +93,11 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
                 )
                 val map =
                     cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                if (map == null) {
+                    Log.e("mymymy", "map null")
+                    Toast.makeText(context, "Fail to open Camera!", Toast.LENGTH_SHORT).show()
+                    return null
+                }
                 val previewSize = map!!.getOutputSizes(
                     SurfaceTexture::class.java
                 )[0]
@@ -103,6 +115,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
             return
         }
         val texture = this.surfaceTexture ?: return
+        if (previewSize == null) return
         texture.setDefaultBufferSize(previewSize!!.width, previewSize.height)
         val surface = Surface(texture)
         val builder: CaptureRequest.Builder = try {
@@ -126,6 +139,8 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
             )
         } catch (e: CameraAccessException) {
             e.printStackTrace()
+            Toast.makeText(context, "fail to open camera", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -151,6 +166,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
                     cameraCharacteristics.get(CameraCharacteristics.LENS_FACING)!!
                 if (cameraOrientation == CameraCharacteristics.LENS_FACING_BACK) return cameraId
             }
+            return cameraManager.cameraIdList[0]
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }

@@ -37,10 +37,8 @@ class QuestionFormFragment : Fragment() {
 
     var schoolSelected: String = "고등학교"
     var subjectSelected: String? = null
-    var chapterCodeSelected: Int? = null
     var chapterSelected: String? = null
     var difficultySelected: String = "normal"
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,14 +104,12 @@ class QuestionFormFragment : Fragment() {
 
     private fun setSubjectSpinner() {
 
-
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             mathSubjects[schoolSelected]?.keys?.toList()!!
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerSubject.adapter = adapter
+        binding.atSubject.setAdapter(adapter)
     }
 
     private fun setChapterSpinner() {
@@ -123,37 +119,35 @@ class QuestionFormFragment : Fragment() {
             android.R.layout.simple_spinner_item,
             mathSubjects[schoolSelected]?.get(subjectSelected)?.keys?.toList()!!
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerChapter.adapter = adapter
+        binding.atChapter.setAdapter(adapter)
     }
 
     private fun setRadioGroups() {
-        binding.rgSchool.setOnCheckedChangeListener { _, checkId ->
-            when (checkId) {
-                R.id.rb_middleschool -> schoolSelected = "중학교"
-
-
-                R.id.rb_highschool -> schoolSelected = "고등학교"
-
+        binding.atSchoolLevel.onItemClickListener =
+            AdapterView.OnItemClickListener { p0, p1, pos, id ->
+                schoolSelected =
+                    when (pos) {
+                        0 -> "초등학교"
+                        1 -> "중학교"
+                        else -> "고등학교"
+                    }
             }
-            setSubjectSpinner()
-        }
+
+        setSubjectSpinner()
+
         binding.rgDifficulty.setOnCheckedChangeListener { _, checkId ->
-            when (checkId) {
-                R.id.rb_easy -> difficultySelected = "easy"
-
-                R.id.rb_normal -> difficultySelected = "normal"
-
-
-                R.id.rb_hard -> difficultySelected = "hard"
-
-            }
+            difficultySelected =
+                when (checkId) {
+                    R.id.rb_easy -> "easy"
+                    R.id.rb_middle -> "normal"
+                    else -> "hard"
+                }
         }
     }
 
 
     private fun setSpinnerListener() {
-        binding.spinnerSubject.onItemSelectedListener =
+        binding.atSubject.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -167,12 +161,10 @@ class QuestionFormFragment : Fragment() {
                     setChapterSpinner()
                 }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    return
-                }
+                override fun onNothingSelected(p0: AdapterView<*>?) { return }
 
             }
-        binding.spinnerChapter.onItemSelectedListener =
+        binding.atChapter.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -184,10 +176,7 @@ class QuestionFormFragment : Fragment() {
                     chapterSelected = selectedItem
                 }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    return
-                }
-
+                override fun onNothingSelected(p0: AdapterView<*>?) { return }
             }
     }
 

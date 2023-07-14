@@ -16,16 +16,16 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
     override suspend fun getQuestions(): Flow<BaseResult<List<QuestionGetResultVO>, String>> {
         return flow {
             val response = questionGetApi.getQuestions()
-            if (response.isSuccessful) {
-                response.body()!!
-                    .map { it.asDomain() }
-                    .let { emit(BaseResult.Success(it)) }
+            if (response.isSuccessful && !response.body()!!.error) {
+                response.body()!!.data
+                    ?.map { it.asDomain() }
+                    ?.let { emit(BaseResult.Success(it)) }
             }
             else {
                 val errorString =
                     "error in ${this@QuestionGetRepositoryImpl::class.java.name}\n" +
-                            "message: ${response.message()}"
-                emit(BaseResult.Error(errorString))
+                            "message: ${response.body()!!.message}"
+                Log.d("Error", errorString)
             }
         }
     }

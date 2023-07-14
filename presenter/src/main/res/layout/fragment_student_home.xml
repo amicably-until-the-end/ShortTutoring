@@ -7,6 +7,55 @@
     android:layout_height="match_parent"
     tools:context=".student_home.StudentHomeActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="50dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="50dp" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btn_question"
+        app:layout_constraintLeft_toRightOf="@id/gl_left"
+        app:layout_constraintRight_toLeftOf="@id/gl_right">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_lecture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="지난 과외 영상"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_medium"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_lecture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="100dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
     <Button
         android:id="@+id/btn_question"
         android:layout_width="match_parent"

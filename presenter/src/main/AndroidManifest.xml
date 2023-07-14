@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application>
+        <activity
+            android:name=".classroom.ClassroomActivity"
+            android:exported="false" />
         <activity
             android:name=".question_upload.QuestionUploadActivity"
             android:exported="false" />

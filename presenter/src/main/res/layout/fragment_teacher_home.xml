@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="100dp" />
+        app:layout_constraintGuide_begin="50dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gl_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="100dp" />
+        app:layout_constraintGuide_end="50dp" />
 
     <TextView
         android:id="@+id/tv_student_question"
@@ -28,7 +28,7 @@
         android:layout_marginTop="100dp"
         android:text="학생이 질문한 목록입니다"
         android:textColor="@android:color/black"
-        android:textSize="30sp"
+        android:textSize="@dimen/text_medium"
         app:layout_constraintLeft_toRightOf="@id/gl_left"
         app:layout_constraintTop_toTopOf="parent" />
 
