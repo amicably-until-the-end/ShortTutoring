@@ -1,15 +1,19 @@
 package org.softwaremaestro.presenter.teacher_home
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.internal.ViewUtils.dpToPx
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -23,6 +27,8 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
+
+private const val GRIDLAYOUT_SPANCOUNT = 2
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -44,18 +50,23 @@ class TeacherHomeFragment : Fragment() {
             waitingDialog.show()
             uploadAnswer()
         }.apply {
-            val items = listOf(QuestionGetResultVO(
-                "studentId",
-                null,
-                "고등학교",
-                "수학1",
-                "지수함수와 로그함수",
-                "어려움",
-                "어떻게 풀지 모르겠어요",
-                "not selected",
-                "test-tutoring-id",
-                "today"
-            ))
+            val items = mutableListOf<QuestionGetResultVO>()
+            (0..10).forEach {
+                items.add(
+                    QuestionGetResultVO(
+                        "studentId",
+                        null,
+                        "고등학교",
+                        "수학1",
+                        "지수함수와 로그함수",
+                        "어려움",
+                        "어떻게 풀지 모르겠어요",
+                        "not selected",
+                        "test-tutoring-id",
+                        "today"
+                    )
+                )
+            }
             setItem(items)
         }
         waitingDialog = WaitingDialog(requireActivity())
@@ -64,12 +75,35 @@ class TeacherHomeFragment : Fragment() {
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
-            layoutManager = LinearLayoutManager(requireActivity())
+            layoutManager = GridLayoutManager(requireActivity(), GRIDLAYOUT_SPANCOUNT)
+            setSpacing(10)
         }
 
         observe()
 
         return binding.root
+    }
+
+    private fun RecyclerView.setSpacing(dp: Int) {
+        this.addItemDecoration(object: RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                position: Int,
+                parent: RecyclerView
+            ) {
+                super.getItemOffsets(outRect, position, parent)
+                when (position % GRIDLAYOUT_SPANCOUNT) {
+                    // 그리드 레이아웃의 맨 왼쪽 뷰
+                    0 -> outRect.right = dpToPx(dp)
+                    // 그리드 레이아웃의 맨 오른쪽 뷰
+                    GRIDLAYOUT_SPANCOUNT - 1 -> outRect.right = dpToPx(dp)
+                    else -> {
+                        outRect.left = dpToPx(dp)
+                        outRect.right = dpToPx(dp)
+                    }
+                }
+            }
+        })
     }
 
     private fun observe() {
@@ -134,5 +168,10 @@ class TeacherHomeFragment : Fragment() {
     private fun uploadAnswer() {
         val problemId = "this should be properly set, or error occurs"
         answerViewModel.uploadAnswer(AnswerUploadVO(problemId, TeacherVO("teacherId")))
+    }
+
+    fun dpToPx(dp: Int): Int {
+        val metrics = requireContext().resources.displayMetrics;
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), metrics).toInt()
     }
 }

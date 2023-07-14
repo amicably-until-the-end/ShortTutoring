@@ -44,7 +44,7 @@ class QuestionAdapter(private val answerBtnClickListener: () -> Unit): RecyclerV
 //                (binding.containerReview.getChildAt(i) as TextView).text = item.reviews?.get(i) ?: EMPTY_STRING
 //            }
 
-            binding.btnAnswer.setOnClickListener {
+            binding.root.setOnClickListener {
                 answerBtnClickListener()
             }
         }
