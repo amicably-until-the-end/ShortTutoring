@@ -4,7 +4,7 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
+import org.softwaremaestro.presenter.Util.dpToPx
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ViewUtils.dpToPx
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -94,12 +93,12 @@ class TeacherHomeFragment : Fragment() {
                 super.getItemOffsets(outRect, position, parent)
                 when (position % GRIDLAYOUT_SPANCOUNT) {
                     // 그리드 레이아웃의 맨 왼쪽 뷰
-                    0 -> outRect.right = dpToPx(dp)
+                    0 -> outRect.right = dpToPx(dp, requireContext())
                     // 그리드 레이아웃의 맨 오른쪽 뷰
-                    GRIDLAYOUT_SPANCOUNT - 1 -> outRect.right = dpToPx(dp)
+                    GRIDLAYOUT_SPANCOUNT - 1 -> outRect.right = dpToPx(dp, requireContext())
                     else -> {
-                        outRect.left = dpToPx(dp)
-                        outRect.right = dpToPx(dp)
+                        outRect.left = dpToPx(dp, requireContext())
+                        outRect.right = dpToPx(dp, requireContext())
                     }
                 }
             }
@@ -168,10 +167,5 @@ class TeacherHomeFragment : Fragment() {
     private fun uploadAnswer() {
         val problemId = "this should be properly set, or error occurs"
         answerViewModel.uploadAnswer(AnswerUploadVO(problemId, TeacherVO("teacherId")))
-    }
-
-    fun dpToPx(dp: Int): Int {
-        val metrics = requireContext().resources.displayMetrics;
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), metrics).toInt()
     }
 }
