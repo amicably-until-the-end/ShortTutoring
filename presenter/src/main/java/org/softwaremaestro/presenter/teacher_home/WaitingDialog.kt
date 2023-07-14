@@ -26,19 +26,5 @@ class WaitingDialog(context: Context): Dialog(context) {
             // 대화상자를 없앤다
             dismiss()
         }
-
-        getReply()
-    }
-
-    private fun getReply() {
-
-        // reply의 state가 success이면
-        if (true) {
-
-            // go to room
-        }
-        else {
-
-        }
     }
 }
