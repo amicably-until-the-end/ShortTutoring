@@ -18,8 +18,8 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     ViewModel() {
 
 
-    private val _questionId: MutableLiveData<String> = MutableLiveData();
-    val questionId: LiveData<String> get() = _questionId
+    private val _questionId: MutableLiveData<String?> = MutableLiveData();
+    val questionId: LiveData<String?> get() = _questionId
 
 
     fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
@@ -29,7 +29,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> _questionId.value = result.data.question_id
-                        is BaseResult.Error -> _questionId.value = "fail"
+                        is BaseResult.Error -> _questionId.value = null
                     }
                 }
 

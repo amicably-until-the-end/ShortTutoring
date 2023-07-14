@@ -75,6 +75,7 @@ class QuestionFormFragment : Fragment() {
                     bundle
                 )
             }
+
         }
     }
 
@@ -89,8 +90,8 @@ class QuestionFormFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             viewModel.uploadQuestion(
                 QuestionUploadVO(
-                    "testID",
-                    binding.etDescription.text.toString(),
+                    "test-student-id",
+                    binding.etDetail.text.toString(),
                     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
                     schoolSelected,
                     subjectSelected ?: "",
