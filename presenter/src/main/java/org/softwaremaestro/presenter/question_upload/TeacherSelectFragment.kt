@@ -55,6 +55,14 @@ class TeacherSelectFragment : Fragment() {
             teacherListAdapter.notifyDataSetChanged()
 
         })
+        viewModel.tutoringId.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(
+                context,
+                "tutoring Id is ${viewModel.tutoringId.value}",
+                Toast.LENGTH_SHORT
+            )
+
+        })
     }
 
     private fun setTeacherRecycler() {
@@ -63,7 +71,7 @@ class TeacherSelectFragment : Fragment() {
                 viewModel.teacherList.value ?: emptyList(),
                 object : OnItemClickListener {
                     override fun onAcceptBtnClicked(teacherId: String) {
-
+                        viewModel.pickTeacher(teacherId)
                     }
 
                 })

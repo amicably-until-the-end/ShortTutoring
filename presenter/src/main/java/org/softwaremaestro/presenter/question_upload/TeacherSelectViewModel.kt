@@ -13,13 +13,17 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_upload.usecase.TeacherListGetUseCase
+import org.softwaremaestro.domain.question_upload.usecase.TeacherPickUseCase
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
 
 
 @HiltViewModel
-class TeacherSelectViewModel @Inject constructor(private val teacherListGetUseCase: TeacherListGetUseCase) :
+class TeacherSelectViewModel @Inject constructor(
+    private val teacherListGetUseCase: TeacherListGetUseCase,
+    private val teacherPickUseCase: TeacherPickUseCase
+) :
     ViewModel() {
 
     private val timer = Timer()
@@ -32,11 +36,35 @@ class TeacherSelectViewModel @Inject constructor(private val teacherListGetUseCa
     private val _errorMsg: MutableLiveData<String> = MutableLiveData();
     val errorMsg: LiveData<String> get() = _errorMsg
 
+    private val _tutoringId: MutableLiveData<String> = MutableLiveData()
+    val tutoringId: LiveData<String> get() = _tutoringId
+
+    fun pickTeacher(teacherId: String) {
+        viewModelScope.launch {
+
+            teacherPickUseCase.execute(teacherId)
+                .catch {
+                    Log.e("mymymy", "pick Teacher Fail")
+                }
+                .collect { result ->
+                    Log.d("mymymy", result.toString())
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _tutoringId.postValue(result.toString())
+                        }
+
+                        is BaseResult.Error -> {
+                            _errorMsg.postValue("fail to pick Teacher")
+                        }
+                    }
+                }
+        }
+    }
+
     fun startGetTeacherList(questionId: String) {
         timer.schedule(object : TimerTask() {
             override fun run() {
                 viewModelScope.launch(Dispatchers.IO) {
-                    Log.d("mymymy", "thread is working")
                     getTeacherList(questionId)
                 }
             }
