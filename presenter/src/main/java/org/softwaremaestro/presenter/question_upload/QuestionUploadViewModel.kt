@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,10 +26,17 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)
-                .catch { exception -> _questionId.value = exception.message.toString() }
+                .catch { exception ->
+
+                    _questionId.value = null
+                }
                 .collect { result ->
+                    Log.d("mymymy", "${result.toString()} is result in viewmodel")
                     when (result) {
-                        is BaseResult.Success -> _questionId.value = result.data.question_id
+                        is BaseResult.Success -> {
+                            _questionId.value = result.data.question_id
+                        }
+
                         is BaseResult.Error -> _questionId.value = null
                     }
                 }

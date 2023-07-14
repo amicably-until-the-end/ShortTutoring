@@ -3,12 +3,14 @@ package org.softwaremaestro.data.question_upload
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.remote.QuestionUploadApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import javax.inject.Inject
 
@@ -28,12 +30,12 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
                 questionUploadVO.problemDifficulty,
             )
             val response = questionUploadApi.uploadQuestion(questionUploadVO.studentId, dto)
+            Log.d("mymymy", "${response.toString()} is res in imple")
             if (response.isSuccessful) {
                 val body = response.body()!!
-                val resultVO = QuestionUploadResultVO(body?.questionId!!)
+                val resultVO = QuestionUploadResultVO(body?.data?.questionId!!)
                 emit(BaseResult.Success(resultVO))
             } else {
-                Log.d("mymymy", response.toString()!!)
                 val errorString = "error"
                 emit(BaseResult.Error(errorString))
             }
@@ -45,8 +47,8 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
             Log.d("mymymy", "${questionId} is question id in before api call")
             val response = questionUploadApi.getTeacherList(questionId)
             if (response.isSuccessful) {
-                val body = response.body()
-                val teacherDtoList = body ?: emptyList()
+                val data = response.body()?.data
+                val teacherDtoList = data ?: emptyList()
                 val teacherList = teacherDtoList.map { teacherDto ->
                     TeacherVO(
                         name = "undefined", // Set the appropriate values for name, school, bio, imageUrl, and teacherId
@@ -63,12 +65,23 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
         }
     }
 
-    override suspend fun pickTeacher(teacherId: String): Flow<BaseResult<String, String>> {
+    override suspend fun pickTeacher(
+        VO: TeacherPickReqVO
+    ): Flow<BaseResult<String, String>> {
         return flow {
+            val response =
+                questionUploadApi.pickTeacher(
+                    PickTeacherReqDto(
+                        VO.studentId,
+                        VO.teacherId,
+                        VO.questionId
+                    )
+                )
+            Log.d("mymymy", "pickTeacher ${response.body()} is res in imple")
 
-            val response = questionUploadApi.pickTeacher(teacherId)
             if (response.isSuccessful) {
-                val tutoringId = response.body() ?: ""
+                val tutoringId = response.body()?.data?.tutoringId ?: ""
+                Log.d("mymymy", "tutoring Id in imple ${tutoringId}")
                 emit(BaseResult.Success(tutoringId))
             } else {
                 emit(BaseResult.Error("error"))

@@ -2,7 +2,6 @@ package org.softwaremaestro.data.question_upload.model
 
 import com.google.gson.annotations.SerializedName
 
-
-data class QuestionUploadResultDto(
-    @SerializedName("requestId") var questionId: String,
+data class PickTeacherResDto(
+    @SerializedName("tutoringId") val tutoringId: String,
 )

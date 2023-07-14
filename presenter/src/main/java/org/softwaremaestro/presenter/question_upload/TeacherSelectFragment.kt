@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 import java.util.logging.Logger
@@ -32,17 +33,20 @@ class TeacherSelectFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        binding = FragmentTeacherSelectBinding.inflate(layoutInflater, container, false)
+        binding = FragmentTeacherSelectBinding.inflate(inflater, container, false)
+
 
         val question_id = arguments?.getString("questionId")
 
         if (question_id == null) {
             Toast.makeText(context, "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
+            Log.d("mymymy", "null question id")
         } else {
             Log.d("mymymy", "$question_id question id")
             viewModel.startGetTeacherList(question_id)
+            setTeacherRecycler(question_id)
+
         }
-        setTeacherRecycler()
         setObserver()
 
         return binding.root
@@ -60,18 +64,25 @@ class TeacherSelectFragment : Fragment() {
                 context,
                 "tutoring Id is ${viewModel.tutoringId.value}",
                 Toast.LENGTH_SHORT
-            )
+            ).show()
+            Log.d("mymymy", viewModel.tutoringId.value!!)
 
         })
     }
 
-    private fun setTeacherRecycler() {
+    private fun setTeacherRecycler(questionId: String) {
         teacherListAdapter =
             TeacherAdapter(
                 viewModel.teacherList.value ?: emptyList(),
                 object : OnItemClickListener {
                     override fun onAcceptBtnClicked(teacherId: String) {
-                        viewModel.pickTeacher(teacherId)
+                        viewModel.pickTeacher(
+                            TeacherPickReqVO(
+                                questionId = questionId,
+                                "test-student-id",
+                                teacherId = teacherId
+                            )
+                        )
                     }
 
                 })
