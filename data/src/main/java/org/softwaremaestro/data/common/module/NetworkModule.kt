@@ -28,19 +28,19 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttp(): OkHttpClient {
+    fun provideOkHttp(requestInterceptor: RequestInterceptor): OkHttpClient {
         return OkHttpClient.Builder().apply {
             connectTimeout(60, TimeUnit.SECONDS)
             readTimeout(60, TimeUnit.SECONDS)
             writeTimeout(60, TimeUnit.SECONDS)
-            //addInterceptor(requestInterceptor)
+            addInterceptor(requestInterceptor)
         }.build()
     }
 
-    /*  @Provides
-      fun provideRequestIntercepter(prefs: SharedPrefs): RequestInterceptor {
-          return RequestInterceptor(prefs)
-      }*/
+    @Provides
+    fun provideRequestIntercepter(prefs: SharedPrefs): RequestInterceptor {
+        return RequestInterceptor(prefs)
+    }
 
 
 }

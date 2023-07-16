@@ -40,9 +40,12 @@ class LogoViewModel @Inject constructor(
                     Log.d("mymymy", "Auto login Fail")
                 }
                 .collect { result ->
+                    Log.d("mymymy", result.toString())
                     when (result) {
                         is BaseResult.Success -> _savedToken.postValue(result.data)
-                        else -> {}
+                        else -> {
+                            
+                        }
                     }
                 }
         }

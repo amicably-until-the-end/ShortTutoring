@@ -29,8 +29,9 @@ class LoginModule {
     @Singleton
     @Provides
     fun provideAnswerUploadRepository(
+        sharedPrefs: SharedPrefs,
         getUserInfoApi: GetUserInfoApi
     ): LoginRepository {
-        return LoginRepositoryImpl(getUserInfoApi)
+        return LoginRepositoryImpl(getUserInfoApi, sharedPrefs)
     }
 }

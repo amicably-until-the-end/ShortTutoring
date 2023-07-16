@@ -29,7 +29,7 @@ class LogoFragment @Inject constructor() :
 
     private lateinit var binding: FragmentLogoBinding
 
-    //private val viewModel: LogoViewModel by viewModels()
+    private val viewModel: LogoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,33 +53,33 @@ class LogoFragment @Inject constructor() :
             Navigation.findNavController(it)
                 .navigate(R.id.action_logoFragment_to_registerRoleFragment)
         }
-        //checkAutoLogin()
-        //setObserver()
+        checkAutoLogin()
+        setObserver()
         return binding.root
     }
 
     private fun checkAutoLogin() {
-        //viewModel.getSaveToken()
+        viewModel.getSaveToken()
     }
 
-//    private fun setObserver() {
-//        viewModel.savedToken.observe(viewLifecycleOwner) {
-//            if (viewModel.savedToken != null) {
-//                viewModel.getUserInfo()
-//            }
-//        }
-//        viewModel.userInfo.observe(viewLifecycleOwner) {
-//            if (viewModel.userInfo != null) {
-//                Log.d("mymymy", "get user info in frag ${viewModel.userInfo.value.toString()}")
-//                if (viewModel.userInfo.value?.role == "student") {
-//                    val intent = Intent(activity, StudentHomeActivity::class.java)
-//                    startActivity(intent)
-//                } else {
-//                    val intent = Intent(activity, TeacherHomeActivity::class.java)
-//                    startActivity(intent)
-//                }
-//            }
-//        }
-//    }
+    private fun setObserver() {
+        viewModel.savedToken.observe(viewLifecycleOwner) {
+            if (viewModel.savedToken != null) {
+                //viewModel.getUserInfo()
+            }
+        }
+        viewModel.userInfo.observe(viewLifecycleOwner) {
+            if (viewModel.userInfo != null) {
+                Log.d("mymymy", "get user info in frag ${viewModel.userInfo.value.toString()}")
+                if (viewModel.userInfo.value?.role == "student") {
+                    val intent = Intent(activity, StudentHomeActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(activity, TeacherHomeActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
 
 }

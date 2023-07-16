@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.login
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.infra.SharedPrefs
@@ -11,17 +12,19 @@ import org.softwaremaestro.domain.login.entity.UserVO
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
-    private val getUserInfoApi: GetUserInfoApi
+    private val getUserInfoApi: GetUserInfoApi,
+    private val prefs: SharedPrefs
 ) :
     LoginRepository {
 
 
     override suspend fun autoLogin(): Flow<BaseResult<String, String>> {
         return flow {
-            val savedToken: String = ""//prefs.getToken()
+            val savedToken: String = prefs.getToken()
             //token 만료되었으면 리프래시 하는 로직 추가.
             if (savedToken == "") {
-                emit(BaseResult.Error("Fail to get token"))
+                emit(BaseResult.Error("No saved token"))
+                prefs.saveToken("userToken")
             } else {
                 // 토큰 유효한지 체크
                 // 유효하면 return
@@ -34,7 +37,8 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun getUserInfo(): Flow<BaseResult<UserVO, String>> {
         return flow {
-            val savedToken: String = ""//prefs.getToken()
+            val savedToken: String = prefs.getToken()
+            Log.d("mymymy", "imple try to get user info with ${savedToken}")
             val result = getUserInfoApi.getUserInfo(UserInfoReqDto(savedToken))
             if (result.isSuccessful) {
                 val userDto = result.body()?.data!!

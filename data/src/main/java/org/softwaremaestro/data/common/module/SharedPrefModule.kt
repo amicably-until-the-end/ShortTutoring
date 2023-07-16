@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.softwaremaestro.data.infra.SharedPrefs
 
-/*
+
 @Module
 @InstallIn(SingletonComponent::class)
 object SharedPrefModule {
@@ -17,4 +17,4 @@ object SharedPrefModule {
     fun provideSharedPref(@ApplicationContext context: Context): SharedPrefs {
         return SharedPrefs(context)
     }
-}*/
+}
