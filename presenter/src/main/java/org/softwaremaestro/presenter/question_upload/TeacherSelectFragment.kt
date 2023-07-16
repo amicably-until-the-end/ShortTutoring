@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
+import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 import java.util.logging.Logger
 
@@ -65,7 +67,10 @@ class TeacherSelectFragment : Fragment() {
                 "tutoring Id is ${viewModel.tutoringId.value}",
                 Toast.LENGTH_SHORT
             ).show()
-            Log.d("mymymy", viewModel.tutoringId.value!!)
+            val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
+                putExtra("tutoringId", viewModel.tutoringId.value)
+            }
+            startActivity(intent)
 
         })
     }
