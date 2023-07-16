@@ -11,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_upload.usecase.TeacherListGetUseCase
 import org.softwaremaestro.domain.question_upload.usecase.TeacherPickUseCase
@@ -39,18 +40,19 @@ class TeacherSelectViewModel @Inject constructor(
     private val _tutoringId: MutableLiveData<String> = MutableLiveData()
     val tutoringId: LiveData<String> get() = _tutoringId
 
-    fun pickTeacher(teacherId: String) {
+    fun pickTeacher(teacherPickReqVO: TeacherPickReqVO) {
         viewModelScope.launch {
 
-            teacherPickUseCase.execute(teacherId)
-                .catch {
-                    Log.e("mymymy", "pick Teacher Fail")
+            teacherPickUseCase.execute(teacherPickReqVO)
+                .catch { exception ->
+
+                    Log.e("mymymy", "pick Teacher Fail ${exception.toString()}")
                 }
                 .collect { result ->
-                    Log.d("mymymy", result.toString())
                     when (result) {
                         is BaseResult.Success -> {
-                            _tutoringId.postValue(result.toString())
+                            Log.d("mymymy", "success pick viewmodel ${result.data}")
+                            _tutoringId.postValue(result.data)
                         }
 
                         is BaseResult.Error -> {

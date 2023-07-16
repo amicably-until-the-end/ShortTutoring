@@ -9,7 +9,8 @@
             android:exported="false" />
         <activity
             android:name=".question_upload.QuestionUploadActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true" />
         <activity
             android:name=".login.LoginActivity"
             android:exported="false" />

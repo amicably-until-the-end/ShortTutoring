@@ -1,6 +1,9 @@
 package org.softwaremaestro.data.question_upload.remote
 
 import org.softwaremaestro.data.common.utils.WrappedListResponse
+import org.softwaremaestro.data.common.utils.WrappedResponse
+import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
+import org.softwaremaestro.data.question_upload.model.PickTeacherResDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadResultDto
 import org.softwaremaestro.data.question_upload.model.TeacherDto
@@ -15,13 +18,13 @@ interface QuestionUploadApi {
     suspend fun uploadQuestion(
         @Path("id") studentId: String,
         @Body questionUploadRequestDto: QuestionUploadRequestDto
-    ): Response<QuestionUploadResultDto>
+    ): Response<WrappedResponse<QuestionUploadResultDto>>
 
     @GET("/response/teacherList/{questionId}")
-    suspend fun getTeacherList(@Path("questionId") questionId: String): Response<List<TeacherDto>>
+    suspend fun getTeacherList(@Path("questionId") questionId: String): Response<WrappedListResponse<TeacherDto>>
 
-    @GET("/response/select")
-    suspend fun pickTeacher(@Body pickTeacherDto: String): Response<String>
+    @POST("/response/select")
+    suspend fun pickTeacher(@Body pickTeacherReqDto: PickTeacherReqDto): Response<WrappedResponse<PickTeacherResDto>>
 
 
 }

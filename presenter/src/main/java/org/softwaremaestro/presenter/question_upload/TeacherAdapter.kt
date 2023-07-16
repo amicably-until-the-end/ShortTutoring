@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 
 class TeacherAdapter(private var items: List<TeacherVO>, val listener: OnItemClickListener) :
     RecyclerView.Adapter<TeacherAdapter.ViewHolder>() {
