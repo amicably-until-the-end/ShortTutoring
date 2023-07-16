@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.Util.dpToPx
 
 private const val GRIDLAYOUT_SPANCOUNT = 2
 
+@AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentHomeBinding
@@ -51,7 +53,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun RecyclerView.setSpacing(dp: Int) {
-        this.addItemDecoration(object: RecyclerView.ItemDecoration() {
+        this.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 position: Int,
