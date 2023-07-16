@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterStudentInfoBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 
+@AndroidEntryPoint
 class RegisterStudentInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterStudentInfoBinding

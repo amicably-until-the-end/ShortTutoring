@@ -91,7 +91,7 @@ class QuestionFormFragment : Fragment() {
             viewModel.uploadQuestion(
                 QuestionUploadVO(
                     "test-student-id",
-                    binding.etDetail.text.toString(),
+                    binding.etDescription.text.toString(),
                     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
                     schoolSelected,
                     subjectSelected ?: "",
@@ -161,7 +161,9 @@ class QuestionFormFragment : Fragment() {
                     setChapterSpinner()
                 }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) { return }
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    return
+                }
 
             }
         binding.atChapter.onItemSelectedListener =
@@ -176,7 +178,9 @@ class QuestionFormFragment : Fragment() {
                     chapterSelected = selectedItem
                 }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) { return }
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    return
+                }
             }
     }
 
