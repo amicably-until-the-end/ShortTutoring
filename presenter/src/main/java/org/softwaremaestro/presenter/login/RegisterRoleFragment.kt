@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterRoleBinding
 
 // 로그인 화면에서 회원 가입을 누르면 나오는 화면.
 // 유저는 선생님과 학생 중에서 선택한다.
+@AndroidEntryPoint
 class RegisterRoleFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterRoleBinding
@@ -24,11 +26,13 @@ class RegisterRoleFragment : Fragment() {
         binding = FragmentRegisterRoleBinding.inflate(inflater, container, false)
 
         binding.tvStudent.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_registerRoleFragment_to_registerStudentInfoFragment)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_registerRoleFragment_to_registerStudentInfoFragment)
         }
 
         binding.tvTeacher.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_registerRoleFragment_to_registerTeacherInfoFragment)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_registerRoleFragment_to_registerTeacherInfoFragment)
         }
 
         return binding.root

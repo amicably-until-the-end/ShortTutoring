@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 
 // 회원가입 두 번째 화면.
 // 개인정보를 입력한다.
+@AndroidEntryPoint
 class RegisterTeacherInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterTeacherInfoBinding
@@ -27,9 +29,9 @@ class RegisterTeacherInfoFragment : Fragment() {
 
         binding.btnComplete.setOnClickListener {
             if (true) {
-                Navigation.findNavController(it).navigate(R.id.action_registerTeacherInfoFragment_to_logoFragment)
-            }
-            else {
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_registerTeacherInfoFragment_to_logoFragment)
+            } else {
 
             }
         }

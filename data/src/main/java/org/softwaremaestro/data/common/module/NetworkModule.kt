@@ -5,6 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import org.softwaremaestro.data.common.utils.RequestInterceptor
+import org.softwaremaestro.data.infra.SharedPrefs
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -26,12 +28,18 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttp(): OkHttpClient {
+    fun provideOkHttp(requestInterceptor: RequestInterceptor): OkHttpClient {
         return OkHttpClient.Builder().apply {
             connectTimeout(60, TimeUnit.SECONDS)
             readTimeout(60, TimeUnit.SECONDS)
             writeTimeout(60, TimeUnit.SECONDS)
+            addInterceptor(requestInterceptor)
         }.build()
+    }
+
+    @Provides
+    fun provideRequestIntercepter(prefs: SharedPrefs): RequestInterceptor {
+        return RequestInterceptor(prefs)
     }
 
 
