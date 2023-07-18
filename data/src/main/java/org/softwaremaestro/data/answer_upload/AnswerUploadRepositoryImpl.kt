@@ -17,19 +17,19 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
     override suspend fun uploadAnswer(answerUploadVO: AnswerUploadVO): Flow<BaseResult<AnswerUploadResultVO, String>> {
         return flow {
             val dto = AnswerUploadRequestDto(
-                answerUploadVO.id,
+                answerUploadVO.requestId,
                 TeacherDto(answerUploadVO.teacherVO.teacherId)
             )
             val response = answerUploadApi.uploadAnswer(dto.id, dto.teacherDto)
-            if (response.isSuccessful) {
-                response.body()!!.asDomain().let {
+            if (response.isSuccessful && !response.body()!!.error) {
+                response.body()!!.data?.asDomain()?.let {
                     emit(BaseResult.Success(it))
                 }
             }
             else {
                 val errorString =
                     "error in ${this@AnswerUploadRepositoryImpl::class.java.name}\n" +
-                            "message: ${response.message()}"
+                            "message: ${response.body()?.message}"
                 emit(BaseResult.Error(errorString))
             }
         }

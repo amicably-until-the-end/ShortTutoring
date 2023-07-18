@@ -127,9 +127,9 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeCheck() {
         checkViewModel.check.observe(viewLifecycleOwner) {
-            Log.d("question", it.toString())
             when (it.status) {
                 RequestStatus.SELECTED.noti -> {
+                    Log.d("check", "going well")
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
                         putExtra("tutoringId", it.tutoringId)
@@ -165,7 +165,6 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun uploadAnswer() {
-        val problemId = "this should be properly set, or error occurs"
-        answerViewModel.uploadAnswer(AnswerUploadVO(problemId, TeacherVO("teacherId")))
+        answerViewModel.uploadAnswer(AnswerUploadVO("test-request-id", TeacherVO("test-teacher-id")))
     }
 }

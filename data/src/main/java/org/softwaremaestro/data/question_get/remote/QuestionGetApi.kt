@@ -7,6 +7,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface QuestionGetApi {
-    @GET("/request")
+    @GET("/request/list")
     suspend fun getQuestions(): Response<WrappedListResponse<QuestionsGetResultDto>>
 }
