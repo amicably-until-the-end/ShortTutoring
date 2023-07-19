@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="25dp"
+    android:layout_marginTop="20dp"
     android:orientation="vertical"
     android:paddingTop="20dp"
     tools:context=".question_upload.QuestionFormFragment">
@@ -11,8 +13,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="25dp"
-        android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -63,24 +63,49 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginTop="15dp"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_medium"
                 android:textStyle="bold"
                 tools:text="학교" />
 
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/at_school_level"
+            <RadioGroup
+                android:id="@+id/rg_schoolLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_rectangle_6"
-                android:backgroundTint="#a0a0a0"
-                android:drawableRight="@drawable/baseline_arrow_drop_down_24"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="5dp"
-                android:text="학교를 선택하세요"
-                android:textSize="@dimen/text_medium" />
+                android:layout_marginTop="@dimen/spacing_small"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_middle_school"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rb_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="중학교 과정"
+                    android:textColor="@drawable/rb_selector_textcolor" />
+
+                <RadioButton
+                    android:id="@+id/rb_high_school"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rb_selector"
+                    android:button="@null"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="고등학교 과정"
+                    android:textColor="@drawable/rb_selector_textcolor" />
+
+
+            </RadioGroup>
 
 
             <!-- 과목 -->
@@ -94,7 +119,7 @@
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/at_subject"
+                android:id="@+id/btn_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rectangle_6"
@@ -102,7 +127,7 @@
                 android:drawableRight="@drawable/baseline_arrow_drop_down_24"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="5dp"
-                android:text="학교를 선택하세요"
+                android:text="과목을 선택하세요"
                 android:textSize="@dimen/text_medium" />
 
             <!-- 단원 -->
@@ -117,7 +142,7 @@
 
             <!-- 난이도 -->
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/at_chapter"
+                android:id="@+id/btn_chapter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rectangle_6"
@@ -125,7 +150,7 @@
                 android:drawableRight="@drawable/baseline_arrow_drop_down_24"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="5dp"
-                android:text="학교를 선택하세요"
+                android:text="단원을 선택하세요"
                 android:textSize="@dimen/text_medium" />
 
             <TextView
