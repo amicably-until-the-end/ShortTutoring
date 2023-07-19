@@ -53,19 +53,19 @@ class LogoFragment @Inject constructor() :
             startActivity(intent)
         }
 
-        binding.containerLoginByGoogle.setOnClickListener {
+        binding.btnLoginByGoogle.setOnClickListener {
             val intent = Intent(activity, TeacherHomeActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)
         }
 
-
-        binding.containerLoginByKakao.setOnClickListener {
-            //viewModel.loginWithKakao(requireContext())
+        binding.btnLoginByKakao.setOnClickListener {
+            // viewModel.loginWithKakao
+            Navigation.findNavController(it)
+                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
         }
-
-        //checkAutoLogin()
+        // checkAutoLogin()
         setObserver()
         hideAppBar()
         return binding.root
