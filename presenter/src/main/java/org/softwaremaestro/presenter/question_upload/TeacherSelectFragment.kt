@@ -25,9 +25,8 @@ class TeacherSelectFragment : Fragment() {
 
     lateinit var binding: FragmentTeacherSelectBinding
     private val viewModel: TeacherSelectViewModel by viewModels()
-
-
     lateinit var teacherListAdapter: TeacherAdapter
+    var noTeacher = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +56,13 @@ class TeacherSelectFragment : Fragment() {
     private fun setObserver() {
         viewModel.teacherList.observe(viewLifecycleOwner, Observer {
             Log.d("mymymy", "${viewModel.teacherList.value.toString()} is changed")
+            if (viewModel.teacherList.value?.size == 1 && noTeacher) {
+                noTeacher = false
+                binding.layoutParent.removeView(binding.ivWaitingIcon)
+            } else if (viewModel.teacherList.value?.size == 1 && noTeacher) {
+                noTeacher = true
+                binding.layoutParent.addView(binding.ivWaitingIcon)
+            }
             teacherListAdapter.setItems(viewModel.teacherList.value ?: emptyList())
             teacherListAdapter.notifyDataSetChanged()
 

@@ -44,22 +44,22 @@
                 android:textSize="@dimen/text_medium"
                 android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_medium"
-                    tools:text="문제가 이해가 안돼요" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- 학교 -->
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_rectangle_20"
+                android:backgroundTint="#c0c0c0"
+                android:gravity="top"
+                android:padding="20dp"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_small"
+                tools:text="문제가 이해가 안돼요" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,6 +122,7 @@
                 android:id="@+id/btn_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_rectangle_6"
                 android:backgroundTint="#a0a0a0"
                 android:drawableRight="@drawable/baseline_arrow_drop_down_24"
@@ -145,6 +146,7 @@
                 android:id="@+id/btn_chapter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_rectangle_6"
                 android:backgroundTint="#a0a0a0"
                 android:drawableRight="@drawable/baseline_arrow_drop_down_24"

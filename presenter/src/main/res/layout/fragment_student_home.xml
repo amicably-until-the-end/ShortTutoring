@@ -23,65 +23,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_rectangle_20"
-                android:backgroundTint="@color/grey"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingVertical="10dp"
-                app:layout_constraintLeft_toLeftOf="@id/gl_left"
-                app:layout_constraintRight_toRightOf="@id/gl_right"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="현재 접속 중인 선생님"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_medium" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0명"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_medium"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="현재 수업 중인 선생님"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_medium" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0명"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_medium"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_lecture"
@@ -107,14 +48,15 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="52dp"
-        android:background="@drawable/ic_circle_light_gray_10"
+        android:tint="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_circle_light_gray_10" />
+        app:srcCompat="@drawable/baseline_add_24"
+        app:useCompatPadding="false" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
