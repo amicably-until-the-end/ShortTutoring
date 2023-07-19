@@ -28,7 +28,8 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 
-private const val GRIDLAYOUT_SPANCOUNT = 2
+private const val GRIDLAYOUT_SPAN_COUNT = 2
+private const val GRIDLAYOUT_SPICING = 12
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -50,9 +51,7 @@ class TeacherHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
-
 
         return binding.root
     }
@@ -69,25 +68,6 @@ class TeacherHomeFragment : Fragment() {
             //waitingDialog.show()
             snackBar.show()
             uploadAnswer()
-        }.apply {
-            val items = mutableListOf<QuestionGetResultVO>()
-            (0..10).forEach {
-                items.add(
-                    QuestionGetResultVO(
-                        "studentId",
-                        null,
-                        "고등학교",
-                        "수학1",
-                        "지수함수와 로그함수",
-                        "어려움",
-                        "어떻게 풀지 모르겠어요",
-                        "not selected",
-                        "test-tutoring-id",
-                        "today"
-                    )
-                )
-            }
-            setItem(items)
         }
         waitingDialog = WaitingDialog(requireActivity())
         keepGettingQuestions(1000L)
@@ -95,8 +75,8 @@ class TeacherHomeFragment : Fragment() {
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
-            layoutManager = GridLayoutManager(requireActivity(), GRIDLAYOUT_SPANCOUNT)
-            setSpacing(10)
+            layoutManager = GridLayoutManager(requireActivity(), GRIDLAYOUT_SPAN_COUNT)
+            setSpacing(GRIDLAYOUT_SPICING)
         }
 
         observe()
@@ -110,11 +90,11 @@ class TeacherHomeFragment : Fragment() {
                 parent: RecyclerView
             ) {
                 super.getItemOffsets(outRect, position, parent)
-                when (position % GRIDLAYOUT_SPANCOUNT) {
+                when (position % GRIDLAYOUT_SPAN_COUNT) {
                     // 그리드 레이아웃의 맨 왼쪽 뷰
                     0 -> outRect.right = dpToPx(dp, requireContext())
                     // 그리드 레이아웃의 맨 오른쪽 뷰
-                    GRIDLAYOUT_SPANCOUNT - 1 -> outRect.right = dpToPx(dp, requireContext())
+                    GRIDLAYOUT_SPAN_COUNT - 1 -> outRect.left = dpToPx(dp, requireContext())
                     else -> {
                         outRect.left = dpToPx(dp, requireContext())
                         outRect.right = dpToPx(dp, requireContext())
