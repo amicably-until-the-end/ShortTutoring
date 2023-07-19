@@ -25,7 +25,6 @@ import android.view.TextureView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.lang.NullPointerException
 
 
 class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
