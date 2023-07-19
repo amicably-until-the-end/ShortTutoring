@@ -7,6 +7,6 @@
     <fragment
         android:id="@+id/teacherHomeFragment"
         android:name="org.softwaremaestro.presenter.teacher_home.TeacherHomeFragment"
-        android:label="fragment_teacher_home"
+        android:label="선생님 홈"
         tools:layout="@layout/fragment_teacher_home" />
 </navigation>

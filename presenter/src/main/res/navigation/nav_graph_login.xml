@@ -9,7 +9,7 @@
         android:id="@+id/logoFragment"
         android:name="org.softwaremaestro.presenter.login.LogoFragment"
         android:label="fragment_logo"
-        tools:layout="@layout/fragment_logo" >
+        tools:layout="@layout/fragment_logo">
         <action
             android:id="@+id/action_logoFragment_to_registerRoleFragment"
             app:destination="@id/registerRoleFragment" />
@@ -17,8 +17,8 @@
     <fragment
         android:id="@+id/registerRoleFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterRoleFragment"
-        android:label="fragment_register_role"
-        tools:layout="@layout/fragment_register_role" >
+        android:label="회원가입"
+        tools:layout="@layout/fragment_register_role">
         <action
             android:id="@+id/action_registerRoleFragment_to_registerTeacherInfoFragment"
             app:destination="@id/registerTeacherInfoFragment" />
@@ -29,8 +29,8 @@
     <fragment
         android:id="@+id/registerStudentInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterStudentInfoFragment"
-        android:label="fragment_register_student_info"
-        tools:layout="@layout/fragment_register_student_info" >
+        android:label="정보 입력"
+        tools:layout="@layout/fragment_register_student_info">
         <action
             android:id="@+id/action_registerStudentInfoFragment_to_logoFragment"
             app:destination="@id/logoFragment" />
@@ -38,8 +38,8 @@
     <fragment
         android:id="@+id/registerTeacherInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterTeacherInfoFragment"
-        android:label="fragment_register_teacher_info"
-        tools:layout="@layout/fragment_register_teacher_info" >
+        android:label="정보 입력"
+        tools:layout="@layout/fragment_register_teacher_info">
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
             app:destination="@id/logoFragment" />
