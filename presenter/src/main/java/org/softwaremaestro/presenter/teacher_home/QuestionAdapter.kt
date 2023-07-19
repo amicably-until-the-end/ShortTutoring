@@ -39,12 +39,13 @@ class QuestionAdapter(private val answerBtnClickListener: () -> Unit) :
             // Todo: 수정 필요함
             binding.ivPhoto.setImageBitmap(null)
             binding.tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
-            //binding.tvChapter.text = item.problemSchoolChapter ?: EMPTY_STRING
-            binding.tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
+            binding.tvDifficulty.text = when (item.problemDifficulty) {
+                "Difficult" -> "어려움"
+                "Midium" -> "중간"
+                "Easy" -> "쉬움"
+                else -> EMPTY_STRING
+            }
             binding.tvDesciption.text = item.problemDescription ?: EMPTY_STRING
-//            for (i in 0..2) {
-//                (binding.containerReview.getChildAt(i) as TextView).text = item.reviews?.get(i) ?: EMPTY_STRING
-//            }
 
             binding.root.setOnClickListener {
                 answerBtnClickListener()
