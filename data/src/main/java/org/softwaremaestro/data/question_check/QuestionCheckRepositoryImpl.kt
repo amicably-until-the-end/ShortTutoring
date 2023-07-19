@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.question_check
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.question_check.model.QuestionCheckRequestDto
@@ -22,6 +23,7 @@ class QuestionCheckRepositoryImpl @Inject constructor(private val questionCheckA
             val dto = QuestionCheckRequestDto(questionCheckRequestVO.teacherId)
             val response = questionCheckApi.checkQuestion(requestId, dto)
             if (response.isSuccessful) {
+                Log.d("Result in raw", response.toString())
                 val vo = response.body()!!.data?.asDomain()
                 if (vo != null)
                     emit(BaseResult.Success(vo))

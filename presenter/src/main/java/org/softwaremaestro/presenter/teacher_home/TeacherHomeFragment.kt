@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -33,20 +34,40 @@ private const val GRIDLAYOUT_SPANCOUNT = 2
 class TeacherHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherHomeBinding
-    private val questionsViewModel : QuestionsViewModel by viewModels()
-    private val answerViewModel : AnswerViewModel by viewModels()
-    private val checkViewModel : CheckViewModel by viewModels()
+    private val questionsViewModel: QuestionsViewModel by viewModels()
+    private val answerViewModel: AnswerViewModel by viewModels()
+    private val checkViewModel: CheckViewModel by viewModels()
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var waitingDialog: WaitingDialog
+
+    //c93f3772-1319-4db7-a88d-4667406a525b
+
+
+    private lateinit var snackBar: Snackbar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        snackBar =
+            Snackbar.make(binding.containerParent, "학생의 선택을 확인하고 있습니다.", Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction("취소하기") {
+            //answer 취소하는 로직 추가
+            snackBar.dismiss()
+        }
         questionAdapter = QuestionAdapter {
-            waitingDialog.show()
+            //waitingDialog.show()
+            snackBar.show()
             uploadAnswer()
         }.apply {
             val items = mutableListOf<QuestionGetResultVO>()
@@ -79,12 +100,10 @@ class TeacherHomeFragment : Fragment() {
         }
 
         observe()
-
-        return binding.root
     }
 
     private fun RecyclerView.setSpacing(dp: Int) {
-        this.addItemDecoration(object: RecyclerView.ItemDecoration() {
+        this.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 position: Int,
@@ -136,15 +155,19 @@ class TeacherHomeFragment : Fragment() {
                     }
                     startActivity(intent)
                 }
+
+                RequestStatus.NOT_SELECTED.noti -> {
+                    snackBar.setText("선생님이 다른 학생을 선택했습니다")
+                    snackBar.duration = Snackbar.LENGTH_SHORT
+                }
             }
-            waitingDialog.dismiss()
         }
     }
 
     private fun keepGettingQuestions(timeInterval: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                if (!waitingDialog.isShowing) {
+                if (!snackBar.isShown) {
                     questionsViewModel.getQuestions()
                 }
                 delay(timeInterval)
@@ -156,8 +179,11 @@ class TeacherHomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 // 학생의 선택을 기다리는 대화상자가 떠있을때
-                if (waitingDialog.isShowing) {
-                    checkViewModel.checkQuestion("test-request-id", QuestionCheckRequestVO("test-teacher-id"))
+                if (snackBar.isShown) {
+                    checkViewModel.checkQuestion(
+                        "test-request-id",
+                        QuestionCheckRequestVO("test-teacher-id")
+                    )
                 }
                 delay(timeInterval)
             }
@@ -165,6 +191,11 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun uploadAnswer() {
-        answerViewModel.uploadAnswer(AnswerUploadVO("test-request-id", TeacherVO("test-teacher-id")))
+        answerViewModel.uploadAnswer(
+            AnswerUploadVO(
+                "test-request-id",
+                TeacherVO("test-teacher-id")
+            )
+        )
     }
 }
