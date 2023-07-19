@@ -7,4 +7,6 @@
     <dimen name="text_small">20sp</dimen>
     <dimen name="spacing_small">10dp</dimen>
     <dimen name="spacing_medium">20dp</dimen>
+    <dimen name="margin_horizontal_default">32dp</dimen>
+    <dimen name="margin_top_default">80dp</dimen>
 </resources>

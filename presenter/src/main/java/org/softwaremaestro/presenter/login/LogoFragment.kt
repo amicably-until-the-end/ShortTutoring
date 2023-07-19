@@ -44,12 +44,12 @@ class LogoFragment @Inject constructor() :
             startActivity(intent)
         }
 
-        binding.containerLoginByGoogle.setOnClickListener {
+        binding.btnLoginByGoogle.setOnClickListener {
             val intent = Intent(activity, TeacherHomeActivity::class.java)
             startActivity(intent)
         }
 
-        binding.containerLoginByKakao.setOnClickListener {
+        binding.btnLoginByKakao.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_logoFragment_to_registerRoleFragment)
         }
