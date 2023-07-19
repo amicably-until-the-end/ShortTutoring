@@ -1,5 +1,7 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -53,10 +55,11 @@ class QuestionFormFragment : Fragment() {
 
         binding = FragmentQuestionFormBinding.inflate(inflater, container, false)
         setButtons()
+        setPickerButtons()
         setRadioGroups()
-        setSubjectSpinner()
+        //setSubjectSpinner()
+        //setSpinnerListener()
         setObserver()
-        setSpinnerListener()
         setPicture(QuestionFormFragmentArgs.fromBundle(requireArguments()).image)
         return binding.root
     }
@@ -103,39 +106,55 @@ class QuestionFormFragment : Fragment() {
         }
     }
 
-    private fun setSubjectSpinner() {
+    private fun setPickerButtons() {
 
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            mathSubjects[schoolSelected]?.keys?.toList()!!
-        )
-        binding.atSubject.setAdapter(adapter)
+        binding.btnSubject.setOnClickListener {
+            val subjectArray = mathSubjects[schoolSelected]?.keys?.toTypedArray()!!
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("과목을 선택해 주세요")
+                .setItems(subjectArray, DialogInterface.OnClickListener { dialog, which ->
+                    subjectSelected = subjectArray[which]
+                    binding.btnSubject.text = subjectSelected
+                })
+            builder.show()
+        }
+        binding.btnChapter.setOnClickListener {
+            if (subjectSelected != null) {
+                val chapterArray =
+                    mathSubjects[schoolSelected]?.get(subjectSelected)?.keys?.toTypedArray()!!
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("학교를 선택해 주세요")
+                    .setItems(chapterArray, DialogInterface.OnClickListener { dialog, which ->
+                        chapterSelected = chapterArray[which]
+                        binding.btnChapter.text = chapterSelected
+                    })
+                builder.show()
+            }
+        }
     }
 
-    private fun setChapterSpinner() {
+    private fun clearChapter() {
+        binding.btnChapter.text = "과목을 선택해 주세요"
+        chapterSelected = null
+    }
 
-        val adapter = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            mathSubjects[schoolSelected]?.get(subjectSelected)?.keys?.toList()!!
-        )
-        binding.atChapter.setAdapter(adapter)
+    private fun clearSubject() {
+        binding.btnSubject.text = "단원을 선택해 주세요"
+        subjectSelected = null
+        chapterSelected = null
     }
 
     private fun setRadioGroups() {
-        binding.atSchoolLevel.onItemClickListener =
-            AdapterView.OnItemClickListener { p0, p1, pos, id ->
-                schoolSelected =
-                    when (pos) {
-                        0 -> "초등학교"
-                        1 -> "중학교"
-                        else -> "고등학교"
-                    }
-            }
-
-        setSubjectSpinner()
-
+        binding.rgSchoolLevel.setOnCheckedChangeListener { _, checkId ->
+            schoolSelected =
+                when (checkId) {
+                    R.id.rb_middle_school -> "중학교"
+                    R.id.rb_high_school -> "고등학교"
+                    else -> "고등학교"
+                }
+            clearSubject()
+            clearChapter()
+        }
         binding.rgDifficulty.setOnCheckedChangeListener { _, checkId ->
             difficultySelected =
                 when (checkId) {
@@ -146,44 +165,66 @@ class QuestionFormFragment : Fragment() {
         }
     }
 
+    /* private fun setSubjectSpinner() {
 
-    private fun setSpinnerListener() {
-        binding.atSubject.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    pos: Int,
-                    id: Long
-                ) {
-                    val selectedItem = parent?.getItemAtPosition(pos).toString()!!
-                    Log.d("mymy", selectedItem)
-                    subjectSelected = selectedItem
-                    setChapterSpinner()
-                }
+         val adapter = ArrayAdapter(
+             requireContext(),
+             android.R.layout.simple_spinner_item,
+             mathSubjects[schoolSelected]?.keys?.toList()!!
+         )
+         binding.atSubject.setAdapter(adapter)
+     }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    return
-                }
+     private fun setChapterSpinner() {
 
-            }
-        binding.atChapter.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    pos: Int,
-                    id: Long
-                ) {
-                    val selectedItem = parent?.getItemAtPosition(pos).toString()!!
-                    chapterSelected = selectedItem
-                }
+         val adapter = ArrayAdapter<String>(
+             requireContext(),
+             android.R.layout.simple_spinner_item,
+             mathSubjects[schoolSelected]?.get(subjectSelected)?.keys?.toList()!!
+         )
+         binding.atChapter.setAdapter(adapter)
+     }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    return
-                }
-            }
-    }
+
+
+
+     private fun setSpinnerListener() {
+         binding.atSubject.onItemSelectedListener =
+             object : AdapterView.OnItemSelectedListener {
+                 override fun onItemSelected(
+                     parent: AdapterView<*>?,
+                     view: View?,
+                     pos: Int,
+                     id: Long
+                 ) {
+                     val selectedItem = parent?.getItemAtPosition(pos).toString()!!
+                     Log.d("mymy", selectedItem)
+                     subjectSelected = selectedItem
+                     setChapterSpinner()
+                 }
+
+                 override fun onNothingSelected(p0: AdapterView<*>?) {
+                     return
+                 }
+
+             }
+         binding.atChapter.onItemSelectedListener =
+             object : AdapterView.OnItemSelectedListener {
+                 override fun onItemSelected(
+                     parent: AdapterView<*>?,
+                     view: View?,
+                     pos: Int,
+                     id: Long
+                 ) {
+                     val selectedItem = parent?.getItemAtPosition(pos).toString()!!
+                     chapterSelected = selectedItem
+                 }
+
+                 override fun onNothingSelected(p0: AdapterView<*>?) {
+                     return
+                 }
+             }
+     }*/
 
     private fun parseMathSubjectJson() {
         val assetsManager = resources.assets
