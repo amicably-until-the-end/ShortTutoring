@@ -1,8 +1,10 @@
 package org.softwaremaestro.data.login
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.softwaremaestro.data.answer_upload.remote.AnswerUploadApi
 import org.softwaremaestro.data.common.module.NetworkModule
