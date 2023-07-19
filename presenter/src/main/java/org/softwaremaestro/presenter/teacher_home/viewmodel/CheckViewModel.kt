@@ -17,7 +17,8 @@ import org.softwaremaestro.domain.question_get.usecase.QuestionGetUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class CheckViewModel @Inject constructor(private val questionCheckUseCase: QuestionCheckUseCase): ViewModel() {
+class CheckViewModel @Inject constructor(private val questionCheckUseCase: QuestionCheckUseCase) :
+    ViewModel() {
 
     private val _check: MutableLiveData<QuestionCheckResultVO> = MutableLiveData()
     val check: LiveData<QuestionCheckResultVO> get() = _check
@@ -30,6 +31,7 @@ class CheckViewModel @Inject constructor(private val questionCheckUseCase: Quest
                     Log.d("Error", exception.message.toString())
                 }
                 .collect { result ->
+                    Log.d("Result", result.toString())
                     when (result) {
                         is BaseResult.Success -> _check.value = result.data
                         is BaseResult.Error -> Log.d("Error", result.toString())
