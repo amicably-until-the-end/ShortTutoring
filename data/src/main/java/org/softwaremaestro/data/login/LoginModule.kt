@@ -32,8 +32,9 @@ class LoginModule {
     @Provides
     fun provideAnswerUploadRepository(
         sharedPrefs: SharedPrefs,
-        getUserInfoApi: GetUserInfoApi
+        getUserInfoApi: GetUserInfoApi,
+        @ApplicationContext context: Context
     ): LoginRepository {
-        return LoginRepositoryImpl(getUserInfoApi, sharedPrefs)
+        return LoginRepositoryImpl(getUserInfoApi, sharedPrefs, context)
     }
 }

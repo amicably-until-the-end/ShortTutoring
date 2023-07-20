@@ -13,12 +13,14 @@ import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.entity.UserVO
 import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
 import org.softwaremaestro.domain.login.usecase.GetUserInfoUseCase
+import org.softwaremaestro.domain.login.usecase.LoginWithKakaoUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class LogoViewModel @Inject constructor(
     private val autoLoginUseCase: AutoLoginUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val loginWithKakaoUseCase: LoginWithKakaoUseCase
 ) :
     ViewModel() {
 
@@ -31,20 +33,38 @@ class LogoViewModel @Inject constructor(
     private val _errorMsg: MutableLiveData<String> = MutableLiveData()
     val errorMsg: LiveData<String> get() = _errorMsg
 
+    private val _isKakaoLoginSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val isKakaoLoginSuccess: LiveData<Boolean> get() = _isKakaoLoginSuccess // kakao login 성공하면 true
+
+
+    fun loginWithKakao() {
+        viewModelScope.launch {
+            loginWithKakaoUseCase.execute()
+                .catch {
+                    Log.d("mymymy", "Kakao fail in viewmodel")
+                }
+                .collect { result ->
+                    Log.d("mymymy", "get kakao token ${result.toString()}")
+                    when (result) {
+                        is BaseResult.Success -> _isKakaoLoginSuccess.postValue(true)
+                        is BaseResult.Error -> _isKakaoLoginSuccess.postValue(false)
+                    }
+                }
+        }
+    }
 
     fun getSaveToken() {
         viewModelScope.launch {
             autoLoginUseCase.execute()
                 .catch {
                     //Auto Login Fail
-                    Log.d("mymymy", "Auto login Fail")
                 }
                 .collect { result ->
                     Log.d("mymymy", result.toString())
                     when (result) {
                         is BaseResult.Success -> _savedToken.postValue(result.data)
                         else -> {
-                            
+
                         }
                     }
                 }
