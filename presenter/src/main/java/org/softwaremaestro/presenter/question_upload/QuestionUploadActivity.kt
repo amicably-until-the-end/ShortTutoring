@@ -5,8 +5,12 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityLoginBinding
@@ -21,6 +25,17 @@ class QuestionUploadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setAppBar()
+
+    }
+
+    private fun setAppBar() {
+        val toolbar: Toolbar = binding.toolbar
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        toolbar.setupWithNavController(navHostFragment.navController)
+        if (toolbar != null)
+            setSupportActionBar(toolbar)
 
     }
 
@@ -32,7 +47,6 @@ class QuestionUploadActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
     }
-
 
 
 }

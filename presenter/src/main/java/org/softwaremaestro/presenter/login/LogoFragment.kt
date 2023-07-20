@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -41,11 +42,15 @@ class LogoFragment @Inject constructor() :
 
         binding.tvLogo.setOnClickListener {
             val intent = Intent(activity, StudentHomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)
         }
 
         binding.containerLoginByGoogle.setOnClickListener {
             val intent = Intent(activity, TeacherHomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)
         }
 
@@ -55,7 +60,12 @@ class LogoFragment @Inject constructor() :
         }
         checkAutoLogin()
         setObserver()
+        hideAppBar()
         return binding.root
+    }
+
+    private fun hideAppBar() {
+        (activity as AppCompatActivity)!!.supportActionBar!!.hide()
     }
 
     private fun checkAutoLogin() {
