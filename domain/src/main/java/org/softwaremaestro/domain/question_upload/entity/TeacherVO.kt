@@ -1,9 +1,9 @@
 package org.softwaremaestro.domain.question_upload.entity
 
 data class TeacherVO(
-    var name: String,
-    var school: String,
-    var bio: String,
-    var imageUrl: String,
-    var teacherId: String,
+    var name: String?,
+    var school: String?,
+    var likes: Int?,
+    var imageUrl: String?,
+    var teacherId: String?,
 )
