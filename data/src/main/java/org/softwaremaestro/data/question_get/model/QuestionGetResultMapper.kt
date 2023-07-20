@@ -6,6 +6,7 @@ object QuestionGetResultMapper {
     fun asDomain(questionsGetResultDto: QuestionsGetResultDto): QuestionGetResultVO {
         return QuestionGetResultVO(
             questionsGetResultDto.id,
+            questionsGetResultDto.studentId,
             questionsGetResultDto.problem?.imageUrl,
             questionsGetResultDto.problem?.schoolLevel,
             questionsGetResultDto.problem?.schoolLevel,

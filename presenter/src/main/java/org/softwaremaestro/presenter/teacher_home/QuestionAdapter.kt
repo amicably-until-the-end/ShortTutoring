@@ -9,7 +9,7 @@ import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val answerBtnClickListener: () -> Unit) :
+class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
     private var items: List<QuestionGetResultVO> = emptyList()
@@ -48,7 +48,7 @@ class QuestionAdapter(private val answerBtnClickListener: () -> Unit) :
             binding.tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
             binding.root.setOnClickListener {
-                answerBtnClickListener()
+                item.id?.let { answerBtnClickListener(it) }
             }
         }
     }
