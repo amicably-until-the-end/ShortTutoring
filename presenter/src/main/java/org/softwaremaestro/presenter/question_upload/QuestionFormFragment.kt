@@ -26,6 +26,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 
+private const val STUDENT_ID = "test-student-id"
+
 @AndroidEntryPoint
 class QuestionFormFragment : Fragment() {
 
@@ -94,7 +96,7 @@ class QuestionFormFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             viewModel.uploadQuestion(
                 QuestionUploadVO(
-                    "test-student-id",
+                    STUDENT_ID,
                     binding.etDescription.text.toString(),
                     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
                     schoolSelected,
@@ -108,61 +110,48 @@ class QuestionFormFragment : Fragment() {
 
     private fun setPickerButtons() {
 
-        binding.btnSubject.setOnClickListener {
-            val subjectArray = mathSubjects[schoolSelected]?.keys?.toTypedArray()!!
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle("과목을 선택해 주세요")
-                .setItems(subjectArray, DialogInterface.OnClickListener { dialog, which ->
-                    subjectSelected = subjectArray[which]
-                    binding.btnSubject.text = subjectSelected
-                })
-            builder.show()
-        }
-        binding.btnChapter.setOnClickListener {
-            if (subjectSelected != null) {
-                val chapterArray =
-                    mathSubjects[schoolSelected]?.get(subjectSelected)?.keys?.toTypedArray()!!
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("학교를 선택해 주세요")
-                    .setItems(chapterArray, DialogInterface.OnClickListener { dialog, which ->
-                        chapterSelected = chapterArray[which]
-                        binding.btnChapter.text = chapterSelected
-                    })
-                builder.show()
-            }
-        }
+//        binding.btnSubject.setOnClickListener {
+//            val subjectArray = mathSubjects[schoolSelected]?.keys?.toTypedArray()!!
+//            val builder = AlertDialog.Builder(context)
+//            builder.setTitle("과목을 선택해 주세요")
+//                .setItems(subjectArray) { dialog, which ->
+//                    subjectSelected = subjectArray[which]
+//                    binding.btnSubject.text = subjectSelected
+//                }
+//            builder.show()
+//        }
     }
 
     private fun clearChapter() {
-        binding.btnChapter.text = "과목을 선택해 주세요"
-        chapterSelected = null
+//        binding.btnChapter.text = "과목을 선택해 주세요"
+//        chapterSelected = null
     }
 
     private fun clearSubject() {
-        binding.btnSubject.text = "단원을 선택해 주세요"
-        subjectSelected = null
-        chapterSelected = null
+//        binding.btnSubject.text = "단원을 선택해 주세요"
+//        subjectSelected = null
+//        chapterSelected = null
     }
 
     private fun setRadioGroups() {
-        binding.rgSchoolLevel.setOnCheckedChangeListener { _, checkId ->
-            schoolSelected =
-                when (checkId) {
-                    R.id.rb_middle_school -> "중학교"
-                    R.id.rb_high_school -> "고등학교"
-                    else -> "고등학교"
-                }
-            clearSubject()
-            clearChapter()
-        }
-        binding.rgDifficulty.setOnCheckedChangeListener { _, checkId ->
-            difficultySelected =
-                when (checkId) {
-                    R.id.rb_easy -> "easy"
-                    R.id.rb_middle -> "normal"
-                    else -> "hard"
-                }
-        }
+//        binding.rgSchoolLevel.setOnCheckedChangeListener { _, checkId ->
+//            schoolSelected =
+//                when (checkId) {
+//                    R.id.rb_middle_school -> "중학교"
+//                    R.id.rb_high_school -> "고등학교"
+//                    else -> "고등학교"
+//                }
+//            clearSubject()
+//            clearChapter()
+//        }
+//        binding.rgDifficulty.setOnCheckedChangeListener { _, checkId ->
+//            difficultySelected =
+//                when (checkId) {
+//                    R.id.rb_easy -> "easy"
+//                    R.id.rb_middle -> "normal"
+//                    else -> "hard"
+//                }
+//        }
     }
 
     /* private fun setSubjectSpinner() {
