@@ -9,7 +9,9 @@ import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 
-class TeacherAdapter(private var items: List<TeacherVO>, val listener: OnItemClickListener) :
+private const val EMPTY_STRING = "-"
+
+class TeacherAdapter(private var items: List<TeacherVO>, private val listener: (String) -> Unit) :
     RecyclerView.Adapter<TeacherAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeacherAdapter.ViewHolder {
@@ -25,7 +27,7 @@ class TeacherAdapter(private var items: List<TeacherVO>, val listener: OnItemCli
         return items.size
     }
 
-    fun setItems(items: List<TeacherVO>) {
+    fun setItems(items:List<TeacherVO>) {
         this.items = items
     }
 
@@ -33,17 +35,15 @@ class TeacherAdapter(private var items: List<TeacherVO>, val listener: OnItemCli
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: TeacherVO) {
-            binding.tvTeacherBio.text = item.bio
-            binding.tvTeacherName.text = item.teacherId
-            binding.tvTeacherSchool.text = item.school
-            binding.btnAccept.setOnClickListener() {
-                listener.onAcceptBtnClicked(item.teacherId)
-            }
+            binding.tvLikes.text = " · 찜한 사람 ${item.likes}명" ?: EMPTY_STRING
+            binding.tvTeacherName.text = item.teacherId ?: EMPTY_STRING
+            binding.tvTeacherSchool.text = item.school ?: EMPTY_STRING
 
+            item.teacherId?.let { teacherId ->
+                binding.btnAccept.setOnClickListener {
+                    listener(teacherId)
+                }
+            }
         }
     }
-}
-
-interface OnItemClickListener {
-    fun onAcceptBtnClicked(teacherId: String)
 }

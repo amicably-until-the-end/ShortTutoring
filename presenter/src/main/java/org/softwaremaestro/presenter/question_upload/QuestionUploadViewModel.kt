@@ -28,6 +28,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
             questionUploadUseCase.execute(questionUploadVO)
                 .catch { exception ->
 
+                    Log.d("mymymy", exception.toString())
                     _questionId.value = null
                 }
                 .collect { result ->

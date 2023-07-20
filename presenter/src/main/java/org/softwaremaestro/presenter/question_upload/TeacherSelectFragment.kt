@@ -18,10 +18,10 @@ import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 import java.util.logging.Logger
 
+private const val STUDENT_ID = "test-student-id"
 
 @AndroidEntryPoint
 class TeacherSelectFragment : Fragment() {
-
 
     lateinit var binding: FragmentTeacherSelectBinding
     private val viewModel: TeacherSelectViewModel by viewModels()
@@ -54,8 +54,7 @@ class TeacherSelectFragment : Fragment() {
     }
 
     private fun setObserver() {
-        viewModel.teacherList.observe(viewLifecycleOwner, Observer {
-            Log.d("mymymy", "${viewModel.teacherList.value.toString()} is changed")
+        viewModel.teacherList.observe(viewLifecycleOwner) {
             if (viewModel.teacherList.value?.size == 1 && noTeacher) {
                 noTeacher = false
                 binding.layoutParent.removeView(binding.ivWaitingIcon)
@@ -66,7 +65,7 @@ class TeacherSelectFragment : Fragment() {
             teacherListAdapter.setItems(viewModel.teacherList.value ?: emptyList())
             teacherListAdapter.notifyDataSetChanged()
 
-        })
+        }
         viewModel.tutoringId.observe(viewLifecycleOwner, Observer {
             Toast.makeText(
                 context,
@@ -83,20 +82,15 @@ class TeacherSelectFragment : Fragment() {
 
     private fun setTeacherRecycler(questionId: String) {
         teacherListAdapter =
-            TeacherAdapter(
-                viewModel.teacherList.value ?: emptyList(),
-                object : OnItemClickListener {
-                    override fun onAcceptBtnClicked(teacherId: String) {
-                        viewModel.pickTeacher(
-                            TeacherPickReqVO(
-                                questionId = questionId,
-                                "test-student-id",
-                                teacherId = teacherId
-                            )
-                        )
-                    }
-
-                })
+            TeacherAdapter(viewModel.teacherList.value ?: emptyList()) { teacherId: String ->
+                viewModel.pickTeacher(
+                    TeacherPickReqVO(
+                        questionId = questionId,
+                        STUDENT_ID,
+                        teacherId = teacherId
+                    )
+                )
+            }
 
         binding.rvTeacherList.apply {
             adapter = teacherListAdapter
@@ -105,6 +99,5 @@ class TeacherSelectFragment : Fragment() {
         teacherListAdapter.setItems(
             viewModel.teacherList.value ?: emptyList()
         )
-
     }
 }
