@@ -59,7 +59,7 @@ class LogoFragment @Inject constructor() :
             viewModel.loginWithKakao()
         }
 
-        checkAutoLogin()
+        //checkAutoLogin()
         setObserver()
         //checkKakaoToken()
         return binding.root

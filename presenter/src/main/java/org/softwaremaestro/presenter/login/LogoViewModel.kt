@@ -41,7 +41,7 @@ class LogoViewModel @Inject constructor(
         viewModelScope.launch {
             loginWithKakaoUseCase.execute()
                 .catch {
-                    Log.d("mymymy", "Kakao fail in viewmodel")
+                    Log.d("mymymy", "Kakao fail in viewmodel ${it.toString()}")
                 }
                 .collect { result ->
                     Log.d("mymymy", "get kakao token ${result.toString()}")

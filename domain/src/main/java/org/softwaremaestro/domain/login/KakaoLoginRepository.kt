@@ -4,9 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.entity.UserVO
 
-interface LoginRepository {
-    suspend fun autoLogin(): Flow<BaseResult<String, String>>
+interface KakaoLoginRepository {
 
-    suspend fun getUserInfo(): Flow<BaseResult<UserVO, String>>
-
+    suspend fun loginWithKakao(): Flow<BaseResult<String, String>>
 }
