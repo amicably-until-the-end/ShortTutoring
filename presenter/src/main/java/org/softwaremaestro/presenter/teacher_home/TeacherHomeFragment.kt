@@ -8,6 +8,8 @@ import org.softwaremaestro.presenter.Util.dpToPx
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout.LayoutParams
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +23,6 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
@@ -30,6 +31,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 12
+private const val TEACHER_ID = "test-teacher-id"
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -45,6 +47,7 @@ class TeacherHomeFragment : Fragment() {
 
 
     private lateinit var snackBar: Snackbar
+    private var selectedRequestId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,18 +61,25 @@ class TeacherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        val snackBarParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT).apply {
+//            setMargins(64, 0, 64, 56)
+//        }
         snackBar =
-            Snackbar.make(binding.containerParent, "학생의 선택을 확인하고 있습니다.", Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction("취소하기") {
-            //answer 취소하는 로직 추가
-            snackBar.dismiss()
-        }
-        questionAdapter = QuestionAdapter {
+            Snackbar.make(binding.containerParent, "학생의 선택을 확인하고 있습니다.", Snackbar.LENGTH_INDEFINITE).apply {
+//                view.layoutParams = snackBarParams
+                view.setPadding(16)
+                setAction("취소하기") {
+                    //answer 취소하는 로직 추가
+                    snackBar.dismiss()
+                }
+            }
+        questionAdapter = QuestionAdapter { requestId: String ->
             //waitingDialog.show()
+            selectedRequestId = requestId
             snackBar.show()
             uploadAnswer()
         }
-        waitingDialog = WaitingDialog(requireActivity())
+//        waitingDialog = WaitingDialog(requireActivity())
         keepGettingQuestions(1000L)
         keepCheckingQuestionAfterSelect(1000L)
 
@@ -128,7 +138,6 @@ class TeacherHomeFragment : Fragment() {
         checkViewModel.check.observe(viewLifecycleOwner) {
             when (it.status) {
                 RequestStatus.SELECTED.noti -> {
-                    Log.d("check", "going well")
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
                         putExtra("tutoringId", it.tutoringId)
@@ -158,11 +167,11 @@ class TeacherHomeFragment : Fragment() {
     private fun keepCheckingQuestionAfterSelect(timeInterval: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                // 학생의 선택을 기다리는 대화상자가 떠있을때
-                if (snackBar.isShown) {
+                // 학생의 선택을 기다리는 스낵바가 떠있을때
+                if (snackBar.isShown && selectedRequestId != null) {
                     checkViewModel.checkQuestion(
-                        "test-request-id",
-                        QuestionCheckRequestVO("test-teacher-id")
+                        selectedRequestId!!,
+                        QuestionCheckRequestVO(TEACHER_ID)
                     )
                 }
                 delay(timeInterval)
