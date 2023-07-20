@@ -26,13 +26,13 @@
 
                 <TextView
                     android:id="@+id/tv_student_question"
+                    style="@style/h6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="답변을 기다리는 질문입니 다"
+                    android:text="답변을 기다리는 질문입니다"
                     android:textColor="@color/black"
-                    style="@style/h6"
-                    android:layout_marginTop="@dimen/margin_top_default"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
+                    android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+                    android:layout_marginTop="@dimen/margin_top_default" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_question"
