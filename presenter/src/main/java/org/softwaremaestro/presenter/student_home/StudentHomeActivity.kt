@@ -19,12 +19,12 @@ class StudentHomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // 액션바 설정
-        val toolbar: Toolbar = binding.toolbar
-        if (toolbar != null)
-            setSupportActionBar(toolbar)
+//        val toolbar: Toolbar = binding.toolbar
+//        if (toolbar != null)
+//            setSupportActionBar(toolbar)
 
         // 뒤로가기 버튼
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+//        val actionBar = supportActionBar
+//        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }

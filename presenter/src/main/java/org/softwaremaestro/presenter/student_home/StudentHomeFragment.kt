@@ -15,7 +15,8 @@ import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.Util.dpToPx
 
-private const val GRIDLAYOUT_SPANCOUNT = 2
+private const val GRIDLAYOUT_SPAN_COUNT = 2
+private const val GRIDLAYOUT_SPICING = 12
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -40,13 +41,13 @@ class StudentHomeFragment : Fragment() {
             }.apply {
                 val lectures = mutableListOf<Lecture>().apply {
                     (0..10).forEach {
-                        add(Lecture("문제를 못 풀겠어요", "23/07/23", "수학1", "지수함수와 로그함수"))
+                        add(Lecture("경우의 수를 다 셌는데 안 맞아요", "수학1"))
                     }
                 }
                 setItem(lectures)
             }
             layoutManager = GridLayoutManager(requireActivity(), 2)
-            setSpacing(10)
+            setSpacing(GRIDLAYOUT_SPICING)
         }
 
         return binding.root
@@ -60,11 +61,11 @@ class StudentHomeFragment : Fragment() {
                 parent: RecyclerView
             ) {
                 super.getItemOffsets(outRect, position, parent)
-                when (position % GRIDLAYOUT_SPANCOUNT) {
+                when (position % GRIDLAYOUT_SPAN_COUNT) {
                     // 그리드 레이아웃의 맨 왼쪽 뷰
                     0 -> outRect.right = dpToPx(dp, requireContext())
                     // 그리드 레이아웃의 맨 오른쪽 뷰
-                    GRIDLAYOUT_SPANCOUNT - 1 -> outRect.right = dpToPx(dp, requireContext())
+                    GRIDLAYOUT_SPAN_COUNT - 1 -> outRect.left = dpToPx(dp, requireContext())
                     else -> {
                         outRect.left = dpToPx(dp, requireContext())
                         outRect.right = dpToPx(dp, requireContext())
