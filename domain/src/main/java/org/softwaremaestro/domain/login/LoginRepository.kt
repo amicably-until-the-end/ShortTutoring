@@ -9,4 +9,5 @@ interface LoginRepository {
 
     suspend fun getUserInfo(): Flow<BaseResult<UserVO, String>>
 
+    suspend fun loginWithKakao(): Flow<BaseResult<String, String>>
 }
