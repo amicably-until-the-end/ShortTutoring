@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
-import org.softwaremaestro.presenter.Util.dpToPx
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 12
@@ -40,9 +40,8 @@ class StudentHomeFragment : Fragment() {
                 Log.d("message", it)
             }.apply {
                 val lectures = mutableListOf<Lecture>().apply {
-                    (0..10).forEach {
-                        add(Lecture("경우의 수를 다 셌는데 안 맞아요", "수학1"))
-                    }
+                    add(Lecture("경우의 수를 다 셌는데 안 맞아요", "수학1"))
+                    add(Lecture("이차곡선의 성질이 이해가 안 돼요", "기하"))
                 }
                 setItem(lectures)
             }
