@@ -2,20 +2,21 @@ package org.softwaremaestro.data.question_get.model
 
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 
+private const val EMPTY_STRING = "-"
+
 object QuestionGetResultMapper {
     fun asDomain(questionsGetResultDto: QuestionsGetResultDto): QuestionGetResultVO {
         return QuestionGetResultVO(
             questionsGetResultDto.id,
-            questionsGetResultDto.studentId,
-            questionsGetResultDto.problem?.imageUrl,
-            questionsGetResultDto.problem?.schoolLevel,
-            questionsGetResultDto.problem?.schoolLevel,
-            questionsGetResultDto.problem?.schoolSubject,
-            questionsGetResultDto.problem?.difficulty,
-            questionsGetResultDto.problem?.description,
-            questionsGetResultDto.status,
-            questionsGetResultDto.tutoringId,
-            questionsGetResultDto.createdAt
+            questionsGetResultDto.student?.id,
+            questionsGetResultDto.student?.name,
+            questionsGetResultDto.problemDto?.imageUrl,
+            questionsGetResultDto.problemDto?.schoolLevel,
+            questionsGetResultDto.problemDto?.schoolChapter,
+            questionsGetResultDto.problemDto?.schoolSubject,
+            questionsGetResultDto.problemDto?.difficulty,
+            questionsGetResultDto.problemDto?.description,
+            questionsGetResultDto.teacherIds
         )
     }
 }

@@ -4,12 +4,10 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import org.softwaremaestro.presenter.Util.dpToPx
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout.LayoutParams
-import androidx.core.view.setPadding
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
+import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
@@ -41,12 +40,13 @@ class TeacherHomeFragment : Fragment() {
     private val answerViewModel: AnswerViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
     private lateinit var questionAdapter: QuestionAdapter
-    private lateinit var waitingDialog: WaitingDialog
 
     //c93f3772-1319-4db7-a88d-4667406a525b
 
 
-    private lateinit var snackBar: Snackbar
+    private lateinit var waitingSnackbar: Snackbar
+
+    //    private lateinit var waitingSnackBar: WaitingSnackbar
     private var selectedRequestId: String? = null
 
     override fun onCreateView(
@@ -55,41 +55,53 @@ class TeacherHomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val snackBarParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT).apply {
-//            setMargins(64, 0, 64, 56)
-//        }
-        snackBar =
-            Snackbar.make(binding.containerParent, "학생의 선택을 확인하고 있습니다.", Snackbar.LENGTH_INDEFINITE).apply {
-//                view.layoutParams = snackBarParams
-                view.setPadding(16)
-                setAction("취소하기") {
-                    //answer 취소하는 로직 추가
-                    snackBar.dismiss()
-                }
-            }
-        questionAdapter = QuestionAdapter { requestId: String ->
-            //waitingDialog.show()
-            selectedRequestId = requestId
-            snackBar.show()
-            uploadAnswer()
-        }
-//        waitingDialog = WaitingDialog(requireActivity())
+
+        initWaitingSnackbar()
+
+        initQuestionRecyclerView()
+
         keepGettingQuestions(1000L)
         keepCheckingQuestionAfterSelect(1000L)
+
+        observe()
+    }
+
+    private fun initWaitingSnackbar() {
+        waitingSnackbar =
+            Snackbar.make(requireView(), "학생의 선택을 확인하고 있습니다.", Snackbar.LENGTH_INDEFINITE).apply {
+
+                val params = (this.view.layoutParams as FrameLayout.LayoutParams).apply {
+                    width = FrameLayout.LayoutParams.MATCH_PARENT
+                    setMargins(64, 0, 64, 56)
+                }
+
+                this.view.layoutParams = params
+
+                setAction("취소하기") {
+                    //answer 취소하는 로직 추가
+                    waitingSnackbar.dismiss()
+                }
+            }
+    }
+
+    private fun initQuestionRecyclerView() {
+
+        questionAdapter = QuestionAdapter { requestId: String ->
+            selectedRequestId = requestId
+            waitingSnackbar.show()
+            uploadAnswer(requestId)
+        }
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
             layoutManager = GridLayoutManager(requireActivity(), GRIDLAYOUT_SPAN_COUNT)
             setSpacing(GRIDLAYOUT_SPICING)
         }
-
-        observe()
     }
 
     private fun RecyclerView.setSpacing(dp: Int) {
@@ -146,8 +158,8 @@ class TeacherHomeFragment : Fragment() {
                 }
 
                 RequestStatus.NOT_SELECTED.noti -> {
-                    snackBar.setText("선생님이 다른 학생을 선택했습니다")
-                    snackBar.duration = Snackbar.LENGTH_SHORT
+                    waitingSnackbar.setText("학생이 다른 선생님을 선택했습니다")
+                    waitingSnackbar.duration = Snackbar.LENGTH_SHORT
                 }
             }
         }
@@ -156,9 +168,7 @@ class TeacherHomeFragment : Fragment() {
     private fun keepGettingQuestions(timeInterval: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                if (!snackBar.isShown) {
-                    questionsViewModel.getQuestions()
-                }
+                questionsViewModel.getQuestions()
                 delay(timeInterval)
             }
         }
@@ -168,7 +178,7 @@ class TeacherHomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 // 학생의 선택을 기다리는 스낵바가 떠있을때
-                if (snackBar.isShown && selectedRequestId != null) {
+                if (waitingSnackbar.isShown && selectedRequestId != null) {
                     checkViewModel.checkQuestion(
                         selectedRequestId!!,
                         QuestionCheckRequestVO(TEACHER_ID)
@@ -179,11 +189,11 @@ class TeacherHomeFragment : Fragment() {
         }
     }
 
-    private fun uploadAnswer() {
+    private fun uploadAnswer(requestId: String) {
         answerViewModel.uploadAnswer(
             AnswerUploadVO(
-                "test-request-id",
-                TeacherVO("test-teacher-id")
+                requestId,
+                TeacherVO(TEACHER_ID)
             )
         )
     }

@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
-    app:cardUseCompatPadding="true"
-    android:layout_marginBottom="24dp">
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:id="@+id/view_teacher_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#0A000000"
+        android:orientation="vertical"
         android:padding="24dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,37 +54,59 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
                 android:text="서울대학교 수의예과"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_teacher_img"
-                android:layout_marginTop="12dp"/>
+
+                app:layout_constraintStart_toEndOf="@id/iv_teacher_img" />
 
             <TextView
                 android:id="@+id/tv_likes"
                 style="@style/subtitle2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_teacher_school"
-                android:layout_marginTop="12dp"
                 tools:text=" · 찜한 학생 23명" />
+
+            <TextView
+                style="@style/subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFAA55"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_rating"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="★ " />
+
+            <TextView
+                android:id="@+id/tv_rating"
+                style="@style/subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="3.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_accept"
+            style="@style/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:background="@drawable/corner_radius_10"
             android:gravity="center"
             android:paddingVertical="12dp"
-            android:text="과외 신청하기"
+            android:text="선택하기"
             android:textAlignment="center"
-            android:textColor="@color/black"
-            style="@style/button"
-            android:layout_marginTop="24dp" />
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

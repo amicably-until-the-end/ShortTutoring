@@ -2,7 +2,6 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
@@ -39,12 +38,7 @@ class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
             // Todo: 수정 필요함
             binding.ivPhoto.setImageBitmap(null)
             binding.tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
-            binding.tvDifficulty.text = when (item.problemDifficulty) {
-                "Difficult" -> "어려움"
-                "Midium" -> "중간"
-                "Easy" -> "쉬움"
-                else -> EMPTY_STRING
-            }
+            binding.tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
             binding.tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
             binding.root.setOnClickListener {
