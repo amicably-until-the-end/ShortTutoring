@@ -1,52 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".login.RegisterRoleFragment">
 
     <TextView
         android:id="@+id/tv_question"
+        style="@style/h6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal_default"
+        android:layout_marginTop="@dimen/margin_top_default"
         android:text="어떤 회원으로 가입할까요?"
         android:textColor="@color/black"
-        style="@style/h6"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="@dimen/margin_top_default"
-        android:layout_marginStart="@dimen/margin_horizontal_default"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/tv_student"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:text="학생으로 가입하기"
-        android:textColor="@color/black"
-        android:gravity="center"
-        style="@style/button"
-        android:background="@drawable/corner_radius_10"
-        app:layout_constraintTop_toBottomOf="@id/tv_question"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginTop="48dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default"/>
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_question">
+
+        <RadioButton
+            android:id="@+id/tv_student"
+            style="button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rb_selector"
+            android:button="@null"
+            android:checked="true"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="학생"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/tv_teacher"
+            style="button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector"
+            android:button="@null"
+            android:checked="false"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="선생님"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+    </RadioGroup>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/tv_teacher"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:text="선생님으로 가입하기"
-        android:textColor="@color/black"
+        android:id="@+id/btn_next"
         style="@style/button"
-        android:background="@drawable/corner_radius_10"
-        app:layout_constraintTop_toBottomOf="@+id/tv_student"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="다음"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
