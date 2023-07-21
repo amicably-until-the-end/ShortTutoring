@@ -1,172 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".login.RegisterStudentInfoFragment">
 
     <TextView
-        android:id="@+id/tv_info_basic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="기본 정보"
-        android:textColor="@color/black"
-        style="@style/h5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/margin_top_default"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
-
-    <TextView
-        android:id="@+id/tv_name_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이름"
-        android:textColor="@color/black"
+        android:id="@+id/tv_school_level"
         style="@style/h6"
-        app:layout_constraintTop_toBottomOf="@id/tv_info_basic"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="60dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tf_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/tv_name_label"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@color/black"
-            style="@style/body2"
-            android:padding="16dp"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_school_level_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="@dimen/margin_top_default"
         android:text="재학 중인 학교를 선택해주세요"
         android:textColor="@color/black"
-        style="@style/h6"
-        app:layout_constraintTop_toBottomOf="@id/tf_name_input"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="48dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/rg_school_level_input"
+        android:id="@+id/rg_school_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tv_school_level_label"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" >
-        
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_school_level">
+
         <RadioButton
             android:id="@+id/rb_middle_school"
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rb_selector"
+            android:button="@null"
+            android:checked="true"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="중학교"
-            android:textColor="@drawable/rb_selector_textcolor"
-            style="@style/button"
-            android:padding="16dp"
-            android:background="@drawable/rb_selector_corner_radius_10"
-            android:button="@null"/>
+            android:textColor="@drawable/rb_selector_text_color" />
 
         <RadioButton
             android:id="@+id/rb_high_school"
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="고등학교"
-            android:textColor="@drawable/rb_selector_textcolor"
-            style="@style/button"
-            android:padding="16dp"
-            android:background="@drawable/rb_selector_corner_radius_10"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector"
             android:button="@null"
-            android:layout_marginStart="24dp"/>
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="고등학교"
+            android:textColor="@drawable/rb_selector_text_color" />
 
     </RadioGroup>
 
     <TextView
-        android:id="@+id/tv_grade_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="학년을 선택해주세요"
-        android:textColor="@color/black"
+        android:id="@+id/tv_grade"
         style="@style/h6"
-        app:layout_constraintTop_toBottomOf="@id/rg_school_level_input"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginTop="48dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
+        android:text="현재 학년을 선택해주세요"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rg_school_level" />
 
     <RadioGroup
-        android:id="@+id/rg_grade_input"
+        android:id="@+id/rg_grade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tv_grade_label"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" >
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_grade">
 
         <RadioButton
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rb_selector"
+            android:button="@null"
+            android:checked="true"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="1학년"
-            android:textColor="@drawable/rb_selector_textcolor"
-            style="@style/button"
-            android:padding="16dp"
-            android:background="@drawable/rb_selector_corner_radius_10"
-            android:button="@null"/>
+            android:textColor="@drawable/rb_selector_text_color" />
 
         <RadioButton
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector"
+            android:button="@null"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="2학년"
-            android:textColor="@drawable/rb_selector_textcolor"
-            style="@style/button"
-            android:padding="16dp"
-            android:background="@drawable/rb_selector_corner_radius_10"
-            android:button="@null"
-            android:layout_marginStart="24dp" />
+            android:textColor="@drawable/rb_selector_text_color" />
 
         <RadioButton
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3학년"
-            android:textColor="@drawable/rb_selector_textcolor"
-            style="@style/button"
-            android:padding="16dp"
-            android:background="@drawable/rb_selector_corner_radius_10"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector"
             android:button="@null"
-            android:layout_marginStart="24dp" />
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="3학년"
+            android:textColor="@drawable/rb_selector_text_color" />
+
     </RadioGroup>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_complete"
+        android:id="@+id/btn_next"
+        style="@style/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="회원가입 완료"
-        android:textColor="@color/black"
-        style="@style/button"
-        android:background="@drawable/corner_radius_10"
-        android:padding="16dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginBottom="56dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
+        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="다음"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
