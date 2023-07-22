@@ -9,8 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
+import org.softwaremaestro.presenter.setEnabledAndChangeColor
 
 // 회원가입 두 번째 화면.
 // 개인정보를 입력한다.
@@ -24,6 +24,7 @@ class RegisterTeacherInfoFragment : Fragment() {
             listOf(etUniv, etCollege, etMajor, etYearOfAdmission)
         }
     }
+
     private val actions = listOf(
         R.id.action_registerTeacherInfoFragment_to_searchUnivFragment,
         R.id.action_registerTeacherInfoFragment_to_searchCollegeFragment,
@@ -68,8 +69,6 @@ class RegisterTeacherInfoFragment : Fragment() {
         }
     }
 
-    private fun isAllValuesEntered() = ets.map { it.text.isNullOrEmpty() }.contains(true).toggle()
-
     private fun setOnClickListener() {
         ets.zip(actions).forEach { pair ->
             pair.first.setOnClickListener {
@@ -85,6 +84,8 @@ class RegisterTeacherInfoFragment : Fragment() {
             }
         }
     }
+
+    private fun isAllValuesEntered() = ets.map { it.text.isNullOrEmpty() }.contains(true).toggle()
 
     private fun Boolean.toggle() = !this
 }

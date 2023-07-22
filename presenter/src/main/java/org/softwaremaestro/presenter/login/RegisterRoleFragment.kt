@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.databinding.FragmentRegisterRoleBinding
+import org.softwaremaestro.presenter.setEnabledAndChangeColor
 
 // 로그인 화면에서 회원 가입을 누르면 나오는 화면.
 // 유저는 학생과 선생님 중에서 선택한다.

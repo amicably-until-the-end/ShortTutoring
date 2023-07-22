@@ -12,7 +12,6 @@ import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
-import java.util.EmptyStackException
 import javax.inject.Inject
 
 private const val EMPTY_STRING = "undefined"
@@ -23,19 +22,18 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     override suspend fun uploadQuestion(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>> {
         return flow {
             val dto = QuestionUploadRequestDto(
-                questionUploadVO.studentId,
                 questionUploadVO.description,
                 questionUploadVO.imageEncoding,
                 questionUploadVO.schoolLevel,
                 questionUploadVO.schoolSubject,
                 questionUploadVO.schoolChapter,
-                questionUploadVO.problemDifficulty,
+                questionUploadVO.problemDifficulty
             )
             val response = questionUploadApi.uploadQuestion(questionUploadVO.studentId, dto)
             Log.d("mymymy", "${response.body()} is res in imple")
             if (response.isSuccessful) {
                 val body = response.body()
-                val resultVO = QuestionUploadResultVO(body?.data?.questionId?:"")
+                val resultVO = QuestionUploadResultVO(body?.data?.questionId ?: "")
 
 
                 emit(BaseResult.Success(resultVO))
@@ -57,7 +55,7 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
                         name = teacherDto.name ?: EMPTY_STRING,
                         school = "서울대학교" ?: EMPTY_STRING, // Todo
                         likes = 23 ?: 0, // Todo
-                        imageUrl = teacherDto.imageUrl ?: EMPTY_STRING ,
+                        imageUrl = teacherDto.imageUrl ?: EMPTY_STRING,
                         teacherId = teacherDto.id ?: EMPTY_STRING
                     )
                 }

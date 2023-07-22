@@ -1,29 +1,25 @@
 package org.softwaremaestro.presenter.question_upload
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
+import org.softwaremaestro.presenter.setEnabledAndChangeColor
 import java.io.ByteArrayOutputStream
-import java.io.File
 
 
 private const val STUDENT_ID = "test-student-id"
@@ -37,17 +33,22 @@ class QuestionFormFragment : Fragment() {
 
     private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
 
-    var pictureBitmap: Bitmap? = null
-
-    var schoolSelected: String = "고등학교"
-    var subjectSelected: String? = null
-    var chapterSelected: String? = null
-    var difficultySelected: String = "normal"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseMathSubjectJson()
+    private val ets: List<TextInputEditText> by lazy {
+        with(binding) {
+            listOf(etDescription, etSchoolLevel, etSubject, etDifficulty)
+        }
     }
+
+    private val actions = listOf(
+        R.id.action_questionFormFragment_to_questionFormDescriptionFragment,
+        R.id.action_questionFormFragment_to_questionFormSchoolLevelFragment,
+        R.id.action_questionFormFragment_to_questionFormSubjectFragment,
+        R.id.action_questionFormFragment_to_questionFormDifficultyFragment
+    )
+
+    private val selectedValues = listOf(
+        INPUT_DESCRIPTION, INPUT_SCHOOL_LEVEL, INPUT_SUBJECT, INPUT_DIFFICULTY
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,20 +56,78 @@ class QuestionFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentQuestionFormBinding.inflate(inflater, container, false)
+        binding = FragmentQuestionFormBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        parseMathSubjectJson()
         setButtons()
         setPickerButtons()
         setRadioGroups()
         //setSubjectSpinner()
         //setSpinnerListener()
         setObserver()
-        setPicture(QuestionFormFragmentArgs.fromBundle(requireArguments()).image)
-        return binding.root
+
+        try {
+            setPicture(QuestionFormFragmentArgs.fromBundle(requireArguments()).image)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // 뷰를 클릭하면 값을 입력하는 페이지로 이동한다
+        setOnClickListener()
+
+        // 선생님이 입력한 값을 뷰에 표시한다
+        setSelectedValues()
+
+        // 선생님이 입력한 값을 저장한다
+        saveSelectedValues()
+
+        (requireActivity() as QuestionUploadActivity).image?.let {
+            binding.ivPhoto.setImageBitmap(it)
+        }
+
+        // 입력받지 않은 에딧텍스트가 있으면 버튼을 활성화하지 않는다
+        isAllValuesEntered().let {
+            binding.btnSubmit.setEnabledAndChangeColor(it)
+        }
     }
+
+    private fun setOnClickListener() {
+        ets.zip(actions).forEach { pair ->
+            pair.first.setOnClickListener {
+                findNavController().navigate(pair.second)
+            }
+        }
+    }
+
+    private fun setSelectedValues() {
+        selectedValues.zip(ets).forEach { pair ->
+            arguments?.getString(pair.first)?.let {
+                pair.second.setText(it)
+            }
+        }
+    }
+
+    private fun saveSelectedValues() {
+        with(requireActivity() as QuestionUploadActivity) {
+            arguments?.getString(INPUT_DESCRIPTION)?.let { description = it }
+            arguments?.getString(INPUT_SCHOOL_LEVEL)?.let { schoolLevelSelected = it }
+            arguments?.getString(INPUT_SUBJECT)?.let { subjectSelected = it }
+            arguments?.getString(INPUT_DIFFICULTY)?.let { difficultySelected = it }
+        }
+    }
+
+    private fun isAllValuesEntered() = ets.map { it.text.isNullOrEmpty() }.contains(true).toggle()
+
+    private fun Boolean.toggle() = !this
 
     private fun setPicture(image: Bitmap) {
         binding.ivPhoto.setImageBitmap(image)
-        pictureBitmap = image
+        (requireActivity() as QuestionUploadActivity).image = image
     }
 
     private fun setObserver() {
@@ -95,15 +154,17 @@ class QuestionFormFragment : Fragment() {
     private fun setButtons() {
         binding.btnSubmit.setOnClickListener {
             viewModel.uploadQuestion(
-                QuestionUploadVO(
-                    STUDENT_ID,
-                    binding.etDescription.text.toString(),
-                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
-                    schoolSelected,
-                    subjectSelected ?: "",
-                    chapterSelected ?: "",
-                    difficultySelected
-                )
+                with(requireActivity() as QuestionUploadActivity) {
+                    QuestionUploadVO(
+                        STUDENT_ID,
+                        description!!,
+                        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+                        schoolLevelSelected!!,
+                        subjectSelected!!,
+                        "",
+                        difficultySelected!!
+                    )
+                }
             )
         }
     }

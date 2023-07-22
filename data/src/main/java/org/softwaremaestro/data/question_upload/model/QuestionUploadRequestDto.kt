@@ -3,11 +3,10 @@ package org.softwaremaestro.data.question_upload.model
 import com.google.gson.annotations.SerializedName
 
 data class QuestionUploadRequestDto(
-    @SerializedName("student_id") var studentId: String,
-    @SerializedName("problem_description") var description: String,
-    @SerializedName("problem_base64_image") var imageEncoding: String,
-    @SerializedName("problem_school_level") var schoolLevel: String,
-    @SerializedName("problem_school_subject") var schoolSubject: String,
-    @SerializedName("problem_school_chapter") var schoolChapter: String,
-    @SerializedName("problem_difficulty") var problemDifficulty: String,
+    @SerializedName("problemDescription") var problemDescription: String,
+    @SerializedName("problemBase64Image") var problemBase64Image: String,
+    @SerializedName("problemSchoolLevel") var problemSchoolLevel: String,
+    @SerializedName("problemSchoolSubject") var problemSchoolSubject: String,
+    @SerializedName("problemSchoolChapter") var problemSchoolChapter: String,
+    @SerializedName("problemDifficulty") var problemDifficulty: String
 )
