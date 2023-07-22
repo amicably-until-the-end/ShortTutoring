@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
@@ -43,7 +43,7 @@ class RegisterRoleFragment : Fragment() {
                 1 -> R.id.action_registerRoleFragment_to_registerTeacherInfoFragment
                 else -> null
             }?.let { dest ->
-                Navigation.findNavController(requireView()).navigate(dest)
+                findNavController().navigate(dest)
             }
         }
 
