@@ -55,13 +55,14 @@ class LogoFragment @Inject constructor() :
             startActivity(intent)
         }
 
+
         binding.containerLoginByKakao.setOnClickListener {
-            viewModel.loginWithKakao()
+            viewModel.loginWithKakao(requireContext())
         }
 
         checkAutoLogin()
         setObserver()
-        //checkKakaoToken()
+        viewModel.loginWithKakao(requireContext())
         return binding.root
     }
 
@@ -71,7 +72,11 @@ class LogoFragment @Inject constructor() :
 
 
     private fun checkAutoLogin() {
-        viewModel.getSaveToken()
+        // 자동로그인 처리 구현 방법
+        // 1. preferenece 에 저장된 이전 로그인 정보 확인
+        // 2. 로그인 정보 없으면 소셜 로그인 선택화면 보여주기
+        // 3. access token으로 회원정보 받아오기.
+        // 3. 회원정보에 따라서 선생님, 학생 분기.
     }
 
 

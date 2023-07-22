@@ -62,4 +62,8 @@ dependencies {
 
     //Kakao
     implementation "com.kakao.sdk:v2-user:2.15.0"
+
+
+    //JWT Util
+    implementation 'com.auth0.android:jwtdecode:2.0.2'
 }
