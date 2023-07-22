@@ -7,4 +7,5 @@
     <color name="transparent">#00000000</color>
     <color name="primary">#FF6200EE</color>
     <color name="primary_bright">#FFAA77FF</color>
+    <color name="kakao">#FEE500</color>
 </resources>
