@@ -87,5 +87,10 @@ dependencies {
 
     //Kakao
     implementation "com.kakao.sdk:v2-user:2.15.0"
+
+    //Agora White Board
+    implementation 'com.github.netless-io:whiteboard-android:2.16.42'
+
+
 }
 
