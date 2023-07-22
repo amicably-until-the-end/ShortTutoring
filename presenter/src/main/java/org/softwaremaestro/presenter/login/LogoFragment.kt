@@ -57,10 +57,10 @@ class LogoFragment @Inject constructor() :
 
 
         binding.containerLoginByKakao.setOnClickListener {
-            viewModel.loginWithKakao(requireContext())
+            //viewModel.loginWithKakao(requireContext())
         }
 
-        checkAutoLogin()
+        //checkAutoLogin()
         setObserver()
         viewModel.loginWithKakao(requireContext())
         return binding.root

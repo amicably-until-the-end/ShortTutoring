@@ -24,7 +24,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class RequestInterceptor constructor(private val prefs: SharedPrefs) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = getToken()
+        val token = ""
 
         val newRequest = chain.request().newBuilder()
             .addHeader("user_token", token ?: "")
