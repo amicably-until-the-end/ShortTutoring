@@ -42,7 +42,8 @@
         tools:layout="@layout/fragment_register_teacher_info">
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
-            app:destination="@id/logoFragment" />
+            app:destination="@id/logoFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_searchUnivFragment"
             app:destination="@id/searchUnivFragment" />

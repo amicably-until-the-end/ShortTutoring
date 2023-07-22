@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".question_upload.QuestionFormSubjectFragment">
+
+    <RadioGroup
+        android:id="@+id/rg_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="@dimen/margin_top_default"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/rb_high_school_math_1"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="고등수학(상)"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/rb_high_school_math_2"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="고등수학(하)"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/rb_math_1"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="수학1"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/rb_math_2"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="수학2"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/rb_di"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="미적분"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/rb_ps"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="확률과 통계"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

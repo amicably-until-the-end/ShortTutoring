@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_horizontal_default"
                 android:layout_marginTop="@dimen/margin_top_default"
-                android:text="질문 내용"
+                android:text="질문할 내용을 입력해주세요"
                 android:textColor="@color/black" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -49,21 +49,14 @@
                     style="@style/body2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="질문 내용"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- 학교 -->
-            <TextView
-                style="@style/h6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_horizontal_default"
-                android:layout_marginTop="24dp"
-                android:text="학교"
-                android:textColor="@color/black" />
 
             <!--            <RadioGroup-->
             <!--                android:id="@+id/rg_school_level"-->
@@ -106,24 +99,18 @@
                 android:layout_marginTop="24dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_school_level"
                     style="@style/body2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="학교"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- 과목 -->
-            <TextView
-                style="@style/h6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_horizontal_default"
-                android:layout_marginTop="24dp"
-                android:text="과목"
-                android:textColor="@color/black" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -133,76 +120,92 @@
                 android:layout_marginTop="24dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_subject"
                     style="@style/body2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="과목"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <!-- 난이도 -->
-            <TextView
-                style="@style/h6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_horizontal_default"
-                android:layout_marginTop="24dp"
-                android:text="예상 난이도"
-                android:textColor="@color/black" />
-
-            <RadioGroup
-                android:id="@+id/rg_difficulty"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginTop="24dp">
 
-                <RadioButton
-                    android:id="@+id/rb_easy"
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_difficulty"
+                    style="@style/body2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/rb_selector"
-                    android:button="@null"
-                    android:checked="true"
-                    android:gravity="center"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="난이도"
+                    android:inputType="text"
                     android:padding="16dp"
-                    android:text="쉬움\n\n10분 이하"
-                    android:textColor="@drawable/rb_selector_text_color" />
+                    android:textColor="@color/black" />
 
-                <RadioButton
-                    android:id="@+id/rb_middle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/rb_selector"
-                    android:button="@null"
-                    android:checked="false"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="중간\n\n10분 ~ 30분"
-                    android:textColor="@drawable/rb_selector_text_color" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/rb_difficult"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/rb_selector"
-                    android:button="@null"
-                    android:checked="false"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="어려움\n\n10분 이하"
-                    android:textColor="@drawable/rb_selector_text_color" />
+            <!--            <RadioGroup-->
+            <!--                android:id="@+id/rg_difficulty"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginHorizontal="@dimen/margin_horizontal_default"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:gravity="center"-->
+            <!--                android:orientation="horizontal">-->
 
-            </RadioGroup>
+            <!--                <RadioButton-->
+            <!--                    android:id="@+id/rb_easy"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:background="@drawable/rb_selector"-->
+            <!--                    android:button="@null"-->
+            <!--                    android:checked="true"-->
+            <!--                    android:gravity="center"-->
+            <!--                    android:padding="16dp"-->
+            <!--                    android:text="쉬움\n\n10분 이하"-->
+            <!--                    android:textColor="@drawable/rb_selector_text_color" />-->
+
+            <!--                <RadioButton-->
+            <!--                    android:id="@+id/rb_middle"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:background="@drawable/rb_selector"-->
+            <!--                    android:button="@null"-->
+            <!--                    android:checked="false"-->
+            <!--                    android:gravity="center"-->
+            <!--                    android:padding="16dp"-->
+            <!--                    android:text="중간\n\n10분 ~ 30분"-->
+            <!--                    android:textColor="@drawable/rb_selector_text_color" />-->
+
+            <!--                <RadioButton-->
+            <!--                    android:id="@+id/rb_difficult"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:background="@drawable/rb_selector"-->
+            <!--                    android:button="@null"-->
+            <!--                    android:checked="false"-->
+            <!--                    android:gravity="center"-->
+            <!--                    android:padding="16dp"-->
+            <!--                    android:text="어려움\n\n10분 이하"-->
+            <!--                    android:textColor="@drawable/rb_selector_text_color" />-->
+
+            <!--            </RadioGroup>-->
+
         </LinearLayout>
+
     </ScrollView>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -211,7 +214,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:background="@drawable/corner_radius_10"
+        android:background="@drawable/btn_corner_radius_10_disabled"
         android:gravity="center"
         android:padding="16dp"
         android:text="제출하기"

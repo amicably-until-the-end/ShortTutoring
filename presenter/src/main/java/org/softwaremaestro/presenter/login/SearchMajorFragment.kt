@@ -1,18 +1,17 @@
 package org.softwaremaestro.presenter.login
 
-import android.app.Service
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
-import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchMajorBinding
+import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
 
 const val SELECTED_MAJOR = "selected-major"
 private const val IME_ACTION = IME_ACTION_NEXT
@@ -36,7 +35,7 @@ class SearchMajorFragment : Fragment() {
         setAdapter(binding.atvMajor)
 
         // 자동으로 전공 텍스트필드에 포커스가 가게 한다
-        requestFocusAndShowKeyboard(binding.atvMajor)
+        requestFocusAndShowKeyboard(binding.atvMajor, requireContext())
     }
 
     private fun setAdapter(view: AutoCompleteTextView) {
@@ -57,13 +56,5 @@ class SearchMajorFragment : Fragment() {
             }
 
         view.setAdapter(adapter)
-    }
-
-    private fun requestFocusAndShowKeyboard(view: View) {
-        view.requestFocus()
-
-        val imm: InputMethodManager =
-            requireContext().getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, 0)
     }
 }

@@ -1,18 +1,17 @@
 package org.softwaremaestro.presenter.login
 
-import android.app.Service
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchYearOfAdmissionBinding
+import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
 
 const val SELECTED_YEAR_OF_ADMISSION = "selected-year-of-admission"
 private const val IME_ACTION = IME_ACTION_NEXT
@@ -33,7 +32,7 @@ class SearchYearOfAdmissionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 자동으로 학번 텍스트필드에 포커스가 가게 한다
-        requestFocusAndShowKeyboard(binding.atvYearOfAdmission)
+        requestFocusAndShowKeyboard(binding.atvYearOfAdmission, requireContext())
 
         // 다음 버튼을 누르면 선생님 정보 입력 페이지로 돌아간다
         setOnEditorActionLister(binding.atvYearOfAdmission)
@@ -54,13 +53,5 @@ class SearchYearOfAdmissionFragment : Fragment() {
             }
             true
         }
-    }
-
-    private fun requestFocusAndShowKeyboard(view: View) {
-        view.requestFocus()
-
-        val imm: InputMethodManager =
-            requireContext().getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, 0)
     }
 }
