@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".login.LogoFragment">
@@ -23,32 +22,58 @@
         android:id="@+id/btn_login_by_google"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="구글 계정으로 시작하기"
-        android:textColor="@color/black"
-        style="@style/button"
-        android:background="@drawable/corner_radius_10"
-        android:padding="16dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/btn_login_by_kakao"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginBottom="32dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
+        android:background="@drawable/btn_login_google"
+        android:drawableStart="@drawable/logo_google_24"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="구글로 시작하기"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/btn_login_by_kakao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_login_by_kakao"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="카카오 계정으로 시작하기"
-        android:textColor="@color/black"
-        style="@style/button"
-        android:background="@drawable/corner_radius_10"
-        android:padding="16dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginBottom="56dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default" />
+        android:background="@drawable/btn_login"
+        android:backgroundTint="@color/kakao"
+        android:drawableStart="@drawable/logo_kakao_24"
+        android:drawableTint="@color/black"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="카카오로 시작하기"
+        android:textColor="#D8000000"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginHorizontal="@dimen/margin_horizontal_default"-->
+    <!--        android:layout_marginBottom="56dp"-->
+    <!--        android:background="@drawable/btn_kakao"-->
+    <!--        android:gravity="center"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent">-->
+
+    <!--        <androidx.appcompat.widget.AppCompatButton-->
+    <!--            android:id="@+id/btn_login_by_kakao"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:drawableStart="@drawable/kakao_24"-->
+    <!--            android:drawablePadding="12dp"-->
+    <!--            android:drawableTint="@color/black"-->
+    <!--            android:gravity="center"-->
+    <!--            android:padding="16dp"-->
+    <!--            android:text="카카오로 시작하기"-->
+    <!--            android:textColor="#D8000000"-->
+    <!--            android:textSize="14sp" />-->
+
+    <!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
