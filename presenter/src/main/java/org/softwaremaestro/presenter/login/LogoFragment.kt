@@ -14,6 +14,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
 import org.softwaremaestro.presenter.R
@@ -54,11 +60,12 @@ class LogoFragment @Inject constructor() :
             startActivity(intent)
         }
 
+
         binding.containerLoginByKakao.setOnClickListener {
-            Navigation.findNavController(it)
-                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
+            //viewModel.loginWithKakao(requireContext())
         }
-        checkAutoLogin()
+
+        //checkAutoLogin()
         setObserver()
         hideAppBar()
         return binding.root
@@ -69,15 +76,15 @@ class LogoFragment @Inject constructor() :
     }
 
     private fun checkAutoLogin() {
-        viewModel.getSaveToken()
+        // 자동로그인 처리 구현 방법
+        // 1. preferenece 에 저장된 이전 로그인 정보 확인
+        // 2. 로그인 정보 없으면 소셜 로그인 선택화면 보여주기
+        // 3. access token으로 회원정보 받아오기.
+        // 3. 회원정보에 따라서 선생님, 학생 분기.
     }
 
-    private fun setObserver() {
-        viewModel.savedToken.observe(viewLifecycleOwner) {
-            if (viewModel.savedToken != null) {
-                //viewModel.getUserInfo()
-            }
-        }
+
+    private fun observeUserInfo() {
         viewModel.userInfo.observe(viewLifecycleOwner) {
             if (viewModel.userInfo != null) {
                 Log.d("mymymy", "get user info in frag ${viewModel.userInfo.value.toString()}")
@@ -90,6 +97,20 @@ class LogoFragment @Inject constructor() :
                 }
             }
         }
+    }
+
+    private fun observeKakaoLogin() {
+        viewModel.isKakaoLoginSuccess.observe(viewLifecycleOwner) {
+            if (viewModel.isKakaoLoginSuccess?.value == true) {
+                //카카오 로그인 성공 //로컬에 idToken이 저장되어있음
+
+            }
+        }
+    }
+
+    private fun setObserver() {
+        observeUserInfo()
+        observeKakaoLogin()
     }
 
 }

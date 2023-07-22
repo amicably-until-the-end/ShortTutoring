@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface GetUserInfoApi {
-    @POST("/getUserInfo")
-    suspend fun getUserInfo(@Body getUserInfoReqDto: UserInfoReqDto): Response<WrappedResponse<UserInfoResDto>>
+    @POST("/user/getInfo")
+    suspend fun getUserInfo(): Response<WrappedResponse<UserInfoResDto>>
+    
 }

@@ -8,4 +8,6 @@ interface LoginRepository {
     suspend fun autoLogin(): Flow<BaseResult<String, String>>
 
     suspend fun getUserInfo(): Flow<BaseResult<UserVO, String>>
+
+    fun saveKakaoJWT(token: String)
 }

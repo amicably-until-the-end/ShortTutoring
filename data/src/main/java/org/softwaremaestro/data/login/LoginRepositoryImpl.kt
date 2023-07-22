@@ -1,7 +1,12 @@
 package org.softwaremaestro.data.login
 
+import android.content.Context
 import android.util.Log
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.infra.SharedPrefs
 import org.softwaremaestro.data.login.model.UserInfoReqDto
@@ -37,9 +42,9 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun getUserInfo(): Flow<BaseResult<UserVO, String>> {
         return flow {
-            val savedToken: String = prefs.getToken()
-            Log.d("mymymy", "imple try to get user info with ${savedToken}")
-            val result = getUserInfoApi.getUserInfo(UserInfoReqDto(savedToken))
+
+
+            val result = getUserInfoApi.getUserInfo()
             if (result.isSuccessful) {
                 val userDto = result.body()?.data!!
                 emit(BaseResult.Success(UserVO(userDto.role, null, userDto.name)))
@@ -49,5 +54,8 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun saveKakaoJWT(token: String) {
+        prefs.saveToken(token)
+    }
 
 }
