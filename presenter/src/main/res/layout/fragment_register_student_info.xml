@@ -1,102 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".login.RegisterStudentInfoFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_left"
+    <TextView
+        android:id="@+id/tv_school_level"
+        style="@style/h6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="@dimen/margin_top_default"
+        android:text="재학 중인 학교를 선택해주세요"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rg_school_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="100dp" />
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_school_level">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_right"
+        <RadioButton
+            android:id="@+id/rb_middle_school"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:checked="true"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="중학교"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+        <RadioButton
+            android:id="@+id/rb_high_school"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="고등학교"
+            android:textColor="@drawable/rb_selector_text_color" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_grade"
+        style="@style/h6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="48dp"
+        android:text="현재 학년을 선택해주세요"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rg_school_level" />
+
+    <RadioGroup
+        android:id="@+id/rg_grade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="100dp" />
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="24dp"
+        android:checkedButton="@id/rb_grade_0"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_grade">
 
-    <LinearLayout
-        android:id="@+id/container_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toRightOf="@id/gl_left"
-        app:layout_constraintRight_toLeftOf="@id/gl_right"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_name_label"
+        <RadioButton
+            android:id="@+id/rb_grade_0"
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이름"
-            android:textColor="@android:color/black"
-            android:textSize="30sp" />
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="1학년"
+            android:textColor="@drawable/rb_selector_text_color" />
 
-        <EditText
-            android:id="@+id/et_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="96dp"
-            android:hint="이름"
-            android:inputType="text"
-            android:textSize="25sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/container_school"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="@id/gl_left"
-        app:layout_constraintRight_toRightOf="@id/gl_right"
-        app:layout_constraintTop_toBottomOf="@id/container_name">
-
-        <TextView
-            android:id="@+id/tv_school_label"
+        <RadioButton
+            android:id="@+id/rb_grade_1"
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="학교"
-            android:textColor="@android:color/black"
-            android:textSize="30sp" />
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="2학년"
+            android:textColor="@drawable/rb_selector_text_color" />
 
-        <EditText
-            android:id="@+id/et_school_input"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/rb_grade_2"
+            style="@style/button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="96dp"
-            android:hint="학교"
-            android:inputType="text"
-            android:textSize="25sp" />
+            android:layout_marginStart="24dp"
+            android:background="@drawable/rb_selector_corner_radius"
+            android:button="@null"
+            android:paddingHorizontal="@dimen/padding_horizontal_rb"
+            android:paddingVertical="@dimen/padding_vertical_rb"
+            android:text="3학년"
+            android:textColor="@drawable/rb_selector_text_color" />
 
-        <NumberPicker
-            android:id="@+id/pcr_grade_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:inputType="number"
-            android:textSize="25sp"/>
+    </RadioGroup>
 
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_complete"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next"
+        style="@style/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="회원가입 완료"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@id/container_school"
-        android:layout_marginTop="100dp"
-        app:layout_constraintLeft_toRightOf="@id/gl_left"
-        app:layout_constraintRight_toLeftOf="@id/gl_right" />
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="다음"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

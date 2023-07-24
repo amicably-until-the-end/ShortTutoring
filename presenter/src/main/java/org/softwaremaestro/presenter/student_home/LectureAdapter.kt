@@ -35,9 +35,7 @@ class LectureAdapter(private val onItemClickListener: (String) -> Unit): Recycle
             // Todo: 수정 필요함
             binding.ivPhoto.setImageBitmap(null)
             binding.tvDesciption.text = item.description
-            binding.tvDate.text = item.date
             binding.tvSubject.text = item.subject
-            binding.tvChapter.text = item.chapter
             binding.root.setOnClickListener {
                 onItemClickListener("string from ViewAdapter")
             }

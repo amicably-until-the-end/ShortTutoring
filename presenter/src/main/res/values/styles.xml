@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="h1" parent="TextAppearance.MaterialComponents.Headline1" />
+
+    <style name="h2" parent="TextAppearance.MaterialComponents.Headline2" />
+
+    <style name="h3" parent="TextAppearance.MaterialComponents.Headline3" />
+
+    <style name="h4" parent="TextAppearance.MaterialComponents.Headline4" />
+
+    <style name="h5" parent="TextAppearance.MaterialComponents.Headline5" />
+
+    <style name="h6" parent="TextAppearance.MaterialComponents.Headline6" />
+
+    <style name="subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1" />
+
+    <style name="subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2" />
+
+    <style name="body1" parent="TextAppearance.MaterialComponents.Body1" />
+
+    <style name="body2" parent="TextAppearance.MaterialComponents.Body2" />
+
+    <style name="button" parent="TextAppearance.MaterialComponents.Button" />
+</resources>

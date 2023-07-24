@@ -6,114 +6,128 @@
     android:layout_height="match_parent"
     tools:context=".login.RegisterTeacherInfoFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_left"
+    <TextView
+        android:id="@+id/tv_univ"
+        style="@style/h6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="100dp" />
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="@dimen/margin_top_default"
+        android:text="재학 중인 대학교를 입력해주세요"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_right"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_univ"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="100dp" />
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_univ">
 
-    <LinearLayout
-        android:id="@+id/container_name"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_univ"
+            style="@style/body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="대학교"
+            android:inputType="text"
+            android:padding="16dp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_college"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tf_univ">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_college"
+            style="@style/body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="단과대학"
+            android:inputType="text"
+            android:padding="16dp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_major"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tf_college">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_major"
+            style="@style/body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="전공"
+            android:inputType="text"
+            android:padding="16dp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_year_of_admission"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tf_major">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_year_of_admission"
+            style="@style/body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="학번"
+            android:inputType="text"
+            android:padding="16dp"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next"
+        style="@style/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toRightOf="@id/gl_left"
-        app:layout_constraintRight_toLeftOf="@id/gl_right"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이름"
-            android:textColor="@android:color/black"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/et_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="96dp"
-            android:hint="이름"
-            android:inputType="text"
-            android:textSize="25sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/container_school"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="@id/gl_left"
-        app:layout_constraintRight_toRightOf="@id/gl_right"
-        app:layout_constraintTop_toBottomOf="@id/container_name">
-
-        <TextView
-            android:id="@+id/tv_school_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="학교"
-            android:textColor="@android:color/black"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/et_school_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="96dp"
-            android:hint="학교"
-            android:inputType="text"
-            android:textSize="25sp" />
-
-        <EditText
-            android:id="@+id/et_faculty_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:hint="학부"
-            android:inputType="text"
-            android:textSize="25sp" />
-
-        <EditText
-            android:id="@+id/et_major_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:hint="학과"
-            android:inputType="text"
-            android:textSize="25sp" />
-
-        <NumberPicker
-            android:id="@+id/pcr_year_of_administration_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:inputType="number"
-            android:textSize="25sp" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_complete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="회원가입 완료"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@id/container_school"
-        android:layout_marginTop="100dp"
-        app:layout_constraintLeft_toRightOf="@id/gl_left"
-        app:layout_constraintRight_toLeftOf="@id/gl_right" />
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/btn_corner_radius_10_disabled"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="다음"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

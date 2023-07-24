@@ -42,6 +42,54 @@
         tools:layout="@layout/fragment_register_teacher_info">
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
-            app:destination="@id/logoFragment" />
+            app:destination="@id/logoFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registerTeacherInfoFragment_to_searchUnivFragment"
+            app:destination="@id/searchUnivFragment" />
+        <action
+            android:id="@+id/action_registerTeacherInfoFragment_to_searchCollegeFragment"
+            app:destination="@id/searchCollegeFragment" />
+        <action
+            android:id="@+id/action_registerTeacherInfoFragment_to_searchMajorFragment"
+            app:destination="@id/searchMajorFragment" />
+        <action
+            android:id="@+id/action_registerTeacherInfoFragment_to_searchYearOfAdmissionFragment"
+            app:destination="@id/searchYearOfAdmissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchUnivFragment"
+        android:name="org.softwaremaestro.presenter.login.SearchUnivFragment"
+        android:label="SearchUnivFragment">
+        <action
+            android:id="@+id/action_searchUnivFragment_to_searchCollegeFragment"
+            app:destination="@id/searchCollegeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchCollegeFragment"
+        android:name="org.softwaremaestro.presenter.login.SearchCollegeFragment"
+        android:label="fragment_search_college"
+        tools:layout="@layout/fragment_search_college">
+        <action
+            android:id="@+id/action_searchCollegeFragment_to_searchMajorFragment"
+            app:destination="@id/searchMajorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchMajorFragment"
+        android:name="org.softwaremaestro.presenter.login.SearchMajorFragment"
+        android:label="fragment_search_major"
+        tools:layout="@layout/fragment_search_major">
+        <action
+            android:id="@+id/action_searchMajorFragment_to_searchYearOfAdmissionFragment"
+            app:destination="@id/searchYearOfAdmissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchYearOfAdmissionFragment"
+        android:name="org.softwaremaestro.presenter.login.SearchYearOfAdmissionFragment"
+        android:label="fragment_search_year_of_admission"
+        tools:layout="@layout/fragment_search_year_of_admission">
+        <action
+            android:id="@+id/action_searchYearOfAdmissionFragment_to_registerTeacherInfoFragment"
+            app:destination="@id/registerTeacherInfoFragment" />
     </fragment>
 </navigation>

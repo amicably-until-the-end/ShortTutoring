@@ -2,14 +2,13 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val answerBtnClickListener: () -> Unit) :
+class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
     private var items: List<QuestionGetResultVO> = emptyList()
@@ -39,15 +38,11 @@ class QuestionAdapter(private val answerBtnClickListener: () -> Unit) :
             // Todo: 수정 필요함
             binding.ivPhoto.setImageBitmap(null)
             binding.tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
-            //binding.tvChapter.text = item.problemSchoolChapter ?: EMPTY_STRING
             binding.tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
             binding.tvDesciption.text = item.problemDescription ?: EMPTY_STRING
-//            for (i in 0..2) {
-//                (binding.containerReview.getChildAt(i) as TextView).text = item.reviews?.get(i) ?: EMPTY_STRING
-//            }
 
             binding.root.setOnClickListener {
-                answerBtnClickListener()
+                item.id?.let { answerBtnClickListener(it) }
             }
         }
     }

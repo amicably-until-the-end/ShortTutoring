@@ -29,6 +29,18 @@
             app:destination="@id/teacherSelectFragment"
             app:popUpTo="@id/questionCameraFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_questionFormFragment_to_questionFormDescriptionFragment"
+            app:destination="@id/questionFormDescriptionFragment" />
+        <action
+            android:id="@+id/action_questionFormFragment_to_questionFormSchoolLevelFragment"
+            app:destination="@id/questionFormSchoolLevelFragment" />
+        <action
+            android:id="@+id/action_questionFormFragment_to_questionFormSubjectFragment"
+            app:destination="@id/questionFormSubjectFragment" />
+        <action
+            android:id="@+id/action_questionFormFragment_to_questionFormDifficultyFragment"
+            app:destination="@id/questionFormDifficultyFragment" />
     </fragment>
     <fragment
         android:id="@+id/teacherSelectFragment"
@@ -40,6 +52,41 @@
             app:argType="string"
             app:nullable="false" />
     </fragment>
-
+    <fragment
+        android:id="@+id/questionFormSchoolLevelFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionFormSchoolLevelFragment"
+        android:label="fragment_question_form_school_level"
+        tools:layout="@layout/fragment_question_form_school_level">
+        <action
+            android:id="@+id/action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment"
+            app:destination="@id/questionFormSubjectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionFormSubjectFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionFormSubjectFragment"
+        android:label="fragment_question_form_subject"
+        tools:layout="@layout/fragment_question_form_subject">
+        <action
+            android:id="@+id/action_questionFormSubjectFragment_to_questionFormDifficultyFragment"
+            app:destination="@id/questionFormDifficultyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionFormDescriptionFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionFormDescriptionFragment"
+        android:label="fragment_question_form_description"
+        tools:layout="@layout/fragment_question_form_description">
+        <action
+            android:id="@+id/action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment"
+            app:destination="@id/questionFormSchoolLevelFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionFormDifficultyFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionFormDifficultyFragment"
+        android:label="fragment_question_form_difficulty"
+        tools:layout="@layout/fragment_question_form_difficulty">
+        <action
+            android:id="@+id/action_questionFormDifficultyFragment_to_questionFormFragment"
+            app:destination="@id/questionFormFragment" />
+    </fragment>
 
 </navigation>
