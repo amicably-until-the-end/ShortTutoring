@@ -1,11 +1,8 @@
 package org.softwaremaestro.presenter.student_home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityStudentHomeBinding
 
 @AndroidEntryPoint

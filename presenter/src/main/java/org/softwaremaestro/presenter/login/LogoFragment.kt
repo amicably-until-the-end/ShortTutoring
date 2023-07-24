@@ -1,9 +1,7 @@
 package org.softwaremaestro.presenter.login
 
 import android.content.Intent
-import android.media.tv.TvContract.Channels.Logo
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +9,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLogoBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
@@ -112,5 +101,4 @@ class LogoFragment @Inject constructor() :
         observeUserInfo()
         observeKakaoLogin()
     }
-
 }
