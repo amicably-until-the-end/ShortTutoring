@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.login.LoginActivity
 
 
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, ClassroomActivity::class.java)
         startActivity(intent)
 
         // 액션바 설정
