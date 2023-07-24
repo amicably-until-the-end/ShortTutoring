@@ -29,7 +29,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
-private const val GRIDLAYOUT_SPICING = 12
+private const val GRIDLAYOUT_SPICING = 8
 private const val TEACHER_ID = "test-teacher-id"
 
 @AndroidEntryPoint

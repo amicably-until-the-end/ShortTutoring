@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDifficultyBinding
-
-const val INPUT_DIFFICULTY = "input-difficulty"
 
 class QuestionFormDifficultyFragment : Fragment() {
 
@@ -39,14 +36,11 @@ class QuestionFormDifficultyFragment : Fragment() {
                 }
 
             selectedDifficulty?.let {
+                (requireActivity() as QuestionUploadActivity).difficultySelected =
+                    selectedDifficulty
+
                 findNavController().navigate(
-                    R.id.action_questionFormDifficultyFragment_to_questionFormFragment,
-                    bundleOf(
-                        INPUT_DESCRIPTION to arguments?.getString(INPUT_DESCRIPTION),
-                        INPUT_SCHOOL_LEVEL to arguments?.getString(INPUT_SCHOOL_LEVEL),
-                        INPUT_SUBJECT to arguments?.getString(INPUT_SUBJECT),
-                        INPUT_DIFFICULTY to selectedDifficulty
-                    )
+                    R.id.action_questionFormDifficultyFragment_to_questionFormFragment
                 )
             }
         }
