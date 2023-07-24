@@ -96,7 +96,7 @@ class ClassroomFragment : Fragment() {
         }
 
         //setWhiteBoard()
-        setupVoiceSDKEngine()
+        //setupVoiceSDKEngine()
         return binding.root
     }
 
