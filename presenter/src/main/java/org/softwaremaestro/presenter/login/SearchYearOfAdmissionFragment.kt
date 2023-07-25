@@ -8,7 +8,10 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchYearOfAdmissionBinding
 import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
@@ -16,8 +19,11 @@ import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
 const val SELECTED_YEAR_OF_ADMISSION = "selected-year-of-admission"
 private const val IME_ACTION = IME_ACTION_NEXT
 
+@AndroidEntryPoint
 class SearchYearOfAdmissionFragment : Fragment() {
     private lateinit var binding: FragmentSearchYearOfAdmissionBinding
+
+    private val viewModel: TeacherRegisterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +47,8 @@ class SearchYearOfAdmissionFragment : Fragment() {
     private fun setOnEditorActionLister(textView: TextView) {
         textView.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == IME_ACTION) {
-                findNavController().navigate(
-                    R.id.action_searchYearOfAdmissionFragment_to_registerTeacherInfoFragment,
-                    bundleOf(
-                        SELECTED_YEAR_OF_ADMISSION to view.text.toString(),
-                        SELECTED_MAJOR to arguments?.getString(SELECTED_MAJOR),
-                        SELECTED_COLLEGE to arguments?.getString(SELECTED_COLLEGE),
-                        SELECTED_UNIV to arguments?.getString(SELECTED_UNIV)
-                    )
-                )
+                viewModel._admissonYear.value = binding.tfYearOfAdmission.editText?.text.toString()
+                findNavController().popBackStack()
             }
             true
         }

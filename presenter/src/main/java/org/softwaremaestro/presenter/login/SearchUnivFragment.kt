@@ -10,16 +10,22 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSeachUnivBinding
 
 const val SELECTED_UNIV = "selected-univ"
 private const val IME_ACTION = IME_ACTION_NEXT
 
+@AndroidEntryPoint
 class SearchUnivFragment : Fragment() {
 
     private lateinit var binding: FragmentSeachUnivBinding
+
+    private val viewModel: TeacherRegisterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +53,7 @@ class SearchUnivFragment : Fragment() {
                 requireActivity(),
                 listOf("서울대학교", "연세대학교", "고려대학교")
             ) { name: String ->
+                viewModel._univ.value = name
                 findNavController().navigate(
                     R.id.action_searchUnivFragment_to_searchCollegeFragment,
                     bundleOf(SELECTED_UNIV to name)
