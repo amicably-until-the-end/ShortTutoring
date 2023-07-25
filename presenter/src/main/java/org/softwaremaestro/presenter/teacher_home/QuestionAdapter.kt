@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.teacher_home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
@@ -35,14 +36,17 @@ class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
 
         fun onBind(item: QuestionGetResultVO) {
 
-            // Todo: 수정 필요함
-            binding.ivPhoto.setImageBitmap(null)
-            binding.tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
-            binding.tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
-            binding.tvDesciption.text = item.problemDescription ?: EMPTY_STRING
+            with(binding) {
 
-            binding.root.setOnClickListener {
-                item.id?.let { answerBtnClickListener(it) }
+                Picasso.with(root.context).load(item.problemImage).into(ivPhoto)
+
+                tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
+                tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
+                tvDesciption.text = item.problemDescription ?: EMPTY_STRING
+
+                root.setOnClickListener {
+                    item.id?.let { answerBtnClickListener(it) }
+                }
             }
         }
     }

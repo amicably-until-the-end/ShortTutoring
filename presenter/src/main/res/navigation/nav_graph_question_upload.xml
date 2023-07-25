@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_questionFormFragment_to_questionFormDifficultyFragment"
             app:destination="@id/questionFormDifficultyFragment" />
+        <action
+            android:id="@+id/action_questionFormFragment_to_questionCameraFragment"
+            app:destination="@id/questionCameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/teacherSelectFragment"

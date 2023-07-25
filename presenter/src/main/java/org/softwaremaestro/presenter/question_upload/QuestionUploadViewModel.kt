@@ -35,7 +35,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
                     Log.d("mymymy", "${result.toString()} is result in viewmodel")
                     when (result) {
                         is BaseResult.Success -> {
-                            _questionId.value = result.data.question_id
+                            _questionId.value = result.data.questionId
                         }
 
                         is BaseResult.Error -> _questionId.value = null

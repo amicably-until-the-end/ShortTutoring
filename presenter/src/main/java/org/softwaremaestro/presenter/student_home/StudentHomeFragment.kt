@@ -16,7 +16,7 @@ import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
-private const val GRIDLAYOUT_SPICING = 12
+private const val GRIDLAYOUT_SPICING = 8
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {

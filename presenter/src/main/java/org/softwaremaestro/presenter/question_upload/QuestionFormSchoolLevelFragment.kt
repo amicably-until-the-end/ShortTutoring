@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormSchoolLevelBinding
-
-const val INPUT_SCHOOL_LEVEL = "input-school-level"
 
 class QuestionFormSchoolLevelFragment : Fragment() {
 
@@ -38,12 +35,11 @@ class QuestionFormSchoolLevelFragment : Fragment() {
                 }
 
             selectedSchoolLevel?.let {
+
+                (requireActivity() as QuestionUploadActivity).schoolLevelSelected = it
+
                 findNavController().navigate(
-                    R.id.action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment,
-                    bundleOf(
-                        INPUT_DESCRIPTION to arguments?.getString(INPUT_DESCRIPTION),
-                        INPUT_SCHOOL_LEVEL to selectedSchoolLevel
-                    )
+                    R.id.action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment
                 )
             }
         }
