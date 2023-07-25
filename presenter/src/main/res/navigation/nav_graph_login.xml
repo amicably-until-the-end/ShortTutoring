@@ -24,17 +24,14 @@
             app:destination="@id/registerTeacherInfoFragment" />
         <action
             android:id="@+id/action_registerRoleFragment_to_registerStudentInfoFragment"
-            app:destination="@id/registerStudentInfoFragment" />
+            app:destination="@id/registerStudentInfoFragment"
+            app:popUpTo="@id/logoFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerStudentInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterStudentInfoFragment"
         android:label="정보 입력"
-        tools:layout="@layout/fragment_register_student_info">
-        <action
-            android:id="@+id/action_registerStudentInfoFragment_to_logoFragment"
-            app:destination="@id/logoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_register_student_info"></fragment>
     <fragment
         android:id="@+id/registerTeacherInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterTeacherInfoFragment"

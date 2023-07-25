@@ -58,7 +58,7 @@ class RegisterStudentInfoFragment : Fragment() {
             } else {
                 //TODO: 실패했을 때 처리
                 Navigation.findNavController(requireView())
-                    .navigate(R.id.action_registerStudentInfoFragment_to_logoFragment)
+                    .popBackStack()
             }
         }
 

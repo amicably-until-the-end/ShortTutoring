@@ -46,6 +46,7 @@ class RegisterRoleFragment : Fragment() {
                 findNavController().navigate(dest)
             }
         }
+        (activity as LoginActivity).showAppBar()
 
         return binding.root
     }
