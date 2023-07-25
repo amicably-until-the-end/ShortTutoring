@@ -82,15 +82,17 @@ dependencies {
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-    //Kakao
+    // Kakao
     implementation "com.kakao.sdk:v2-user:2.15.0"
 
-    //Agora White Board
+    // Agora White Board
     implementation 'com.github.netless-io:whiteboard-android:2.16.42'
 
     //Agora Voice RTC
     implementation 'io.agora.rtc:voice-sdk:4.2.0'
 
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
 }
 

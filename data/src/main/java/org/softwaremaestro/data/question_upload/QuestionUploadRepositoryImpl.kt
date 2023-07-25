@@ -22,12 +22,12 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     override suspend fun uploadQuestion(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>> {
         return flow {
             val dto = QuestionUploadRequestDto(
+                questionUploadVO.imageBase64,
+                questionUploadVO.imageFormat,
                 questionUploadVO.description,
-                questionUploadVO.imageEncoding,
                 questionUploadVO.schoolLevel,
                 questionUploadVO.schoolSubject,
-                questionUploadVO.schoolChapter,
-                questionUploadVO.problemDifficulty
+                questionUploadVO.difficulty
             )
             val response = questionUploadApi.uploadQuestion(questionUploadVO.studentId, dto)
             Log.d("mymymy", "${response.body()} is res in imple")

@@ -25,7 +25,6 @@ class QuestionUploadActivity : AppCompatActivity() {
         binding = ActivityQuestionUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setAppBar()
-
     }
 
     private fun setAppBar() {
