@@ -22,3 +22,5 @@
 
 # Agora White Board SDK model
 -keep class com.herewhite.** { *; }
+
+-keep class io.agora.**{*;}
