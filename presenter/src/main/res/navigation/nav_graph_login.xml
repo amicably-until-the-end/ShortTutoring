@@ -81,7 +81,8 @@
         tools:layout="@layout/fragment_search_major">
         <action
             android:id="@+id/action_searchMajorFragment_to_searchYearOfAdmissionFragment"
-            app:destination="@id/searchYearOfAdmissionFragment" />
+            app:destination="@id/searchYearOfAdmissionFragment"
+            app:popUpTo="@id/registerTeacherInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchYearOfAdmissionFragment"
