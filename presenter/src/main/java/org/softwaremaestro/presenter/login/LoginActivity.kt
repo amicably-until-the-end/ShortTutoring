@@ -33,6 +33,14 @@ class LoginActivity : AppCompatActivity() {
             setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        
+
+    }
+
+    fun hideAppBar() {
+        supportActionBar?.hide()
+    }
+
+    fun showAppBar() {
+        supportActionBar?.show()
     }
 }

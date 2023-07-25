@@ -22,12 +22,19 @@ import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+
+data class TokenInfo(
+    var vendor: String?,
+    var token: String?
+)
+
 class RequestInterceptor constructor(private val prefs: SharedPrefs) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = ""
+        val tokenInfo = getTokenInfo()
 
         val newRequest = chain.request().newBuilder()
-            .addHeader("user_token", token ?: "")
+            .addHeader("Authorization", "Bearer ${tokenInfo.token}")
+            .addHeader("vendor", tokenInfo.vendor ?: "")
             .build()
         Log.d("mymymy", "intercept request is ${newRequest.toString()}")
         return chain.proceed(newRequest)
@@ -65,11 +72,16 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     }
 
 
-    private fun getToken(): String? {
-        val kakaoToken = runBlocking { getKakaoToken() }
+    private fun getTokenInfo(): TokenInfo {
+
+        return TokenInfo(null, null)
+
+        /*val kakaoToken = runBlocking { getKakaoToken() }
         if (kakaoToken?.accessToken != null) {
-            return kakaoToken.accessToken!!
+            return TokenInfo("kakao", kakaoToken.accessToken!!)
         }
-        return null
+        return TokenInfo(null, null)*/
     }
 }
+
+

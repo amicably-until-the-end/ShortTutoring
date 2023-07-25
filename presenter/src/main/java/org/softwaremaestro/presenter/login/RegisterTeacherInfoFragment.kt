@@ -112,7 +112,7 @@ class RegisterTeacherInfoFragment : Fragment() {
                 startActivity(intent)
             } else {
                 // TODO: 회원가입 실패 처리
-                findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_logoFragment)
+                findNavController().popBackStack()
             }
         }
     }
