@@ -12,17 +12,24 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 
 @AndroidEntryPoint
 class TeacherHomeActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityTeacherHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeacherHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setAppBar()
+        setToolBar()
     }
 
-    private fun setAppBar() {
-        return
-
+    /**
+     * 상단바 설정
+     */
+    fun setToolBar() {
+        // 액션바 설정
+        val toolbar: Toolbar = binding.toolbar
+        if (toolbar != null)
+            setSupportActionBar(toolbar)
+        // 뒤로가기 버튼
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }
