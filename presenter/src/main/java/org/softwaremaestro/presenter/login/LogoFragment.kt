@@ -56,13 +56,10 @@ class LogoFragment @Inject constructor() :
         }
         // checkAutoLogin()
         setObserver()
-        hideAppBar()
+        (activity as LoginActivity).hideAppBar()
         return binding.root
     }
 
-    private fun hideAppBar() {
-        (activity as AppCompatActivity)!!.supportActionBar!!.hide()
-    }
 
     private fun checkAutoLogin() {
         // 자동로그인 처리 구현 방법

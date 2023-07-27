@@ -10,4 +10,5 @@ interface LoginRepository {
     suspend fun getUserInfo(): Flow<BaseResult<UserVO, String>>
 
     fun saveKakaoJWT(token: String)
+
 }
