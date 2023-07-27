@@ -151,7 +151,8 @@ class TeacherHomeFragment : Fragment() {
         checkViewModel.check.observe(viewLifecycleOwner) {
             when (it.status) {
                 RequestStatus.SELECTED.noti -> {
-
+                    //snackbar가 떠 있으면 계속 api를 호출하는 상태임. 결과 나왔으면 그만 호출 해야함.
+                    waitingSnackbar.dismiss()
                     //Acticity 간 data class 전달을 위해 Serializable 사용
                     val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
                         it.whiteBoardAppId!!,

@@ -27,7 +27,7 @@ class TeacherAdapter(private var items: List<TeacherVO>, private val listener: (
         return items.size
     }
 
-    fun setItems(items:List<TeacherVO>) {
+    fun setItems(items: List<TeacherVO>) {
         this.items = items
     }
 
@@ -42,6 +42,7 @@ class TeacherAdapter(private var items: List<TeacherVO>, private val listener: (
             item.teacherId?.let { teacherId ->
                 binding.btnAccept.setOnClickListener {
                     listener(teacherId)
+
                 }
             }
         }

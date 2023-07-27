@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
@@ -41,13 +42,17 @@ class TeacherSelectViewModel @Inject constructor(
     private val _tutoringInfo: MutableLiveData<TeacherPickResVO> = MutableLiveData()
     val tutoringInfo: LiveData<TeacherPickResVO> get() = _tutoringInfo
 
+    private var waitForRoom = false
+
+
     fun pickTeacher(teacherPickReqVO: TeacherPickReqVO) {
+        if (waitForRoom) return
+        waitForRoom = true
         viewModelScope.launch {
 
             teacherPickUseCase.execute(teacherPickReqVO)
                 .catch { exception ->
-
-                    Log.e("mymymy", "pick Teacher Fail ${exception.toString()}")
+                    waitForRoom = false
                 }
                 .collect { result ->
                     when (result) {
@@ -58,6 +63,7 @@ class TeacherSelectViewModel @Inject constructor(
 
                         is BaseResult.Error -> {
                             _errorMsg.postValue("fail to pick Teacher")
+                            waitForRoom = false
                         }
                     }
                 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -80,7 +81,7 @@ class QuestionFormFragment : Fragment() {
 
         // 제출 버튼을 클릭하면 과외 요청을 보낸다.
         setSubmitButton()
-        
+
         // 뷰를 클릭하면 해당 뷰에 값을 입력하는 페이지로 이동한다
         setOnClickListenerToViews()
     }
@@ -134,12 +135,14 @@ class QuestionFormFragment : Fragment() {
     private fun setObserver() {
         viewModel.questionId.observe(viewLifecycleOwner) {
             if (!viewModel.questionId.value.isNullOrEmpty()) {
-                Log.d("mymymy", "${viewModel.questionId.value} <= in observer")
                 val bundle = bundleOf("questionId" to viewModel.questionId.value)
                 findNavController().navigate(
                     R.id.action_questionFormFragment_to_teacherSelectFragment,
                     bundle
                 )
+            } else {
+                binding.btnSubmit.isEnabled = true
+                Toast.makeText(requireContext(), "질문 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -152,6 +155,9 @@ class QuestionFormFragment : Fragment() {
 
     private fun setSubmitButton() {
         binding.btnSubmit.setOnClickListener {
+            //버튼 여러번 눌러지는 거 방지
+            binding.btnSubmit.isEnabled = false
+            
             CoroutineScope(Dispatchers.IO).launch {
                 val base64 = (requireActivity() as QuestionUploadActivity).image!!.toBase64()
 
@@ -171,7 +177,10 @@ class QuestionFormFragment : Fragment() {
                     }
                 }
             }
+
         }
+
+
     }
 
 //    private fun parseMathSubjectJson() {

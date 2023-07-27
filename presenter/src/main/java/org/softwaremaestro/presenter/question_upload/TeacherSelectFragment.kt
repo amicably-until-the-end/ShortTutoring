@@ -13,11 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
-import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
-import java.util.logging.Logger
 
 private const val STUDENT_ID = "test-student-id"
 
@@ -29,6 +27,7 @@ class TeacherSelectFragment : Fragment() {
     lateinit var teacherListAdapter: TeacherAdapter
     var noTeacher = true
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,23 +37,24 @@ class TeacherSelectFragment : Fragment() {
         binding = FragmentTeacherSelectBinding.inflate(inflater, container, false)
 
 
-        val question_id = arguments?.getString("questionId")
+        val questionId = arguments?.getString("questionId")
 
-        if (question_id == null) {
-            Toast.makeText(context, "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
+        if (questionId == null) {
             Log.d("mymymy", "null question id")
         } else {
-            Log.d("mymymy", "$question_id question id")
-            viewModel.startGetTeacherList(question_id)
-            setTeacherRecycler(question_id)
-
+            viewModel.startGetTeacherList(questionId)
+            setTeacherRecycler(questionId)
         }
         setObserver()
 
         return binding.root
     }
 
-    private fun setObserver() {
+
+    /**
+     * 질문을 답변하겠다고 한 강사 목록을 observe하고, 강사 목록이 변경되면 adapter에 변경된 목록을 전달한다.
+     */
+    private fun observeTeacherList() {
         viewModel.teacherList.observe(viewLifecycleOwner) {
             if (viewModel.teacherList.value?.size == 1 && noTeacher) {
                 noTeacher = false
@@ -67,23 +67,41 @@ class TeacherSelectFragment : Fragment() {
             teacherListAdapter.notifyDataSetChanged()
 
         }
+    }
+
+    /**
+     * 강사를 선택하면, 선택한 강사의 id를 서버에 전달하고, 서버에서 전달받은 whiteboard 정보를 observe한다.
+     */
+    private fun observeTutoringInfo() {
         viewModel.tutoringInfo.observe(viewLifecycleOwner, Observer {
-            //Acticity 간 data class 전달을 위해 Serializable 사용
+
             if (it == null) {
                 return@Observer
             }
+            //Acticity 간 data class 전달을 위해 Serializable 사용
             val whiteBoardInfo = SerializedWhiteBoardRoomInfo(
-                it?.whiteBoardAppId ?: "",
-                it?.whiteBoardUUID ?: "",
-                it?.whiteBoardToken ?: "",
+                it.whiteBoardAppId ?: "",
+                it.whiteBoardUUID ?: "",
+                it.whiteBoardToken ?: "",
                 "1"
             )
             //classroom activty에 데이터 전달 및 실행
             val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
                 putExtra("whiteBoardInfo", whiteBoardInfo)
             }
+
+            //classroom activity 실행
             startActivity(intent)
+
+
+            //현재 activity 종료
+            activity?.finish()
         })
+    }
+
+    private fun setObserver() {
+        observeTeacherList()
+        observeTutoringInfo()
     }
 
     private fun setTeacherRecycler(questionId: String) {
