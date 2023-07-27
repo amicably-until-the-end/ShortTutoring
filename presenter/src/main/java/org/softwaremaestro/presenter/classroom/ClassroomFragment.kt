@@ -34,12 +34,6 @@ class ClassroomFragment : Fragment() {
 
     private lateinit var binding: FragmentClassroomBinding
 
-    var appId = "ieDZoBo0Ee62CX-2JkpBKg/pl0QHB62g749Bw"
-    var uuid = "962c2060289011eeb1e747d8f6d5a89a"
-    var roomToken =
-        "NETLESSROOM_YWs9RmJsUGdVdTFkaGZzck1mZCZleHBpcmVBdD0xNjkwMDY3MjA1MDY0Jm5vbmNlPTE2OTAwMzEyMDUwNjQwMCZyb2xlPTAmc2lnPTM5ZDgyZGE1NDI5ZDQ3ZGZiZDU2ZTdkYzllZDRlNzM4YzU3MGM1OGZmNDQ2YmNkZDg0NzQ3YTg3NDkyZTM5MGUmdXVpZD05NjJjMjA2MDI4OTAxMWVlYjFlNzQ3ZDhmNmQ1YTg5YQ"
-    var uid = "j3333fzdfason"
-
     lateinit var whiteboardView: WhiteboardView
     lateinit var sdkConfiguration: WhiteSdkConfiguration;
 
@@ -66,11 +60,6 @@ class ClassroomFragment : Fragment() {
 
     // Agora engine instance
     private lateinit var agoraEngine: RtcEngine
-
-    // UI elements
-    private val voice_infoText: TextView? = null
-    private val voice_joinLeaveButton: Button? = null
-
 
     private var whiteBoardRoom: Room? = null
 
@@ -102,9 +91,9 @@ class ClassroomFragment : Fragment() {
             );
         }
 
-        setAgora()
+        //setAgora()
         //setupVoiceSDKEngine()
-        setColorButtons()
+
         return binding.root
     }
 
@@ -120,6 +109,7 @@ class ClassroomFragment : Fragment() {
     private fun setAgora() {
         setTutoringArgument()
         setWhiteBoard()
+        setColorButtons()
         //setupVoiceSDKEngine()
     }
 
