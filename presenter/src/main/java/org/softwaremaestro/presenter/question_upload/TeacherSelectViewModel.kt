@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_upload.usecase.TeacherListGetUseCase
 import org.softwaremaestro.domain.question_upload.usecase.TeacherPickUseCase
@@ -37,8 +38,8 @@ class TeacherSelectViewModel @Inject constructor(
     private val _errorMsg: MutableLiveData<String> = MutableLiveData();
     val errorMsg: LiveData<String> get() = _errorMsg
 
-    private val _tutoringId: MutableLiveData<String> = MutableLiveData()
-    val tutoringId: LiveData<String> get() = _tutoringId
+    private val _tutoringInfo: MutableLiveData<TeacherPickResVO> = MutableLiveData()
+    val tutoringInfo: LiveData<TeacherPickResVO> get() = _tutoringInfo
 
     fun pickTeacher(teacherPickReqVO: TeacherPickReqVO) {
         viewModelScope.launch {
@@ -52,7 +53,7 @@ class TeacherSelectViewModel @Inject constructor(
                     when (result) {
                         is BaseResult.Success -> {
                             Log.d("mymymy", "success pick viewmodel ${result.data}")
-                            _tutoringId.postValue(result.data)
+                            _tutoringInfo.postValue(result.data)
                         }
 
                         is BaseResult.Error -> {

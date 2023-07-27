@@ -34,38 +34,34 @@ class ClassroomFragment : Fragment() {
 
     private lateinit var binding: FragmentClassroomBinding
 
-    val appId = "ieDZoBo0Ee62CX-2JkpBKg/pl0QHB62g749Bw"
-    val uuid = "962c2060289011eeb1e747d8f6d5a89a"
-    val roomToken =
-        "NETLESSROOM_YWs9RmJsUGdVdTFkaGZzck1mZCZleHBpcmVBdD0xNjkwMDY3MjA1MDY0Jm5vbmNlPTE2OTAwMzEyMDUwNjQwMCZyb2xlPTAmc2lnPTM5ZDgyZGE1NDI5ZDQ3ZGZiZDU2ZTdkYzllZDRlNzM4YzU3MGM1OGZmNDQ2YmNkZDg0NzQ3YTg3NDkyZTM5MGUmdXVpZD05NjJjMjA2MDI4OTAxMWVlYjFlNzQ3ZDhmNmQ1YTg5YQ"
-    val uid = "j3333fzdfason"
-
     lateinit var whiteboardView: WhiteboardView
-    var sdkConfiguration: WhiteSdkConfiguration = WhiteSdkConfiguration(appId, true)
-    var roomParams = RoomParams(uuid, roomToken, uid)
+    lateinit var sdkConfiguration: WhiteSdkConfiguration;
+
+
+    private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
+    private lateinit var voiceInfo: SerializedWhiteBoardRoomInfo
 
     // Fill the App ID of your project generated on Agora Console.
-    private val voice_appId = "8a2ba5d43c734e6e8645149b41e4b540"
+    /*
+        private var voice_appId = "8a2ba5d43c734e6e8645149b41e4b540"
 
-    // Fill the channel name.
-    private val channelName = "shortStudyDev"
+        // Fill the channel name.
+        private var channelName = "shortStudyDev"
 
-    // Fill the temp token generated on Agora Console.
-    private val video_token =
-        "007eJxTYPhXvfZyXvx5njXHTh9gW2H1Y2FRLf+vOzsybDmXX3IVv1utwGCRaJSUaJpiYpxsbmySapZqYWZiamhimWRimGqSZGpi8EBsX0pDICNDruE+RkYGCATxeRmKM/KLSoJLSlMqXVLLGBgAMkckuA=="
+        // Fill the temp token generated on Agora Console.
+        private var voiceRoomToken =
+            "007eJxTYPhXvfZyXvx5njXHTh9gW2H1Y2FRLf+vOzsybDmXX3IVv1utwGCRaJSUaJpiYpxsbmySapZqYWZiamhimWRimGqSZGpi8EBsX0pDICNDruE+RkYGCATxeRmKM/KLSoJLSlMqXVLLGBgAMkckuA=="
 
-    // An integer that identifies the local user.
-    private val voice_uid = 0
+        // An integer that identifies the local user.
+        private var voice_uid = 0
 
-    // Track the status of your connection
-    private val voice_isJoined = false
+        // Track the status of your connection
+        private var voice_isJoined = false*/
 
     // Agora engine instance
     private lateinit var agoraEngine: RtcEngine
 
-    // UI elements
-    private val voice_infoText: TextView? = null
-    private val voice_joinLeaveButton: Button? = null
+    private var whiteBoardRoom: Room? = null
 
 
     private val PERMISSION_REQ_ID = 22
@@ -95,24 +91,38 @@ class ClassroomFragment : Fragment() {
             );
         }
 
-        //setWhiteBoard()
+        //setAgora()
         //setupVoiceSDKEngine()
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        binding.tvTutoringId.text = requireActivity().intent.getStringExtra("tutoringId") ?: "-"
+    fun setTutoringArgument() {
+        whiteBoardInfo =
+            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+        Log.d("agora", whiteBoardInfo.toString())
+        //voiceInfo = requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
+        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
+    }
+
+    private fun setAgora() {
+        setTutoringArgument()
+        setWhiteBoard()
+        setColorButtons()
+        //setupVoiceSDKEngine()
     }
 
     private fun setWhiteBoard() {
-
+        setTutoringArgument()
+        sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
         var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
+
         var newPromise = object : Promise<Room> {
             override fun then(wRoom: Room?) {
+                whiteBoardRoom = wRoom!!
                 var memberState = MemberState()
                 memberState.currentApplianceName = "pencil"
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
@@ -121,11 +131,12 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun catchEx(t: SDKError?) {
-                var o = t?.message
-                Log.i("show Toast", o.toString())
-                Toast.makeText(requireContext(), o.toString(), Toast.LENGTH_SHORT).show()
+                Log.i("agora", t.toString())
+                Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
             }
         }
+        var roomParams =
+            RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, whiteBoardInfo.uid)
         whiteSdk.joinRoom(roomParams, newPromise)
 
     }
@@ -134,7 +145,7 @@ class ClassroomFragment : Fragment() {
         try {
             val config = RtcEngineConfig()
             config.mContext = requireContext()
-            config.mAppId = voice_appId
+            config.mAppId = voiceInfo.appId
             config.mEventHandler = mRtcEventHandler
             agoraEngine = RtcEngine.create(config)
             joinChannel()
@@ -154,7 +165,7 @@ class ClassroomFragment : Fragment() {
 
         // Join the channel with a temp token.
         // You need to specify the user ID yourself, and ensure that it is unique in the channel.
-        agoraEngine.joinChannel(video_token, channelName, voice_uid, options)
+        //agoraEngine.joinChannel(voiceRoomToken, channelName, voice_uid, options)
 
     }
 
@@ -195,6 +206,20 @@ class ClassroomFragment : Fragment() {
         override fun onLeaveChannel(stats: RtcStats) {
             // Listen for the local user leaving the channel
             showMessage("onLeaveChannel")
+        }
+    }
+
+    private fun setColorButtons() {
+        binding.btnColorPen.setOnClickListener {
+            var memberState = MemberState()
+            memberState.currentApplianceName = "pencil"
+            memberState.strokeColor = IntArray(3) { 255;0;0; }
+            whiteBoardRoom?.memberState = memberState
+        }
+        binding.btnColorErase.setOnClickListener {
+            var memberState = MemberState()
+            memberState.currentApplianceName = "eraser"
+            whiteBoardRoom?.memberState = memberState
         }
     }
 

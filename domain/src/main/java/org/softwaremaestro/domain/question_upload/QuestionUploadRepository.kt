@@ -5,6 +5,7 @@ import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 
 
@@ -14,5 +15,5 @@ interface QuestionUploadRepository {
 
     suspend fun pickTeacher(
         teacherPickReqVO: TeacherPickReqVO
-    ): Flow<BaseResult<String, String>>
+    ): Flow<BaseResult<TeacherPickResVO, String>>
 }

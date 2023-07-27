@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 import java.util.logging.Logger
 
@@ -66,17 +67,22 @@ class TeacherSelectFragment : Fragment() {
             teacherListAdapter.notifyDataSetChanged()
 
         }
-        viewModel.tutoringId.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(
-                context,
-                "tutoring Id is ${viewModel.tutoringId.value}",
-                Toast.LENGTH_SHORT
-            ).show()
+        viewModel.tutoringInfo.observe(viewLifecycleOwner, Observer {
+            //Acticity 간 data class 전달을 위해 Serializable 사용
+            if (it == null) {
+                return@Observer
+            }
+            val whiteBoardInfo = SerializedWhiteBoardRoomInfo(
+                it?.whiteBoardAppId ?: "",
+                it?.whiteBoardUUID ?: "",
+                it?.whiteBoardToken ?: "",
+                "1"
+            )
+            //classroom activty에 데이터 전달 및 실행
             val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
-                putExtra("tutoringId", viewModel.tutoringId.value)
+                putExtra("whiteBoardInfo", whiteBoardInfo)
             }
             startActivity(intent)
-
         })
     }
 
