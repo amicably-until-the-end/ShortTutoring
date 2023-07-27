@@ -69,15 +69,18 @@ class TeacherSelectFragment : Fragment() {
         }
         viewModel.tutoringInfo.observe(viewLifecycleOwner, Observer {
             //Acticity 간 data class 전달을 위해 Serializable 사용
-            val tutoringInfoSerializable = SerializedWhiteBoardRoomInfo(
-                viewModel.tutoringInfo.value?.tutoringId ?: "",
-                viewModel.tutoringInfo.value?.whiteBoardUUID ?: "",
-                viewModel.tutoringInfo.value?.whiteBoardToken ?: "",
+            if (it == null) {
+                return@Observer
+            }
+            val whiteBoardInfo = SerializedWhiteBoardRoomInfo(
+                it?.whiteBoardAppId ?: "",
+                it?.whiteBoardUUID ?: "",
+                it?.whiteBoardToken ?: "",
                 "1"
             )
             //classroom activty에 데이터 전달 및 실행
             val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
-                putExtra("tutoringInfo", tutoringInfoSerializable)
+                putExtra("whiteBoardInfo", whiteBoardInfo)
             }
             startActivity(intent)
         })

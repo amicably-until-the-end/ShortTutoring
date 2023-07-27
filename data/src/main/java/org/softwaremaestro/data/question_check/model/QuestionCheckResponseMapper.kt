@@ -9,7 +9,10 @@ object QuestionCheckResponseMapper {
     fun asDomain(questionCheckResponseDto: QuestionCheckResponseDto): QuestionCheckResultVO {
         return QuestionCheckResultVO(
             questionCheckResponseDto.status,
-            questionCheckResponseDto.tutoringId
+            questionCheckResponseDto.tutoringId,
+            questionCheckResponseDto.whiteBoardToken,
+            questionCheckResponseDto.whiteBoardUUID,
+            questionCheckResponseDto.whiteBoardAppId
         )
     }
 }

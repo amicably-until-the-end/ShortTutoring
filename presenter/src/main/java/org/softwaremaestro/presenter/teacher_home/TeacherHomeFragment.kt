@@ -23,6 +23,7 @@ import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
@@ -150,9 +151,17 @@ class TeacherHomeFragment : Fragment() {
         checkViewModel.check.observe(viewLifecycleOwner) {
             when (it.status) {
                 RequestStatus.SELECTED.noti -> {
+
+                    //Acticity 간 data class 전달을 위해 Serializable 사용
+                    val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
+                        it.whiteBoardAppId!!,
+                        it.whiteBoardUUID!!,
+                        it.whiteBoardToken!!,
+                        "0"
+                    )
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
-                        putExtra("tutoringId", it.tutoringId)
+                        putExtra("whiteBoardInfo", whiteBoardRoomInfo)
                     }
                     startActivity(intent)
                 }

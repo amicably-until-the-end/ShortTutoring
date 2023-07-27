@@ -112,10 +112,9 @@ class ClassroomFragment : Fragment() {
     fun setTutoringArgument() {
         whiteBoardInfo =
             requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
-
+        Log.d("agora", whiteBoardInfo.toString())
         //voiceInfo = requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
-        binding.tvTutoringId.text =
-            requireActivity().intent.getStringExtra("tutoringId") ?: "No class room id"
+        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
     private fun setAgora() {
@@ -126,9 +125,9 @@ class ClassroomFragment : Fragment() {
 
     private fun setWhiteBoard() {
         setTutoringArgument()
+        sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
-        sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
 
         var newPromise = object : Promise<Room> {
@@ -142,12 +141,12 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun catchEx(t: SDKError?) {
-                var o = t?.message
-                Log.i("show Toast", o.toString())
-                Toast.makeText(requireContext(), o.toString(), Toast.LENGTH_SHORT).show()
+                Log.i("agora", t.toString())
+                Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
             }
         }
-        var roomParams = RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, uid)
+        var roomParams =
+            RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, whiteBoardInfo.uid)
         whiteSdk.joinRoom(roomParams, newPromise)
 
     }
