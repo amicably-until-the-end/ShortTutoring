@@ -11,6 +11,7 @@ import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
+import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import javax.inject.Inject
 
@@ -68,7 +69,7 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
 
     override suspend fun pickTeacher(
         VO: TeacherPickReqVO
-    ): Flow<BaseResult<String, String>> {
+    ): Flow<BaseResult<TeacherPickResVO, String>> {
         return flow {
             val response =
                 questionUploadApi.pickTeacher(
@@ -81,9 +82,17 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
             Log.d("mymymy", "pickTeacher ${response} is res in imple")
 
             if (response.isSuccessful) {
-                val tutoringId = response.body()?.data?.tutoringId ?: ""
-                Log.d("mymymy", "tutoring Id in imple ${tutoringId}")
-                emit(BaseResult.Success(tutoringId))
+                val tutoringInfo = response.body()?.data
+
+                val teacherPickResVO = TeacherPickResVO(
+                    tutoringId = tutoringInfo?.tutoringId ?: EMPTY_STRING,
+                    whiteBoardToken = tutoringInfo?.whiteBoardToken ?: EMPTY_STRING,
+                    whiteBoardUUID = tutoringInfo?.whiteBoardUUID ?: EMPTY_STRING,
+                    whiteBoardAppId = tutoringInfo?.whiteBoardAppId ?: EMPTY_STRING
+                )
+
+                Log.d("mymymy", "tutoring Id in imple ${teacherPickResVO}")
+                emit(BaseResult.Success(teacherPickResVO))
             } else {
                 emit(BaseResult.Error("error"))
             }
