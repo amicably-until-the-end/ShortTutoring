@@ -41,6 +41,9 @@ class LogoViewModel @Inject constructor(
     val isKakaoLoginSuccess: LiveData<Boolean> get() = _isKakaoLoginSuccess // kakao login 성공하면 true
 
 
+    /**
+     * 카카오 로그인
+     */
     fun loginWithKakao(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->

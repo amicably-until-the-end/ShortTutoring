@@ -91,7 +91,7 @@ class ClassroomFragment : Fragment() {
             );
         }
 
-        //setAgora()
+        setAgora()
         //setupVoiceSDKEngine()
 
         return binding.root
