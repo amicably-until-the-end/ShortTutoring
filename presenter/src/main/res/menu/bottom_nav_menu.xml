@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/studentHomeFragment"
+        android:icon="@drawable/ic_home_24"
+        android:title="홈" />
+    <item
+        android:id="@+id/settingFragment"
+        android:icon="@drawable/ic_settings_24"
+        android:title="올리기" />
+</menu>

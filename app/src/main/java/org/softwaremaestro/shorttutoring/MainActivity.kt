@@ -6,7 +6,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.login.LoginActivity
 
 

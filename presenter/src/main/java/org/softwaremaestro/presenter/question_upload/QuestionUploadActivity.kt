@@ -29,11 +29,11 @@ class QuestionUploadActivity : AppCompatActivity() {
 
     private fun setAppBar() {
         val toolbar: Toolbar = binding.toolbar
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
-        toolbar.setupWithNavController(navHostFragment.navController)
         if (toolbar != null)
             setSupportActionBar(toolbar)
+        // 뒤로가기 버튼
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun onRequestPermissionsResult(
