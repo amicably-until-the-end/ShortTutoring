@@ -4,6 +4,7 @@
         android:id="@+id/studentHomeFragment"
         android:icon="@drawable/ic_home_24"
         android:title="홈" />
+
     <item
         android:id="@+id/settingFragment"
         android:icon="@drawable/ic_settings_24"
