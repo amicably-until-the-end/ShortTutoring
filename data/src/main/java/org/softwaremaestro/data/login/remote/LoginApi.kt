@@ -5,10 +5,14 @@ import org.softwaremaestro.data.login.model.LoginReqDto
 import org.softwaremaestro.data.login.model.UserInfoResDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface LoginApi {
     @POST("/user/login")
-    suspend fun login(@Body loginReqDto: LoginReqDto): Response<WrappedResponse<UserInfoResDto>>
+    suspend fun login(
+        @Body loginReqDto: LoginReqDto,
+        @Header("Authorization") authCode: String
+    ): Response<WrappedResponse<UserInfoResDto>>
 
 }

@@ -47,8 +47,8 @@ class LoginRepositoryImpl @Inject constructor(
                 loginApi.login(
                     LoginReqDto(
                         savedToken.getTokenInfo().vendor!!,
-                        savedToken.getTokenInfo().token!!
-                    )
+                    ),
+                    "Bearer ${savedToken.getTokenInfo().token!!}",
                 )
             Log.d("login", result.toString())
             if (result.isSuccessful) {

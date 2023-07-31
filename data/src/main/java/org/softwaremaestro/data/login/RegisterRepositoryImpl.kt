@@ -23,7 +23,10 @@ class RegisterRepositoryImpl @Inject constructor(
         return flow {
             val response = registerApi.registerStudent(
                 StudentRegisterReqDto(
-                    "testBio", "testName", "student", savedToken.getTokenInfo()?.token!!
+                    "testBio",
+                    "testName",
+                    "student",
+                    savedToken.getTokenInfo().token!!,
                 )
             )
             if (response.isSuccessful && !response.body()!!.error) {
