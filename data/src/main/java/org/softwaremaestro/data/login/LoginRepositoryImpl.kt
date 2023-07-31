@@ -45,9 +45,7 @@ class LoginRepositoryImpl @Inject constructor(
             Log.d("login", "Saved Token :${"savedToken.getTokenInfo()?.token"}")
             val result =
                 loginApi.login(
-                    LoginReqDto(
-                        savedToken.getTokenInfo().vendor!!,
-                    ),
+                    savedToken.getTokenInfo().vendor!!,
                     "Bearer ${savedToken.getTokenInfo().token!!}",
                 )
             Log.d("login", result.toString())

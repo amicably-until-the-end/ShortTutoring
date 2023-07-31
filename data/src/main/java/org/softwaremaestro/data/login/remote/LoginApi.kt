@@ -11,7 +11,7 @@ import retrofit2.http.POST
 interface LoginApi {
     @POST("/user/login")
     suspend fun login(
-        @Body loginReqDto: LoginReqDto,
+        @Header("vendor") vendor: String,
         @Header("Authorization") authCode: String
     ): Response<WrappedResponse<UserInfoResDto>>
 
