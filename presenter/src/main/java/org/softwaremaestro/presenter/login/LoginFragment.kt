@@ -49,9 +49,9 @@ class LoginFragment @Inject constructor() :
         }
 
         binding.btnLoginByKakao.setOnClickListener {
-//            viewModel.loginWithKakao(requireContext())
-            Navigation.findNavController(it)
-                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
+            viewModel.loginWithKakao(requireContext())
+//            Navigation.findNavController(it)
+//                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
         }
         // checkAutoLogin()
         setObserver()

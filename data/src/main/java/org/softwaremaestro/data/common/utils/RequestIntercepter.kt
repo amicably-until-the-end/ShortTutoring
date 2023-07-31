@@ -32,12 +32,21 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     override fun intercept(chain: Interceptor.Chain): Response {
         val jwt = getJWT()
 
-        val newRequest = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer $jwt")
-            .build()
-        Log.d("retrofit", "intercept request is ${newRequest.toString()}")
+        var newRequest: Request? = null
+        if (jwt != "") {
+            newRequest = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $jwt")
+                .build()
+        } else {
+            newRequest = chain.request()
+        }
+
+        Log.d("retrofit", "intercept request is $newRequest")
         val response = chain.proceed(newRequest)
-        Log.d("retrofit", "intercept response is ${response.toString()}")
+        Log.d(
+            "retrofit",
+            "intercept response is ${response.toString()}"
+        )
         return response
     }
 
