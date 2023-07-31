@@ -36,7 +36,7 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
             .addHeader("Authorization", "Bearer ${tokenInfo.token}")
             .addHeader("vendor", tokenInfo.vendor ?: "")
             .build()
-        Log.d("mymymy", "intercept request is ${newRequest.toString()}")
+        Log.d("retrofit", "intercept request is ${newRequest.toString()}")
         return chain.proceed(newRequest)
     }
 
