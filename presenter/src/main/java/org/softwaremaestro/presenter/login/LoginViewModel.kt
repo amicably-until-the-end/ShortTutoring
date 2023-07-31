@@ -94,7 +94,7 @@ class LoginViewModel @Inject constructor(
                     when (result) {
                         is BaseResult.Success -> _savedToken.postValue(result.data)
                         else -> {
-
+                            
                         }
                     }
                 }
