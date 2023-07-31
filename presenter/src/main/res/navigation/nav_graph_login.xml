@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/logoFragment"
-        android:name="org.softwaremaestro.presenter.login.LogoFragment"
+        android:name="org.softwaremaestro.presenter.login.LoginFragment"
         android:label="fragment_logo"
         tools:layout="@layout/fragment_logo">
         <action

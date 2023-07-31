@@ -11,19 +11,18 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.entity.UserVO
 import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
-import org.softwaremaestro.domain.login.usecase.GetUserInfoUseCase
+import org.softwaremaestro.domain.login.usecase.LoginUseCase
 import org.softwaremaestro.domain.login.usecase.SaveKakaoJWTUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class LogoViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
     private val autoLoginUseCase: AutoLoginUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val loginUseCase: LoginUseCase,
     private val saveKakaoJWTUseCase: SaveKakaoJWTUseCase
 ) :
     ViewModel() {
@@ -59,26 +58,27 @@ class LogoViewModel @Inject constructor(
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                     UserApiClient.instance.loginWithKakaoAccount(
                         context
-                    ) { token, error ->
-                        if (error != null) {
-
+                    ) { _, accountError ->
+                        if (accountError != null) {
+                            Log.e("kakao", "카카오계정으로 로그인 실패 ${accountError}")
                         } else {
                             if (token?.idToken != null) {
-                                saveKakaoJWTUseCase.save(token?.idToken!!)
+                                login()
                             }
                         }
                     }
                 } else if (token != null) {
                     Log.i("kakao", "카카오톡으로 로그인 성공 ${token.idToken}")
-                    saveKakaoJWTUseCase.save(token?.idToken!!)
+                    login()
+
                 }
             }
         } else {
             UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
                 if (error != null) {
-
+                    Log.e("kakao", "카카오계정으로 로그인 실패", error)
                 } else {
-
+                    login()
                 }
             }
         }
@@ -91,7 +91,6 @@ class LogoViewModel @Inject constructor(
                     //Auto Login Fail
                 }
                 .collect { result ->
-                    Log.d("mymymy", result.toString())
                     when (result) {
                         is BaseResult.Success -> _savedToken.postValue(result.data)
                         else -> {
@@ -102,19 +101,23 @@ class LogoViewModel @Inject constructor(
         }
     }
 
-    fun getUserInfo() {
+    fun login() {
         viewModelScope.launch {
-            getUserInfoUseCase.execute()
+            loginUseCase.execute()
                 .catch {
-                    Log.d("mymymy", "Get User info fail")
+                    Log.e("login", "login fail", it)
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
+                            //TODO: 로그인 성공. role 에 따라서 선생님 학생 분기
+                            Log.d("login", "login success")
                             _userInfo.postValue(result.data)
                         }
 
                         else -> {
+                            Log.d("login", "${result}")
+                            //TODO: 회원 정보 없으면 회원 가입으로 이동.
                             _errorMsg.postValue("로그인 실패")
                         }
                     }

@@ -157,7 +157,7 @@ class QuestionFormFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             //버튼 여러번 눌러지는 거 방지
             binding.btnSubmit.isEnabled = false
-            
+
             CoroutineScope(Dispatchers.IO).launch {
                 val base64 = (requireActivity() as QuestionUploadActivity).image!!.toBase64()
 
