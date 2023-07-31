@@ -39,10 +39,8 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun login(): Flow<BaseResult<UserVO, String>> {
-        Log.d("login", "login")
         return flow {
 
-            Log.d("login", "Saved Token :${"savedToken.getTokenInfo()?.token"}")
             val result =
                 loginApi.login(
                     savedToken.getTokenInfo().vendor!!,
