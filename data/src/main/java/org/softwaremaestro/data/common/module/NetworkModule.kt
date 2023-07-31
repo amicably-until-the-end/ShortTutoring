@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import org.softwaremaestro.data.common.utils.RequestInterceptor
 import org.softwaremaestro.data.infra.SharedPrefs
