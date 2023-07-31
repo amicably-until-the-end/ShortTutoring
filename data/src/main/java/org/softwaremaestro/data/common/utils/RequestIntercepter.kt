@@ -36,7 +36,9 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
             .addHeader("Authorization", "Bearer $jwt")
             .build()
         Log.d("retrofit", "intercept request is ${newRequest.toString()}")
-        return chain.proceed(newRequest)
+        val response = chain.proceed(newRequest)
+        Log.d("retrofit", "intercept response is ${response.toString()}")
+        return response
     }
 
     private fun getJWT(): String {
