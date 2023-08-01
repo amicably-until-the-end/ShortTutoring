@@ -19,7 +19,6 @@
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
-
     <application
         android:name=".ExampleApplication"
         android:allowBackup="true"
