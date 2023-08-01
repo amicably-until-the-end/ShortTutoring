@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
-import org.softwaremaestro.presenter.student_home.Lecture
+import org.softwaremaestro.presenter.student_home.item.Lecture
 
 class LectureAdapter(private val onItemClickListener: (String) -> Unit) :
     RecyclerView.Adapter<LectureAdapter.ViewHolder>() {

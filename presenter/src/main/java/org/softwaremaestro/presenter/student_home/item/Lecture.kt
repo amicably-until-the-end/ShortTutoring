@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.student_home
+package org.softwaremaestro.presenter.student_home.item
 
 data class Lecture(
     val description: String,
