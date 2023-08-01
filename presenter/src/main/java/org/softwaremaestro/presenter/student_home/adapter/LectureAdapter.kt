@@ -1,13 +1,13 @@
-package org.softwaremaestro.presenter.student_home
+package org.softwaremaestro.presenter.student_home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
+import org.softwaremaestro.presenter.student_home.Lecture
 
-private const val EMPTY_STRING = "-"
-
-class LectureAdapter(private val onItemClickListener: (String) -> Unit): RecyclerView.Adapter<LectureAdapter.ViewHolder>() {
+class LectureAdapter(private val onItemClickListener: (String) -> Unit) :
+    RecyclerView.Adapter<LectureAdapter.ViewHolder>() {
 
     private var items: List<Lecture> = emptyList()
 
@@ -28,7 +28,8 @@ class LectureAdapter(private val onItemClickListener: (String) -> Unit): Recycle
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemLectureBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemLectureBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: Lecture) {
 

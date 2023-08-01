@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
@@ -45,12 +47,13 @@ class StudentHomeFragment : Fragment() {
                 }
                 setItem(lectures)
             }
-            layoutManager = GridLayoutManager(requireActivity(), 2)
-            setSpacing(GRIDLAYOUT_SPICING)
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
 
         return binding.root
     }
+
 
     private fun RecyclerView.setSpacing(dp: Int) {
         this.addItemDecoration(object : RecyclerView.ItemDecoration() {
