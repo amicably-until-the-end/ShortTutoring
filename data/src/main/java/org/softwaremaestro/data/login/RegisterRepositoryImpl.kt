@@ -3,10 +3,10 @@ package org.softwaremaestro.data.login
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.softwaremaestro.data.common.utils.SavedToken
 import org.softwaremaestro.data.login.model.StudentRegisterReqDto
 import org.softwaremaestro.data.login.model.TeacherRegisterReqDto
 import org.softwaremaestro.data.login.remote.RegisterApi
-import org.softwaremaestro.data.question_get.model.asDomain
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.RegisterRepository
 import org.softwaremaestro.domain.login.entity.StudentRegisterVO
@@ -15,14 +15,18 @@ import javax.inject.Inject
 
 class RegisterRepositoryImpl @Inject constructor(
     private val registerApi: RegisterApi,
+    private val savedToken: SavedToken
 ) :
     RegisterRepository {
     override suspend fun registerStudent(studentRegisterVO: StudentRegisterVO): Flow<BaseResult<String, String>> {
+
         return flow {
             val response = registerApi.registerStudent(
                 StudentRegisterReqDto(
-                    studentRegisterVO.school,
-                    studentRegisterVO.grade
+                    "testBio",
+                    "testName",
+                    "student",
+                    savedToken.getTokenInfo().token!!,
                 )
             )
             if (response.isSuccessful && !response.body()!!.error) {
@@ -51,9 +55,8 @@ class RegisterRepositoryImpl @Inject constructor(
             } else {
                 emit(BaseResult.Success(response.body()!!.message))
             }
-            
+
         }
     }
-
 
 }

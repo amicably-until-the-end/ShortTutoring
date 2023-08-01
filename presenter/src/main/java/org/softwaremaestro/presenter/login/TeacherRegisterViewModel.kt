@@ -10,9 +10,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.entity.TeacherRegisterVO
-import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
-import org.softwaremaestro.domain.login.usecase.GetUserInfoUseCase
-import org.softwaremaestro.domain.login.usecase.SaveKakaoJWTUseCase
 import org.softwaremaestro.domain.login.usecase.TeacherRegisterUseCase
 import javax.inject.Inject
 
@@ -46,12 +43,10 @@ class TeacherRegisterViewModel @Inject constructor(
                 )
             ).catch { exception ->
                 _registerResult.postValue(false)
-                Log.e("mymymy", "register fail ${exception.toString()}")
             }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            Log.d("mymymy", "success register ${result.data}")
                             _registerResult.postValue(true)
                         }
 

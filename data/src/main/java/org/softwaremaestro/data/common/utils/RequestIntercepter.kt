@@ -30,57 +30,28 @@ data class TokenInfo(
 
 class RequestInterceptor constructor(private val prefs: SharedPrefs) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val tokenInfo = getTokenInfo()
+        val jwt = getJWT()
 
-        val newRequest = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer ${tokenInfo.token}")
-            .addHeader("vendor", tokenInfo.vendor ?: "")
-            .build()
-        Log.d("mymymy", "intercept request is ${newRequest.toString()}")
-        return chain.proceed(newRequest)
-    }
-
-    private suspend fun getKakaoToken(): OAuthToken? {
-        if (AuthApiClient.instance.hasToken()) {
-            return suspendCoroutine { continuation ->
-                UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-                    if (error != null) {
-                        Log.d("mymymy", "kakao error ${error}")
-                        if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                            // 로그인 필요
-                            continuation.resume(null)
-                        } else {
-                            // 기타 에러
-                            continuation.resume(null)
-                        }
-                    } else {
-                        val token = TokenManager.instance.getToken()
-                        Log.d("mymymy", "kakao success ${token}")
-                        if (token != null) {
-                            continuation.resume(token)
-                        } else {
-                            // 토큰이 null일 경우 처리
-                            continuation.resume(null)
-                        }
-                    }
-                }
-            }
+        var newRequest: Request? = null
+        if (jwt != "") {
+            newRequest = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $jwt")
+                .build()
         } else {
-            // 로그인 필요
-            return null
+            newRequest = chain.request()
         }
+
+        Log.d("retrofit", "intercept request is $newRequest")
+        val response = chain.proceed(newRequest)
+        Log.d(
+            "retrofit",
+            "intercept response is ${response.toString()}"
+        )
+        return response
     }
 
-
-    private fun getTokenInfo(): TokenInfo {
-
-        return TokenInfo(null, null)
-
-        /*val kakaoToken = runBlocking { getKakaoToken() }
-        if (kakaoToken?.accessToken != null) {
-            return TokenInfo("kakao", kakaoToken.accessToken!!)
-        }
-        return TokenInfo(null, null)*/
+    private fun getJWT(): String {
+        return ""
     }
 }
 

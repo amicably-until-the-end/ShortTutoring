@@ -6,6 +6,6 @@ import org.softwaremaestro.domain.login.LoginRepository
 import org.softwaremaestro.domain.login.entity.UserVO
 import javax.inject.Inject
 
-class GetUserInfoUseCase @Inject constructor(private val repository: LoginRepository) {
-    suspend fun execute(): Flow<BaseResult<UserVO, String>> = repository.getUserInfo()
+class LoginUseCase @Inject constructor(private val repository: LoginRepository) {
+    suspend fun execute(): Flow<BaseResult<UserVO, String>> = repository.login()
 }

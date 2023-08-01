@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -20,12 +19,12 @@ import javax.inject.Inject
 // 앱에 들어왔을 때 보이는 첫 화면.
 // 로그인 창과 소셜 로그인 버튼이 있다.
 @AndroidEntryPoint
-class LogoFragment @Inject constructor() :
+class LoginFragment @Inject constructor() :
     Fragment() {
 
     private lateinit var binding: FragmentLogoBinding
 
-    private val viewModel: LogoViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +49,7 @@ class LogoFragment @Inject constructor() :
         }
 
         binding.btnLoginByKakao.setOnClickListener {
-            // viewModel.loginWithKakao
+            //viewModel.loginWithKakao(requireContext())
             Navigation.findNavController(it)
                 .navigate(R.id.action_logoFragment_to_registerRoleFragment)
         }
