@@ -5,6 +5,9 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 
 android {
     namespace 'org.softwaremaestro.shorttutoring'
@@ -17,7 +20,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        buildConfigField "String", "KAKAO_APP_KEY", properties["KAKAO_APP_KEY"]
     }
 
     buildTypes {
