@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchYearOfAdmissionBinding
+import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
 
 const val SELECTED_YEAR_OF_ADMISSION = "selected-year-of-admission"

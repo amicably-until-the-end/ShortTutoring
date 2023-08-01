@@ -11,11 +11,11 @@ import android.widget.AutoCompleteTextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSeachUnivBinding
+import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 
 const val SELECTED_UNIV = "selected-univ"
 private const val IME_ACTION = IME_ACTION_NEXT

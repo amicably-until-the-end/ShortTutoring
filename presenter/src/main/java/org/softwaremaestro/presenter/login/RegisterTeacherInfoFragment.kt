@@ -2,17 +2,16 @@ package org.softwaremaestro.presenter.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
+import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 
@@ -42,7 +41,7 @@ class RegisterTeacherInfoFragment : Fragment() {
         setOnClickListener()
 
         // 다음 버튼을 누르면 로고화면으로 돌아간다
-      
+
         setFieldButtons()
         setNextButton()
         setObserver()
