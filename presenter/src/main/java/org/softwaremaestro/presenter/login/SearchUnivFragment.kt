@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSeachUnivBinding
+import org.softwaremaestro.presenter.login.adapter.SearchAdapter
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 
 const val SELECTED_UNIV = "selected-univ"
