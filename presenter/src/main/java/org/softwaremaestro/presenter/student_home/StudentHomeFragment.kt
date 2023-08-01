@@ -14,8 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.student_home.adapter.BestTeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.MyTeacherAdapter
+import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.item.Lecture
 import org.softwaremaestro.presenter.student_home.item.MyTeacher
 
@@ -37,6 +39,7 @@ class StudentHomeFragment : Fragment() {
         setQuestionButton()
         setLectureRecyclerView()
         setMyTeacherRecyclerView()
+        setBestTeacherRecyclerView()
 
 
         return binding.root
@@ -61,7 +64,14 @@ class StudentHomeFragment : Fragment() {
                             "수학의신",
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                             "1"
-                        )
+                        ),
+                    )
+                    add(
+                        MyTeacher(
+                            "수학의신",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
+                            "1"
+                        ),
                     )
                 }
                 setItem(teachers)
@@ -71,6 +81,38 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+
+    private fun setBestTeacherRecyclerView() {
+        binding.rvBestTeacher.apply {
+            adapter = BestTeacherAdapter {
+                Log.d("message", it)
+            }.apply {
+                val lectures = mutableListOf<BestTeacher>().apply {
+                    add(
+                        BestTeacher(
+                            "강해린",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
+                            "1",
+                            35,
+                            "성균관대학교",
+                        )
+                    )
+                    add(
+                        BestTeacher(
+                            "팜하니",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
+                            "1",
+                            31,
+                            "피식대학교",
+                        )
+                    )
+                }
+                setItem(lectures)
+            }
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        }
+    }
 
     private fun setLectureRecyclerView() {
         binding.rvLecture.apply {

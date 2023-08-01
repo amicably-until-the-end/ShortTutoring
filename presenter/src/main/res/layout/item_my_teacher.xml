@@ -11,8 +11,6 @@
         android:id="@+id/container_profile_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:clickable="true"
-        android:focusable="true"
         app:cardCornerRadius="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +19,7 @@
             android:id="@+id/iv_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#22000000" />
+            android:background="@color/black" />
     </androidx.cardview.widget.CardView>
 
     <TextView
