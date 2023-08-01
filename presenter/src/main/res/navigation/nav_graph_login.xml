@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginFrament"
         android:name="org.softwaremaestro.presenter.login.LoginFragment"
-        android:label="fragment_logo"
+        android:label="로그인"
         tools:layout="@layout/fragment_logo">
         <action
             android:id="@+id/action_logoFragment_to_registerRoleFragment"
@@ -60,7 +60,7 @@
     <fragment
         android:id="@+id/searchUnivFragment"
         android:name="org.softwaremaestro.presenter.login.SearchUnivFragment"
-        android:label="SearchUnivFragment">
+        android:label="대학교 검색">
         <action
             android:id="@+id/action_searchUnivFragment_to_searchCollegeFragment"
             app:destination="@id/searchCollegeFragment" />
@@ -68,7 +68,7 @@
     <fragment
         android:id="@+id/searchCollegeFragment"
         android:name="org.softwaremaestro.presenter.login.SearchCollegeFragment"
-        android:label="fragment_search_college"
+        android:label="단과대학 검색"
         tools:layout="@layout/fragment_search_college">
         <action
             android:id="@+id/action_searchCollegeFragment_to_searchMajorFragment"
@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/searchMajorFragment"
         android:name="org.softwaremaestro.presenter.login.SearchMajorFragment"
-        android:label="fragment_search_major"
+        android:label="전공 선택"
         tools:layout="@layout/fragment_search_major">
         <action
             android:id="@+id/action_searchMajorFragment_to_searchYearOfAdmissionFragment"
@@ -87,7 +87,7 @@
     <fragment
         android:id="@+id/searchYearOfAdmissionFragment"
         android:name="org.softwaremaestro.presenter.login.SearchYearOfAdmissionFragment"
-        android:label="fragment_search_year_of_admission"
+        android:label="학번 입력"
         tools:layout="@layout/fragment_search_year_of_admission">
         <action
             android:id="@+id/action_searchYearOfAdmissionFragment_to_registerTeacherInfoFragment"
