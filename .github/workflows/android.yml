@@ -22,5 +22,10 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Access UNIVCERT_API_KEY
+      run: |
+        echo UNIVCERT_API_KEY=\"$UNIVCERT_API_KEY\" > local.properties
+      env:
+        API_KEY: ${{secrets.UNIVCERT_API_KEY }}
     - name: Build with Gradle
       run: ./gradlew build
