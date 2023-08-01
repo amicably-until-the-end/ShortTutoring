@@ -24,8 +24,7 @@
             app:destination="@id/registerTeacherInfoFragment" />
         <action
             android:id="@+id/action_registerRoleFragment_to_registerStudentInfoFragment"
-            app:destination="@id/registerStudentInfoFragment"
-            app:popUpTo="@id/loginFrament" />
+            app:destination="@id/registerStudentInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerStudentInfoFragment"

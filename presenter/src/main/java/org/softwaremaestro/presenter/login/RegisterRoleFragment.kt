@@ -50,4 +50,5 @@ class RegisterRoleFragment : Fragment() {
 
         return binding.root
     }
+
 }

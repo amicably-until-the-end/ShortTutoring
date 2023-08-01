@@ -41,22 +41,21 @@ class LoginFragment @Inject constructor() :
             startActivity(intent)
         }
 
-        binding.btnLoginByGoogle.setOnClickListener {
-            val intent = Intent(activity, TeacherHomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent)
-        }
+        setKakaoButton()
+        setGoogleButton()
 
-        binding.btnLoginByKakao.setOnClickListener {
-            //viewModel.loginWithKakao(requireContext())
-            Navigation.findNavController(it)
-                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
-        }
-        // checkAutoLogin()
-        setObserver()
         (activity as LoginActivity).hideAppBar()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setObserver()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onStop() {
+        Log.d("mymymy", "onStop in frag Login")
+        super.onStop()
     }
 
 
@@ -66,6 +65,23 @@ class LoginFragment @Inject constructor() :
         // 2. 로그인 정보 없으면 소셜 로그인 선택화면 보여주기
         // 3. access token으로 회원정보 받아오기.
         // 3. 회원정보에 따라서 선생님, 학생 분기.
+    }
+
+    private fun setKakaoButton() {
+        binding.btnLoginByKakao.setOnClickListener {
+            //viewModel.loginWithKakao(requireContext())
+            Navigation.findNavController(it)
+                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
+        }
+    }
+
+    private fun setGoogleButton() {
+        binding.btnLoginByGoogle.setOnClickListener {
+            val intent = Intent(activity, TeacherHomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent)
+        }
     }
 
 

@@ -38,10 +38,12 @@ class StudentHomeActivity : AppCompatActivity() {
      * 상단바 설정
      */
     fun setToolBar() {
+
         // 액션바 설정
         val toolbar: Toolbar = binding.toolbar
         if (toolbar != null)
             setSupportActionBar(toolbar)
+
         // 뒤로가기 버튼
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
