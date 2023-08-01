@@ -8,7 +8,6 @@
     android:paddingHorizontal="20dp"
     tools:context=".login.EmailCheckFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <TextView
         android:id="@+id/tv_email_desc"
@@ -34,9 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="대학교"
+            android:hint="학교 이메일"
             android:inputType="text"
             android:padding="16dp"
             android:textColor="@color/black" />
@@ -50,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/btn_corner_radius_10_enabled"
         android:gravity="center"
         android:padding="12dp"
@@ -63,6 +60,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -73,16 +71,26 @@
             style="@style/body2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:hint="인증코드"
-            android:inputType="text"
+            android:inputType="number"
             android:padding="16dp"
             android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_check_code"
+        style="@style/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_corner_radius_10_disabled"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="인증 코드 확인하기"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/cotainer_email_code" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register"
@@ -92,7 +100,8 @@
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:background="@drawable/btn_corner_radius_10_disabled"
+        android:enabled="false"
         android:gravity="center"
         android:padding="12dp"
         android:text="회원가입 완료"
