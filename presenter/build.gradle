@@ -7,6 +7,10 @@ plugins {
 
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+
 android {
 
     namespace 'org.softwaremaestro.presenter'
@@ -18,6 +22,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        buildConfigField "String", "UNIVCERT_API_KEY", properties["UNIVCERT_API_KEY"]
+
+
     }
 
     buildTypes {
@@ -25,6 +32,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -37,12 +45,16 @@ android {
     viewBinding {
         enabled = true
     }
+    configurations { compile.exclude group: "junit", module: "junit" }
+
+
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+
 
 dependencies {
 
@@ -93,6 +105,10 @@ dependencies {
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // email check
+    implementation 'com.github.in-seo:univcert:master-SNAPSHOT'
+
 
 }
 

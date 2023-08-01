@@ -78,6 +78,19 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_check_code"
+        style="@style/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_corner_radius_10_disabled"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="인증 코드 확인하기"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/cotainer_email_code" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register"
@@ -87,7 +100,8 @@
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:background="@drawable/btn_corner_radius_10_disabled"
+        android:enabled="false"
         android:gravity="center"
         android:padding="12dp"
         android:text="회원가입 완료"

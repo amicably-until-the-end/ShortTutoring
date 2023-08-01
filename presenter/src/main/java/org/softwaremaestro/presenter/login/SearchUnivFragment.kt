@@ -51,7 +51,7 @@ class SearchUnivFragment : Fragment() {
         val adapter =
             SearchAdapter(
                 requireActivity(),
-                listOf("서울대학교", "연세대학교", "고려대학교")
+                listOf("서울대학교", "연세대학교", "고려대학교", "성균관대학교")
             ) { name: String ->
                 viewModel._univ.value = name
                 findNavController().navigate(
