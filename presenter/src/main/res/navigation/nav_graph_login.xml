@@ -6,7 +6,7 @@
     app:startDestination="@id/emailCheckFragment">
 
     <fragment
-        android:id="@+id/logoFragment"
+        android:id="@+id/loginFrament"
         android:name="org.softwaremaestro.presenter.login.LoginFragment"
         android:label="fragment_logo"
         tools:layout="@layout/fragment_logo">
@@ -25,7 +25,7 @@
         <action
             android:id="@+id/action_registerRoleFragment_to_registerStudentInfoFragment"
             app:destination="@id/registerStudentInfoFragment"
-            app:popUpTo="@id/logoFragment" />
+            app:popUpTo="@id/loginFrament" />
     </fragment>
     <fragment
         android:id="@+id/registerStudentInfoFragment"
@@ -39,7 +39,7 @@
         tools:layout="@layout/fragment_register_teacher_info">
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
-            app:destination="@id/logoFragment"
+            app:destination="@id/loginFrament"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_searchUnivFragment"

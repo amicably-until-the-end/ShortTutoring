@@ -13,7 +13,8 @@
             android:noHistory="true" />
         <activity
             android:name=".login.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".student_home.StudentHomeActivity"
             android:exported="false" />
