@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/logoFragment">
+    app:startDestination="@id/emailCheckFragment">
 
     <fragment
         android:id="@+id/logoFragment"
@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_searchYearOfAdmissionFragment"
             app:destination="@id/searchYearOfAdmissionFragment" />
+        <action
+            android:id="@+id/action_registerTeacherInfoFragment_to_emailCheckFragment"
+            app:destination="@id/emailCheckFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchUnivFragment"
@@ -90,4 +93,9 @@
             android:id="@+id/action_searchYearOfAdmissionFragment_to_registerTeacherInfoFragment"
             app:destination="@id/registerTeacherInfoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/emailCheckFragment"
+        android:name="org.softwaremaestro.presenter.login.EmailCheckFragment"
+        android:label="학교 이메일 인증"
+        tools:layout="@layout/fragment_email_check" />
 </navigation>

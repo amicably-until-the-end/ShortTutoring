@@ -30,12 +30,10 @@ class StudentRegisterViewModel @Inject constructor(
             studentRegisterUseCase.execute(StudentRegisterVO(school, grade))
                 .catch { exception ->
                     _registerSuccess.postValue(false)
-                    Log.e("mymymy", "register fail ${exception.toString()}")
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            Log.d("mymymy", "success register ${result.data}")
                             _registerSuccess.postValue(true)
                         }
 

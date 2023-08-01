@@ -43,12 +43,10 @@ class TeacherRegisterViewModel @Inject constructor(
                 )
             ).catch { exception ->
                 _registerResult.postValue(false)
-                Log.e("mymymy", "register fail ${exception.toString()}")
             }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            Log.d("mymymy", "success register ${result.data}")
                             _registerResult.postValue(true)
                         }
 
