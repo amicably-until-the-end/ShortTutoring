@@ -58,7 +58,7 @@
 
 
         <Button
-            android:id="@+id/btn_side_bar"
+            android:id="@+id/btn_show_scenes"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="사이드"
@@ -68,10 +68,11 @@
             android:id="@+id/btn_color_pen"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text="펜"
             android:textAlignment="center"
-            app:layout_constraintLeft_toRightOf="@id/btn_side_bar" />
+            app:layout_constraintLeft_toRightOf="@id/btn_show_scenes" />
 
         <Button
             android:id="@+id/btn_color_erase"
@@ -91,7 +92,19 @@
             android:gravity="center"
             android:text="사진"
             android:textAlignment="center"
-            app:layout_constraintLeft_toRightOf="@id/btn_color_erase" />
+            app:layout_constraintLeft_toRightOf="@id/btn_color_erase"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="선택"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toRightOf="@id/btn_get_image"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -121,16 +134,20 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_scene_list"
         android:layout_width="200dp"
         android:layout_height="0dp"
-        android:background="@color/white"
+        android:background="@color/grey"
+        android:paddingHorizontal="20dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/container_tool_box">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_scene_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
