@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login
+package org.softwaremaestro.presenter.login.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

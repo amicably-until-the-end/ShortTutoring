@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login
+package org.softwaremaestro.presenter.login.viewmodel
 
 import android.content.Context
 import android.util.Log
@@ -94,7 +94,7 @@ class LoginViewModel @Inject constructor(
                     when (result) {
                         is BaseResult.Success -> _savedToken.postValue(result.data)
                         else -> {
-                            
+
                         }
                     }
                 }

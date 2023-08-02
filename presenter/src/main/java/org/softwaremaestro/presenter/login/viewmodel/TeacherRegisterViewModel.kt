@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login
+package org.softwaremaestro.presenter.login.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
