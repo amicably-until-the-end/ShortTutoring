@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.usecase.QuestionUploadUseCase
+import org.softwaremaestro.presenter.toBase64
 import javax.inject.Inject
 
 
@@ -22,17 +24,35 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     private val _questionId: MutableLiveData<String?> = MutableLiveData();
     val questionId: LiveData<String?> get() = _questionId
 
+    val _description: MutableLiveData<String> = MutableLiveData();
+    val _school: MutableLiveData<String> = MutableLiveData();
+    val _subject: MutableLiveData<String> = MutableLiveData();
+    val _difficulty: MutableLiveData<String> = MutableLiveData();
+    val _image: MutableLiveData<Bitmap> = MutableLiveData();
 
-    fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
+
+    val description: LiveData<String> get() = _description
+    val school: LiveData<String> get() = _school
+    val subject: LiveData<String> get() = _subject
+    val difficulty: LiveData<String> get() = _difficulty
+    val image: LiveData<Bitmap> get() = _image
+
+    fun uploadQuestion() {
+        val questionUploadVO = QuestionUploadVO(
+            studentId = "test-student-id",
+            imageBase64 = image.value?.toBase64()!!,
+            imageFormat = "png",
+            description = description.value ?: "",
+            schoolLevel = school.value ?: "",
+            schoolSubject = subject.value ?: "",
+            difficulty = difficulty.value ?: "",
+        )
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)
                 .catch { exception ->
-
-                    Log.d("mymymy", "exception: ${exception}")
                     _questionId.value = null
                 }
                 .collect { result ->
-                    Log.d("mymymy", "${result.toString()} is result in viewmodel")
                     when (result) {
                         is BaseResult.Success -> {
                             _questionId.value = result.data.questionId

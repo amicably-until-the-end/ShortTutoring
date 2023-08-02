@@ -2,10 +2,13 @@ package org.softwaremaestro.presenter
 
 import android.app.Service
 import android.content.Context
+import android.graphics.Bitmap
+import android.util.Base64
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import java.io.ByteArrayOutputStream
 
 object Util {
     fun dpToPx(dp: Int, context: Context): Int {
@@ -25,6 +28,12 @@ fun Button.setEnabledAndChangeColor(enabled: Boolean) {
         setBackgroundColor(resources.getColor(R.color.light_grey, null))
         setTextColor(resources.getColor(R.color.grey, null))
     }
+}
+
+fun Bitmap.toBase64(): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    this.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
 }
 
 fun requestFocusAndShowKeyboard(view: View, context: Context) {

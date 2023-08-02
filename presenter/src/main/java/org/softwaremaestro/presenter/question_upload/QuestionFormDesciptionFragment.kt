@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDescriptionBinding
@@ -17,6 +18,8 @@ private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT
 class QuestionFormDescriptionFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionFormDescriptionBinding
+
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +44,16 @@ class QuestionFormDescriptionFragment : Fragment() {
         textView.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == IME_ACTION) {
                 view.text.toString().let {
-                    (requireActivity() as QuestionUploadActivity).description = it
+                    viewModel._description.postValue(it)
                 }
-                findNavController().navigate(
-                    R.id.action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment,
-                )
+                if (viewModel.description.value == null) {
+                    findNavController().navigate(
+                        R.id.action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment,
+                    )
+                } else {
+                    findNavController().popBackStack()
+                }
+
             }
             true
         }

@@ -20,10 +20,6 @@
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormFragment"
         android:label="질문 올리기"
         tools:layout="@layout/fragment_question_form">
-        <argument
-            android:name="image"
-            app:argType="android.graphics.Bitmap"
-            app:nullable="false" />
         <action
             android:id="@+id/action_questionFormFragment_to_teacherSelectFragment"
             app:destination="@id/teacherSelectFragment"

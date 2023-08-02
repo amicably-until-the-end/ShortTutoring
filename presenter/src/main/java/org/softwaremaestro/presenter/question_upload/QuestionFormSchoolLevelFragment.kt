@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormSchoolLevelBinding
@@ -12,6 +13,7 @@ import org.softwaremaestro.presenter.databinding.FragmentQuestionFormSchoolLevel
 class QuestionFormSchoolLevelFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionFormSchoolLevelBinding
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +38,15 @@ class QuestionFormSchoolLevelFragment : Fragment() {
 
             selectedSchoolLevel?.let {
 
-                (requireActivity() as QuestionUploadActivity).schoolLevelSelected = it
+                viewModel._school.postValue(it)
 
-                findNavController().navigate(
-                    R.id.action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment
-                )
+                if (viewModel.subject.value == null) {
+                    findNavController().navigate(
+                        R.id.action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment
+                    )
+                } else {
+                    findNavController().popBackStack()
+                }
             }
         }
     }
