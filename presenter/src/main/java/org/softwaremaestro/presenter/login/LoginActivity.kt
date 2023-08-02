@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.login
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
@@ -29,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setAppBar() {
-        setSupportActionBar(binding.toolbar!!)
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
