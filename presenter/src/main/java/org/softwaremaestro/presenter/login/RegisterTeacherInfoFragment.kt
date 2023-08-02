@@ -109,7 +109,7 @@ class RegisterTeacherInfoFragment : Fragment() {
     private fun checkFields() {
 
 
-        if (viewModel.major != null && viewModel.college != null && viewModel.univ != null && viewModel.admissonYear != null) {
+        if (viewModel.major.value != null && viewModel.univ.value != null && viewModel.college.value != null && viewModel.admissonYear.value != null) {
             binding.btnNext.setEnabledAndChangeColor(true)
         } else {
             binding.btnNext.setEnabledAndChangeColor(false)
