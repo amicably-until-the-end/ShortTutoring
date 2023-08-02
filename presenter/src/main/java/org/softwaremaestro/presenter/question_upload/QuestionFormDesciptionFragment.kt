@@ -37,21 +37,21 @@ class QuestionFormDescriptionFragment : Fragment() {
         requestFocusAndShowKeyboard(binding.atvContent, requireContext())
 
         // 다음 버튼을 누르면 질문 입력 페이지로 돌아간다
-        setOnEditorActionLister(binding.atvContent)
+        setOnEditorActionLister()
     }
 
-    private fun setOnEditorActionLister(textView: TextView) {
-        textView.setOnEditorActionListener { view, actionId, _ ->
+    private fun setOnEditorActionLister() {
+        binding.atvContent.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == IME_ACTION) {
                 view.text.toString().let {
                     viewModel._description.postValue(it)
                 }
-                if (viewModel.description.value == null) {
+                if (viewModel.school.value == null) {
                     findNavController().navigate(
                         R.id.action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment,
                     )
                 } else {
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.questionFormFragment, false)
                 }
 
             }

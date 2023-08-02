@@ -39,7 +39,11 @@ class QuestionFormSubjectFragment : Fragment() {
                 }
 
             selectedSubject?.let {
-
+                if (viewModel.subject.value == it) {
+                    binding.rgSubject.clearCheck()
+                    viewModel._subject.postValue(null)
+                    return@setOnCheckedChangeListener
+                }
                 viewModel._subject.postValue(it)
 
                 if (viewModel.difficulty.value == null) {
@@ -47,7 +51,7 @@ class QuestionFormSubjectFragment : Fragment() {
                         R.id.action_questionFormSubjectFragment_to_questionFormDifficultyFragment
                     )
                 } else {
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.questionFormFragment, false)
                 }
             }
         }

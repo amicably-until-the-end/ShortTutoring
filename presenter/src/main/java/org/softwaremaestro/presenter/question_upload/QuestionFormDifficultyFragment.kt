@@ -39,11 +39,7 @@ class QuestionFormDifficultyFragment : Fragment() {
                 }
 
             viewModel._difficulty.postValue(selectedDifficulty)
-
-
-            findNavController().navigate(
-                R.id.action_questionFormDifficultyFragment_to_questionFormFragment
-            )
+            findNavController().popBackStack(R.id.questionFormFragment, false)
         }
     }
 

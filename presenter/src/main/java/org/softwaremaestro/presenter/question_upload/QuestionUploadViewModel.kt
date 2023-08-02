@@ -24,17 +24,17 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     private val _questionId: MutableLiveData<String?> = MutableLiveData();
     val questionId: LiveData<String?> get() = _questionId
 
-    val _description: MutableLiveData<String> = MutableLiveData();
-    val _school: MutableLiveData<String> = MutableLiveData();
-    val _subject: MutableLiveData<String> = MutableLiveData();
-    val _difficulty: MutableLiveData<String> = MutableLiveData();
+    val _description: MutableLiveData<String?> = MutableLiveData();
+    val _school: MutableLiveData<String?> = MutableLiveData();
+    val _subject: MutableLiveData<String?> = MutableLiveData();
+    val _difficulty: MutableLiveData<String?> = MutableLiveData();
     val _image: MutableLiveData<Bitmap> = MutableLiveData();
 
 
-    val description: LiveData<String> get() = _description
-    val school: LiveData<String> get() = _school
-    val subject: LiveData<String> get() = _subject
-    val difficulty: LiveData<String> get() = _difficulty
+    val description: LiveData<String?> get() = _description
+    val school: LiveData<String?> get() = _school
+    val subject: LiveData<String?> get() = _subject
+    val difficulty: LiveData<String?> get() = _difficulty
     val image: LiveData<Bitmap> get() = _image
 
     fun uploadQuestion() {

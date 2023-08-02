@@ -26,8 +26,6 @@ import org.softwaremaestro.presenter.setEnabledAndChangeColor
 import java.io.ByteArrayOutputStream
 
 
-private const val STUDENT_ID = "test-student-id"
-
 @AndroidEntryPoint
 class QuestionFormFragment : Fragment() {
 
@@ -97,7 +95,14 @@ class QuestionFormFragment : Fragment() {
     }
 
 
-    private fun isAllValuesEntered() = ets.map { it.text.isNullOrEmpty() }.contains(true).toggle()
+    private fun isAllValuesEntered(): Boolean {
+        return (
+                viewModel.image.value != null &&
+                        viewModel.description.value != null &&
+                        viewModel.school.value != null &&
+                        viewModel.subject.value != null &&
+                        viewModel.difficulty.value != null)
+    }
 
     private fun Boolean.toggle() = !this
 
