@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.FragmentLogoBinding
+import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.ClassroomFragment
+import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
@@ -23,7 +25,7 @@ import javax.inject.Inject
 class LoginFragment @Inject constructor() :
     Fragment() {
 
-    private lateinit var binding: FragmentLogoBinding
+    private lateinit var binding: FragmentLoginBinding
 
     private val viewModel: LoginViewModel by viewModels()
 
@@ -33,7 +35,7 @@ class LoginFragment @Inject constructor() :
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentLogoBinding.inflate(inflater, container, false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.tvLogo.setOnClickListener {
             val intent = Intent(activity, StudentHomeActivity::class.java)

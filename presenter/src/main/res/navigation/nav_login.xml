@@ -9,7 +9,7 @@
         android:id="@+id/loginFrament"
         android:name="org.softwaremaestro.presenter.login.LoginFragment"
         android:label="로그인"
-        tools:layout="@layout/fragment_logo">
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_logoFragment_to_registerRoleFragment"
             app:destination="@id/registerRoleFragment" />
