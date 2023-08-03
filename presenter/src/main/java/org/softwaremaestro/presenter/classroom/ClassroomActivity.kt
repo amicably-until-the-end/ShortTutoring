@@ -14,13 +14,6 @@ class ClassroomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityClassroomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // 액션바 설정
-        val toolbar: Toolbar = binding.toolbar
-        setSupportActionBar(toolbar)
-
-        // 뒤로가기 버튼
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        
     }
 }

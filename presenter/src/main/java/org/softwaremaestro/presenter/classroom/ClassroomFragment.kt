@@ -7,17 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomParams
 import com.herewhite.sdk.WhiteSdk
 import com.herewhite.sdk.WhiteSdkConfiguration
 import com.herewhite.sdk.WhiteboardView
+import com.herewhite.sdk.domain.ImageInformationWithUrl
 import com.herewhite.sdk.domain.MemberState
 import com.herewhite.sdk.domain.Promise
 import com.herewhite.sdk.domain.Region
@@ -27,7 +28,12 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
+import okhttp3.internal.notify
+import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
+import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
+import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
+import org.softwaremaestro.presenter.student_home.item.Lecture
 
 
 class ClassroomFragment : Fragment() {
@@ -63,6 +69,7 @@ class ClassroomFragment : Fragment() {
 
     private var whiteBoardRoom: Room? = null
 
+    private val viewModel: ClassroomViewModel by viewModels()
 
     private val PERMISSION_REQ_ID = 22
     private val REQUESTED_PERMISSIONS = arrayOf<String>(
@@ -99,21 +106,35 @@ class ClassroomFragment : Fragment() {
 
 
     fun setTutoringArgument() {
-        whiteBoardInfo =
-            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
-        Log.d("agora", whiteBoardInfo.toString())
+        whiteBoardInfo = SerializedWhiteBoardRoomInfo(
+            "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
+            "e711fcd0310411ee9e6241209ace6cf9",
+            "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkwOTk2ODE1OTUxJm5vbmNlPTE2OTA5NjA4MTU5NTEwMCZyb2xlPTAmc2lnPWNlYzY0Y2FhNWQ1YmM3YzFkNzg4OGMzNGM0N2ZkOWNjNjJiZGZmZjJlNjk1Mzc3OTg4MGE1MzcxY2JhMzg1NTQmdXVpZD1lNzExZmNkMDMxMDQxMWVlOWU2MjQxMjA5YWNlNmNmOQ",
+            (0..100).random().toString()
+        )
+        //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         //voiceInfo = requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
         if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
     private fun setAgora() {
-        setTutoringArgument()
-        setWhiteBoard()
-        setColorButtons()
+        joinWhiteBoard()
         //setupVoiceSDKEngine()
     }
 
     private fun setWhiteBoard() {
+        //join 을 한 이후에 화이트 보드 관련 기능 세팅
+        setPenButtons()
+        setEraseButton()
+        setImageButton()
+        setSelectorButton()
+        setSceneList()
+        setSceneListButton()
+
+    }
+
+
+    private fun joinWhiteBoard() {
         setTutoringArgument()
         sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
@@ -127,6 +148,7 @@ class ClassroomFragment : Fragment() {
                 memberState.currentApplianceName = "pencil"
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom?.memberState = memberState
+                setWhiteBoard()
 
             }
 
@@ -209,18 +231,64 @@ class ClassroomFragment : Fragment() {
         }
     }
 
-    private fun setColorButtons() {
+    private fun setSceneList() {
+        binding.rvSceneList.apply {
+            adapter = SceneAdapter(whiteBoardRoom!!) {
+                Log.d("agora", "scene clicked ${it}")
+            }
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setPenButtons() {
         binding.btnColorPen.setOnClickListener {
             var memberState = MemberState()
             memberState.currentApplianceName = "pencil"
             memberState.strokeColor = IntArray(3) { 255;0;0; }
             whiteBoardRoom?.memberState = memberState
         }
+
+    }
+
+    private fun setEraseButton() {
         binding.btnColorErase.setOnClickListener {
             var memberState = MemberState()
             memberState.currentApplianceName = "eraser"
             whiteBoardRoom?.memberState = memberState
         }
+    }
+
+    private fun setImageButton() {
+        binding.btnGetImage.setOnClickListener {
+            whiteBoardRoom?.cleanScene(true)
+            val imageInfo = ImageInformationWithUrl(
+                0.0, 0.0, 200.0, 200.0,
+                "https://4.bp.blogspot.com/-TTRkTOT6oRY/WiA37N0gqpI/AAAAAAAAP_E/rHjroHUXRN4pMHmOkY41-yl39O0uYibAwCLcBGAs/s640/KSAT_Math_GA_Q14.JPG"
+            )
+            whiteBoardRoom?.insertImage(imageInfo)
+        }
+
+    }
+
+    private fun setSelectorButton() {
+        binding.btnSelector.setOnClickListener {
+            var memberState = MemberState()
+            memberState.currentApplianceName = "selector"
+            whiteBoardRoom?.memberState = memberState
+        }
+    }
+
+
+    private fun setSceneListButton() {
+        binding.btnShowScenes.setOnClickListener {
+            binding.containerSceneList.apply {
+                if (visibility == View.VISIBLE) visibility = View.GONE
+                else visibility = View.VISIBLE
+            }
+            (binding.rvSceneList.adapter as SceneAdapter).getPreview()
+        }
+
     }
 
 
