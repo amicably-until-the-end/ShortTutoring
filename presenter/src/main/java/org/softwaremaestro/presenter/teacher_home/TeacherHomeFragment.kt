@@ -173,8 +173,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeQuestions() {
         questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
-            questionAdapter.setItem(questions)
-            questionAdapter.notifyDataSetChanged()
+            questionAdapter.submitList(questions)
 
             binding.tvNumOfQuestions.text =
                 if (questions.isNotEmpty()) "${questions.size}명의 학생이 선생님을 기다리고 있어요"
