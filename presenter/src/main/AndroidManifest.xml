@@ -26,7 +26,7 @@
         <activity
             android:name=".teacher_home.TeacherHomeActivity"
             android:exported="false" />
-
+        
     </application>
 
 </manifest>

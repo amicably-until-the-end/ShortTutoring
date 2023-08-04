@@ -8,11 +8,12 @@
     <fragment
         android:id="@+id/questionCameraFragment"
         android:name="org.softwaremaestro.presenter.question_upload.QuestionCameraFragment"
-        android:label="fragment_camera"
+        android:label="문제 촬영하기"
         tools:layout="@layout/fragment_question_camera">
         <action
             android:id="@+id/action_questionCameraFragment_to_questionFormFragment"
             app:destination="@id/questionFormFragment"
+            app:popUpTo="@id/questionCameraFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -20,15 +21,9 @@
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormFragment"
         android:label="질문 올리기"
         tools:layout="@layout/fragment_question_form">
-        <argument
-            android:name="image"
-            app:argType="android.graphics.Bitmap"
-            app:nullable="false" />
         <action
             android:id="@+id/action_questionFormFragment_to_teacherSelectFragment"
-            app:destination="@id/teacherSelectFragment"
-            app:popUpTo="@id/questionCameraFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/teacherSelectFragment" />
         <action
             android:id="@+id/action_questionFormFragment_to_questionFormDescriptionFragment"
             app:destination="@id/questionFormDescriptionFragment" />
@@ -49,16 +44,11 @@
         android:id="@+id/teacherSelectFragment"
         android:name="org.softwaremaestro.presenter.question_upload.TeacherSelectFragment"
         android:label="선생님 선택하기"
-        tools:layout="@layout/fragment_teacher_select">
-        <argument
-            android:name="quesionId"
-            app:argType="string"
-            app:nullable="false" />
-    </fragment>
+        tools:layout="@layout/fragment_teacher_select"></fragment>
     <fragment
         android:id="@+id/questionFormSchoolLevelFragment"
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormSchoolLevelFragment"
-        android:label="fragment_question_form_school_level"
+        android:label="문제 정보 입력"
         tools:layout="@layout/fragment_question_form_school_level">
         <action
             android:id="@+id/action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment"
@@ -67,7 +57,7 @@
     <fragment
         android:id="@+id/questionFormSubjectFragment"
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormSubjectFragment"
-        android:label="fragment_question_form_subject"
+        android:label="문제 정보 입력"
         tools:layout="@layout/fragment_question_form_subject">
         <action
             android:id="@+id/action_questionFormSubjectFragment_to_questionFormDifficultyFragment"
@@ -76,7 +66,7 @@
     <fragment
         android:id="@+id/questionFormDescriptionFragment"
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormDescriptionFragment"
-        android:label="fragment_question_form_description"
+        android:label="질문 내용 입력"
         tools:layout="@layout/fragment_question_form_description">
         <action
             android:id="@+id/action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment"
@@ -85,11 +75,7 @@
     <fragment
         android:id="@+id/questionFormDifficultyFragment"
         android:name="org.softwaremaestro.presenter.question_upload.QuestionFormDifficultyFragment"
-        android:label="fragment_question_form_difficulty"
-        tools:layout="@layout/fragment_question_form_difficulty">
-        <action
-            android:id="@+id/action_questionFormDifficultyFragment_to_questionFormFragment"
-            app:destination="@id/questionFormFragment" />
-    </fragment>
+        android:label="난이도 입력"
+        tools:layout="@layout/fragment_question_form_difficulty"></fragment>
 
 </navigation>

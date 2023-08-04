@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormSchoolLevelBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 
 class QuestionFormSchoolLevelFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionFormSchoolLevelBinding
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -19,11 +22,16 @@ class QuestionFormSchoolLevelFragment : Fragment() {
     ): View? {
 
         binding = FragmentQuestionFormSchoolLevelBinding.inflate(layoutInflater)
+
+
+
+        setRadioGroup()
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    private fun setRadioGroup() {
 
         binding.rgSchoolLevel.setOnCheckedChangeListener { parent, resId ->
 
@@ -35,13 +43,23 @@ class QuestionFormSchoolLevelFragment : Fragment() {
                 }
 
             selectedSchoolLevel?.let {
+                if (viewModel.school.value == it) {
+                    binding.rgSchoolLevel.clearCheck()
+                    viewModel._school.postValue(null)
+                    return@setOnCheckedChangeListener
+                }
+                viewModel._school.postValue(it)
 
-                (requireActivity() as QuestionUploadActivity).schoolLevelSelected = it
-
-                findNavController().navigate(
-                    R.id.action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment
-                )
+                if (viewModel.subject.value == null) {
+                    findNavController().navigate(
+                        R.id.action_questionFormSchoolLevelFragment_to_questionFormSubjectFragment
+                    )
+                } else {
+                    findNavController().popBackStack(R.id.questionFormFragment, false)
+                }
             }
         }
+
     }
+
 }

@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.FragmentLogoBinding
+import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.ClassroomFragment
+import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
@@ -23,7 +25,7 @@ import javax.inject.Inject
 class LoginFragment @Inject constructor() :
     Fragment() {
 
-    private lateinit var binding: FragmentLogoBinding
+    private lateinit var binding: FragmentLoginBinding
 
     private val viewModel: LoginViewModel by viewModels()
 
@@ -33,7 +35,7 @@ class LoginFragment @Inject constructor() :
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentLogoBinding.inflate(inflater, container, false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.tvLogo.setOnClickListener {
             val intent = Intent(activity, StudentHomeActivity::class.java)
@@ -70,9 +72,8 @@ class LoginFragment @Inject constructor() :
 
     private fun setKakaoButton() {
         binding.btnLoginByKakao.setOnClickListener {
-            //viewModel.loginWithKakao(requireContext())
-            Navigation.findNavController(it)
-                .navigate(R.id.action_logoFragment_to_registerRoleFragment)
+            viewModel.loginWithKakao(requireContext())
+
         }
     }
 
@@ -86,15 +87,20 @@ class LoginFragment @Inject constructor() :
     }
 
 
-    private fun observeUserInfo() {
-        viewModel.userInfo.observe(viewLifecycleOwner) {
-            if (viewModel.userInfo != null) {
-                Log.d("mymymy", "get user info in frag ${viewModel.userInfo.value.toString()}")
-                if (viewModel.userInfo.value?.role == "student") {
-                    val intent = Intent(activity, StudentHomeActivity::class.java)
-                    startActivity(intent)
-                } else {
+    private fun observeLoginResult() {
+        viewModel.userRole.observe(viewLifecycleOwner) {
+            when (it) {
+                "teacher" -> {
                     val intent = Intent(activity, TeacherHomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent)
+                }
+
+                "student" -> {
+                    val intent = Intent(activity, StudentHomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent)
                 }
             }
@@ -111,7 +117,7 @@ class LoginFragment @Inject constructor() :
     }
 
     private fun setObserver() {
-        observeUserInfo()
+        observeLoginResult()
         observeKakaoLogin()
     }
 }

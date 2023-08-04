@@ -5,14 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormSubjectBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 
 class QuestionFormSubjectFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionFormSubjectBinding
-
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,12 +40,20 @@ class QuestionFormSubjectFragment : Fragment() {
                 }
 
             selectedSubject?.let {
+                if (viewModel.subject.value == it) {
+                    binding.rgSubject.clearCheck()
+                    viewModel._subject.postValue(null)
+                    return@setOnCheckedChangeListener
+                }
+                viewModel._subject.postValue(it)
 
-                (requireActivity() as QuestionUploadActivity).subjectSelected = it
-
-                findNavController().navigate(
-                    R.id.action_questionFormSubjectFragment_to_questionFormDifficultyFragment
-                )
+                if (viewModel.difficulty.value == null) {
+                    findNavController().navigate(
+                        R.id.action_questionFormSubjectFragment_to_questionFormDifficultyFragment
+                    )
+                } else {
+                    findNavController().popBackStack(R.id.questionFormFragment, false)
+                }
             }
         }
     }

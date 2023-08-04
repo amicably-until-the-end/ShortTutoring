@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDifficultyBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 
 class QuestionFormDifficultyFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionFormDifficultyBinding
 
+
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,14 +39,9 @@ class QuestionFormDifficultyFragment : Fragment() {
                     else -> null
                 }
 
-            selectedDifficulty?.let {
-                (requireActivity() as QuestionUploadActivity).difficultySelected =
-                    selectedDifficulty
-
-                findNavController().navigate(
-                    R.id.action_questionFormDifficultyFragment_to_questionFormFragment
-                )
-            }
+            viewModel._difficulty.postValue(selectedDifficulty)
+            findNavController().popBackStack(R.id.questionFormFragment, false)
         }
     }
+
 }

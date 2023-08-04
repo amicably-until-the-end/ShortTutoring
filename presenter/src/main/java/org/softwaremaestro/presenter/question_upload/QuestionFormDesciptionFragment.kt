@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDescriptionBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
 
 private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT
@@ -17,6 +18,8 @@ private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT
 class QuestionFormDescriptionFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionFormDescriptionBinding
+
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,18 +37,23 @@ class QuestionFormDescriptionFragment : Fragment() {
         requestFocusAndShowKeyboard(binding.atvContent, requireContext())
 
         // 다음 버튼을 누르면 질문 입력 페이지로 돌아간다
-        setOnEditorActionLister(binding.atvContent)
+        setOnEditorActionLister()
     }
 
-    private fun setOnEditorActionLister(textView: TextView) {
-        textView.setOnEditorActionListener { view, actionId, _ ->
+    private fun setOnEditorActionLister() {
+        binding.atvContent.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == IME_ACTION) {
                 view.text.toString().let {
-                    (requireActivity() as QuestionUploadActivity).description = it
+                    viewModel._description.postValue(it)
                 }
-                findNavController().navigate(
-                    R.id.action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment,
-                )
+                if (viewModel.school.value == null) {
+                    findNavController().navigate(
+                        R.id.action_questionFormDescriptionFragment_to_questionFormSchoolLevelFragment,
+                    )
+                } else {
+                    findNavController().popBackStack(R.id.questionFormFragment, false)
+                }
+
             }
             true
         }

@@ -1,45 +1,29 @@
 package org.softwaremaestro.presenter.question_upload
 
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.setEnabledAndChangeColor
-import java.io.ByteArrayOutputStream
 
-
-private const val STUDENT_ID = "test-student-id"
 
 @AndroidEntryPoint
 class QuestionFormFragment : Fragment() {
 
     lateinit var binding: FragmentQuestionFormBinding
-    private val viewModel: QuestionUploadViewModel by viewModels()
+    private val viewModel: QuestionUploadViewModel by activityViewModels()
 
 //    private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
-
-    private val selectedValues: List<String?> by lazy {
-        with(requireActivity() as QuestionUploadActivity) {
-            listOf(description, schoolLevelSelected, subjectSelected, difficultySelected)
-        }
-    }
 
     private val ets: List<TextInputEditText> by lazy {
         with(binding) {
@@ -47,12 +31,6 @@ class QuestionFormFragment : Fragment() {
         }
     }
 
-    private val actions = listOf(
-        R.id.action_questionFormFragment_to_questionFormDescriptionFragment,
-        R.id.action_questionFormFragment_to_questionFormSchoolLevelFragment,
-        R.id.action_questionFormFragment_to_questionFormSubjectFragment,
-        R.id.action_questionFormFragment_to_questionFormDifficultyFragment
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,12 +48,6 @@ class QuestionFormFragment : Fragment() {
 //        parseMathSubjectJson()
         setObserver()
 
-        // 카메라로 촬영한 사진을 저장한다.
-        saveImage()
-
-        // 선생님이 입력한 값을 뷰에 표시한다
-        setSelectedValues()
-
         // 모든 내용이 입력되었으면 제출 버튼을 활성화한다
         checkAndEnableSubjectBtn()
 
@@ -83,7 +55,7 @@ class QuestionFormFragment : Fragment() {
         setSubmitButton()
 
         // 뷰를 클릭하면 해당 뷰에 값을 입력하는 페이지로 이동한다
-        setOnClickListenerToViews()
+        setFieldButtons()
     }
 
     private fun checkAndEnableSubjectBtn() {
@@ -92,47 +64,76 @@ class QuestionFormFragment : Fragment() {
         }
     }
 
-    private fun saveImage() {
-        try {
-            QuestionFormFragmentArgs.fromBundle(requireArguments()).image.let {
-                (requireActivity() as QuestionUploadActivity).image = it
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun setOnClickListenerToViews() {
+    private fun setFieldButtons() {
 
         binding.ivImage.setOnClickListener {
             findNavController().navigate(R.id.action_questionFormFragment_to_questionCameraFragment)
         }
 
-        ets.zip(actions).forEach { pair ->
-            pair.first.setOnClickListener {
-                findNavController().navigate(pair.second)
-            }
+        binding.etSchoolLevel.setOnClickListener {
+            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormSchoolLevelFragment)
         }
+        binding.etDescription.setOnClickListener {
+            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormDescriptionFragment)
+        }
+        binding.etSubject.setOnClickListener {
+            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormSubjectFragment)
+        }
+        binding.etDifficulty.setOnClickListener {
+            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormDifficultyFragment)
+        }
+
     }
 
-    private fun setSelectedValues() {
 
-        (requireActivity() as QuestionUploadActivity).image.let {
-            binding.ivImage.setImageBitmap(it)
-        }
-
-        selectedValues.zip(ets).forEach { pair ->
-            pair.first.let {
-                pair.second.setText(it)
-            }
-        }
+    private fun isAllValuesEntered(): Boolean {
+        return (
+                viewModel.image.value != null &&
+                        viewModel.description.value != null &&
+                        viewModel.school.value != null &&
+                        viewModel.subject.value != null &&
+                        viewModel.difficulty.value != null)
     }
-
-    private fun isAllValuesEntered() = ets.map { it.text.isNullOrEmpty() }.contains(true).toggle()
 
     private fun Boolean.toggle() = !this
 
-    private fun setObserver() {
+
+    private fun observeImage() {
+        viewModel.image.observe(viewLifecycleOwner) {
+            binding.ivImage.setImageBitmap(it)
+            checkAndEnableSubjectBtn()
+        }
+    }
+
+    private fun observeDescription() {
+        viewModel.description.observe(viewLifecycleOwner) {
+            binding.etDescription.setText(it)
+            checkAndEnableSubjectBtn()
+        }
+    }
+
+    private fun observeSchoolLevel() {
+        viewModel.school.observe(viewLifecycleOwner) {
+            binding.etSchoolLevel.setText(it)
+            checkAndEnableSubjectBtn()
+        }
+    }
+
+    private fun observeSubject() {
+        viewModel.subject.observe(viewLifecycleOwner) {
+            binding.etSubject.setText(it)
+            checkAndEnableSubjectBtn()
+        }
+    }
+
+    private fun observeDifficulty() {
+        viewModel.difficulty.observe(viewLifecycleOwner) {
+            binding.etDifficulty.setText(it)
+            checkAndEnableSubjectBtn()
+        }
+    }
+
+    private fun observeQuestionId() {
         viewModel.questionId.observe(viewLifecycleOwner) {
             if (!viewModel.questionId.value.isNullOrEmpty()) {
                 val bundle = bundleOf("questionId" to viewModel.questionId.value)
@@ -145,38 +146,26 @@ class QuestionFormFragment : Fragment() {
                 Toast.makeText(requireContext(), "질문 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+        checkAndEnableSubjectBtn()
     }
 
-    private fun Bitmap.toBase64(): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        this.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+
+    private fun setObserver() {
+        observeImage()
+        observeDescription()
+        observeSchoolLevel()
+        observeSubject()
+        observeDifficulty()
+        observeQuestionId()
     }
+
 
     private fun setSubmitButton() {
         binding.btnSubmit.setOnClickListener {
             //버튼 여러번 눌러지는 거 방지
             binding.btnSubmit.isEnabled = false
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val base64 = (requireActivity() as QuestionUploadActivity).image!!.toBase64()
-
-                withContext(Dispatchers.Main) {
-                    with(requireActivity() as QuestionUploadActivity) {
-                        viewModel.uploadQuestion(
-                            QuestionUploadVO(
-                                STUDENT_ID,
-                                base64,
-                                "png",
-                                description!!,
-                                schoolLevelSelected!!,
-                                subjectSelected!!,
-                                difficultySelected!!
-                            )
-                        )
-                    }
-                }
-            }
+            viewModel.uploadQuestion()
 
         }
 

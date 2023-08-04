@@ -41,17 +41,17 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
             newRequest = chain.request()
         }
 
-        Log.d("retrofit", "intercept request is $newRequest")
+        Log.d("retrofit", "intercept request is $newRequest ")
         val response = chain.proceed(newRequest)
         Log.d(
             "retrofit",
-            "intercept response is ${response.toString()}"
+            "intercept response is $response ${response.peekBody(Long.MAX_VALUE).string()}"
         )
         return response
     }
 
     private fun getJWT(): String {
-        return ""
+        return prefs.getJWT()
     }
 }
 
