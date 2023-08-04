@@ -23,7 +23,7 @@ import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
-import org.softwaremaestro.presenter.classroom.SerializedWhiteBoardRoomInfo
+import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel

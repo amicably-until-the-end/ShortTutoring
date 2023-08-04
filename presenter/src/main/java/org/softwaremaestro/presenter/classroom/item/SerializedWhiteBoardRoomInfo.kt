@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.classroom
+package org.softwaremaestro.presenter.classroom.item
 
 import java.io.Serializable
 

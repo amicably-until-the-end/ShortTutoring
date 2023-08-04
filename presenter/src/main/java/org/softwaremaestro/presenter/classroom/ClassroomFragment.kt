@@ -28,6 +28,7 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
+import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import okhttp3.internal.notify
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel

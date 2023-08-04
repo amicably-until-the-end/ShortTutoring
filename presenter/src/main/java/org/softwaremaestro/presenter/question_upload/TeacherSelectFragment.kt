@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
-import org.softwaremaestro.presenter.classroom.SerializedWhiteBoardRoomInfo
+import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.TeacherSelectViewModel
 
