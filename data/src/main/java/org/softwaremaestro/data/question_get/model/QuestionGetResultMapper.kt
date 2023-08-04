@@ -14,12 +14,10 @@ object QuestionGetResultMapper {
                 student?.profileImage,
                 problemDto?.image,
                 problemDto?.schoolLevel,
-                problemDto?.schoolChapter,
                 problemDto?.schoolSubject,
                 problemDto?.difficulty,
                 problemDto?.description,
-                teacherIds,
-                createdAt
+                teacherIds
             )
         }
     }

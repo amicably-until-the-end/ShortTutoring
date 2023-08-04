@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_parent"
@@ -8,43 +7,234 @@
     android:layout_height="match_parent"
     tools:context=".teacher_home.TeacherHomeActivity">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="vertical">
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/container_question_pool"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+                android:layout_marginTop="@dimen/margin_top_default"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_student_question"
+                    android:id="@+id/tv_num_of_questions"
                     style="@style/h6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="답변을 기다리는 질문입니다"
                     android:textColor="@color/black"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                    android:layout_marginTop="@dimen/margin_top_default" />
+                    tools:text="38명의 학생이 선생님을 기다리고 있어요" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_question"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="24dp" />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_noti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/border_radius_10_light_grey"
+                android:orientation="vertical"
+                android:paddingStart="32dp"
+                android:paddingBottom="48dp">
+
+                <TextView
+                    android:id="@+id/tv_dismiss"
+                    style="@style/h6"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_default"/>
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="x"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_noti"
+                    style="@style/h6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="선생님의 활동이 학생들에게 도움이 되고 있어요!" />
+
+                <LinearLayout
+                    android:id="@+id/container_example_likes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_noti">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="50dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:id="@+id/iv_example_likes"
+                            style="@style/h6"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="#11000000" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tv_example_likes"
+                        style="@style/body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/black"
+                        tools:text="학생이 선생님을 찜했어요" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_example_rating"
+                    style="@style/body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="평점이 4.8이 되었어요"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/container_example_likes" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_example_rating">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="50dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:id="@+id/iv_example_review"
+                            style="@style/h6"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="#11000000" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tv_example_review"
+                        style="@style/body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/black"
+                        tools:text="학생이 리뷰를 작성했어요" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_rating_and_temperature"
+                    style="@style/h6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="현재 별점은 4.8점, 매너 온도는 48도에요"
+                    android:textColor="@color/black" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/h6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="설정된 답변 비용은 10분당 약 "
+                        android:textColor="@color/hint" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_answer_cost"
+                        style="@style/h6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_bottom_hint"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:padding="0dp"
+                        android:textColor="@color/hint"
+                        tools:text="3,000원" />
+
+                    <TextView
+                        style="@style/h6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 이에요"
+                        android:textColor="@color/hint" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            <LinearLayout
+                android:id="@+id/container_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <TextView
+                    style="@style/h6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수업을 들은 학생들이 남긴 리뷰에요"
+                    android:textColor="@color/black" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="24dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
