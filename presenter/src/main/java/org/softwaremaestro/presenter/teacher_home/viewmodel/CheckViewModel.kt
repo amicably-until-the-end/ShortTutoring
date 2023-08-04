@@ -12,8 +12,6 @@ import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckResultVO
 import org.softwaremaestro.domain.question_check.usecase.QuestionCheckUseCase
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
-import org.softwaremaestro.domain.question_get.usecase.QuestionGetUseCase
 import javax.inject.Inject
 
 @HiltViewModel

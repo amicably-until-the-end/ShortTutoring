@@ -7,21 +7,24 @@ import org.softwaremaestro.data.question_get.model.asDomain
 import org.softwaremaestro.data.question_get.remote.QuestionGetApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_get.QuestionGetRepository
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import javax.inject.Inject
 
 class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: QuestionGetApi) :
     QuestionGetRepository {
 
-    override suspend fun getQuestions(): Flow<BaseResult<List<QuestionGetResultVO>, String>> {
+    override suspend fun getQuestions(): Flow<BaseResult<List<QuestionGetResponseVO>, String>> {
         return flow {
             val response = questionGetApi.getQuestions()
-            if (response.isSuccessful && !response.body()!!.error) {
-                response.body()!!.data
+            val body = response.body()!!
+            Log.d("retrofit", body.success.toString())
+            if (body.success) {
+                body.data
                     ?.map { it.asDomain() }
-                    ?.let { emit(BaseResult.Success(it)) }
-            }
-            else {
+                    ?.let {
+                        emit(BaseResult.Success(it))
+                    }
+            } else {
                 val errorString =
                     "error in ${this@QuestionGetRepositoryImpl::class.java.name}\n" +
                             "message: ${response.body()!!.message}"

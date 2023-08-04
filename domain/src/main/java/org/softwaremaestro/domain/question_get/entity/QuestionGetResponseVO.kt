@@ -1,6 +1,6 @@
 package org.softwaremaestro.domain.question_get.entity;
 
-data class QuestionGetResultVO(
+data class QuestionGetResponseVO(
     var id: String?,
     val studentId: String?,
     val studentName: String?,
@@ -10,5 +10,8 @@ data class QuestionGetResultVO(
     val problemSchoolSubject: String?,
     val problemDifficulty: String?,
     val problemDescription: String?,
-    val teacherIds: List<String>?
+    val teacherIds: List<String>?,
+    val status: String?,
+    val createdAt: String?,
+    val tutoringId: String?
 )

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
@@ -12,7 +12,7 @@ private const val EMPTY_STRING = "-"
 class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
-    private var items: List<QuestionGetResultVO> = emptyList()
+    private var items: List<QuestionGetResponseVO> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionAdapter.ViewHolder {
         val view = ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,18 +27,18 @@ class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
         return items.size
     }
 
-    fun setItem(items: List<QuestionGetResultVO>) {
+    fun setItem(items: List<QuestionGetResponseVO>) {
         this.items = items
     }
 
     inner class ViewHolder(private val binding: ItemQuestionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: QuestionGetResultVO) {
+        fun onBind(item: QuestionGetResponseVO) {
 
             with(binding) {
 
-                Picasso.with(root.context).load(item.problemImage).into(ivPhoto)
+                Picasso.with(root.context).load(item.problemImage).fit().centerCrop().into(ivPhoto)
 
                 tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
                 tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING

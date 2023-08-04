@@ -29,7 +29,8 @@ class RegisterRepositoryImpl @Inject constructor(
                     savedToken.getTokenInfo().token!!,
                 )
             )
-            if (response.isSuccessful && !response.body()!!.error) {
+            val body = response.body()!!
+            if (body.success) {
                 emit(BaseResult.Success(response.body()!!.message))
             } else {
                 val errorString =
@@ -50,10 +51,11 @@ class RegisterRepositoryImpl @Inject constructor(
                     teacherRegisterVO.admissonYear
                 )
             )
-            if (!response.isSuccessful || response.body()?.error == true) {
-                emit(BaseResult.Error("error"))
-            } else {
+            val body = response.body()!!
+            if (body.success) {
                 emit(BaseResult.Success(response.body()!!.message))
+            } else {
+                emit(BaseResult.Error("error"))
             }
 
         }

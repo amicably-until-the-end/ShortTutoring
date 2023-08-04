@@ -9,15 +9,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.question_get.usecase.QuestionGetUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionsViewModel @Inject constructor(private val questionGetUseCase: QuestionGetUseCase): ViewModel() {
+class QuestionsViewModel @Inject constructor(private val questionGetUseCase: QuestionGetUseCase) :
+    ViewModel() {
 
-    private val _questions: MutableLiveData<List<QuestionGetResultVO>> = MutableLiveData()
-    val questions: LiveData<List<QuestionGetResultVO>> get() = _questions
+    private val _questions: MutableLiveData<List<QuestionGetResponseVO>> = MutableLiveData()
+    val questions: LiveData<List<QuestionGetResponseVO>> get() = _questions
 
     fun getQuestions() {
         viewModelScope.launch {

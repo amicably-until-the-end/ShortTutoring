@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
-import org.softwaremaestro.domain.question_get.entity.QuestionGetResultVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.SerializedWhiteBoardRoomInfo
@@ -35,6 +34,7 @@ private const val TEACHER_NAME = "김민수수학"
 private const val TEACHER_RATING = 4.8989897f
 private const val TEACHER_TEMPERATURE = 48
 private const val TEACHER_ANSWER_COST = 2500
+private const val REFRESHING_TIME_INTERVAL = 10000L
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -62,70 +62,53 @@ class TeacherHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setTexts()
+
         initWaitingSnackbar()
 
         initQuestionRecyclerView()
 
-        // TODO : api 엔드포인트 연결
-        keepGettingQuestions(1000L)
-        keepCheckingQuestionAfterSelect(1000L)
+        initReviewRecyclerView()
+
+        keepGettingQuestions(REFRESHING_TIME_INTERVAL)
+        keepCheckingQuestionAfterSelect(REFRESHING_TIME_INTERVAL)
 
         observe()
-
-        // mockup
-        setItemToQuestionAdapter()
-
-        binding.tvNumOfQuestions.text =
-            if (questionAdapter.itemCount > 0) "${questionAdapter.itemCount}명의 학생이 선생님을 기다리고 있어요"
-            else "아직 질문이 올라오지 않았어요"
-
-        binding.tvNoti.text = "${TEACHER_NAME} 선생님의 활동이 학생들에게 도움이 되고 있어요!"
-
-        binding.tvRatingAndTemperature.text =
-            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
-
-        binding.tvExampleLikes.text = "조미연 학생이 김민수 선생님을 찜했어요"
-        binding.tvExampleReview.text = "이미주 학생이 리뷰를 작성했어요"
-
-        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
-
-        initReviewRecyclerView()
 
         // mockup
         setItemToReviewAdapter()
     }
 
-    private fun setItemToReviewAdapter() {
-        reviewAdapter.setItem(
-            listOf(
-                ReviewVO(
-                    "김민수",
-                    "2023.7.19",
-                    "선생님 너무 잘 가르치세요",
-                    2,
-                    0,
-                    null
-                )
-            )
-        )
+    private fun setTexts() {
+
+        // 선생님 정보
+        binding.tvNoti.text = "${TEACHER_NAME} 선생님의 활동이 학생들에게 도움이 되고 있어요!"
+
+        binding.tvRatingAndTemperature.text =
+            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
+
+        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
+
+        // 알림
+        binding.tvExampleLikes.text = "조미연 학생이 김민수 선생님을 찜했어요"
+        binding.tvExampleReview.text = "이미주 학생이 리뷰를 작성했어요"
     }
 
-    private fun setItemToQuestionAdapter() {
-        questionAdapter.setItem(
-            listOf(
-                QuestionGetResultVO(
-                    "id",
-                    null,
-                    "student",
-                    null,
-                    null,
-                    "고등학교",
-                    "수1",
-                    "어려움",
-                    "문제 조건을 활용하지 못하겠어요",
-                    null
-                )
-            )
+    private fun setItemToReviewAdapter() {
+        val review = ReviewVO(
+            "김민수",
+            "2023.7.19",
+            "선생님 너무 잘 가르치세요",
+            2,
+            0,
+            null
+        )
+        reviewAdapter.setItem(
+            mutableListOf<ReviewVO>().apply {
+                (0..10).forEach {
+                    add(review)
+                }
+            }
         )
     }
 
@@ -157,7 +140,8 @@ class TeacherHomeFragment : Fragment() {
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
-            layoutManager = LinearLayoutManager(requireActivity())
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
@@ -176,7 +160,8 @@ class TeacherHomeFragment : Fragment() {
 
         binding.rvReview.apply {
             adapter = reviewAdapter
-            layoutManager = LinearLayoutManager(requireActivity())
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
@@ -187,9 +172,13 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun observeQuestions() {
-        questionsViewModel.questions.observe(viewLifecycleOwner) {
-            questionAdapter.setItem(it)
+        questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
+            questionAdapter.setItem(questions)
             questionAdapter.notifyDataSetChanged()
+
+            binding.tvNumOfQuestions.text =
+                if (questions.isNotEmpty()) "${questions.size}명의 학생이 선생님을 기다리고 있어요"
+                else "아직 질문이 올라오지 않았어요"
         }
     }
 

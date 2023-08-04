@@ -1,6 +1,5 @@
 package org.softwaremaestro.data.answer_upload
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.answer_upload.model.AnswerUploadRequestDto
@@ -13,7 +12,8 @@ import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
-class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi: AnswerUploadApi): AnswerUploadRepository {
+class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi: AnswerUploadApi) :
+    AnswerUploadRepository {
     override suspend fun uploadAnswer(answerUploadVO: AnswerUploadVO): Flow<BaseResult<AnswerUploadResultVO, String>> {
         return flow {
             val dto = AnswerUploadRequestDto(
@@ -21,12 +21,12 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
                 TeacherDto(answerUploadVO.teacherVO.teacherId)
             )
             val response = answerUploadApi.uploadAnswer(dto.id, dto.teacherDto)
-            if (response.isSuccessful && !response.body()!!.error) {
+            val body = response.body()!!
+            if (body.success) {
                 response.body()!!.data?.asDomain()?.let {
                     emit(BaseResult.Success(it))
                 }
-            }
-            else {
+            } else {
                 val errorString =
                     "error in ${this@AnswerUploadRepositoryImpl::class.java.name}\n" +
                             "message: ${response.body()?.message}"

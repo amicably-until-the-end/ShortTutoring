@@ -1,26 +1,10 @@
 package org.softwaremaestro.data.common.utils
 
 import android.util.Log
-import com.auth0.android.jwt.JWT
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.TokenManager
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.runBlocking
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.FormBody
 import okhttp3.Interceptor
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import org.json.JSONObject
 import org.softwaremaestro.data.infra.SharedPrefs
-import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 data class TokenInfo(
@@ -45,13 +29,17 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
         val response = chain.proceed(newRequest)
         Log.d(
             "retrofit",
-            "intercept response is ${response.toString()}"
+            "intercept response is ${response}"
         )
         return response
     }
 
     private fun getJWT(): String {
-        return ""
+        // return prefs.getJWT()
+        // 학생
+        // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsInVzZXJJZCI6InRlc3Qtc3R1ZGVudC1pZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjkxMTMyODk3LCJleHAiOjE3MjI2OTA0OTd9.VwHlj3s8ZbruX4dQpPrvnTV93_LRVt_7YGMGP7emNuM"
+        // 선생님
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsInVzZXJJZCI6InRlc3QtdGVhY2hlci1pZCIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNjkxMTMyOTg3LCJleHAiOjE3MjI2OTA1ODd9.G1eeoixa12BW62OxRVZlgpSrWLzYVNgHPayyzJLJnaY"
     }
 }
 
