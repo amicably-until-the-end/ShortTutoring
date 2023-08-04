@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 
 data class QuestionUploadResultDto(
-    @SerializedName("requestId") var questionId: String,
+    @SerializedName("id") var questionId: String,
 )

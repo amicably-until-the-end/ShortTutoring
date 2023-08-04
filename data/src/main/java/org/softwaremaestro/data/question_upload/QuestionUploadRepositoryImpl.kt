@@ -30,8 +30,7 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
                 questionUploadVO.schoolSubject,
                 questionUploadVO.difficulty
             )
-            val response = questionUploadApi.uploadQuestion(questionUploadVO.studentId, dto)
-            Log.d("mymymy", "${response.body()} is res in imple")
+            val response = questionUploadApi.uploadQuestion(dto)
             if (response.isSuccessful) {
                 val body = response.body()
                 val resultVO = QuestionUploadResultVO(body?.data?.questionId ?: "")
@@ -73,13 +72,11 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
         return flow {
             val response =
                 questionUploadApi.pickTeacher(
+                    VO.questionId,
                     PickTeacherReqDto(
-                        VO.studentId,
-                        VO.teacherId,
-                        VO.questionId
+                        VO.teacherId
                     )
                 )
-            Log.d("mymymy", "pickTeacher ${response} is res in imple")
 
             if (response.isSuccessful) {
                 val tutoringInfo = response.body()?.data
@@ -91,7 +88,6 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
                     whiteBoardAppId = tutoringInfo?.whiteBoardAppId ?: EMPTY_STRING
                 )
 
-                Log.d("mymymy", "tutoring Id in imple ${teacherPickResVO}")
                 emit(BaseResult.Success(teacherPickResVO))
             } else {
                 emit(BaseResult.Error("error"))

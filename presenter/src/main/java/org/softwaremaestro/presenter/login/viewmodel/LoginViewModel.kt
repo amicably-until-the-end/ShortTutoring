@@ -30,8 +30,8 @@ class LoginViewModel @Inject constructor(
     private val _savedToken: MutableLiveData<String> = MutableLiveData()
     val savedToken: LiveData<String> get() = _savedToken
 
-    private val _userInfo: MutableLiveData<UserVO> = MutableLiveData()
-    val userInfo: LiveData<UserVO> get() = _userInfo
+    private val _userRole: MutableLiveData<String> = MutableLiveData()
+    val userRole: LiveData<String> get() = _userRole
 
     private val _errorMsg: MutableLiveData<String> = MutableLiveData()
     val errorMsg: LiveData<String> get() = _errorMsg
@@ -112,7 +112,7 @@ class LoginViewModel @Inject constructor(
                         is BaseResult.Success -> {
                             //TODO: 로그인 성공. role 에 따라서 선생님 학생 분기
                             Log.d("login", "login success")
-                            _userInfo.postValue(result.data)
+                            _userRole.postValue(result.data)
                         }
 
                         else -> {
