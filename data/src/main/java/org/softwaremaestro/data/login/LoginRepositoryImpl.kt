@@ -7,6 +7,7 @@ import org.softwaremaestro.data.infra.SharedPrefs
 import org.softwaremaestro.data.common.module.SavedTokenModule
 import org.softwaremaestro.data.common.utils.SavedToken
 import org.softwaremaestro.data.login.model.LoginReqDto
+import org.softwaremaestro.data.login.model.UserInfoResDto
 import org.softwaremaestro.data.login.remote.LoginApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.LoginRepository
@@ -38,7 +39,7 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun login(): Flow<BaseResult<UserVO, String>> {
+    override suspend fun login(): Flow<BaseResult<String, String>> {
         return flow {
 
             val result =
@@ -48,11 +49,14 @@ class LoginRepositoryImpl @Inject constructor(
                         savedToken.getTokenInfo().token!!
                     )
                 )
-            Log.d("login", result.toString())
             if (result.isSuccessful) {
                 val loginData = result.body()?.data!!
                 prefs.saveJWT(loginData.JWT)
-                emit(BaseResult.Success(UserVO("test", "test", "test")))
+                emit(
+                    BaseResult.Success(
+                        loginData.role
+                    )
+                )
             } else {
                 emit(BaseResult.Error("Fail to login"))
             }
@@ -61,6 +65,28 @@ class LoginRepositoryImpl @Inject constructor(
 
     override fun saveKakaoJWT(token: String) {
         //
+    }
+
+    override fun getUserInfo(): Flow<BaseResult<UserVO, String>> {
+        return flow {
+            val result = loginApi.getUserInfo()
+            if (result.isSuccessful) {
+                val userInfo = result.body()?.data!!
+                emit(
+                    BaseResult.Success(
+                        UserVO(
+                            userInfo.role,
+                            userInfo.id,
+                            userInfo.bio,
+                            userInfo.name,
+                            userInfo.profileImage
+                        )
+                    )
+                )
+            } else {
+                emit(BaseResult.Error("Fail to get user info"))
+            }
+        }
     }
 
 

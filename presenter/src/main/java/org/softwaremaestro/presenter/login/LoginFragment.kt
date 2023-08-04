@@ -73,7 +73,7 @@ class LoginFragment @Inject constructor() :
     private fun setKakaoButton() {
         binding.btnLoginByKakao.setOnClickListener {
             viewModel.loginWithKakao(requireContext())
-            
+
         }
     }
 
@@ -87,15 +87,20 @@ class LoginFragment @Inject constructor() :
     }
 
 
-    private fun observeUserInfo() {
-        viewModel.userInfo.observe(viewLifecycleOwner) {
-            if (viewModel.userInfo != null) {
-                Log.d("mymymy", "get user info in frag ${viewModel.userInfo.value.toString()}")
-                if (viewModel.userInfo.value?.role == "student") {
-                    val intent = Intent(activity, StudentHomeActivity::class.java)
-                    startActivity(intent)
-                } else {
+    private fun observeLoginResult() {
+        viewModel.userRole.observe(viewLifecycleOwner) {
+            when (it) {
+                "teacher" -> {
                     val intent = Intent(activity, TeacherHomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent)
+                }
+
+                "student" -> {
+                    val intent = Intent(activity, StudentHomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent)
                 }
             }
@@ -112,7 +117,7 @@ class LoginFragment @Inject constructor() :
     }
 
     private fun setObserver() {
-        observeUserInfo()
+        observeLoginResult()
         observeKakaoLogin()
     }
 }

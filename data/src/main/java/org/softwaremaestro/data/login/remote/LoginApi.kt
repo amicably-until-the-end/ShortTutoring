@@ -16,4 +16,8 @@ interface LoginApi {
         @Body loginReqDto: LoginReqDto
     ): Response<WrappedResponse<LoginResDto>>
 
+    @GET("/user/profile")
+    suspend fun getUserInfo(
+    ): Response<WrappedResponse<UserInfoResDto>>
+
 }

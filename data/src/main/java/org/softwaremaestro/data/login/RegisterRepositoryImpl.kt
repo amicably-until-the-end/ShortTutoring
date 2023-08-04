@@ -29,8 +29,12 @@ class RegisterRepositoryImpl @Inject constructor(
                     savedToken.getTokenInfo().token!!,
                 )
             )
-            if (response.isSuccessful && !response.body()!!.error) {
-                emit(BaseResult.Success(response.body()!!.message))
+            if (response.isSuccessful && response.body()?.error == false) {
+                emit(
+                    BaseResult.Success(
+                        "success"
+                    )
+                )
             } else {
                 val errorString =
                     "error in ${this@RegisterRepositoryImpl::class.java.name}\n" +
@@ -53,7 +57,7 @@ class RegisterRepositoryImpl @Inject constructor(
             if (!response.isSuccessful || response.body()?.error == true) {
                 emit(BaseResult.Error("error"))
             } else {
-                emit(BaseResult.Success(response.body()!!.message))
+                emit(BaseResult.Success("success"))
             }
 
         }

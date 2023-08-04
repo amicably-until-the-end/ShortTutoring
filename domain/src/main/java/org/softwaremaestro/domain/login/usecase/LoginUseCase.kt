@@ -7,5 +7,5 @@ import org.softwaremaestro.domain.login.entity.UserVO
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(private val repository: LoginRepository) {
-    suspend fun execute(): Flow<BaseResult<UserVO, String>> = repository.login()
+    suspend fun execute(): Flow<BaseResult<String, String>> = repository.login()
 }
