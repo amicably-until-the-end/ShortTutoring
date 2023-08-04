@@ -23,11 +23,11 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun autoLogin(): Flow<BaseResult<String, String>> {
         return flow {
-            val savedToken: String = prefs.getToken()
+            val savedToken: String = prefs.getJWT()
             //token 만료되었으면 리프래시 하는 로직 추가.
             if (savedToken == "") {
                 emit(BaseResult.Error("No saved token"))
-                prefs.saveToken("userToken")
+                prefs.getJWT()
             } else {
                 // 토큰 유효한지 체크
                 // 유효하면 return
@@ -43,14 +43,16 @@ class LoginRepositoryImpl @Inject constructor(
 
             val result =
                 loginApi.login(
-                    savedToken.getTokenInfo().vendor!!,
-                    "Bearer ${savedToken.getTokenInfo().token!!}",
+                    LoginReqDto(
+                        savedToken.getTokenInfo().vendor!!,
+                        savedToken.getTokenInfo().token!!
+                    )
                 )
             Log.d("login", result.toString())
             if (result.isSuccessful) {
-                val userDto = result.body()?.data!!
-                //TODO: JWT 저장
-                emit(BaseResult.Success(UserVO(userDto.role, null, userDto.name)))
+                val loginData = result.body()?.data!!
+                prefs.saveJWT(loginData.JWT)
+                emit(BaseResult.Success(UserVO("test", "test", "test")))
             } else {
                 emit(BaseResult.Error("Fail to login"))
             }
@@ -58,7 +60,7 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override fun saveKakaoJWT(token: String) {
-        prefs.saveToken(token)
+        //
     }
 
 

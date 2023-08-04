@@ -7,18 +7,18 @@ import android.content.SharedPreferences
 class SharedPrefs(private val context: Context) {
     companion object {
         private const val PREF = "DefaultPref"
-        private const val PREF_TOKEN = "user_token"
+        private const val PREF_TOKEN = "jwt"
     }
 
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
 
 
-    fun saveToken(token: String) {
+    fun saveJWT(token: String) {
         put(PREF_TOKEN, token)
     }
 
-    fun getToken(): String {
+    fun getJWT(): String {
         return get(PREF_TOKEN, String::class.java)
     }
 
@@ -46,7 +46,7 @@ class SharedPrefs(private val context: Context) {
         editor.apply()
     }
 
-    fun clearToken() {
+    fun clearJWT() {
         sharedPref.edit().run {
             remove(PREF_TOKEN)
         }.apply()
