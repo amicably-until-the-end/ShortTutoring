@@ -43,6 +43,12 @@ class LoginViewModel @Inject constructor(
     /**
      * 카카오 로그인
      */
+
+    fun clearUserRole() {
+        _userRole.postValue("")
+    }
+
+
     fun loginWithKakao(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
@@ -110,20 +116,18 @@ class LoginViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            //TODO: 로그인 성공. role 에 따라서 선생님 학생 분기
-                            Log.d("login", "login success")
+                            //TODO: enum으로 바꾸기
                             _userRole.postValue(result.data)
                         }
 
                         else -> {
-                            Log.d("login", "${result}")
-                            //TODO: 회원 정보 없으면 회원 가입으로 이동.
-                            _errorMsg.postValue("로그인 실패")
+                            _userRole.postValue("not registered")
                         }
                     }
 
                 }
         }
     }
+
 
 }

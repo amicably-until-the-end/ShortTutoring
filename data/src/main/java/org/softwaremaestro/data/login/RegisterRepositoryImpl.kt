@@ -21,16 +21,17 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun registerStudent(studentRegisterVO: StudentRegisterVO): Flow<BaseResult<String, String>> {
 
         return flow {
+            val token = savedToken.getTokenInfo()
             val response = registerApi.registerStudent(
                 StudentRegisterReqDto(
                     "testBio",
                     "testName",
                     "student",
-                    savedToken.getTokenInfo().token!!,
+                    token.token!!,
+                    token.vendor!!,
                 )
             )
-            val body = response.body()!!
-            if (body.success == true) {
+            if (response.isSuccessful && response.body()?.success == true) {
                 emit(
                     BaseResult.Success(
                         "success"
@@ -47,12 +48,14 @@ class RegisterRepositoryImpl @Inject constructor(
 
     override suspend fun registerTeacher(teacherRegisterVO: TeacherRegisterVO): Flow<BaseResult<String, String>> {
         return flow {
-            val response = registerApi.registerTeacher(
-                TeacherRegisterReqDto(
-                    teacherRegisterVO.univ,
-                    teacherRegisterVO.colledge,
-                    teacherRegisterVO.major,
-                    teacherRegisterVO.admissonYear
+            val token = savedToken.getTokenInfo()
+            val response = registerApi.registerStudent(
+                StudentRegisterReqDto(
+                    "testBio",
+                    "testName",
+                    "teacher",
+                    token.token!!,
+                    token.vendor!!,
                 )
             )
             val body = response.body()!!

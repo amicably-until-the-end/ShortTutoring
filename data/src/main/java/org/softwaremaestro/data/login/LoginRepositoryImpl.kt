@@ -49,7 +49,7 @@ class LoginRepositoryImpl @Inject constructor(
                         savedToken.getTokenInfo().token!!
                     )
                 )
-            if (result.isSuccessful) {
+            if (result.isSuccessful && result.body()?.success == true) {
                 val loginData = result.body()?.data!!
                 prefs.saveJWT(loginData.JWT)
                 emit(

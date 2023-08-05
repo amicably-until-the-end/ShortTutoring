@@ -6,5 +6,6 @@ data class StudentRegisterReqDto(
     @SerializedName("bio") val bio: String?,
     @SerializedName("name") val name: String?,
     @SerializedName("role") val role: String?,
-    @SerializedName("authorizationCode") val authCode: String,
+    @SerializedName("accessToken") val accessToken: String,
+    @SerializedName("vendor") val vendor: String
 )

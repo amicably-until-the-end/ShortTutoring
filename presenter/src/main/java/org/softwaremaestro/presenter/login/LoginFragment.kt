@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -46,7 +47,7 @@ class LoginFragment @Inject constructor() :
 
         setKakaoButton()
         setGoogleButton()
-        
+
         return binding.root
     }
 
@@ -88,6 +89,7 @@ class LoginFragment @Inject constructor() :
 
     private fun observeLoginResult() {
         viewModel.userRole.observe(viewLifecycleOwner) {
+
             when (it) {
                 "teacher" -> {
                     val intent = Intent(activity, TeacherHomeActivity::class.java)
@@ -102,7 +104,22 @@ class LoginFragment @Inject constructor() :
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent)
                 }
+
+                "not registered" -> {
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_loginFragment_to_registerRoleFragment)
+                }
+
+                else -> return@observe
+
             }
+            // 로그인 성공 시, 유저의 역할에 따라서 화면 분기
+            //다른 프래그먼트로 갔다가 되돌아올경우 observe가 다시 호출되는데
+            //userRole이 null이 아니면 다시 이동되는 문제가 있음
+            //따라서 네비게이션 될때 userRole이 null로 바꿔줌
+            
+            viewModel.clearUserRole()
+
         }
     }
 
