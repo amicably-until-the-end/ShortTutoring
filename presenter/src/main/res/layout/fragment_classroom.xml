@@ -85,6 +85,26 @@
             app:layout_constraintLeft_toRightOf="@id/btn_color_pen" />
 
         <Button
+            android:id="@+id/btn_redo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="redo"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toRightOf="@id/btn_undo" />
+
+        <Button
+            android:id="@+id/btn_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="undo"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toRightOf="@id/btn_get_image" />
+
+        <Button
             android:id="@+id/btn_get_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
