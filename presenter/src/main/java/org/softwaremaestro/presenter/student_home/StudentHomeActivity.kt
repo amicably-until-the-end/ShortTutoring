@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.student_home
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
@@ -47,6 +48,11 @@ class StudentHomeActivity : AppCompatActivity() {
         // 뒤로가기 버튼
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.student_home_menu, menu)
+        return true
     }
 
 }
