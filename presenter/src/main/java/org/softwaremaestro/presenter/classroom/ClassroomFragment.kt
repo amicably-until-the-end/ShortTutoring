@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.classroom
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -98,11 +99,17 @@ class ClassroomFragment : Fragment() {
                 PERMISSION_REQ_ID
             );
         }
-
+        startTimer()
         setAgora()
         //setupVoiceSDKEngine()
 
         return binding.root
+    }
+
+
+    private fun startTimer() {
+        binding.chElapsedTime.base = SystemClock.elapsedRealtime()
+        binding.chElapsedTime.start()
     }
 
 

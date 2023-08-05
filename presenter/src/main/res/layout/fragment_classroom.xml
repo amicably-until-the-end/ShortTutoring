@@ -40,11 +40,11 @@
             android:text="종료"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <TextView
+        <Chronometer
+            android:id="@+id/ch_elapsed_time"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="00:00"
             app:layout_constraintRight_toLeftOf="@id/btn_exit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
