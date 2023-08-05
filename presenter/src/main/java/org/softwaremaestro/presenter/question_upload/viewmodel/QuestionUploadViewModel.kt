@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.question_upload
+package org.softwaremaestro.presenter.question_upload.viewmodel
 
 import android.graphics.Bitmap
 import android.util.Log

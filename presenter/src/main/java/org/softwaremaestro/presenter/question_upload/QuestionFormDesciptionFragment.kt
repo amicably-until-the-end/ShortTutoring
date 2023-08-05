@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDescriptionBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
 
 private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT

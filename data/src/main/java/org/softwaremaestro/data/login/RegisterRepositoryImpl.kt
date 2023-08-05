@@ -31,7 +31,11 @@ class RegisterRepositoryImpl @Inject constructor(
             )
             val body = response.body()!!
             if (body.success) {
-                emit(BaseResult.Success(response.body()!!.message))
+                emit(
+                    BaseResult.Success(
+                        "success"
+                    )
+                )
             } else {
                 val errorString =
                     "error in ${this@RegisterRepositoryImpl::class.java.name}\n" +
@@ -53,9 +57,10 @@ class RegisterRepositoryImpl @Inject constructor(
             )
             val body = response.body()!!
             if (body.success) {
-                emit(BaseResult.Success(response.body()!!.message))
+                emit(BaseResult.Success("success"))
             } else {
                 emit(BaseResult.Error("error"))
+
             }
 
         }

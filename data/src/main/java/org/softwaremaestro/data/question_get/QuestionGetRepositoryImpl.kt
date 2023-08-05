@@ -17,7 +17,6 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
         return flow {
             val response = questionGetApi.getQuestions()
             val body = response.body()!!
-            Log.d("retrofit", body.success.toString())
             if (body.success) {
                 body.data
                     ?.map { it.asDomain() }

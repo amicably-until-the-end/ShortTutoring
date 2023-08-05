@@ -1,10 +1,7 @@
 package org.softwaremaestro.presenter.question_upload
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionCameraBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

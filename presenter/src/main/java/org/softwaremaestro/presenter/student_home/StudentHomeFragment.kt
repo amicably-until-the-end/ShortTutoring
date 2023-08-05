@@ -7,10 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.dpToPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
@@ -132,8 +136,16 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
-            val intent = Intent(activity, QuestionUploadActivity::class.java)
-            startActivity(intent)
+            val dialogView = layoutInflater.inflate(R.layout.dialog_question_type, null)
+            dialogView.findViewById<Button>(R.id.btn_new_question).setOnClickListener {
+                startActivity(Intent(requireContext(), QuestionUploadActivity::class.java))
+            }
+            dialogView.findViewById<Button>(R.id.btn_re_question).setOnClickListener {
+                Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
+            }
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+            bottomSheetDialog.setContentView(dialogView)
+            bottomSheetDialog.show()
         }
     }
 

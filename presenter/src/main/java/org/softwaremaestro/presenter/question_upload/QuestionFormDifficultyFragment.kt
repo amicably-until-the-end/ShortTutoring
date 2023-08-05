@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDifficultyBinding
+import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 
 class QuestionFormDifficultyFragment : Fragment() {
 

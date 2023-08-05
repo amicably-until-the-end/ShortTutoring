@@ -7,6 +7,7 @@ import org.softwaremaestro.data.infra.SharedPrefs
 import org.softwaremaestro.data.common.module.SavedTokenModule
 import org.softwaremaestro.data.common.utils.SavedToken
 import org.softwaremaestro.data.login.model.LoginReqDto
+import org.softwaremaestro.data.login.model.UserInfoResDto
 import org.softwaremaestro.data.login.remote.LoginApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.LoginRepository
@@ -23,11 +24,11 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun autoLogin(): Flow<BaseResult<String, String>> {
         return flow {
-            val savedToken: String = prefs.getToken()
+            val savedToken: String = prefs.getJWT()
             //token 만료되었으면 리프래시 하는 로직 추가.
             if (savedToken == "") {
                 emit(BaseResult.Error("No saved token"))
-                prefs.saveToken("userToken")
+                prefs.getJWT()
             } else {
                 // 토큰 유효한지 체크
                 // 유효하면 return
@@ -38,19 +39,24 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun login(): Flow<BaseResult<UserVO, String>> {
+    override suspend fun login(): Flow<BaseResult<String, String>> {
         return flow {
 
             val result =
                 loginApi.login(
-                    savedToken.getTokenInfo().vendor!!,
-                    "Bearer ${savedToken.getTokenInfo().token!!}",
+                    LoginReqDto(
+                        savedToken.getTokenInfo().vendor!!,
+                        savedToken.getTokenInfo().token!!
+                    )
                 )
-            Log.d("login", result.toString())
             if (result.isSuccessful) {
-                val userDto = result.body()?.data!!
-                //TODO: JWT 저장
-                emit(BaseResult.Success(UserVO(userDto.role, null, userDto.name)))
+                val loginData = result.body()?.data!!
+                prefs.saveJWT(loginData.JWT)
+                emit(
+                    BaseResult.Success(
+                        loginData.role
+                    )
+                )
             } else {
                 emit(BaseResult.Error("Fail to login"))
             }
@@ -58,7 +64,29 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override fun saveKakaoJWT(token: String) {
-        prefs.saveToken(token)
+        //
+    }
+
+    override fun getUserInfo(): Flow<BaseResult<UserVO, String>> {
+        return flow {
+            val result = loginApi.getUserInfo()
+            if (result.isSuccessful) {
+                val userInfo = result.body()?.data!!
+                emit(
+                    BaseResult.Success(
+                        UserVO(
+                            userInfo.role,
+                            userInfo.id,
+                            userInfo.bio,
+                            userInfo.name,
+                            userInfo.profileImage
+                        )
+                    )
+                )
+            } else {
+                emit(BaseResult.Error("Fail to get user info"))
+            }
+        }
     }
 
 
