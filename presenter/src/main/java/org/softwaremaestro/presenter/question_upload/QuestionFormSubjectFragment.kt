@@ -21,6 +21,7 @@ class QuestionFormSubjectFragment : Fragment() {
     ): View? {
 
         binding = FragmentQuestionFormSubjectBinding.inflate(layoutInflater)
+        setToolBar()
         return binding.root
     }
 
@@ -55,6 +56,12 @@ class QuestionFormSubjectFragment : Fragment() {
                     findNavController().popBackStack(R.id.questionFormFragment, false)
                 }
             }
+        }
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

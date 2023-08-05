@@ -6,17 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".login.RegisterTeacherInfoFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btn_toolbar_back"
+            style="@style/ToolBarBackButton" />
+
+        <TextView
+            style="@style/ToolBarTitle"
+            android:text="회원가입" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/tv_univ"
         style="@style/h6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-        android:layout_marginTop="@dimen/margin_top_default"
         android:text="재학 중인 대학교를 입력해주세요"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_univ"

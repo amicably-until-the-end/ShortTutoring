@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".question_upload.QuestionUploadActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/app_name"
-        app:titleTextColor="@android:color/black" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"

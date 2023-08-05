@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterStudentInfoBinding
@@ -44,6 +45,9 @@ class RegisterStudentInfoFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             viewModel.registerStudent()
+        }
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         setRegisterResultObserver()

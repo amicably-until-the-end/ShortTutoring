@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -44,6 +45,7 @@ class StudentHomeFragment : Fragment() {
         setLectureRecyclerView()
         setMyTeacherRecyclerView()
         setBestTeacherRecyclerView()
+        setToolBar()
 
 
         return binding.root
@@ -137,13 +139,16 @@ class StudentHomeFragment : Fragment() {
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.dialog_question_type, null)
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+
             dialogView.findViewById<Button>(R.id.btn_new_question).setOnClickListener {
                 startActivity(Intent(requireContext(), QuestionUploadActivity::class.java))
+                bottomSheetDialog.dismiss()
             }
             dialogView.findViewById<Button>(R.id.btn_re_question).setOnClickListener {
                 Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
+                bottomSheetDialog.dismiss()
             }
-            val bottomSheetDialog = BottomSheetDialog(requireContext())
             bottomSheetDialog.setContentView(dialogView)
             bottomSheetDialog.show()
         }
@@ -169,5 +174,11 @@ class StudentHomeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_studentHomeFragment_to_notificationFragment)
+        }
     }
 }

@@ -23,6 +23,7 @@ class QuestionFormDifficultyFragment : Fragment() {
     ): View? {
 
         binding = FragmentQuestionFormDifficultyBinding.inflate(layoutInflater)
+        setToolBar()
         return binding.root
     }
 
@@ -41,6 +42,12 @@ class QuestionFormDifficultyFragment : Fragment() {
 
             viewModel._difficulty.postValue(selectedDifficulty)
             findNavController().popBackStack(R.id.questionFormFragment, false)
+        }
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".question_upload.QuestionFormDifficultyFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btn_toolbar_back"
+            style="@style/ToolBarBackButton" />
+
+        <TextView
+            style="@style/ToolBarTitle"
+            android:text="질문 올리기" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <RadioGroup
         android:id="@+id/rg_difficulty"
         android:layout_width="match_parent"

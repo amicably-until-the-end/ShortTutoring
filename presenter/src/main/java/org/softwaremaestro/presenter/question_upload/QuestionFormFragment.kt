@@ -48,6 +48,8 @@ class QuestionFormFragment : Fragment() {
 //        parseMathSubjectJson()
         setObserver()
 
+        setToolBar()
+
         // 모든 내용이 입력되었으면 제출 버튼을 활성화한다
         checkAndEnableSubjectBtn()
 
@@ -170,6 +172,12 @@ class QuestionFormFragment : Fragment() {
         }
 
 
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            activity?.finish()
+        }
     }
 
 //    private fun parseMathSubjectJson() {

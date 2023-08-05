@@ -33,6 +33,7 @@ class SearchCollegeFragment : Fragment() {
     ): View? {
 
         binding = FragmentSearchCollegeBinding.inflate(layoutInflater)
+        setToolBar()
         return binding.root
     }
 
@@ -62,5 +63,11 @@ class SearchCollegeFragment : Fragment() {
 
 
         view.setAdapter(adapter)
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

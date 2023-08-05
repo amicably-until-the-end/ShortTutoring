@@ -6,15 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".question_upload.QuestionFormSubjectFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btn_toolbar_back"
+            style="@style/ToolBarBackButton" />
+
+        <TextView
+            style="@style/ToolBarTitle"
+            android:text="질문 올리기" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <RadioGroup
         android:id="@+id/rg_subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-        android:layout_marginTop="@dimen/margin_top_default"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar">
 
         <RadioButton
             android:id="@+id/rb_high_school_math_1"
@@ -54,7 +67,6 @@
         <RadioButton
             android:id="@+id/rb_math_2"
             style="@style/button"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:background="@drawable/rb_selector_corner_radius"

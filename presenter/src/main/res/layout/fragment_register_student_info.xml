@@ -7,17 +7,30 @@
     android:orientation="vertical"
     tools:context=".login.RegisterStudentInfoFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btn_toolbar_back"
+            style="@style/ToolBarBackButton" />
+
+        <TextView
+            style="@style/ToolBarTitle"
+            android:text="질문 올리기" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/tv_school_level"
         style="@style/h6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-        android:layout_marginTop="@dimen/margin_top_default"
         android:text="재학 중인 학교를 선택해주세요"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
     <RadioGroup
         android:id="@+id/rg_school_level"
