@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.teacher_home
 
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +10,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
@@ -21,17 +19,22 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
-import org.softwaremaestro.presenter.Util.dpToPx
+import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
+import java.text.DecimalFormat
 
-private const val GRIDLAYOUT_SPAN_COUNT = 2
-private const val GRIDLAYOUT_SPICING = 8
+// TODO: 추후 수정
 private const val TEACHER_ID = "test-teacher-id"
+private const val TEACHER_NAME = "김민수수학"
+private const val TEACHER_RATING = 4.8989897f
+private const val TEACHER_TEMPERATURE = 48
+private const val TEACHER_ANSWER_COST = 2500
+private const val REFRESHING_TIME_INTERVAL = 10000L
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -40,15 +43,12 @@ class TeacherHomeFragment : Fragment() {
     private val questionsViewModel: QuestionsViewModel by viewModels()
     private val answerViewModel: AnswerViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
+
     private lateinit var questionAdapter: QuestionAdapter
-
-    //c93f3772-1319-4db7-a88d-4667406a525b
-
-
+    private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var waitingSnackbar: Snackbar
 
-    //    private lateinit var waitingSnackBar: WaitingSnackbar
-    private var selectedRequestId: String? = null
+    private var selectedQuestionId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,14 +62,54 @@ class TeacherHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setTexts()
+
         initWaitingSnackbar()
 
         initQuestionRecyclerView()
 
-        keepGettingQuestions(1000L)
-        keepCheckingQuestionAfterSelect(1000L)
+        initReviewRecyclerView()
+
+        keepGettingQuestions(REFRESHING_TIME_INTERVAL)
+        keepCheckingQuestionAfterSelect(REFRESHING_TIME_INTERVAL)
 
         observe()
+
+        // mockup
+        setItemToReviewAdapter()
+    }
+
+    private fun setTexts() {
+
+        // 선생님 정보
+        binding.tvNoti.text = "${TEACHER_NAME} 선생님의 활동이 학생들에게 도움이 되고 있어요!"
+
+        binding.tvRatingAndTemperature.text =
+            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
+
+        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
+
+        // 알림
+        binding.tvExampleLikes.text = "조미연 학생이 김민수 선생님을 찜했어요"
+        binding.tvExampleReview.text = "이미주 학생이 리뷰를 작성했어요"
+    }
+
+    private fun setItemToReviewAdapter() {
+        val review = ReviewVO(
+            "김민수",
+            "2023.7.19",
+            "선생님 너무 잘 가르치세요",
+            2,
+            0,
+            null
+        )
+        reviewAdapter.setItem(
+            mutableListOf<ReviewVO>().apply {
+                (0..10).forEach {
+                    add(review)
+                }
+            }
+        )
     }
 
     private fun initWaitingSnackbar() {
@@ -92,39 +132,37 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        questionAdapter = QuestionAdapter { requestId: String ->
-            selectedRequestId = requestId
+        questionAdapter = QuestionAdapter { questionId: String ->
+            selectedQuestionId = questionId
             waitingSnackbar.show()
-            uploadAnswer(requestId)
+            offerTeacher(questionId)
         }
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
-            layoutManager = GridLayoutManager(requireActivity(), GRIDLAYOUT_SPAN_COUNT)
-            setSpacing(GRIDLAYOUT_SPICING)
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
-    private fun RecyclerView.setSpacing(dp: Int) {
-        this.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                position: Int,
-                parent: RecyclerView
-            ) {
-                super.getItemOffsets(outRect, position, parent)
-                when (position % GRIDLAYOUT_SPAN_COUNT) {
-                    // 그리드 레이아웃의 맨 왼쪽 뷰
-                    0 -> outRect.right = dpToPx(dp, requireContext())
-                    // 그리드 레이아웃의 맨 오른쪽 뷰
-                    GRIDLAYOUT_SPAN_COUNT - 1 -> outRect.left = dpToPx(dp, requireContext())
-                    else -> {
-                        outRect.left = dpToPx(dp, requireContext())
-                        outRect.right = dpToPx(dp, requireContext())
-                    }
-                }
-            }
-        })
+    private fun offerTeacher(requestId: String) {
+        answerViewModel.uploadAnswer(
+            AnswerUploadVO(
+                requestId,
+                TeacherVO(TEACHER_ID)
+            )
+        )
+    }
+
+    private fun initReviewRecyclerView() {
+
+        reviewAdapter = ReviewAdapter()
+
+        binding.rvReview.apply {
+            adapter = reviewAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     private fun observe() {
@@ -134,9 +172,12 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun observeQuestions() {
-        questionsViewModel.questions.observe(viewLifecycleOwner) {
-            questionAdapter.setItem(it)
-            questionAdapter.notifyDataSetChanged()
+        questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
+            questionAdapter.submitList(questions)
+
+            binding.tvNumOfQuestions.text =
+                if (questions.isNotEmpty()) "${questions.size}명의 학생이 선생님을 기다리고 있어요"
+                else "아직 질문이 올라오지 않았어요"
         }
     }
 
@@ -188,23 +229,14 @@ class TeacherHomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 // 학생의 선택을 기다리는 스낵바가 떠있을때
-                if (waitingSnackbar.isShown && selectedRequestId != null) {
+                if (waitingSnackbar.isShown && selectedQuestionId != null) {
                     checkViewModel.checkQuestion(
-                        selectedRequestId!!,
+                        selectedQuestionId!!,
                         QuestionCheckRequestVO(TEACHER_ID)
                     )
                 }
                 delay(timeInterval)
             }
         }
-    }
-
-    private fun uploadAnswer(requestId: String) {
-        answerViewModel.uploadAnswer(
-            AnswerUploadVO(
-                requestId,
-                TeacherVO(TEACHER_ID)
-            )
-        )
     }
 }

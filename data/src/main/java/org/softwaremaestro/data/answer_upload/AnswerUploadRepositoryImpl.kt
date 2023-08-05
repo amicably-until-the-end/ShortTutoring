@@ -1,6 +1,5 @@
 package org.softwaremaestro.data.answer_upload
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.answer_upload.model.AnswerUploadRequestDto
@@ -22,7 +21,8 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
                 TeacherDto(answerUploadVO.teacherVO.teacherId)
             )
             val response = answerUploadApi.uploadAnswer(dto.id, dto.teacherDto)
-            if (response.isSuccessful && response.body()?.error != true) {
+            val body = response.body()!!
+            if (body.success) {
                 response.body()!!.data?.asDomain()?.let {
                     emit(BaseResult.Success(it))
                 }

@@ -7,6 +7,5 @@ data class ProblemDto(
     @SerializedName("difficulty") val difficulty: String?,
     @SerializedName("description") val description: String?,
     @SerializedName("schoolSubject") val schoolSubject: String?,
-    @SerializedName("image") val image: String?,
-    @SerializedName("schoolChapter") val schoolChapter: String?
+    @SerializedName("image") val image: String?
 )
