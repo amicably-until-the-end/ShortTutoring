@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".teacher_home.TeacherHomeActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/app_name"
-        app:titleTextColor="@android:color/black" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"

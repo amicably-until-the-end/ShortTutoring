@@ -22,7 +22,7 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
             )
             val response = answerUploadApi.uploadAnswer(dto.id, dto.teacherDto)
             val body = response.body()!!
-            if (body.success) {
+            if (body.success == true) {
                 response.body()!!.data?.asDomain()?.let {
                     emit(BaseResult.Success(it))
                 }

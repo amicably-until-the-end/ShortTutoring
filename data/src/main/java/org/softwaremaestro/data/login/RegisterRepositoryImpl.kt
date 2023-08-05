@@ -30,7 +30,7 @@ class RegisterRepositoryImpl @Inject constructor(
                 )
             )
             val body = response.body()!!
-            if (body.success) {
+            if (body.success == true) {
                 emit(
                     BaseResult.Success(
                         "success"
@@ -56,7 +56,7 @@ class RegisterRepositoryImpl @Inject constructor(
                 )
             )
             val body = response.body()!!
-            if (body.success) {
+            if (body.success == true) {
                 emit(BaseResult.Success("success"))
             } else {
                 emit(BaseResult.Error("error"))

@@ -46,8 +46,7 @@ class LoginFragment @Inject constructor() :
 
         setKakaoButton()
         setGoogleButton()
-
-        (activity as LoginActivity).hideAppBar()
+        
         return binding.root
     }
 

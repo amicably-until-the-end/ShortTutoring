@@ -137,13 +137,16 @@ class StudentHomeFragment : Fragment() {
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.dialog_question_type, null)
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+
             dialogView.findViewById<Button>(R.id.btn_new_question).setOnClickListener {
                 startActivity(Intent(requireContext(), QuestionUploadActivity::class.java))
+                bottomSheetDialog.dismiss()
             }
             dialogView.findViewById<Button>(R.id.btn_re_question).setOnClickListener {
                 Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
+                bottomSheetDialog.dismiss()
             }
-            val bottomSheetDialog = BottomSheetDialog(requireContext())
             bottomSheetDialog.setContentView(dialogView)
             bottomSheetDialog.show()
         }

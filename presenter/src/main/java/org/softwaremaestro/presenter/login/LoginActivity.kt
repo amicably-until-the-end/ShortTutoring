@@ -19,42 +19,11 @@ class LoginActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setAppBar()
-        hideAppBar()
-    }
 
-    private fun setAppBar() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
-        navController = navHostFragment.navController
-        binding.toolbar.setupWithNavController(navHostFragment.navController)
-        setSupportActionBar(binding.toolbar!!)
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-
-    }
-
-    fun hideAppBar() {
-        supportActionBar?.hide()
-    }
-
-    fun showAppBar() {
-        supportActionBar?.show()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                return navController.popBackStack() || super.onOptionsItemSelected(item)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 }
