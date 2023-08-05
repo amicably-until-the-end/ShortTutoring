@@ -29,6 +29,7 @@ class SearchYearOfAdmissionFragment : Fragment() {
     ): View? {
 
         binding = FragmentSearchYearOfAdmissionBinding.inflate(layoutInflater)
+        setToolBar()
         return binding.root
     }
 
@@ -49,6 +50,12 @@ class SearchYearOfAdmissionFragment : Fragment() {
                 findNavController().popBackStack()
             }
             true
+        }
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

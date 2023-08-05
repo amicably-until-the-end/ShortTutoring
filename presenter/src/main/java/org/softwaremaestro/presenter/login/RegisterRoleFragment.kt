@@ -46,6 +46,9 @@ class RegisterRoleFragment : Fragment() {
                 findNavController().navigate(dest)
             }
         }
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         return binding.root
     }

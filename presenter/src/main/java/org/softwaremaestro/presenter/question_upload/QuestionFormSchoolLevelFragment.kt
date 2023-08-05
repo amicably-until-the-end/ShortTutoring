@@ -23,7 +23,7 @@ class QuestionFormSchoolLevelFragment : Fragment() {
 
         binding = FragmentQuestionFormSchoolLevelBinding.inflate(layoutInflater)
 
-
+        setToolBar()
 
         setRadioGroup()
 
@@ -60,6 +60,12 @@ class QuestionFormSchoolLevelFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 }

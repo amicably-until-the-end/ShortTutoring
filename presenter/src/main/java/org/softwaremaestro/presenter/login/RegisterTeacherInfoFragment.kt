@@ -45,6 +45,13 @@ class RegisterTeacherInfoFragment : Fragment() {
         setFieldButtons()
         setNextButton()
         setObserver()
+        setToolBar()
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 

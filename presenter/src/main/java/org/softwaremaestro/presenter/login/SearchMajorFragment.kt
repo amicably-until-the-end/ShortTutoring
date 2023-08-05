@@ -32,6 +32,7 @@ class SearchMajorFragment : Fragment() {
     ): View? {
 
         binding = FragmentSearchMajorBinding.inflate(layoutInflater)
+        setToolBar()
         return binding.root
     }
 
@@ -59,5 +60,11 @@ class SearchMajorFragment : Fragment() {
             }
 
         view.setAdapter(adapter)
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

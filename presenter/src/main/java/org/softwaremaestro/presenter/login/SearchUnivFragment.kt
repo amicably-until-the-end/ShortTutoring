@@ -34,6 +34,7 @@ class SearchUnivFragment : Fragment() {
     ): View? {
 
         binding = FragmentSeachUnivBinding.inflate(layoutInflater)
+        setToolBar()
         return binding.root
     }
 
@@ -70,5 +71,11 @@ class SearchUnivFragment : Fragment() {
         val imm: InputMethodManager =
             requireContext().getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(view, 0)
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }
