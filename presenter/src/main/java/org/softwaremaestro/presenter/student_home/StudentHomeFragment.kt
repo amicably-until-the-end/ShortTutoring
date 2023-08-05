@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -44,6 +45,7 @@ class StudentHomeFragment : Fragment() {
         setLectureRecyclerView()
         setMyTeacherRecyclerView()
         setBestTeacherRecyclerView()
+        setToolBar()
 
 
         return binding.root
@@ -172,5 +174,11 @@ class StudentHomeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_studentHomeFragment_to_notificationFragment)
+        }
     }
 }
