@@ -26,11 +26,12 @@
     <style name="ToolBar">
         <item name="android:background">@color/white</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="android:layout_marginBottom">12dp</item>
     </style>
 
     <style name="ToolBarTitle">
