@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.classroom
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -98,7 +99,7 @@ class ClassroomFragment : Fragment() {
                 PERMISSION_REQ_ID
             );
         }
-
+        startTimer()
         setAgora()
         //setupVoiceSDKEngine()
 
@@ -106,15 +107,17 @@ class ClassroomFragment : Fragment() {
     }
 
 
+    private fun startTimer() {
+        binding.chElapsedTime.base = SystemClock.elapsedRealtime()
+        binding.chElapsedTime.start()
+    }
+
+
     fun setTutoringArgument() {
-        whiteBoardInfo = SerializedWhiteBoardRoomInfo(
-            "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
-            "3d01dda031b811ee9e6241209ace6cf9",
-            "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxMDczODA4OTgzJm5vbmNlPTE2OTEwMzc4MDg5ODMwMCZyb2xlPTAmc2lnPWJjODUxNTdmYzIyZWM4Njg0NjUzMjhlNzBkNDhiYWE1NzEwMjllZTRjMjVmNzRhYmEzN2IzY2Q4MDFjMGQ4ZmImdXVpZD0zZDAxZGRhMDMxYjgxMWVlOWU2MjQxMjA5YWNlNmNmOQ",
-            (0..100).random().toString()
-        )
-        //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
-        //voiceInfo = requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
+        whiteBoardInfo =
+            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+        voiceInfo =
+            requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
         if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
@@ -131,6 +134,8 @@ class ClassroomFragment : Fragment() {
         setSelectorButton()
         setSceneList()
         setSceneListButton()
+        setRedoButton()
+        setUndoButton()
 
     }
 
@@ -290,6 +295,18 @@ class ClassroomFragment : Fragment() {
             (binding.rvSceneList.adapter as SceneAdapter).getPreview()
         }
 
+    }
+
+    private fun setRedoButton() {
+        binding.btnRedo.setOnClickListener {
+            whiteBoardRoom?.redo()
+        }
+    }
+
+    private fun setUndoButton() {
+        binding.btnUndo.setOnClickListener {
+            whiteBoardRoom?.undo()
+        }
     }
 
 
