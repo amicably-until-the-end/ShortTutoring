@@ -11,7 +11,7 @@
         android:label="로그인"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_logoFragment_to_registerRoleFragment"
+            android:id="@+id/action_loginFragment_to_registerRoleFragment"
             app:destination="@id/registerRoleFragment" />
     </fragment>
     <fragment
@@ -37,7 +37,7 @@
         android:label="정보 입력"
         tools:layout="@layout/fragment_register_teacher_info">
         <action
-            android:id="@+id/action_registerTeacherInfoFragment_to_logoFragment"
+            android:id="@+id/action_registerTeacherInfoFragment_to_loginFragment"
             app:destination="@id/loginFrament"
             app:popUpToInclusive="true" />
         <action
