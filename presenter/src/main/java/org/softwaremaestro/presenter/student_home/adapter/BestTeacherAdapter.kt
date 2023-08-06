@@ -1,14 +1,11 @@
 package org.softwaremaestro.presenter.student_home.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.ItemBestTeacherBinding
-import org.softwaremaestro.presenter.databinding.ItemLectureBinding
-import org.softwaremaestro.presenter.databinding.ItemMyTeacherBinding
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
-import org.softwaremaestro.presenter.student_home.item.Lecture
-import org.softwaremaestro.presenter.student_home.item.MyTeacher
 
 class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
     RecyclerView.Adapter<BestTeacherAdapter.ViewHolder>() {
@@ -40,10 +37,14 @@ class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: BestTeacher) {
-            binding.tvName.text = "${item.nickname} 선생님"
-            binding.tvSchool.text = item.univ
-            binding.tvPickCount.text = "찜한 학생 ${item.pickCount}명"
 
+            with(binding) {
+                ivProfile.setImageURI(Uri.parse(item.profileUrl))
+                tvName.text = "${item.nickname} 선생님"
+                tvUniv.text = item.univ
+                tvPickCount.text = "찜한 학생 ${item.pickCount}명"
+                tvRating.text = "%.1f".format(item.rating)
+            }
         }
     }
 }
