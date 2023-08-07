@@ -30,5 +30,9 @@ class StudentHomeActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavView.setupWithNavController(navController)
+        binding.bottomNavView.setOnItemSelectedListener {
+            NavigationUI.onNavDestinationSelected(it, navController)
+            return@setOnItemSelectedListener true
+        }
     }
 }
