@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
@@ -28,8 +29,12 @@ class TeacherHomeActivity : AppCompatActivity() {
      */
     fun setUpBottomNavigationBar() {
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view_teacher) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavView.setupWithNavController(navController)
+        binding.bottomNavView.setOnItemSelectedListener {
+            NavigationUI.onNavDestinationSelected(it, navController)
+            return@setOnItemSelectedListener true
+        }
     }
 }
