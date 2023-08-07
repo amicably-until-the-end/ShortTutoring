@@ -7,10 +7,11 @@
     <fragment
         android:id="@+id/studentHomeFragment"
         android:name="org.softwaremaestro.presenter.student_home.StudentHomeFragment"
-        android:label="학생 홈" />
-    <action
-        android:id="@+id/action_studentHomeFragment_to_notificationFragment"
-        app:destination="@id/notificationFragment" />
+        android:label="학생 홈">
+        <action
+            android:id="@+id/action_studentHomeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="org.softwaremaestro.presenter.student_home.SettingFragment"
@@ -18,5 +19,9 @@
     <fragment
         android:id="@+id/notificationFragment"
         android:name="org.softwaremaestro.presenter.student_home.NotificationFragment"
-        android:label="알림" />
+        android:label="알림">
+        <action
+            android:id="@+id/action_notificationFragment_to_studentHomeFragment"
+            app:destination="@id/studentHomeFragment" />
+    </fragment>
 </navigation>

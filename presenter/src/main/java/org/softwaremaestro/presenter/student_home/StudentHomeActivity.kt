@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
@@ -36,6 +37,10 @@ class StudentHomeActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavView.setupWithNavController(navController)
+        binding.bottomNavView.setOnItemSelectedListener {
+            NavigationUI.onNavDestinationSelected(it, navController)
+            return@setOnItemSelectedListener true
+        }
     }
 
 
