@@ -22,8 +22,4 @@
         android:name="org.softwaremaestro.presenter.student_home.StudentMyPageFragment"
         android:label="fragment_student_my_page"
         tools:layout="@layout/fragment_student_my_page" />
-        <action
-            android:id="@+id/action_notificationFragment_to_studentHomeFragment"
-            app:destination="@id/studentHomeFragment" />
-    </fragment>
 </navigation>
