@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/studentHomeFragment"
+        android:id="@+id/teacherHomeFragment"
         android:icon="@drawable/ic_home_24"
         android:title="홈" />
 
     <item
-        android:id="@+id/searchingTeacherFragment"
-        android:icon="@drawable/ic_search_48"
-        android:title="선생님 찾기" />
-
-    <item
-        android:id="@+id/studentCoinFragment"
+        android:id="@+id/teacherCoinFragment"
         android:icon="@drawable/ic_database_48"
-        android:title="코인 충전하기" />
+        android:title="정산하기" />
 
     <item
-        android:id="@+id/studentMyPageFragment"
+        android:id="@+id/teacherMyPageFragment"
         android:icon="@drawable/ic_person_48"
         android:title="마이페이지" />
 </menu>

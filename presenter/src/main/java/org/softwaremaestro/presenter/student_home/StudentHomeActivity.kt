@@ -1,14 +1,9 @@
 package org.softwaremaestro.presenter.student_home
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
@@ -25,8 +20,6 @@ class StudentHomeActivity : AppCompatActivity() {
         binding = ActivityStudentHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpBottomNavigationBar()
-
-
     }
 
     /**
@@ -42,6 +35,4 @@ class StudentHomeActivity : AppCompatActivity() {
             return@setOnItemSelectedListener true
         }
     }
-
-
 }
