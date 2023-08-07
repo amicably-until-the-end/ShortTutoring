@@ -36,7 +36,7 @@ class LoginFragment @Inject constructor() :
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.tvLogo.setOnClickListener {
-            val intent = Intent(activity, StudentHomeActivity::class.java)
+            val intent = Intent(activity, ClassroomActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)

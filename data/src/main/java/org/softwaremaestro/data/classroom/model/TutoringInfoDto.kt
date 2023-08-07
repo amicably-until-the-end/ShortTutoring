@@ -14,12 +14,3 @@ data class TutoringInfoDto(
     @SerializedName("whiteBoardToken") val whiteBoardToken: String,
     @SerializedName("whiteBoardUUID") val whiteBoardUUID: String,
 )
-/*  whiteBoardAppId: {
-    type: String,
-  },
-  whiteBoardToken: {
-    type: String,
-  },
-  whiteBoardUUID: {
-    type: String,
-  },*/
