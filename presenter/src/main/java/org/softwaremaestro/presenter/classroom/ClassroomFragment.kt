@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.herewhite.sdk.CommonCallback
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomParams
 import com.herewhite.sdk.WhiteSdk
@@ -24,6 +26,7 @@ import com.herewhite.sdk.domain.MemberState
 import com.herewhite.sdk.domain.Promise
 import com.herewhite.sdk.domain.Region
 import com.herewhite.sdk.domain.SDKError
+import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -31,6 +34,7 @@ import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import okhttp3.internal.notify
+import org.json.JSONObject
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
@@ -38,6 +42,7 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.item.Lecture
 
 
+@AndroidEntryPoint
 class ClassroomFragment : Fragment() {
 
     private lateinit var binding: FragmentClassroomBinding
@@ -115,9 +120,17 @@ class ClassroomFragment : Fragment() {
 
     fun setTutoringArgument() {
         whiteBoardInfo =
-            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+            SerializedWhiteBoardRoomInfo(
+                "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
+                "014c3e102c2511eeb3a0cf7341a171af",
+                "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxNDUwMzQ5MzQ4Jm5vbmNlPTE2OTE0MTQzNDkzNDgwMCZyb2xlPTAmc2lnPTVjYmZmMGY1MWNkYWY3Y2NlOGI2OTQwMWEyNGU1ZDg5ODU3ZTZiNDI3ZGU1NzYzYzY2Yjc2YjZiYzE5YmI5ZGYmdXVpZD0wMTRjM2UxMDJjMjUxMWVlYjNhMGNmNzM0MWExNzFhZg",
+                (0..100000).random().toString()
+            )
+        //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+        /*
         voiceInfo =
             requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
+           */
         if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
@@ -136,7 +149,7 @@ class ClassroomFragment : Fragment() {
         setSceneListButton()
         setRedoButton()
         setUndoButton()
-
+        setUpFinishButton()
     }
 
 
@@ -146,7 +159,22 @@ class ClassroomFragment : Fragment() {
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
         var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
+        whiteSdk.setCommonCallbacks(object : CommonCallback {
+            override fun throwError(args: Any?) {
+                Log.d("agora t", args.toString())
+                super.throwError(args)
+            }
 
+            override fun onMessage(json: JSONObject?) {
+                Log.d("agora m ", json.toString())
+                super.onMessage(json)
+            }
+
+            override fun onLogger(json: JSONObject?) {
+                Log.d("agora l", json.toString())
+                super.onLogger(json)
+            }
+        })
         var newPromise = object : Promise<Room> {
             override fun then(wRoom: Room?) {
                 whiteBoardRoom = wRoom!!
@@ -154,6 +182,7 @@ class ClassroomFragment : Fragment() {
                 memberState.currentApplianceName = "pencil"
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom?.memberState = memberState
+                wRoom?.disableSerialization(false)
                 setWhiteBoard()
 
             }
@@ -240,7 +269,6 @@ class ClassroomFragment : Fragment() {
     private fun setSceneList() {
         binding.rvSceneList.apply {
             adapter = SceneAdapter(whiteBoardRoom!!) {
-                Log.d("agora", "scene clicked ${it}")
             }
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
@@ -309,5 +337,18 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun setUpFinishButton() {
+        binding.btnFinish.setOnClickListener {
+            val dialog = AlertDialog.Builder(requireContext()).apply {
+                setTitle("과외를 종료하시겠습니까?")
+                setPositiveButton("종료") { _, _ ->
+                    viewModel.finishClass(whiteBoardInfo.uuid)
+                }
+                setNegativeButton("취소") { _, _ ->
+                }
+            }
+            dialog.show()
+        }
+    }
 
 }

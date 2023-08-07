@@ -39,7 +39,7 @@ class LoginFragment @Inject constructor() :
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.tvLogo.setOnClickListener {
-            val intent = Intent(activity, StudentHomeActivity::class.java)
+            val intent = Intent(activity, ClassroomActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)
@@ -117,7 +117,7 @@ class LoginFragment @Inject constructor() :
             //다른 프래그먼트로 갔다가 되돌아올경우 observe가 다시 호출되는데
             //userRole이 null이 아니면 다시 이동되는 문제가 있음
             //따라서 네비게이션 될때 userRole이 null로 바꿔줌
-            
+
             viewModel.clearUserRole()
 
         }
