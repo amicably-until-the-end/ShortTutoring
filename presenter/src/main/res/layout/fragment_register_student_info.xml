@@ -47,13 +47,13 @@
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rb_selector_corner_radius"
+            android:background="@drawable/selector_rb_corner_radius"
             android:button="@null"
             android:checked="true"
             android:paddingHorizontal="@dimen/padding_horizontal_rb"
             android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="중학교"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
         <RadioButton
             android:id="@+id/rb_high_school"
@@ -61,12 +61,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:background="@drawable/rb_selector_corner_radius"
+            android:background="@drawable/selector_rb_corner_radius"
             android:button="@null"
             android:paddingHorizontal="@dimen/padding_horizontal_rb"
             android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="고등학교"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
     </RadioGroup>
 
@@ -98,12 +98,12 @@
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rb_selector_corner_radius"
+            android:background="@drawable/selector_rb_corner_radius"
             android:button="@null"
             android:paddingHorizontal="@dimen/padding_horizontal_rb"
             android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="1학년"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
         <RadioButton
             android:id="@+id/rb_grade_1"
@@ -111,12 +111,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:background="@drawable/rb_selector_corner_radius"
+            android:background="@drawable/selector_rb_corner_radius"
             android:button="@null"
             android:paddingHorizontal="@dimen/padding_horizontal_rb"
             android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="2학년"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
         <RadioButton
             android:id="@+id/rb_grade_2"
@@ -124,12 +124,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:background="@drawable/rb_selector_corner_radius"
+            android:background="@drawable/selector_rb_corner_radius"
             android:button="@null"
             android:paddingHorizontal="@dimen/padding_horizontal_rb"
             android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="3학년"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
     </RadioGroup>
 
