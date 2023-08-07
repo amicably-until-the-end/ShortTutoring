@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_teacher_my_page"
+    app:startDestination="@id/teacherMyPageFragment">
+
+    <fragment
+        android:id="@+id/teacherMyPageFragment"
+        android:name="org.softwaremaestro.presenter.teacher_my_page.TeacherMyPageFragment"
+        android:label="fragment_teacher_my_page"
+        tools:layout="@layout/fragment_teacher_my_page" />
+</navigation>
