@@ -19,7 +19,7 @@ class StudentRegisterViewModel @Inject constructor(
     ViewModel() {
 
     var grade: Int = 1 //1: 1학년, 2:2학년, 3:3학년
-    var school: Int = 0 //0: 중학교 , 1 : 고등학교
+    var school: String = "중학교"
 
     private val _registerSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val registerSuccess: MutableLiveData<Boolean> get() = _registerSuccess

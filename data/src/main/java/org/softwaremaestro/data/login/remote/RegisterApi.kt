@@ -10,9 +10,9 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface RegisterApi {
-    @POST("/user/signup")
+    @POST("/user/signup/student")
     suspend fun registerStudent(@Body studentRegisterReqDto: StudentRegisterReqDto): Response<WrappedResponse<RegisterResDto>>
 
-    @POST("/user/signup")
+    @POST("/user/signup/teacher")
     suspend fun registerTeacher(@Body teacherRegisterReqDto: TeacherRegisterReqDto): Response<WrappedResponse<RegisterResDto>>
 }
