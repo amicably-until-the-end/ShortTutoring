@@ -17,6 +17,6 @@ class ClassroomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityClassroomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
     }
 }
