@@ -8,15 +8,6 @@
     android:orientation="vertical"
     tools:context=".teacher_home.TeacherHomeActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_toolbar"
-        style="@style/ToolBar"
-        tools:ignore="MissingConstraints">
-
-        <TextView style="@style/ToolBarAppName" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -27,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginVertical="@dimen/margin_top_default"
             android:orientation="vertical">
 
             <LinearLayout
@@ -239,7 +231,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_review"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="24dp" />
             </LinearLayout>
 

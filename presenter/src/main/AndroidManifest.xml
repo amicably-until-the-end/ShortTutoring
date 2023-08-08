@@ -5,6 +5,9 @@
 
     <application>
         <activity
+            android:name=".teacher_home.TeacherHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".classroom.ClassroomActivity"
             android:exported="false" />
         <activity
@@ -17,16 +20,13 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".student_home.StudentHomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".teacher_home.TeacherHomeActivity"
-            android:exported="false" />
-        
     </application>
 
 </manifest>

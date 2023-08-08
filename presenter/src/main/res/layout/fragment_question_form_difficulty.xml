@@ -36,38 +36,38 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/rb_selector"
+            android:background="@drawable/selector_rb"
             android:button="@null"
             android:gravity="center"
             android:padding="16dp"
             android:text="쉬움\n\n10분 이하"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
         <RadioButton
             android:id="@+id/rb_middle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/rb_selector"
+            android:background="@drawable/selector_rb"
             android:button="@null"
             android:checked="false"
             android:gravity="center"
             android:padding="16dp"
             android:text="중간\n\n10분 ~ 30분"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
         <RadioButton
             android:id="@+id/rb_difficult"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/rb_selector"
+            android:background="@drawable/selector_rb"
             android:button="@null"
             android:checked="false"
             android:gravity="center"
             android:padding="16dp"
             android:text="어려움\n\n10분 이하"
-            android:textColor="@drawable/rb_selector_text_color" />
+            android:textColor="@drawable/selector_rb_text_color" />
 
     </RadioGroup>
 

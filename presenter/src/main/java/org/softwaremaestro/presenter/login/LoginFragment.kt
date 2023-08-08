@@ -6,14 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.classroom.ClassroomActivity
-import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
@@ -117,7 +114,7 @@ class LoginFragment @Inject constructor() :
             //다른 프래그먼트로 갔다가 되돌아올경우 observe가 다시 호출되는데
             //userRole이 null이 아니면 다시 이동되는 문제가 있음
             //따라서 네비게이션 될때 userRole이 null로 바꿔줌
-            
+
             viewModel.clearUserRole()
 
         }

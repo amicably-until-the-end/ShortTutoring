@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.dpToPx
+import org.softwaremaestro.presenter.Util.toPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.BestTeacherAdapter
@@ -215,12 +215,12 @@ class StudentHomeFragment : Fragment() {
                 super.getItemOffsets(outRect, position, parent)
                 when (position % GRIDLAYOUT_SPAN_COUNT) {
                     // 그리드 레이아웃의 맨 왼쪽 뷰
-                    0 -> outRect.right = dpToPx(dp, requireContext())
+                    0 -> outRect.right = toPx(dp, requireContext())
                     // 그리드 레이아웃의 맨 오른쪽 뷰
-                    GRIDLAYOUT_SPAN_COUNT - 1 -> outRect.left = dpToPx(dp, requireContext())
+                    GRIDLAYOUT_SPAN_COUNT - 1 -> outRect.left = toPx(dp, requireContext())
                     else -> {
-                        outRect.left = dpToPx(dp, requireContext())
-                        outRect.right = dpToPx(dp, requireContext())
+                        outRect.left = toPx(dp, requireContext())
+                        outRect.right = toPx(dp, requireContext())
                     }
                 }
             }

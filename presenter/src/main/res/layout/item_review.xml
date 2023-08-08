@@ -35,7 +35,7 @@
     <TextView
         android:id="@+id/tv_content"
         style="@style/body2"
-        android:layout_width="160dp"
+        android:layout_width="150dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:maxLines="3"
