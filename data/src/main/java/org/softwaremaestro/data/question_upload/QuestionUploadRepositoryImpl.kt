@@ -48,16 +48,17 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     override suspend fun getTeacherList(questionId: String): Flow<BaseResult<List<TeacherVO>, String>> {
         return flow {
             val response = questionUploadApi.getTeacherList(questionId)
-            if (response.isSuccessful) {
-                val data = response.body()?.data
-                val teacherDtoList = data ?: emptyList()
-                val teacherList = teacherDtoList.map { teacherDto ->
+            val body = response.body()
+            if (response.isSuccessful && body?.success == true) {
+                val data = body?.data
+                val teacherDtoList = data?.teacherList!!
+                val teacherList = teacherDtoList.map { teacher ->
                     TeacherVO(
-                        name = teacherDto.name ?: EMPTY_STRING,
+                        name = teacher.name ?: EMPTY_STRING,
                         school = "서울대학교" ?: EMPTY_STRING, // Todo
                         likes = 23 ?: 0, // Todo
-                        imageUrl = teacherDto.imageUrl ?: EMPTY_STRING,
-                        teacherId = teacherDto.id ?: EMPTY_STRING
+                        imageUrl = EMPTY_STRING,
+                        teacherId = teacher.id
                     )
                 }
                 emit(BaseResult.Success(teacherList))

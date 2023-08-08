@@ -5,13 +5,13 @@ import org.softwaremaestro.data.question_check.model.QuestionCheckRequestDto
 import org.softwaremaestro.data.question_check.model.QuestionCheckResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface QuestionCheckApi {
-    @POST("/response/check/{requestId}")
+    @GET("/question/offer/status/{questionId}")
     suspend fun checkQuestion(
-        @Path("requestId") requestId: String,
-        @Body questionCheckRequestDto: QuestionCheckRequestDto
+        @Path("questionId") questionId: String,
     ): Response<WrappedResponse<QuestionCheckResponseDto>>
 }

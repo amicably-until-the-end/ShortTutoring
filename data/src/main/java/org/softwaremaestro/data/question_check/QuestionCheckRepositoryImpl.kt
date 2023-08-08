@@ -21,12 +21,11 @@ class QuestionCheckRepositoryImpl @Inject constructor(private val questionCheckA
     ): Flow<BaseResult<QuestionCheckResultVO, String>> {
         return flow {
             val dto = QuestionCheckRequestDto(questionCheckRequestVO.teacherId)
-            val response = questionCheckApi.checkQuestion(requestId, dto)
-            if (response.isSuccessful) {
-                Log.d("Result in raw", response.toString())
-                val vo = response.body()!!.data?.asDomain()
-                if (vo != null)
-                    emit(BaseResult.Success(vo))
+            val response = questionCheckApi.checkQuestion(requestId)
+            val body = response.body()
+            if (response.isSuccessful && body?.success == true) {
+                val vo = body?.data?.asDomain()!!
+                emit(BaseResult.Success(vo))
             } else {
                 val errorString =
                     "error in ${this@QuestionCheckRepositoryImpl::class.java.name}\n" +

@@ -118,7 +118,7 @@ class ClassroomFragment : Fragment() {
         whiteBoardInfo =
             requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         voiceInfo =
-            requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedVoiceRoomInfo
+            requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
         if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 

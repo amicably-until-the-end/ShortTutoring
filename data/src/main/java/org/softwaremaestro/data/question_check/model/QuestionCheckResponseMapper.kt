@@ -7,15 +7,17 @@ import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 
 object QuestionCheckResponseMapper {
     fun asDomain(questionCheckResponseDto: QuestionCheckResponseDto): QuestionCheckResultVO {
+        val tutoring = questionCheckResponseDto.tutoring
         return QuestionCheckResultVO(
-            status = questionCheckResponseDto.status,
-            tutoringId = questionCheckResponseDto.tutoringId,
-            whiteBoardToken = questionCheckResponseDto.whiteBoardToken,
-            whiteBoardUUID = questionCheckResponseDto.whiteBoardUUID,
-            whiteBoardAppId = questionCheckResponseDto.whiteBoardAppId,
-            teacherRTCToken = questionCheckResponseDto.teacherRTCToken,
-            studentRTCToken = questionCheckResponseDto.studentRTCToken,
-            RTCAppId = questionCheckResponseDto.RTCAppId
+            status = tutoring.status,
+            tutoringId = tutoring.id,
+            whiteBoardToken = tutoring.whiteBoardToken,
+            whiteBoardUUID = tutoring.whiteBoardUUID,
+            whiteBoardAppId = tutoring.whiteBoardAppId,
+            teacherRTCToken = tutoring.teacherRTCToken,
+            studentRTCToken = tutoring.studentRTCToken,
+            RTCAppId = tutoring.RTCAppId,
+            studentSelect = questionCheckResponseDto.status
         )
     }
 }

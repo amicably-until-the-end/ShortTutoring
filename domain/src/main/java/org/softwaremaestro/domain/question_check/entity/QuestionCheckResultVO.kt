@@ -1,6 +1,7 @@
 package org.softwaremaestro.domain.question_check.entity
 
 data class QuestionCheckResultVO(
+    val studentSelect: String?,
     val status: String?,
     val tutoringId: String?,
     val whiteBoardToken: String?,
