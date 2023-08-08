@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.herewhite.sdk.CommonCallback
 import com.herewhite.sdk.Room
+import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
 import com.herewhite.sdk.WhiteSdk
 import com.herewhite.sdk.WhiteSdkConfiguration
@@ -25,6 +26,8 @@ import com.herewhite.sdk.domain.ImageInformationWithUrl
 import com.herewhite.sdk.domain.MemberState
 import com.herewhite.sdk.domain.Promise
 import com.herewhite.sdk.domain.Region
+import com.herewhite.sdk.domain.RoomPhase
+import com.herewhite.sdk.domain.RoomState
 import com.herewhite.sdk.domain.SDKError
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
@@ -122,8 +125,8 @@ class ClassroomFragment : Fragment() {
         whiteBoardInfo =
             SerializedWhiteBoardRoomInfo(
                 "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
-                "014c3e102c2511eeb3a0cf7341a171af",
-                "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxNDUwMzQ5MzQ4Jm5vbmNlPTE2OTE0MTQzNDkzNDgwMCZyb2xlPTAmc2lnPTVjYmZmMGY1MWNkYWY3Y2NlOGI2OTQwMWEyNGU1ZDg5ODU3ZTZiNDI3ZGU1NzYzYzY2Yjc2YjZiYzE5YmI5ZGYmdXVpZD0wMTRjM2UxMDJjMjUxMWVlYjNhMGNmNzM0MWExNzFhZg",
+                "0b4520802b0311eeb1e747d8f6d5a89a",
+                "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxNDg5NTU0ODU1Jm5vbmNlPTE2OTE0NTM1NTQ4NTUwMCZyb2xlPTAmc2lnPWM5MTdkMjYzNTQxOTBjMTZkZTVkMzMwNDViYjZhYzViZDJhYjUxZjA2MjI5N2ZhMjM1ZTM4YWJmODM4MzUzNTMmdXVpZD0wYjQ1MjA4MDJiMDMxMWVlYjFlNzQ3ZDhmNmQ1YTg5YQ",
                 (0..100000).random().toString()
             )
         //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
@@ -158,23 +161,8 @@ class ClassroomFragment : Fragment() {
         sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
+
         var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
-        whiteSdk.setCommonCallbacks(object : CommonCallback {
-            override fun throwError(args: Any?) {
-                Log.d("agora t", args.toString())
-                super.throwError(args)
-            }
-
-            override fun onMessage(json: JSONObject?) {
-                Log.d("agora m ", json.toString())
-                super.onMessage(json)
-            }
-
-            override fun onLogger(json: JSONObject?) {
-                Log.d("agora l", json.toString())
-                super.onLogger(json)
-            }
-        })
         var newPromise = object : Promise<Room> {
             override fun then(wRoom: Room?) {
                 whiteBoardRoom = wRoom!!
@@ -185,6 +173,7 @@ class ClassroomFragment : Fragment() {
                 wRoom?.disableSerialization(false)
                 setWhiteBoard()
 
+
             }
 
             override fun catchEx(t: SDKError?) {
@@ -192,9 +181,41 @@ class ClassroomFragment : Fragment() {
                 Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
             }
         }
+        var roomListener = object : RoomListener {
+            override fun onPhaseChanged(phase: RoomPhase?) {
+                if (phase == RoomPhase.disconnected) {
+                    classFinshed()
+                }
+            }
+
+            override fun onDisconnectWithError(e: java.lang.Exception?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onKickedWithReason(reason: String?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onRoomStateChanged(modifyState: RoomState?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCanUndoStepsUpdate(canUndoSteps: Long) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCanRedoStepsUpdate(canRedoSteps: Long) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCatchErrorWhenAppendFrame(userId: Long, error: java.lang.Exception?) {
+                //TODO("Not yet implemented")
+            }
+        }
+
         var roomParams =
             RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, whiteBoardInfo.uid)
-        whiteSdk.joinRoom(roomParams, newPromise)
+        whiteSdk.joinRoom(roomParams, roomListener, newPromise)
 
     }
 
@@ -349,6 +370,17 @@ class ClassroomFragment : Fragment() {
             }
             dialog.show()
         }
+    }
+
+    private fun classFinshed() {
+        binding.chElapsedTime.stop()
+        val dialog = AlertDialog.Builder(requireContext()).apply {
+            setTitle("과외가 종료되었습니다.")
+            setPositiveButton("확인") { _, _ ->
+                requireActivity().finish()
+            }
+        }
+        dialog.show()
     }
 
 }
