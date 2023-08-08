@@ -30,8 +30,8 @@ class RegisterStudentInfoFragment : Fragment() {
 
         binding.rgSchoolLevel.setOnCheckedChangeListener { _, resId ->
             when (resId) {
-                R.id.rb_middle_school -> viewModel.school = 0
-                R.id.rb_high_school -> viewModel.school = 1
+                R.id.rb_middle_school -> viewModel.school = "중학교"
+                R.id.rb_high_school -> viewModel.school = "고등학교"
             }
         }
 

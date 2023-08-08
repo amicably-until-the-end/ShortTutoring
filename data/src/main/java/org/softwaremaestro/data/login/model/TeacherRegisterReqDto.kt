@@ -5,7 +5,11 @@ import com.google.gson.annotations.SerializedName
 data class TeacherRegisterReqDto(
     @SerializedName("bio") val bio: String?,
     @SerializedName("name") val name: String?,
-    @SerializedName("role") val role: String?,
     @SerializedName("accessToken") val accessToken: String,
-    @SerializedName("vendor") val vendor: String
-)
+    @SerializedName("vendor") val vendor: String,
+    @SerializedName("schoolName") val schoolName: String,
+    @SerializedName("schoolDivision") val schoolDivision: String,
+    @SerializedName("schoolDepartment") val schoolDepartment: String,
+    @SerializedName("schoolYear") val schoolYear: Int,
+
+    )
