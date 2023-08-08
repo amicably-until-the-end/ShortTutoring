@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page
+package org.softwaremaestro.presenter.teacher_my_page.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
