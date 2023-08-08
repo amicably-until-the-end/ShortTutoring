@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".classroom.ClassroomFragment"
     tools:ignore="MissingConstraints">
 
@@ -13,7 +14,14 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_toolbar_back"
-            style="@style/ToolBarBackButton" />
+            android:layout_width="@dimen/classroom_toolbox_item_width"
+            android:layout_height="@dimen/classroom_toolbox_item_height"
+            android:background="@drawable/baseline_chevron_left_24"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             style="@style/h6"
@@ -28,8 +36,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_report"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/classroom_toolbox_item_width"
+            android:layout_height="@dimen/classroom_toolbox_item_height"
             android:background="@drawable/ic_siren"
             android:minWidth="0dp"
             android:minHeight="0dp"
@@ -44,13 +52,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="16dp"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_toolbar">
+        android:paddingVertical="12dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,16 +66,16 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_show_scenes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:background="@drawable/ic_double_arrow_right_48"
                 android:maxWidth="0dp"
                 android:maxHeight="0dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_color_pen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
                 android:background="@drawable/ic_stylus_48"
                 android:maxWidth="0dp"
@@ -75,8 +83,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_color_erase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
                 android:background="@drawable/ic_eraser_48"
                 android:maxWidth="0dp"
@@ -84,8 +92,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_redo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
                 android:background="@drawable/ic_redo_48"
                 android:maxWidth="0dp"
@@ -93,8 +101,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_undo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
                 android:background="@drawable/ic_undo_48"
                 android:maxWidth="0dp"
@@ -102,8 +110,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_get_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
                 android:background="@drawable/ic_add_photo_48"
                 android:maxWidth="0dp"
@@ -111,8 +119,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/classroom_toolbox_item_width"
+                android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
                 android:background="@drawable/ic_resize_48"
                 android:maxWidth="0dp"
@@ -148,31 +156,33 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tv_tutoring_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_tool_box"
-        tools:text="교실 아이디" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_tutoring_id"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:textColor="@android:color/black"-->
+    <!--        android:textSize="30sp"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/container_tool_box"-->
+    <!--        tools:text="교실 아이디" />-->
 
-    <LinearLayout
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black" />
+
+    <FrameLayout
         android:id="@+id/container_board"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_tutoring_id">
+        android:layout_height="match_parent">
 
         <com.herewhite.sdk.WhiteboardView
             android:id="@+id/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible" />
-    </LinearLayout>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_scene_list"
@@ -191,4 +201,4 @@
             android:layout_height="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

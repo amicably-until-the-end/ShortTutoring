@@ -29,14 +29,11 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
-import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
-import okhttp3.internal.notify
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
+import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
-import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
-import org.softwaremaestro.presenter.student_home.item.Lecture
-
+import org.softwaremaestro.presenter.showToast
 
 class ClassroomFragment : Fragment() {
 
@@ -44,7 +41,6 @@ class ClassroomFragment : Fragment() {
 
     lateinit var whiteboardView: WhiteboardView
     lateinit var sdkConfiguration: WhiteSdkConfiguration;
-
 
     private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
     private lateinit var voiceInfo: SerializedWhiteBoardRoomInfo
@@ -78,14 +74,6 @@ class ClassroomFragment : Fragment() {
         Manifest.permission.RECORD_AUDIO
     )
 
-    private fun checkSelfPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            REQUESTED_PERMISSIONS[0]
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,13 +85,30 @@ class ClassroomFragment : Fragment() {
                 requireActivity(),
                 REQUESTED_PERMISSIONS,
                 PERMISSION_REQ_ID
-            );
+            )
         }
         startTimer()
         setAgora()
         //setupVoiceSDKEngine()
 
+        binding.btnToolbarBack.setOnClickListener {
+            ReviewDialog(requireContext()).show()
+        }
+
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        whiteboardView.removeAllViews()
+        whiteboardView.destroy()
+    }
+
+    private fun checkSelfPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            REQUESTED_PERMISSIONS[0]
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
 
@@ -112,33 +117,10 @@ class ClassroomFragment : Fragment() {
         binding.chElapsedTime.start()
     }
 
-
-    fun setTutoringArgument() {
-        whiteBoardInfo =
-            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
-        voiceInfo =
-            requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
-        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
-    }
-
     private fun setAgora() {
         joinWhiteBoard()
         //setupVoiceSDKEngine()
     }
-
-    private fun setWhiteBoard() {
-        //join 을 한 이후에 화이트 보드 관련 기능 세팅
-        setPenButtons()
-        setEraseButton()
-        setImageButton()
-        setSelectorButton()
-        setSceneList()
-        setSceneListButton()
-        setRedoButton()
-        setUndoButton()
-
-    }
-
 
     private fun joinWhiteBoard() {
         setTutoringArgument()
@@ -155,7 +137,6 @@ class ClassroomFragment : Fragment() {
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom?.memberState = memberState
                 setWhiteBoard()
-
             }
 
             override fun catchEx(t: SDKError?) {
@@ -166,85 +147,26 @@ class ClassroomFragment : Fragment() {
         var roomParams =
             RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, whiteBoardInfo.uid)
         whiteSdk.joinRoom(roomParams, newPromise)
-
     }
 
-    private fun setupVoiceSDKEngine() {
-        try {
-            val config = RtcEngineConfig()
-            config.mContext = requireContext()
-            config.mAppId = voiceInfo.appId
-            config.mEventHandler = mRtcEventHandler
-            agoraEngine = RtcEngine.create(config)
-            joinChannel()
-        } catch (e: Exception) {
-            throw RuntimeException(e.toString())
-        }
+    fun setTutoringArgument() {
+        whiteBoardInfo =
+            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+        voiceInfo =
+            requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
+//        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
-
-    private fun joinChannel() {
-        val options = ChannelMediaOptions()
-        options.autoSubscribeAudio = true
-        // Set both clients as the BROADCASTER.
-        options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-        // Set the channel profile as BROADCASTING.
-        options.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
-
-        // Join the channel with a temp token.
-        // You need to specify the user ID yourself, and ensure that it is unique in the channel.
-        //agoraEngine.joinChannel(voiceRoomToken, channelName, voice_uid, options)
-
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        whiteboardView.removeAllViews()
-        whiteboardView.destroy()
-    }
-
-    fun showMessage(message: String?) {
-        requireActivity().runOnUiThread {
-            Toast.makeText(
-                requireContext(),
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-    }
-
-    private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
-        // Listen for the remote user joining the channel.
-        override fun onUserJoined(uid: Int, elapsed: Int) {
-            showMessage("Remote user joined the channel, uid: " + uid + " elapsed: " + elapsed)
-        }
-
-        override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
-            // Successfully joined a channel
-            showMessage("Joined Channel $channel")
-        }
-
-        override fun onUserOffline(uid: Int, reason: Int) {
-            // Listen for remote users leaving the channel
-            showMessage("Remote user offline $uid $reason")
-        }
-
-        override fun onLeaveChannel(stats: RtcStats) {
-            // Listen for the local user leaving the channel
-            showMessage("onLeaveChannel")
-        }
-    }
-
-    private fun setSceneList() {
-        binding.rvSceneList.apply {
-            adapter = SceneAdapter(whiteBoardRoom!!) {
-                Log.d("agora", "scene clicked ${it}")
-            }
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
+    private fun setWhiteBoard() {
+        //join 을 한 이후에 화이트 보드 관련 기능 세팅
+        setPenButtons()
+        setEraseButton()
+        setImageButton()
+        setSelectorButton()
+        setSceneList()
+        setSceneListButton()
+        setRedoButton()
+        setUndoButton()
     }
 
     private fun setPenButtons() {
@@ -254,7 +176,6 @@ class ClassroomFragment : Fragment() {
             memberState.strokeColor = IntArray(3) { 255;0;0; }
             whiteBoardRoom?.memberState = memberState
         }
-
     }
 
     private fun setEraseButton() {
@@ -274,7 +195,6 @@ class ClassroomFragment : Fragment() {
             )
             whiteBoardRoom?.insertImage(imageInfo)
         }
-
     }
 
     private fun setSelectorButton() {
@@ -285,6 +205,15 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun setSceneList() {
+        binding.rvSceneList.apply {
+            adapter = SceneAdapter(whiteBoardRoom!!) {
+                Log.d("agora", "scene clicked ${it}")
+            }
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
 
     private fun setSceneListButton() {
         binding.btnShowScenes.setOnClickListener {
@@ -294,7 +223,6 @@ class ClassroomFragment : Fragment() {
             }
             (binding.rvSceneList.adapter as SceneAdapter).getPreview()
         }
-
     }
 
     private fun setRedoButton() {
@@ -309,5 +237,54 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun setupVoiceSDKEngine() {
+        try {
+            val config = RtcEngineConfig()
+            config.mContext = requireContext()
+            config.mAppId = voiceInfo.appId
+            config.mEventHandler = mRtcEventHandler
+            agoraEngine = RtcEngine.create(config)
+            joinChannel()
+        } catch (e: Exception) {
+            throw RuntimeException(e.toString())
+        }
+    }
 
+    private fun joinChannel() {
+        val options = ChannelMediaOptions()
+        options.autoSubscribeAudio = true
+        // Set both clients as the BROADCASTER.
+        options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
+        // Set the channel profile as BROADCASTING.
+        options.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
+
+        // Join the channel with a temp token.
+        // You need to specify the user ID yourself, and ensure that it is unique in the channel.
+        //agoraEngine.joinChannel(voiceRoomToken, channelName, voice_uid, options)
+    }
+
+    private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
+        // Listen for the remote user joining the channel.
+        override fun onUserJoined(uid: Int, elapsed: Int) {
+            showToast(
+                requireActivity(),
+                "Remote user joined the channel, uid: ${uid}, elapsed: $elapsed"
+            )
+        }
+
+        override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
+            // Successfully joined a channel
+            showToast(requireActivity(), "Joined Channel $channel")
+        }
+
+        override fun onUserOffline(uid: Int, reason: Int) {
+            // Listen for remote users leaving the channel
+            showToast(requireActivity(), "Remote user offline $uid $reason")
+        }
+
+        override fun onLeaveChannel(stats: RtcStats) {
+            // Listen for the local user leaving the channel
+            showToast(requireActivity(), "onLeaveChannel")
+        }
+    }
 }
