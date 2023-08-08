@@ -8,11 +8,14 @@ import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 object QuestionCheckResponseMapper {
     fun asDomain(questionCheckResponseDto: QuestionCheckResponseDto): QuestionCheckResultVO {
         return QuestionCheckResultVO(
-            questionCheckResponseDto.status,
-            questionCheckResponseDto.tutoringId,
-            questionCheckResponseDto.whiteBoardToken,
-            questionCheckResponseDto.whiteBoardUUID,
-            questionCheckResponseDto.whiteBoardAppId
+            status = questionCheckResponseDto.status,
+            tutoringId = questionCheckResponseDto.tutoringId,
+            whiteBoardToken = questionCheckResponseDto.whiteBoardToken,
+            whiteBoardUUID = questionCheckResponseDto.whiteBoardUUID,
+            whiteBoardAppId = questionCheckResponseDto.whiteBoardAppId,
+            teacherRTCToken = questionCheckResponseDto.teacherRTCToken,
+            studentRTCToken = questionCheckResponseDto.studentRTCToken,
+            RTCAppId = questionCheckResponseDto.RTCAppId
         )
     }
 }

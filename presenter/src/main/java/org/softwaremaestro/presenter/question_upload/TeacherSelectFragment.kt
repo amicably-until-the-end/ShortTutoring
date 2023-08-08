@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.TeacherSelectViewModel
@@ -82,14 +83,21 @@ class TeacherSelectFragment : Fragment() {
             }
             //Acticity 간 data class 전달을 위해 Serializable 사용
             val whiteBoardInfo = SerializedWhiteBoardRoomInfo(
-                it.whiteBoardAppId ?: "",
-                it.whiteBoardUUID ?: "",
-                it.whiteBoardToken ?: "",
-                "1"
+                it.whiteBoardAppId,
+                it.whiteBoardUUID,
+                it.whiteBoardToken,
+                "2"
+            )
+            val voiceRoomInfo = SerializedVoiceRoomInfo(
+                it.RTCAppId,
+                it.studentRTCToken,
+                it.tutoringId,
+                2,
             )
             //classroom activty에 데이터 전달 및 실행
             val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
                 putExtra("whiteBoardInfo", whiteBoardInfo)
+                putExtra("voiceRoomInfo", voiceRoomInfo)
             }
 
             //classroom activity 실행

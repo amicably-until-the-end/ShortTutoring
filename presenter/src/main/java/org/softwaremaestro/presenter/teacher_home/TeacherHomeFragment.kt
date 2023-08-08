@@ -21,6 +21,7 @@ import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
@@ -199,11 +200,18 @@ class TeacherHomeFragment : Fragment() {
                         it.whiteBoardAppId!!,
                         it.whiteBoardUUID!!,
                         it.whiteBoardToken!!,
-                        "0"
+                        "1"
+                    )
+                    val voiceRoomInfo = SerializedVoiceRoomInfo(
+                        it.RTCAppId!!,
+                        it.teacherRTCToken!!,
+                        it.studentRTCToken!!,
+                        1,
                     )
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
                         putExtra("whiteBoardInfo", whiteBoardRoomInfo)
+                        putExtra("voiceInfo", voiceRoomInfo)
                     }
                     startActivity(intent)
                 }

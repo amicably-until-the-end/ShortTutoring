@@ -32,6 +32,7 @@ import io.agora.rtc2.RtcEngineConfig
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import okhttp3.internal.notify
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
+import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
@@ -47,7 +48,7 @@ class ClassroomFragment : Fragment() {
 
 
     private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
-    private lateinit var voiceInfo: SerializedWhiteBoardRoomInfo
+    private lateinit var voiceInfo: SerializedVoiceRoomInfo
 
     // Fill the App ID of your project generated on Agora Console.
     /*
@@ -117,13 +118,13 @@ class ClassroomFragment : Fragment() {
         whiteBoardInfo =
             requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         voiceInfo =
-            requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedWhiteBoardRoomInfo
+            requireActivity().intent.getSerializableExtra("voiceInfo") as SerializedVoiceRoomInfo
         if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
     private fun setAgora() {
         joinWhiteBoard()
-        //setupVoiceSDKEngine()
+        setupVoiceSDKEngine()
     }
 
     private fun setWhiteBoard() {
@@ -193,7 +194,7 @@ class ClassroomFragment : Fragment() {
 
         // Join the channel with a temp token.
         // You need to specify the user ID yourself, and ensure that it is unique in the channel.
-        //agoraEngine.joinChannel(voiceRoomToken, channelName, voice_uid, options)
+        agoraEngine.joinChannel(voiceInfo.token, voiceInfo.channelId, voiceInfo.uid, options)
 
     }
 
