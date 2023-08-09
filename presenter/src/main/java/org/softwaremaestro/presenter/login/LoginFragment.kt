@@ -21,7 +21,8 @@ import javax.inject.Inject
 // 앱에 들어왔을 때 보이는 첫 화면.
 // 로그인 창과 소셜 로그인 버튼이 있다.
 @AndroidEntryPoint
-class LoginFragment @Inject constructor() : Fragment() {
+class LoginFragment @Inject constructor() :
+    Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
 

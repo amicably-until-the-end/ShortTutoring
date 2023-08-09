@@ -11,12 +11,4 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-
-    <string-array name="rating_noti">
-        <item name="rating_1_noti">다시 만나고 싶지 않아요</item>
-        <item name="rating_2_noti">이해가 잘 안 됐어요</item>
-        <item name="rating_3_noti">몰랐던 내용이 해결됐어요</item>
-        <item name="rating_4_noti">이해가 잘 돼요</item>
-        <item name="rating_5_noti">다음에 또 질문하고 싶어요</item>
-    </string-array>
 </resources>
