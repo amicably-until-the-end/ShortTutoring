@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -14,7 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.herewhite.sdk.CommonCallback
 import com.herewhite.sdk.Room
+import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
 import com.herewhite.sdk.WhiteSdk
 import com.herewhite.sdk.WhiteSdkConfiguration
@@ -23,7 +26,10 @@ import com.herewhite.sdk.domain.ImageInformationWithUrl
 import com.herewhite.sdk.domain.MemberState
 import com.herewhite.sdk.domain.Promise
 import com.herewhite.sdk.domain.Region
+import com.herewhite.sdk.domain.RoomPhase
+import com.herewhite.sdk.domain.RoomState
 import com.herewhite.sdk.domain.SDKError
+import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -31,6 +37,7 @@ import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import okhttp3.internal.notify
+import org.json.JSONObject
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
@@ -39,6 +46,7 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.item.Lecture
 
 
+@AndroidEntryPoint
 class ClassroomFragment : Fragment() {
 
     private lateinit var binding: FragmentClassroomBinding
@@ -116,7 +124,13 @@ class ClassroomFragment : Fragment() {
 
     fun setTutoringArgument() {
         whiteBoardInfo =
-            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+            SerializedWhiteBoardRoomInfo(
+                "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
+                "0b4520802b0311eeb1e747d8f6d5a89a",
+                "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxNDg5NTU0ODU1Jm5vbmNlPTE2OTE0NTM1NTQ4NTUwMCZyb2xlPTAmc2lnPWM5MTdkMjYzNTQxOTBjMTZkZTVkMzMwNDViYjZhYzViZDJhYjUxZjA2MjI5N2ZhMjM1ZTM4YWJmODM4MzUzNTMmdXVpZD0wYjQ1MjA4MDJiMDMxMWVlYjFlNzQ3ZDhmNmQ1YTg5YQ",
+                (0..100000).random().toString()
+            )
+        //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         voiceInfo =
             requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
         if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
@@ -137,7 +151,7 @@ class ClassroomFragment : Fragment() {
         setSceneListButton()
         setRedoButton()
         setUndoButton()
-
+        setUpFinishButton()
     }
 
 
@@ -146,8 +160,8 @@ class ClassroomFragment : Fragment() {
         sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
-        var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
 
+        var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
         var newPromise = object : Promise<Room> {
             override fun then(wRoom: Room?) {
                 whiteBoardRoom = wRoom!!
@@ -155,7 +169,9 @@ class ClassroomFragment : Fragment() {
                 memberState.currentApplianceName = "pencil"
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom?.memberState = memberState
+                wRoom?.disableSerialization(false)
                 setWhiteBoard()
+
 
             }
 
@@ -164,9 +180,41 @@ class ClassroomFragment : Fragment() {
                 Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
             }
         }
+        var roomListener = object : RoomListener {
+            override fun onPhaseChanged(phase: RoomPhase?) {
+                if (phase == RoomPhase.disconnected) {
+                    classFinshed()
+                }
+            }
+
+            override fun onDisconnectWithError(e: java.lang.Exception?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onKickedWithReason(reason: String?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onRoomStateChanged(modifyState: RoomState?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCanUndoStepsUpdate(canUndoSteps: Long) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCanRedoStepsUpdate(canRedoSteps: Long) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCatchErrorWhenAppendFrame(userId: Long, error: java.lang.Exception?) {
+                //TODO("Not yet implemented")
+            }
+        }
+
         var roomParams =
             RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, whiteBoardInfo.uid)
-        whiteSdk.joinRoom(roomParams, newPromise)
+        whiteSdk.joinRoom(roomParams, roomListener, newPromise)
 
     }
 
@@ -241,7 +289,6 @@ class ClassroomFragment : Fragment() {
     private fun setSceneList() {
         binding.rvSceneList.apply {
             adapter = SceneAdapter(whiteBoardRoom!!) {
-                Log.d("agora", "scene clicked ${it}")
             }
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
@@ -310,5 +357,29 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun setUpFinishButton() {
+        binding.btnFinish.setOnClickListener {
+            val dialog = AlertDialog.Builder(requireContext()).apply {
+                setTitle("과외를 종료하시겠습니까?")
+                setPositiveButton("종료") { _, _ ->
+                    viewModel.finishClass(whiteBoardInfo.uuid)
+                }
+                setNegativeButton("취소") { _, _ ->
+                }
+            }
+            dialog.show()
+        }
+    }
+
+    private fun classFinshed() {
+        binding.chElapsedTime.stop()
+        val dialog = AlertDialog.Builder(requireContext()).apply {
+            setTitle("과외가 종료되었습니다.")
+            setPositiveButton("확인") { _, _ ->
+                requireActivity().finish()
+            }
+        }
+        dialog.show()
+    }
 
 }
