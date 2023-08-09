@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.herewhite.sdk.CommonCallback
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
@@ -35,15 +34,11 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
-import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
-import okhttp3.internal.notify
-import org.json.JSONObject
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
+import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
-import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
-import org.softwaremaestro.presenter.student_home.item.Lecture
 
 
 @AndroidEntryPoint
@@ -133,7 +128,7 @@ class ClassroomFragment : Fragment() {
         //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         voiceInfo =
             requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
-        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
+//        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
     private fun setAgora() {
@@ -358,7 +353,7 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun setUpFinishButton() {
-        binding.btnFinish.setOnClickListener {
+        binding.btnToolbarBack.setOnClickListener {
             val dialog = AlertDialog.Builder(requireContext()).apply {
                 setTitle("과외를 종료하시겠습니까?")
                 setPositiveButton("종료") { _, _ ->
