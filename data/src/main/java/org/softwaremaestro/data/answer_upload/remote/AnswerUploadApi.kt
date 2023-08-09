@@ -12,7 +12,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AnswerUploadApi {
-    @GET("/question/offer/append/{questionId}")
+    @GET("/teacher/offer/append/{questionId}")
     suspend fun uploadAnswer(
         @Path("questionId") requestId: String
     ): Response<WrappedResponse<AnswerUploadResultDto>>
