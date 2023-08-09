@@ -6,6 +6,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface QuestionGetApi {
-    @GET("/question/list?status=pending")
+    @GET("/teacher/question/list?status=pending")
     suspend fun getQuestions(): Response<WrappedListResponse<QuestionGetResponseDto>>
 }

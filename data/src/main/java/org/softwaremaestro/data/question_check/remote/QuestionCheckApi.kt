@@ -10,7 +10,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface QuestionCheckApi {
-    @GET("/question/offer/status/{questionId}")
+    @GET("/teacher/offer/status/{questionId}")
     suspend fun checkQuestion(
         @Path("questionId") questionId: String,
     ): Response<WrappedResponse<QuestionCheckResponseDto>>
