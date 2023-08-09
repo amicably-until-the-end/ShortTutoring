@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
@@ -35,7 +36,7 @@ class LoginFragment @Inject constructor() : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.tvLogo.setOnClickListener {
-            val intent = Intent(activity, StudentHomeActivity::class.java)
+            val intent = Intent(activity, ClassroomActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent)
