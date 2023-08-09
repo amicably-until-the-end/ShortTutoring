@@ -52,15 +52,24 @@ class TeacherSelectViewModel @Inject constructor(
             teacherPickUseCase.execute(teacherPickReqVO)
                 .catch { exception ->
                     waitForRoom = false
+                    Log.d("Teacher Select ViewModel", exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            Log.d("mymymy", "success pick viewmodel ${result.data}")
+                            Log.d(
+                                "Teacher Select ViewModel",
+                                "success pick viewmodel ${result.data}"
+                            )
                             _tutoringInfo.postValue(result.data)
                         }
 
                         is BaseResult.Error -> {
+                            Log.d(
+                                "Teacher Select ViewModel",
+                                "fail pick viewmodel ${result.rawResponse}"
+                            )
+
                             _errorMsg.postValue("fail to pick Teacher")
                             waitForRoom = false
                         }
@@ -82,11 +91,10 @@ class TeacherSelectViewModel @Inject constructor(
     suspend fun getTeacherList(questionId: String) {
         teacherListGetUseCase.execute(questionId)
             .catch { exception ->
-                Log.d("mymymy", exception.toString())
+                Log.e("TeacherSelectViewModel", exception.message.toString())
                 _errorMsg.postValue(exception.message.toString())
             }
             .collect { result ->
-                Log.d("mymymy", result.toString())
                 when (result) {
                     is BaseResult.Success -> {
                         _teacherList.postValue(result.data)

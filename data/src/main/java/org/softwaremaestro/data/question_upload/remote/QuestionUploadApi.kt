@@ -7,6 +7,7 @@ import org.softwaremaestro.data.question_upload.model.PickTeacherResDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadResultDto
 import org.softwaremaestro.data.question_upload.model.TeacherDto
+import org.softwaremaestro.data.question_upload.model.TeacherListDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,7 +21,7 @@ interface QuestionUploadApi {
     ): Response<WrappedResponse<QuestionUploadResultDto>>
 
     @GET("/question/offer/teacher-list/{questionId}")
-    suspend fun getTeacherList(@Path("questionId") questionId: String): Response<WrappedListResponse<TeacherDto>>
+    suspend fun getTeacherList(@Path("questionId") questionId: String): Response<WrappedResponse<TeacherListDto>>
 
     @POST("/question/offer/accept/{questionId}")
     suspend fun pickTeacher(

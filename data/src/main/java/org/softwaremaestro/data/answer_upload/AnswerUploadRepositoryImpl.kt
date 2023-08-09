@@ -20,7 +20,7 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
                 answerUploadVO.requestId,
                 TeacherDto(answerUploadVO.teacherVO.teacherId)
             )
-            val response = answerUploadApi.uploadAnswer(dto.id, dto.teacherDto)
+            val response = answerUploadApi.uploadAnswer(dto.id)
             val body = response.body()!!
             if (body.success == true) {
                 response.body()!!.data?.asDomain()?.let {
