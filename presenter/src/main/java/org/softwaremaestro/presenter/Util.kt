@@ -2,7 +2,6 @@ package org.softwaremaestro.presenter
 
 import android.animation.Animator
 import android.animation.ValueAnimator
-import android.app.Activity
 import android.app.Service
 import android.content.Context
 import android.graphics.Bitmap
@@ -12,7 +11,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.Toast
 import java.io.ByteArrayOutputStream
 
 object Util {
@@ -126,14 +124,4 @@ fun requestFocusAndShowKeyboard(view: View, context: Context) {
     val imm: InputMethodManager =
         context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.showSoftInput(view, 0)
-}
-
-fun showToast(activity: Activity, message: String?, duration: Int = Toast.LENGTH_LONG) {
-    activity.runOnUiThread {
-        Toast.makeText(
-            activity,
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
 }
