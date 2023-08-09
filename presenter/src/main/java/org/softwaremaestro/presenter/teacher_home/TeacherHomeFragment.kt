@@ -21,6 +21,7 @@ import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
@@ -190,8 +191,8 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeCheck() {
         checkViewModel.check.observe(viewLifecycleOwner) {
-            when (it.status) {
-                RequestStatus.SELECTED.noti -> {
+            when (it.studentSelect) {
+                "selected" -> {
                     //snackbar가 떠 있으면 계속 api를 호출하는 상태임. 결과 나왔으면 그만 호출 해야함.
                     waitingSnackbar.dismiss()
                     //Acticity 간 data class 전달을 위해 Serializable 사용
@@ -199,16 +200,23 @@ class TeacherHomeFragment : Fragment() {
                         it.whiteBoardAppId!!,
                         it.whiteBoardUUID!!,
                         it.whiteBoardToken!!,
-                        "0"
+                        "1"
+                    )
+                    val voiceRoomInfo = SerializedVoiceRoomInfo(
+                        it.RTCAppId!!,
+                        it.teacherRTCToken!!,
+                        it.studentRTCToken!!,
+                        1,
                     )
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
                         putExtra("whiteBoardInfo", whiteBoardRoomInfo)
+                        putExtra("voiceRoomInfo", voiceRoomInfo)
                     }
                     startActivity(intent)
                 }
 
-                RequestStatus.NOT_SELECTED.noti -> {
+                "rejected" -> {
                     waitingSnackbar.setText("학생이 다른 선생님을 선택했습니다")
                     waitingSnackbar.duration = Snackbar.LENGTH_SHORT
                 }

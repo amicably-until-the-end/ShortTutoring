@@ -16,6 +16,8 @@ import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import org.softwaremaestro.domain.classroom.usecase.FinishClassUseCase
+import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.entity.UserVO
 import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
@@ -25,31 +27,35 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClassroomViewModel @Inject constructor(
+    private val finishClassUseCase: FinishClassUseCase,
+    private val getTutoringInfoUseCase: GetTutoringInfoUseCase
 ) :
     ViewModel() {
 
-    private val _scenePreviews = MutableLiveData<List<Bitmap>>()
-    val scenePreviews: LiveData<List<Bitmap>> = _scenePreviews
 
-    /**
-     * 카카오 로그인
-     */
-    fun getPreviews(room: Room) {
-        val scenes = room.scenes
-        val previews = mutableListOf<Bitmap>()
-        scenes.forEach {
+    private val _finishClassResult = MutableLiveData<String>()
+    val finishClassResult: LiveData<String> = _finishClassResult
 
-            room.getScenePreviewImage("/${it.name}", object : Promise<Bitmap> {
-                override fun then(t: Bitmap?) {
-                    previews.add(t!!)
+
+    fun finishClass(tutoringId: String) {
+        viewModelScope.launch {
+            finishClassUseCase.execute(tutoringId)
+                .catch { e ->
+                    Log.d("error", e.toString())
                 }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _finishClassResult.postValue("finished")
+                        }
 
-                override fun catchEx(e: SDKError?) {
-                    Log.d("agora", e.toString())
+                        is BaseResult.Error -> {
+                            _finishClassResult.postValue("error")
+                        }
+                    }
                 }
-            })
         }
-        _scenePreviews.value = previews
     }
+
 
 }

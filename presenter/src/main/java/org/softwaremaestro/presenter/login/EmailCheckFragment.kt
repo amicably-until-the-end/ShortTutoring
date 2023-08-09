@@ -51,6 +51,7 @@ class EmailCheckFragment : Fragment() {
             if (it) {
                 binding.btnGetEmail.text = "메일을 전송했습니다."
                 binding.btnGetEmail.setEnabledAndChangeColor(false)
+                binding.btnCheckCode.setEnabledAndChangeColor(true)
                 binding.etUniv.isFocusable = false
             } else {
                 Toast.makeText(requireContext(), "올바른 학교 메일을 선택해주세요.", Toast.LENGTH_SHORT).show()

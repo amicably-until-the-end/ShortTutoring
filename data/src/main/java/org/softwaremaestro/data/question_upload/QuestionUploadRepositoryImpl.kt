@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
+import org.softwaremaestro.data.question_upload.model.asDomain
 import org.softwaremaestro.data.question_upload.remote.QuestionUploadApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
@@ -47,16 +48,17 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     override suspend fun getTeacherList(questionId: String): Flow<BaseResult<List<TeacherVO>, String>> {
         return flow {
             val response = questionUploadApi.getTeacherList(questionId)
-            if (response.isSuccessful) {
-                val data = response.body()?.data
-                val teacherDtoList = data ?: emptyList()
-                val teacherList = teacherDtoList.map { teacherDto ->
+            val body = response.body()
+            if (response.isSuccessful && body?.success == true) {
+                val data = body?.data
+                val teacherDtoList = data?.teacherList!!
+                val teacherList = teacherDtoList.map { teacher ->
                     TeacherVO(
-                        name = teacherDto.name ?: EMPTY_STRING,
+                        name = teacher.name ?: EMPTY_STRING,
                         school = "서울대학교" ?: EMPTY_STRING, // Todo
                         likes = 23 ?: 0, // Todo
-                        imageUrl = teacherDto.imageUrl ?: EMPTY_STRING,
-                        teacherId = teacherDto.id ?: EMPTY_STRING
+                        imageUrl = EMPTY_STRING,
+                        teacherId = teacher.id
                     )
                 }
                 emit(BaseResult.Success(teacherList))
@@ -78,15 +80,11 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
                     )
                 )
 
-            if (response.isSuccessful) {
-                val tutoringInfo = response.body()?.data
+            val body = response.body()
+            if (response.isSuccessful && body?.success == true) {
+                val tutoringInfo = body.data
 
-                val teacherPickResVO = TeacherPickResVO(
-                    tutoringId = tutoringInfo?.tutoringId ?: EMPTY_STRING,
-                    whiteBoardToken = tutoringInfo?.whiteBoardToken ?: EMPTY_STRING,
-                    whiteBoardUUID = tutoringInfo?.whiteBoardUUID ?: EMPTY_STRING,
-                    whiteBoardAppId = tutoringInfo?.whiteBoardAppId ?: EMPTY_STRING
-                )
+                val teacherPickResVO = tutoringInfo?.asDomain()!!
 
                 emit(BaseResult.Success(teacherPickResVO))
             } else {

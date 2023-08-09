@@ -26,9 +26,10 @@ class RegisterRepositoryImpl @Inject constructor(
                 StudentRegisterReqDto(
                     "testBio",
                     "testName",
-                    "student",
                     token.token!!,
                     token.vendor!!,
+                    studentRegisterVO.school,
+                    studentRegisterVO.grade,
                 )
             )
             if (response.isSuccessful && response.body()?.success == true) {
@@ -38,10 +39,7 @@ class RegisterRepositoryImpl @Inject constructor(
                     )
                 )
             } else {
-                val errorString =
-                    "error in ${this@RegisterRepositoryImpl::class.java.name}\n" +
-                            "message: ${response.body()!!.message}"
-                Log.d("Error", errorString)
+                emit(BaseResult.Error("error"))
             }
         }
     }
@@ -49,13 +47,16 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun registerTeacher(teacherRegisterVO: TeacherRegisterVO): Flow<BaseResult<String, String>> {
         return flow {
             val token = savedToken.getTokenInfo()
-            val response = registerApi.registerStudent(
-                StudentRegisterReqDto(
+            val response = registerApi.registerTeacher(
+                TeacherRegisterReqDto(
                     "testBio",
                     "testName",
-                    "teacher",
                     token.token!!,
                     token.vendor!!,
+                    teacherRegisterVO.univ ?: "undefined",
+                    teacherRegisterVO.colledge ?: "undefined",
+                    teacherRegisterVO.major ?: "undefined",
+                    1
                 )
             )
             val body = response.body()!!

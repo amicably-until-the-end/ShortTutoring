@@ -4,8 +4,8 @@ import java.io.Serializable
 
 data class SerializedVoiceRoomInfo(
     val appId: String,
-    val uuid: String,
-    val roomToken: String,
-    val uid: String
+    val token: String,
+    val channelId: String,
+    val uid: Int,
 ) : Serializable
 

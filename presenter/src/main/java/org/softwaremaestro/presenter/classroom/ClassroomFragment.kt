@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -14,7 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.herewhite.sdk.CommonCallback
 import com.herewhite.sdk.Room
+import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
 import com.herewhite.sdk.WhiteSdk
 import com.herewhite.sdk.WhiteSdkConfiguration
@@ -23,7 +26,10 @@ import com.herewhite.sdk.domain.ImageInformationWithUrl
 import com.herewhite.sdk.domain.MemberState
 import com.herewhite.sdk.domain.Promise
 import com.herewhite.sdk.domain.Region
+import com.herewhite.sdk.domain.RoomPhase
+import com.herewhite.sdk.domain.RoomState
 import com.herewhite.sdk.domain.SDKError
+import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -35,6 +41,7 @@ import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
 import org.softwaremaestro.presenter.showToast
 
+@AndroidEntryPoint
 class ClassroomFragment : Fragment() {
 
     private lateinit var binding: FragmentClassroomBinding
@@ -43,7 +50,7 @@ class ClassroomFragment : Fragment() {
     lateinit var sdkConfiguration: WhiteSdkConfiguration;
 
     private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
-    private lateinit var voiceInfo: SerializedWhiteBoardRoomInfo
+    private lateinit var voiceInfo: SerializedVoiceRoomInfo
 
     // Fill the App ID of your project generated on Agora Console.
     /*
@@ -119,7 +126,7 @@ class ClassroomFragment : Fragment() {
 
     private fun setAgora() {
         joinWhiteBoard()
-        //setupVoiceSDKEngine()
+        setupVoiceSDKEngine()
     }
 
     private fun joinWhiteBoard() {
@@ -127,8 +134,8 @@ class ClassroomFragment : Fragment() {
         sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
-        var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
 
+        var whiteSdk = WhiteSdk(whiteboardView, requireContext(), sdkConfiguration)
         var newPromise = object : Promise<Room> {
             override fun then(wRoom: Room?) {
                 whiteBoardRoom = wRoom!!
@@ -136,6 +143,7 @@ class ClassroomFragment : Fragment() {
                 memberState.currentApplianceName = "pencil"
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom?.memberState = memberState
+                wRoom?.disableSerialization(false)
                 setWhiteBoard()
             }
 
@@ -144,6 +152,38 @@ class ClassroomFragment : Fragment() {
                 Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
             }
         }
+        var roomListener = object : RoomListener {
+            override fun onPhaseChanged(phase: RoomPhase?) {
+                if (phase == RoomPhase.disconnected) {
+                    classFinshed()
+                }
+            }
+
+            override fun onDisconnectWithError(e: java.lang.Exception?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onKickedWithReason(reason: String?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onRoomStateChanged(modifyState: RoomState?) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCanUndoStepsUpdate(canUndoSteps: Long) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCanRedoStepsUpdate(canRedoSteps: Long) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onCatchErrorWhenAppendFrame(userId: Long, error: java.lang.Exception?) {
+                //TODO("Not yet implemented")
+            }
+        }
+
         var roomParams =
             RoomParams(whiteBoardInfo.uuid, whiteBoardInfo.roomToken, whiteBoardInfo.uid)
         whiteSdk.joinRoom(roomParams, newPromise)

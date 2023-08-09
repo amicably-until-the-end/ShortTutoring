@@ -9,8 +9,12 @@
     tools:ignore="MissingConstraints">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_toolbar"
-        style="@style/ToolBar">
+        android:id="@+id/container_menu_box"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_toolbar_back"
@@ -55,7 +59,8 @@
         android:gravity="center_vertical"
         android:paddingVertical="12dp">
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btn_show_scenes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -129,31 +134,34 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="undo"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toRightOf="@id/btn_selector" />
 
-            <Chronometer
-                android:id="@+id/ch_elapsed_time"
-                style="@style/h6"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/black" />
+        <Button
+            android:id="@+id/btn_get_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="사진"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toRightOf="@id/btn_color_erase"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <!--
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_exit"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="종료"
-                app:layout_constraintRight_toRightOf="parent" />
-                -->
-
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/btn_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="선택"
+            android:textAlignment="center"
+            app:layout_constraintLeft_toRightOf="@id/btn_get_image"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--    <TextView-->
