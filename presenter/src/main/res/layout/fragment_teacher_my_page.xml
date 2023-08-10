@@ -101,8 +101,8 @@
                         android:background="@drawable/btn_corner_radius_10_enabled"
                         android:gravity="center"
                         android:paddingVertical="12dp"
-                        android:text="찜하기 0"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        tools:text="찜하기 0" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_reserve"

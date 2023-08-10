@@ -1,13 +1,16 @@
 package org.softwaremaestro.domain.profile_get.entity
 
 data class ProfileGetResponseVO(
-    val following: List<String>?,
-    val schoolLevel: String?,
-    val schoolGrade: Int?,
-    val role: String?,
-    val followers: List<String>?,
-    val bio: String?,
     val id: String?,
     val name: String?,
-    val profileImage: String?
+    val bio: String?,
+    val profileImage: String?,
+    val role: String?,
+    val schoolLevel: String?,
+    val schoolGrade: Int?,
+    val schoolDivision: String?,
+    val schoolName: String?,
+    val schoolDepartment: String?,
+    val followersCount: Int?,
+    val followingCount: Int?
 )

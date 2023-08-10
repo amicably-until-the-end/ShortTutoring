@@ -14,10 +14,10 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.Util.decreaseWidth
 import org.softwaremaestro.presenter.Util.increaseWidth
 import org.softwaremaestro.presenter.teacher_home.ReviewAdapter
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.NumOfFollowerViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 
+private const val RATING = 4.8334f
 private const val NUM_OF_CLIP = 15
 
 @AndroidEntryPoint
@@ -26,8 +26,7 @@ class TeacherMyPageFragment : Fragment() {
     private lateinit var binding: FragmentTeacherMyPageBinding
 
     private val reviewsViewModel: ReviewsViewModel by viewModels()
-    private val numOfFollowerViewModel: NumOfFollowerViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
 
@@ -44,7 +43,7 @@ class TeacherMyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setExampleText()
+        setProfile()
 
         initReviewRecyclerView()
 
@@ -69,46 +68,24 @@ class TeacherMyPageFragment : Fragment() {
         }
     }
 
-    private fun toggleFollowing() {
-        following = !following
+    private fun setProfile() {
 
-        if (following) {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
-            numOfFollowerViewModel.addOne()
+        myProfileViewModel.getMyProfile()
 
-            binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
-                onEnd = { binding.btnReserve.visibility = View.VISIBLE }
-            )
-        } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
-            numOfFollowerViewModel.minusOne()
-
-            binding.btnFollow.increaseWidth(156, 500L, requireContext(),
-                onStart = { binding.btnReserve.visibility = View.GONE }
-            )
-        }
-    }
-
-    private fun setExampleText() {
-
-        profileViewModel.profile.observe(viewLifecycleOwner) {
+        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
             with(binding) {
                 Picasso.with(requireContext()).load(it.profileImage).fit().centerCrop()
                     .into(ivTeacherImg)
-                tvTeacherSchool.text = "학교 이름 내려주세요"
+                tvTeacherSchool.text = "${it.schoolName} ${it.schoolDepartment}"
                 tvTeacherName.text = it.name
-                tvRating.text = "별점 내려주세요"
+                tvRating.text = "%.2f".format(RATING)
                 tvNumOfClip.text = NUM_OF_CLIP.toString()
             }
         }
 
-        profileViewModel.getProfile()
-
-        numOfFollowerViewModel.numOfFollower.observe(viewLifecycleOwner) {
+        myProfileViewModel.numOfFollower.observe(viewLifecycleOwner) {
             binding.btnFollow.text = "찜하기 $it"
         }
-
-        numOfFollowerViewModel.getNumOfFollower()
     }
 
     private fun initReviewRecyclerView() {
@@ -130,5 +107,25 @@ class TeacherMyPageFragment : Fragment() {
         }
 
         reviewsViewModel.getReviews()
+    }
+
+    private fun toggleFollowing() {
+        following = !following
+
+        if (following) {
+            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+            myProfileViewModel.addOne()
+
+            binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
+                onEnd = { binding.btnReserve.visibility = View.VISIBLE }
+            )
+        } else {
+            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+            myProfileViewModel.minusOne()
+
+            binding.btnFollow.increaseWidth(156, 500L, requireContext(),
+                onStart = { binding.btnReserve.visibility = View.GONE }
+            )
+        }
     }
 }

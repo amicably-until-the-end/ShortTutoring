@@ -13,9 +13,9 @@ import javax.inject.Inject
 class ProfileGetRepositoryImpl @Inject constructor(private val profileGetApi: ProfileGetApi) :
     ProfileGetRepository {
 
-    override suspend fun getProfile(): Flow<BaseResult<ProfileGetResponseVO, String>> {
+    override suspend fun getProfile(userId: String): Flow<BaseResult<ProfileGetResponseVO, String>> {
         return flow {
-            val response = profileGetApi.getProfile()
+            val response = profileGetApi.getProfile(userId)
             val body = response.body()!!
             if (body.success == true) {
                 body.data?.asDomain()?.let {

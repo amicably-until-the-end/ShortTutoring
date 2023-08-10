@@ -7,7 +7,7 @@ import org.softwaremaestro.domain.profile_get.entity.ProfileGetResponseVO
 import javax.inject.Inject
 
 class ProfileGetUseCase @Inject constructor(private val profileGetRepository: ProfileGetRepository) {
-    suspend fun execute(): Flow<BaseResult<ProfileGetResponseVO, String>> {
-        return profileGetRepository.getProfile()
+    suspend fun execute(userId: String): Flow<BaseResult<ProfileGetResponseVO, String>> {
+        return profileGetRepository.getProfile(userId)
     }
 }
