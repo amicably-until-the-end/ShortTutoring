@@ -1,20 +1,22 @@
 package org.softwaremaestro.presenter.teacher_my_page
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.Util.decreaseWidth
 import org.softwaremaestro.presenter.Util.increaseWidth
 import org.softwaremaestro.presenter.teacher_home.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.NumOfFollowerViewModel
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
-
 
 private const val teacherName = "유정연선생님"
 private const val teacherSchool = "서울대학교 수의예과"
@@ -23,12 +25,14 @@ private const val numOfClip = 15
 
 private var following = false
 
+@AndroidEntryPoint
 class TeacherMyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherMyPageBinding
 
     private val reviewsViewModel: ReviewsViewModel by viewModels()
     private val numOfFollowerViewModel: NumOfFollowerViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
 
@@ -46,6 +50,11 @@ class TeacherMyPageFragment : Fragment() {
         setExampleText()
 
         initReviewRecyclerView()
+
+        profileViewModel.profile.observe(viewLifecycleOwner) {
+            Log.d("hhcc", it.toString())
+        }
+        profileViewModel.getProfile()
 
         binding.btnFollow.setOnClickListener {
             toggleFollowing()
