@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id("androidx.navigation.safeargs")
+    id("androidx.navigation.safeargs.kotlin")
 
 }
 
@@ -106,7 +106,6 @@ dependencies {
 
     // email check
     implementation 'com.github.in-seo:univcert:master-SNAPSHOT'
-
-
+    
 }
 

@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.student_home.viewmodel
+package org.softwaremaestro.presenter.teacher_profile.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -20,6 +20,9 @@ class ProfileViewModel @Inject constructor(private val profileGetUseCase: Profil
     private val _profile: MutableLiveData<ProfileGetResponseVO> = MutableLiveData()
     val profile: LiveData<ProfileGetResponseVO> get() = _profile
 
+    private val _numOfFollower: MutableLiveData<Int> = MutableLiveData()
+    val numOfFollower: LiveData<Int> get() = _numOfFollower
+
     fun getProfile(userId: String) {
         viewModelScope.launch {
             profileGetUseCase.execute(userId)
@@ -29,10 +32,18 @@ class ProfileViewModel @Inject constructor(private val profileGetUseCase: Profil
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _profile.postValue(result.data)
+                        is BaseResult.Success -> {
+                            _profile.postValue(result.data)
+                            _numOfFollower.postValue(result.data.followersCount ?: -1)
+                        }
+
                         is BaseResult.Error -> Log.d("Error", result.toString())
                     }
                 }
         }
     }
+
+    fun addOne() = _numOfFollower.postValue(_numOfFollower.value!! + 1)
+
+    fun minusOne() = _numOfFollower.postValue(_numOfFollower.value!! - 1)
 }

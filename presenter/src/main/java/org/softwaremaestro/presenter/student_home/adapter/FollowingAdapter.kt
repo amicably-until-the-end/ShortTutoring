@@ -33,6 +33,9 @@ class FollowingAdapter(private val onItemClickListener: (String) -> Unit) :
 
         fun onBind(item: FollowingGetResponseVO) {
             binding.tvName.text = item.name
+            binding.ivPhoto.setOnClickListener {
+                item.id?.let { onItemClickListener(it) }
+            }
         }
     }
 }

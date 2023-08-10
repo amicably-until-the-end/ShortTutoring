@@ -35,7 +35,7 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
                         is BaseResult.Success -> {
                             result.data.let {
                                 _myProfile.postValue(it)
-                                _numOfFollower.postValue(it.followers?.size)
+                                _numOfFollower.postValue(it.followers?.size ?: -1)
                             }
                         }
 

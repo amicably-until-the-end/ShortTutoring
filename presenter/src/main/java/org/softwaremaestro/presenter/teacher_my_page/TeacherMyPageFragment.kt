@@ -68,26 +68,6 @@ class TeacherMyPageFragment : Fragment() {
         }
     }
 
-    private fun toggleFollowing() {
-        following = !following
-
-        if (following) {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
-            myProfileViewModel.addOne()
-
-            binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
-                onEnd = { binding.btnReserve.visibility = View.VISIBLE }
-            )
-        } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
-            myProfileViewModel.minusOne()
-
-            binding.btnFollow.increaseWidth(156, 500L, requireContext(),
-                onStart = { binding.btnReserve.visibility = View.GONE }
-            )
-        }
-    }
-
     private fun setProfile() {
 
         myProfileViewModel.getMyProfile()
@@ -127,5 +107,25 @@ class TeacherMyPageFragment : Fragment() {
         }
 
         reviewsViewModel.getReviews()
+    }
+
+    private fun toggleFollowing() {
+        following = !following
+
+        if (following) {
+            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+            myProfileViewModel.addOne()
+
+            binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
+                onEnd = { binding.btnReserve.visibility = View.VISIBLE }
+            )
+        } else {
+            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+            myProfileViewModel.minusOne()
+
+            binding.btnFollow.increaseWidth(156, 500L, requireContext(),
+                onStart = { binding.btnReserve.visibility = View.GONE }
+            )
+        }
     }
 }

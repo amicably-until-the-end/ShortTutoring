@@ -3,7 +3,6 @@ package org.softwaremaestro.presenter.student_home
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,7 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.item.Lecture
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
-import org.softwaremaestro.presenter.student_home.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.ProfileViewModel
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
@@ -58,17 +57,12 @@ class StudentHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        profileViewModel.profile.observe(viewLifecycleOwner) {
-            Log.d("hhcc", it.toString())
-        }
-
-        profileViewModel.getProfile("test-teacher-id")
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
 
         initBottomSheetDialog()
         setQuestionButton()
-        setMyTeacherRecyclerView()
+        setFollowingRecyclerView()
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setBestTeacherRecyclerView()
@@ -112,9 +106,14 @@ class StudentHomeFragment : Fragment() {
     }
 
 
-    private fun setMyTeacherRecyclerView() {
-        followingAdapter = FollowingAdapter {}
-        binding.rvMyTeacher.apply {
+    private fun setFollowingRecyclerView() {
+        followingAdapter = FollowingAdapter {
+            val action =
+                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
+            findNavController().navigate(action)
+        }
+
+        binding.rvFollowing.apply {
             adapter = followingAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
@@ -160,8 +159,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun observeFollowing() {
         followingViewModel.following.observe(viewLifecycleOwner) {
-
             followingAdapter.setItem(it)
+            followingAdapter.notifyDataSetChanged()
         }
     }
 
