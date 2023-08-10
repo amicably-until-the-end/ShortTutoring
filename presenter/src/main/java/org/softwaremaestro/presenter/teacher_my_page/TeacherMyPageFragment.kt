@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
-import org.softwaremaestro.presenter.decreaseWidth
-import org.softwaremaestro.presenter.increaseWidth
+import org.softwaremaestro.presenter.Util.decreaseWidth
+import org.softwaremaestro.presenter.Util.increaseWidth
 import org.softwaremaestro.presenter.teacher_home.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.NumOfFollowerViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel

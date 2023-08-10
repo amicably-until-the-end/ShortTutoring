@@ -15,6 +15,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.classroom.usecase.FinishClassUseCase
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
@@ -40,6 +41,9 @@ class ClassroomViewModel @Inject constructor(
     fun finishClass(tutoringId: String) {
         viewModelScope.launch {
             finishClassUseCase.execute(tutoringId)
+                .onStart {
+
+                }
                 .catch { e ->
                     Log.d("error", e.toString())
                 }

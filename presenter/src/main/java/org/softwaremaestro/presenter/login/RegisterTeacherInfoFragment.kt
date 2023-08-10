@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 
 // 회원가입 두 번째 화면.

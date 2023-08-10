@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter
+package org.softwaremaestro.presenter.Util
 
 import android.animation.Animator
 import android.animation.ValueAnimator
@@ -11,6 +11,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
 
 object Util {
