@@ -2,7 +2,6 @@ package org.softwaremaestro.data.common.utils
 
 import android.util.Log
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 import org.softwaremaestro.data.infra.SharedPrefs
 
