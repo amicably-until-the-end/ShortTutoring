@@ -7,6 +7,6 @@ import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
 class FinishClassUseCase @Inject constructor(private val repository: ClassRoomRepository) {
-    suspend fun execute(tutoringId: String): Flow<BaseResult<TutoringInfoVO, String>> =
-        repository.getTutoringInfo(tutoringId)
+    suspend fun execute(tutoringId: String): Flow<BaseResult<String, String>> =
+        repository.finishClass(tutoringId)
 }

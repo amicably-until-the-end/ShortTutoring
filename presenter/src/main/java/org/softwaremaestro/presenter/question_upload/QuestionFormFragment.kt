@@ -12,13 +12,17 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.Util.LoadingDialog
+import org.softwaremaestro.presenter.Util.UIState
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
-import org.softwaremaestro.presenter.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
 
 
 @AndroidEntryPoint
 class QuestionFormFragment : Fragment() {
+
+    private lateinit var loadingDialog: LoadingDialog
 
     lateinit var binding: FragmentQuestionFormBinding
     private val viewModel: QuestionUploadViewModel by activityViewModels()
@@ -136,17 +140,30 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun observeQuestionId() {
-        viewModel.questionId.observe(viewLifecycleOwner) {
-            if (!viewModel.questionId.value.isNullOrEmpty()) {
-                val bundle = bundleOf("questionId" to viewModel.questionId.value)
-                findNavController().navigate(
-                    R.id.action_questionFormFragment_to_teacherSelectFragment,
-                    bundle
-                )
-            } else {
-                binding.btnSubmit.isEnabled = true
-                Toast.makeText(requireContext(), "질문 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        viewModel.questionUploadState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Loading -> {
+                    loadingDialog = LoadingDialog(requireContext())
+                    binding.btnSubmit.setEnabledAndChangeColor(false)
+                    loadingDialog.show()
+                }
+
+                is UIState.Success -> {
+                    loadingDialog.dismiss()
+                    Toast.makeText(requireContext(), "질문 등록에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                    val bundle = bundleOf("questionId" to it.data.questionId)
+                    findNavController().navigate(
+                        R.id.action_questionFormFragment_to_teacherSelectFragment,
+                        bundle
+                    )
+                }
+
+                else -> {
+                    loadingDialog.dismiss()
+                    binding.btnSubmit.setEnabledAndChangeColor(true)
+                }
             }
+            
         }
         checkAndEnableSubjectBtn()
     }

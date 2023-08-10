@@ -18,8 +18,8 @@ import javax.inject.Inject
 class CheckViewModel @Inject constructor(private val questionCheckUseCase: QuestionCheckUseCase) :
     ViewModel() {
 
-    private val _check: MutableLiveData<QuestionCheckResultVO> = MutableLiveData()
-    val check: LiveData<QuestionCheckResultVO> get() = _check
+    private val _check: MutableLiveData<QuestionCheckResultVO?> = MutableLiveData()
+    val check: LiveData<QuestionCheckResultVO?> get() = _check
 
     fun checkQuestion(requestId: String, questionCheckRequestVO: QuestionCheckRequestVO) {
         viewModelScope.launch {
@@ -36,5 +36,9 @@ class CheckViewModel @Inject constructor(private val questionCheckUseCase: Quest
                     }
                 }
         }
+    }
+
+    fun clearCheck() {
+        _check.value = null
     }
 }

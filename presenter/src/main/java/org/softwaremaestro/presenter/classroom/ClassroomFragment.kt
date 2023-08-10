@@ -46,32 +46,25 @@ class ClassroomFragment : Fragment() {
 
     private lateinit var binding: FragmentClassroomBinding
 
+
     lateinit var whiteboardView: WhiteboardView
+
+
+    // Agora whiteboard instance
     lateinit var sdkConfiguration: WhiteSdkConfiguration;
 
 
+    // Agora voice instance
+    private lateinit var voiceEngine: RtcEngine
+
+    // Channel Info
     private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
     private lateinit var voiceInfo: SerializedVoiceRoomInfo
 
-    // Fill the App ID of your project generated on Agora Console.
-    /*
-        private var voice_appId = "8a2ba5d43c734e6e8645149b41e4b540"
 
-        // Fill the channel name.
-        private var channelName = "shortStudyDev"
+    // Room State
+    private var isMicOn = true
 
-        // Fill the temp token generated on Agora Console.
-        private var voiceRoomToken =
-            "007eJxTYPhXvfZyXvx5njXHTh9gW2H1Y2FRLf+vOzsybDmXX3IVv1utwGCRaJSUaJpiYpxsbmySapZqYWZiamhimWRimGqSZGpi8EBsX0pDICNDruE+RkYGCATxeRmKM/KLSoJLSlMqXVLLGBgAMkckuA=="
-
-        // An integer that identifies the local user.
-        private var voice_uid = 0
-
-        // Track the status of your connection
-        private var voice_isJoined = false*/
-
-    // Agora engine instance
-    private lateinit var agoraEngine: RtcEngine
 
     private var whiteBoardRoom: Room? = null
 
@@ -105,7 +98,6 @@ class ClassroomFragment : Fragment() {
         }
         startTimer()
         setAgora()
-        //setupVoiceSDKEngine()
 
         return binding.root
     }
@@ -119,13 +111,7 @@ class ClassroomFragment : Fragment() {
 
     fun setTutoringArgument() {
         whiteBoardInfo =
-            SerializedWhiteBoardRoomInfo(
-                "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
-                "0b4520802b0311eeb1e747d8f6d5a89a",
-                "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxNDg5NTU0ODU1Jm5vbmNlPTE2OTE0NTM1NTQ4NTUwMCZyb2xlPTAmc2lnPWM5MTdkMjYzNTQxOTBjMTZkZTVkMzMwNDViYjZhYzViZDJhYjUxZjA2MjI5N2ZhMjM1ZTM4YWJmODM4MzUzNTMmdXVpZD0wYjQ1MjA4MDJiMDMxMWVlYjFlNzQ3ZDhmNmQ1YTg5YQ",
-                (0..100000).random().toString()
-            )
-        //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         voiceInfo =
             requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
 //        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
@@ -147,6 +133,11 @@ class ClassroomFragment : Fragment() {
         setRedoButton()
         setUndoButton()
         setUpFinishButton()
+    }
+
+    private fun setVoiceFunctions() {
+        //join 을 한 이후에 음성 관련 기능 세팅
+        setMicToggleButton()
     }
 
 
@@ -219,15 +210,15 @@ class ClassroomFragment : Fragment() {
             config.mContext = requireContext()
             config.mAppId = voiceInfo.appId
             config.mEventHandler = mRtcEventHandler
-            agoraEngine = RtcEngine.create(config)
-            joinChannel()
+            voiceEngine = RtcEngine.create(config)
+            joinVoiceChannel()
         } catch (e: Exception) {
             throw RuntimeException(e.toString())
         }
     }
 
 
-    private fun joinChannel() {
+    private fun joinVoiceChannel() {
         val options = ChannelMediaOptions()
         options.autoSubscribeAudio = true
         // Set both clients as the BROADCASTER.
@@ -237,14 +228,15 @@ class ClassroomFragment : Fragment() {
 
         // Join the channel with a temp token.
         // You need to specify the user ID yourself, and ensure that it is unique in the channel.
-        agoraEngine.joinChannel(voiceInfo.token, voiceInfo.channelId, voiceInfo.uid, options)
-
+        voiceEngine.joinChannel(voiceInfo.token, voiceInfo.channelId, voiceInfo.uid, options)
+        setVoiceFunctions()
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         whiteboardView.removeAllViews()
+        voiceEngine.leaveChannel()
         whiteboardView.destroy()
     }
 
@@ -357,7 +349,7 @@ class ClassroomFragment : Fragment() {
             val dialog = AlertDialog.Builder(requireContext()).apply {
                 setTitle("과외를 종료하시겠습니까?")
                 setPositiveButton("종료") { _, _ ->
-                    viewModel.finishClass(whiteBoardInfo.uuid)
+                    viewModel.finishClass(voiceInfo.channelId)
                 }
                 setNegativeButton("취소") { _, _ ->
                 }
@@ -371,10 +363,25 @@ class ClassroomFragment : Fragment() {
         val dialog = AlertDialog.Builder(requireContext()).apply {
             setTitle("과외가 종료되었습니다.")
             setPositiveButton("확인") { _, _ ->
+                voiceEngine.leaveChannel()
                 requireActivity().finish()
             }
         }
         dialog.show()
+    }
+
+    private fun setMicToggleButton() {
+        binding.btnMic.setOnClickListener {
+            if (!isMicOn) {
+                isMicOn = true
+                voiceEngine.enableLocalAudio(true)
+                Toast.makeText(requireContext(), "마이크가 켜졌습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                isMicOn = false
+                voiceEngine.enableLocalAudio(false)
+                Toast.makeText(requireContext(), "마이크가 꺼졌습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 }

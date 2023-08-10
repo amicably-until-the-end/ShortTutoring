@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentSearchYearOfAdmissionBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.Util.requestFocusAndShowKeyboard
 
 const val SELECTED_YEAR_OF_ADMISSION = "selected-year-of-admission"
 private const val IME_ACTION = IME_ACTION_NEXT

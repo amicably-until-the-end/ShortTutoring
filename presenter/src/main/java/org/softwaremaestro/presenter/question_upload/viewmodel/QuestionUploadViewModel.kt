@@ -1,18 +1,20 @@
 package org.softwaremaestro.presenter.question_upload.viewmodel
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.usecase.QuestionUploadUseCase
-import org.softwaremaestro.presenter.toBase64
+import org.softwaremaestro.presenter.Util.UIState
+import org.softwaremaestro.presenter.Util.toBase64
 import javax.inject.Inject
 
 
@@ -21,8 +23,9 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     ViewModel() {
 
 
-    private val _questionId: MutableLiveData<String?> = MutableLiveData();
-    val questionId: LiveData<String?> get() = _questionId
+    private val _questionUploadState: MutableLiveData<UIState<QuestionUploadResultVO>> =
+        MutableLiveData();
+    val questionUploadState: LiveData<UIState<QuestionUploadResultVO>> get() = _questionUploadState
 
     val _description: MutableLiveData<String?> = MutableLiveData();
     val _school: MutableLiveData<String?> = MutableLiveData();
@@ -49,18 +52,22 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
         )
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)
-                .catch { exception ->
-                    _questionId.value = null
+                .onStart {
+                    _questionUploadState.value = UIState.Loading
+                }
+                .catch { _ ->
+                    _questionUploadState.value = UIState.Failure
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            _questionId.value = result.data.questionId
+                            _questionUploadState.value = UIState.Success(result.data)
                         }
 
-                        is BaseResult.Error -> _questionId.value = null
+                        is BaseResult.Error -> _questionUploadState.value = UIState.Failure
                     }
                 }
+
 
         }
     }
