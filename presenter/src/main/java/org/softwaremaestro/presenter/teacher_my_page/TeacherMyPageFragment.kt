@@ -95,7 +95,7 @@ class TeacherMyPageFragment : Fragment() {
             with(binding) {
                 Picasso.with(requireContext()).load(it.profileImage).fit().centerCrop()
                     .into(ivTeacherImg)
-                tvTeacherSchool.text = "학교 이름 내려주세요"
+                tvTeacherSchool.text = "${it.schoolName} ${it.schoolDepartment}"
                 tvTeacherName.text = it.name
                 tvRating.text = "별점 내려주세요"
                 tvNumOfClip.text = NUM_OF_CLIP.toString()
