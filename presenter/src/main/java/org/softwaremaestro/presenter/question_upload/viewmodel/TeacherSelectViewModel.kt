@@ -41,7 +41,7 @@ class TeacherSelectViewModel @Inject constructor(
     val errorMsg: LiveData<String> get() = _errorMsg
 
     private val _teacherSelectState: MutableLiveData<UIState<TeacherPickResVO>> = MutableLiveData()
-    val tutoringInfo: LiveData<UIState<TeacherPickResVO>> get() = _teacherSelectState
+    val teacherSelectState: LiveData<UIState<TeacherPickResVO>> get() = _teacherSelectState
 
 
     fun pickTeacher(teacherPickReqVO: TeacherPickReqVO) {

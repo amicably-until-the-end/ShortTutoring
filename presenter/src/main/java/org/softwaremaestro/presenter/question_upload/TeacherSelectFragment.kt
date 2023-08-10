@@ -2,7 +2,6 @@ package org.softwaremaestro.presenter.question_upload
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,8 +32,7 @@ class TeacherSelectFragment : Fragment() {
 
     private lateinit var loadingDialog: LoadingDialog
 
-    var noTeacher = true
-
+    private var noTeacher = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,13 +42,7 @@ class TeacherSelectFragment : Fragment() {
 
         binding = FragmentTeacherSelectBinding.inflate(inflater, container, false)
 
-
-        val questionId = arguments?.getString("questionId")
-
-        if (questionId != null) {
-            viewModel.startGetTeacherList(questionId)
-            setTeacherRecycler(questionId)
-        }
+        retrieveArguments()
         setToolBar()
 
         return binding.root
@@ -61,6 +53,15 @@ class TeacherSelectFragment : Fragment() {
 
         setObserver()
 
+    }
+
+    private fun retrieveArguments() {
+        val questionId = arguments?.getString("questionId")
+
+        if (questionId != null) {
+            viewModel.startGetTeacherList(questionId)
+            setTeacherRecycler(questionId)
+        }
     }
 
     /**
@@ -85,7 +86,7 @@ class TeacherSelectFragment : Fragment() {
      * 강사를 선택하면, 선택한 강사의 id를 서버에 전달하고, 서버에서 전달받은 whiteboard 정보를 observe한다.
      */
     private fun observeTutoringInfo() {
-        viewModel.tutoringInfo.observe(viewLifecycleOwner, Observer {
+        viewModel.teacherSelectState.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is UIState.Loading -> {
                     loadingDialog = LoadingDialog(requireActivity())
@@ -144,6 +145,7 @@ class TeacherSelectFragment : Fragment() {
     private fun setTeacherRecycler(questionId: String) {
         teacherListAdapter =
             TeacherAdapter(viewModel.teacherList.value ?: emptyList()) { teacherId: String ->
+                if (viewModel.teacherSelectState.value == UIState.Loading) return@TeacherAdapter
                 viewModel.pickTeacher(
                     TeacherPickReqVO(
                         questionId = questionId,
@@ -152,7 +154,6 @@ class TeacherSelectFragment : Fragment() {
                     )
                 )
             }
-
         binding.rvTeacherList.apply {
             adapter = teacherListAdapter
             layoutManager = LinearLayoutManager(requireActivity())
