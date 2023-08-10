@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.teacher_profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.user_follow.SUCCESS_USER_FOLLOW
+import org.softwaremaestro.domain.user_follow.SUCCESS_USER_UNFOLLOW
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.decreaseWidth
 import org.softwaremaestro.presenter.Util.increaseWidth
 import org.softwaremaestro.presenter.databinding.FragmentTeacherProfileBinding
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.NotiFollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.ProfileViewModel
 
 private const val RATING = 4.83333f
@@ -24,8 +28,10 @@ class TeacherProfileFragment : Fragment() {
     private lateinit var binding: FragmentTeacherProfileBinding
 
     private val args by navArgs<TeacherProfileFragmentArgs>()
+    private lateinit var selectedUserId: String
 
     private val profileViewModel: ProfileViewModel by viewModels()
+    private val notiFollowUserViewModel: NotiFollowUserViewModel by viewModels()
 
     private var following = true
 
@@ -34,6 +40,12 @@ class TeacherProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        if (args.teacherId == null) {
+            // 에러 처리
+        } else {
+            selectedUserId = args.teacherId!!
+        }
+
         binding = FragmentTeacherProfileBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -41,19 +53,27 @@ class TeacherProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setProfile()
+        profileViewModel.getProfile(selectedUserId)
+
+        observe()
 
         binding.btnFollow.setOnClickListener {
             toggleFollowing()
         }
     }
 
-    private fun setProfile() {
+    private fun observe() {
 
-        args.teacherId?.let {
-            profileViewModel.getProfile(it)
-        }
+        observeProfile()
 
+        observeNumOfFollower()
+
+        observeNotiFollowUser()
+
+        observeNotiUnfollowUser()
+    }
+
+    private fun observeProfile() {
         profileViewModel.profile.observe(viewLifecycleOwner) {
 
             with(binding) {
@@ -65,9 +85,27 @@ class TeacherProfileFragment : Fragment() {
                 tvNumOfClip.text = NUM_OF_CLIP.toString()
             }
         }
+    }
 
+    private fun observeNumOfFollower() {
         profileViewModel.numOfFollower.observe(viewLifecycleOwner) {
             binding.btnFollow.text = "찜하기 $it"
+        }
+    }
+
+    private fun observeNotiFollowUser() {
+        notiFollowUserViewModel.notiFollowUser.observe(viewLifecycleOwner) {
+            if (it != SUCCESS_USER_FOLLOW) {
+                Log.d("error", "failed in following user")
+            }
+        }
+    }
+
+    private fun observeNotiUnfollowUser() {
+        notiFollowUserViewModel.notiUnfollowUser.observe(viewLifecycleOwner) {
+            if (it != SUCCESS_USER_UNFOLLOW) {
+                Log.d("error", "failed in umfollowing user")
+            }
         }
     }
 
@@ -81,6 +119,9 @@ class TeacherProfileFragment : Fragment() {
             binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
                 onEnd = { binding.btnReserve.visibility = View.VISIBLE }
             )
+
+            notiFollowUserViewModel.followUser(selectedUserId)
+
         } else {
             binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
             profileViewModel.minusOne()
@@ -88,6 +129,8 @@ class TeacherProfileFragment : Fragment() {
             binding.btnFollow.increaseWidth(156, 500L, requireContext(),
                 onStart = { binding.btnReserve.visibility = View.GONE }
             )
+
+            notiFollowUserViewModel.unfollowUser(selectedUserId)
         }
     }
 }
