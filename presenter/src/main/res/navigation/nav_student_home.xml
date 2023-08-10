@@ -40,4 +40,9 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/teacherSearchFragment"
+        android:name="org.softwaremaestro.presenter.teacher_search.TeacherSearchFragment"
+        android:label="fragment_teacher_search"
+        tools:layout="@layout/fragment_teacher_search" />
 </navigation>
