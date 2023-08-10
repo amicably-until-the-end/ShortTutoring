@@ -20,6 +20,9 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
     private val _myProfile: MutableLiveData<MyProfileGetResponseVO> = MutableLiveData()
     val myProfile: LiveData<MyProfileGetResponseVO> get() = _myProfile
 
+    private val _numOfFollower: MutableLiveData<Int> = MutableLiveData()
+    val numOfFollower: LiveData<Int> get() = _numOfFollower
+
     fun getMyProfile() {
         viewModelScope.launch {
             myProfileGetUseCase.execute()
@@ -29,10 +32,20 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _myProfile.postValue(result.data)
+                        is BaseResult.Success -> {
+                            result.data.let {
+                                _myProfile.postValue(it)
+                                _numOfFollower.postValue(it.followers?.size)
+                            }
+                        }
+
                         is BaseResult.Error -> Log.d("Error", result.toString())
                     }
                 }
         }
     }
+
+    fun addOne() = _numOfFollower.postValue(_numOfFollower.value!! + 1)
+
+    fun minusOne() = _numOfFollower.postValue(_numOfFollower.value!! - 1)
 }
