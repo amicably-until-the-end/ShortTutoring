@@ -3,17 +3,23 @@ package org.softwaremaestro.presenter.student_home
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.toPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
@@ -24,6 +30,7 @@ import org.softwaremaestro.presenter.student_home.adapter.MyTeacherAdapter
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.item.Lecture
 import org.softwaremaestro.presenter.student_home.item.MyTeacher
+import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
@@ -40,6 +47,8 @@ private const val PROBLEM_NUMBER_3 = 41
 class StudentHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentHomeBinding
+
+    private val followingViewModel: FollowingViewModel by viewModels()
 
     private lateinit var myTeacherAdapter: MyTeacherAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -60,6 +69,15 @@ class StudentHomeFragment : Fragment() {
         setLectureRecyclerView()
         setBestTeacherRecyclerView()
         setToolBar()
+
+        followingViewModel.following.observe(viewLifecycleOwner) {
+            Log.d("hhcc", it.toString())
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000L)
+            followingViewModel.getFollowing("test-student-id")
+        }
 
         // mockup
         setItemToMyTeacherAdapter()
