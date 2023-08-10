@@ -191,6 +191,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeCheck() {
         checkViewModel.check.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
             when (it.studentSelect) {
                 "selected" -> {
                     //snackbar가 떠 있으면 계속 api를 호출하는 상태임. 결과 나왔으면 그만 호출 해야함.
@@ -213,6 +214,7 @@ class TeacherHomeFragment : Fragment() {
                         putExtra("whiteBoardInfo", whiteBoardRoomInfo)
                         putExtra("voiceRoomInfo", voiceRoomInfo)
                     }
+                    checkViewModel.clearCheck()
                     startActivity(intent)
                 }
 
