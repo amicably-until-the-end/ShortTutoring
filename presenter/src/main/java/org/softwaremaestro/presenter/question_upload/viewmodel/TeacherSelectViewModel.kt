@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
@@ -16,6 +17,7 @@ import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_upload.usecase.TeacherListGetUseCase
 import org.softwaremaestro.domain.question_upload.usecase.TeacherPickUseCase
+import org.softwaremaestro.presenter.Util.UIState
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
@@ -38,40 +40,29 @@ class TeacherSelectViewModel @Inject constructor(
     private val _errorMsg: MutableLiveData<String> = MutableLiveData();
     val errorMsg: LiveData<String> get() = _errorMsg
 
-    private val _tutoringInfo: MutableLiveData<TeacherPickResVO> = MutableLiveData()
-    val tutoringInfo: LiveData<TeacherPickResVO> get() = _tutoringInfo
-
-    private var waitForRoom = false
+    private val _teacherSelectState: MutableLiveData<UIState<TeacherPickResVO>> = MutableLiveData()
+    val teacherSelectState: LiveData<UIState<TeacherPickResVO>> get() = _teacherSelectState
 
 
     fun pickTeacher(teacherPickReqVO: TeacherPickReqVO) {
-        if (waitForRoom) return
-        waitForRoom = true
         viewModelScope.launch {
 
             teacherPickUseCase.execute(teacherPickReqVO)
-                .catch { exception ->
-                    waitForRoom = false
-                    Log.d("Teacher Select ViewModel", exception.message.toString())
+                .onStart {
+                    _teacherSelectState.value = UIState.Loading
+                }
+                .catch { _ ->
+                    _teacherSelectState.value = UIState.Failure
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            Log.d(
-                                "Teacher Select ViewModel",
-                                "success pick viewmodel ${result.data}"
-                            )
-                            _tutoringInfo.postValue(result.data)
+                            _teacherSelectState.postValue(UIState.Success(result.data))
                         }
 
                         is BaseResult.Error -> {
-                            Log.d(
-                                "Teacher Select ViewModel",
-                                "fail pick viewmodel ${result.rawResponse}"
-                            )
+                            _teacherSelectState.postValue(UIState.Failure)
 
-                            _errorMsg.postValue("fail to pick Teacher")
-                            waitForRoom = false
                         }
                     }
                 }
