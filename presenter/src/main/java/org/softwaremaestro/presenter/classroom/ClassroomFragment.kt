@@ -119,13 +119,7 @@ class ClassroomFragment : Fragment() {
 
     fun setTutoringArgument() {
         whiteBoardInfo =
-            SerializedWhiteBoardRoomInfo(
-                "Rxin0CqBEe6G57e1KJqeHw/oPircsyuDTAGMg",
-                "0b4520802b0311eeb1e747d8f6d5a89a",
-                "NETLESSROOM_YWs9S2NIcGQ2U1Rodlc2RXBpWCZleHBpcmVBdD0xNjkxNDg5NTU0ODU1Jm5vbmNlPTE2OTE0NTM1NTQ4NTUwMCZyb2xlPTAmc2lnPWM5MTdkMjYzNTQxOTBjMTZkZTVkMzMwNDViYjZhYzViZDJhYjUxZjA2MjI5N2ZhMjM1ZTM4YWJmODM4MzUzNTMmdXVpZD0wYjQ1MjA4MDJiMDMxMWVlYjFlNzQ3ZDhmNmQ1YTg5YQ",
-                (0..100000).random().toString()
-            )
-        //requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
         voiceInfo =
             requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
 //        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
@@ -220,14 +214,14 @@ class ClassroomFragment : Fragment() {
             config.mAppId = voiceInfo.appId
             config.mEventHandler = mRtcEventHandler
             agoraEngine = RtcEngine.create(config)
-            joinChannel()
+            joinVoiceChannel()
         } catch (e: Exception) {
             throw RuntimeException(e.toString())
         }
     }
 
 
-    private fun joinChannel() {
+    private fun joinVoiceChannel() {
         val options = ChannelMediaOptions()
         options.autoSubscribeAudio = true
         // Set both clients as the BROADCASTER.
@@ -245,6 +239,7 @@ class ClassroomFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         whiteboardView.removeAllViews()
+        agoraEngine.leaveChannel()
         whiteboardView.destroy()
     }
 
@@ -357,7 +352,7 @@ class ClassroomFragment : Fragment() {
             val dialog = AlertDialog.Builder(requireContext()).apply {
                 setTitle("과외를 종료하시겠습니까?")
                 setPositiveButton("종료") { _, _ ->
-                    viewModel.finishClass(whiteBoardInfo.uuid)
+                    viewModel.finishClass(voiceInfo.channelId)
                 }
                 setNegativeButton("취소") { _, _ ->
                 }
@@ -371,6 +366,7 @@ class ClassroomFragment : Fragment() {
         val dialog = AlertDialog.Builder(requireContext()).apply {
             setTitle("과외가 종료되었습니다.")
             setPositiveButton("확인") { _, _ ->
+                agoraEngine.leaveChannel()
                 requireActivity().finish()
             }
         }

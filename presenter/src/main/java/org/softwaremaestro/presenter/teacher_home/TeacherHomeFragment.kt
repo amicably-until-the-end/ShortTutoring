@@ -205,7 +205,7 @@ class TeacherHomeFragment : Fragment() {
                     val voiceRoomInfo = SerializedVoiceRoomInfo(
                         it.RTCAppId!!,
                         it.teacherRTCToken!!,
-                        it.studentRTCToken!!,
+                        it.tutoringId!!,
                         1,
                     )
                     // 교실 액티비티로 이동한다
