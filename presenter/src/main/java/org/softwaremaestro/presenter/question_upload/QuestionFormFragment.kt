@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
-import org.softwaremaestro.presenter.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
 
 
 @AndroidEntryPoint

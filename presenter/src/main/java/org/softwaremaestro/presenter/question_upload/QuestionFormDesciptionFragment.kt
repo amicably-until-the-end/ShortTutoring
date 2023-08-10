@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormDescriptionBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
-import org.softwaremaestro.presenter.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.Util.requestFocusAndShowKeyboard
 
 private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT
 

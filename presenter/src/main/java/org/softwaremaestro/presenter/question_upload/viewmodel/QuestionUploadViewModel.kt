@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.question_upload.viewmodel
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,7 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.usecase.QuestionUploadUseCase
-import org.softwaremaestro.presenter.toBase64
+import org.softwaremaestro.presenter.Util.toBase64
 import javax.inject.Inject
 
 
