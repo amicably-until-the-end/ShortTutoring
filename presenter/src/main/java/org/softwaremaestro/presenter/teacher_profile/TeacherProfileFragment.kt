@@ -30,10 +30,10 @@ class TeacherProfileFragment : Fragment() {
     private val args by navArgs<TeacherProfileFragmentArgs>()
     private lateinit var selectedUserId: String
 
+    private var following = false
+
     private val profileViewModel: ProfileViewModel by viewModels()
     private val notiFollowUserViewModel: NotiFollowUserViewModel by viewModels()
-
-    private var following = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,12 +46,16 @@ class TeacherProfileFragment : Fragment() {
             selectedUserId = args.teacherId!!
         }
 
+        // following 설정
+
         binding = FragmentTeacherProfileBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         profileViewModel.getProfile(selectedUserId)
 
