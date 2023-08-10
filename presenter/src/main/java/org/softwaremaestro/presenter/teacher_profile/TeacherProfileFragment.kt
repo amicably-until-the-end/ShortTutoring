@@ -30,7 +30,7 @@ class TeacherProfileFragment : Fragment() {
     private val args by navArgs<TeacherProfileFragmentArgs>()
     private lateinit var selectedUserId: String
 
-    private var following = false
+    private var following = true
 
     private val profileViewModel: ProfileViewModel by viewModels()
     private val notiFollowUserViewModel: NotiFollowUserViewModel by viewModels()
