@@ -3,7 +3,6 @@ package org.softwaremaestro.presenter.student_home
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,24 +15,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.toPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.BestTeacherAdapter
+import org.softwaremaestro.presenter.student_home.adapter.FollowingAdapter
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
-import org.softwaremaestro.presenter.student_home.adapter.MyTeacherAdapter
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.item.Lecture
-import org.softwaremaestro.presenter.student_home.item.MyTeacher
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
+private const val STUDENT_ID = "test-student-id"
 
 private const val SUBJECT = "수학1"
 private const val MAJOR_SECTION_1 = "다항식"
@@ -50,7 +45,7 @@ class StudentHomeFragment : Fragment() {
 
     private val followingViewModel: FollowingViewModel by viewModels()
 
-    private lateinit var myTeacherAdapter: MyTeacherAdapter
+    private lateinit var followingAdapter: FollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var bestTeacherAdapter: BestTeacherAdapter
     private lateinit var bottomSheetDialog: BottomSheetDialog
@@ -70,17 +65,9 @@ class StudentHomeFragment : Fragment() {
         setBestTeacherRecyclerView()
         setToolBar()
 
-        followingViewModel.following.observe(viewLifecycleOwner) {
-            Log.d("hhcc", it.toString())
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(1000L)
-            followingViewModel.getFollowing("test-student-id")
-        }
+        observeFollowing()
 
         // mockup
-        setItemToMyTeacherAdapter()
         setItemToBestTeacherAdapter()
         setItemToLectureAdapter()
 
@@ -117,12 +104,14 @@ class StudentHomeFragment : Fragment() {
 
 
     private fun setMyTeacherRecyclerView() {
-        myTeacherAdapter = MyTeacherAdapter {}
+        followingAdapter = FollowingAdapter {}
         binding.rvMyTeacher.apply {
-            adapter = myTeacherAdapter
+            adapter = followingAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+
+        followingViewModel.getFollowing(STUDENT_ID)
     }
 
 
@@ -160,31 +149,11 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
-    private fun setItemToMyTeacherAdapter() {
-        val teachers = mutableListOf<MyTeacher>().apply {
-            add(
-                MyTeacher(
-                    "수학멘토",
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                    "1"
-                )
-            )
-            add(
-                MyTeacher(
-                    "수학의신",
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                    "1"
-                ),
-            )
-            add(
-                MyTeacher(
-                    "수학의신",
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                    "1"
-                ),
-            )
+    private fun observeFollowing() {
+        followingViewModel.following.observe(viewLifecycleOwner) {
+
+            followingAdapter.setItem(it)
         }
-        myTeacherAdapter.setItem(teachers)
     }
 
     private fun setItemToBestTeacherAdapter() {
