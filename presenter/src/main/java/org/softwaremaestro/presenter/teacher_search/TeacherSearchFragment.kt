@@ -14,9 +14,8 @@ import org.softwaremaestro.presenter.student_home.StudentHomeFragmentDirections
 import org.softwaremaestro.presenter.student_home.adapter.BestTeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.FollowingAdapter
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
-import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
-
-private const val STUDENT_ID = "test-student-id"
+import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
+import org.softwaremaestro.presenter.teacher_search.viewmodel.MyProfileViewModel
 
 @AndroidEntryPoint
 class TeacherSearchFragment : Fragment() {
@@ -24,6 +23,7 @@ class TeacherSearchFragment : Fragment() {
     private lateinit var binding: FragmentTeacherSearchBinding
 
     private val followingViewModel: FollowingViewModel by viewModels()
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
 
     private lateinit var followingAdapter: FollowingAdapter
     private lateinit var bestTeacherAdapter: BestTeacherAdapter
@@ -38,15 +38,16 @@ class TeacherSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        followingViewModel.getFollowing(STUDENT_ID)
+        myProfileViewModel.getMyProfile()
 
         setFollowingRecyclerView()
-
         setBestTeacherRecyclerView()
-        
+
         setItemToBestTeacherAdapter()
 
         observeFollowing()
+        observeMyProfile()
+
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -63,8 +64,6 @@ class TeacherSearchFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
-
-        followingViewModel.getFollowing(STUDENT_ID)
     }
 
     private fun setBestTeacherRecyclerView() {
@@ -110,6 +109,17 @@ class TeacherSearchFragment : Fragment() {
         followingViewModel.following.observe(viewLifecycleOwner) {
             followingAdapter.setItem(it)
             followingAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun observeMyProfile() {
+        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
+
+            if (it.id == null) {
+                // 에러 처리
+            } else {
+                followingViewModel.getFollowing(it.id!!)
+            }
         }
     }
 }
