@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
+import org.softwaremaestro.domain.offer_remove.SUCCESS_OFFER_REMOVE
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
@@ -26,6 +27,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 import java.text.DecimalFormat
 
@@ -43,6 +45,7 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var binding: FragmentTeacherHomeBinding
     private val questionsViewModel: QuestionsViewModel by viewModels()
     private val answerViewModel: AnswerViewModel by viewModels()
+    private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
 
     private lateinit var questionAdapter: QuestionAdapter
@@ -134,9 +137,23 @@ class TeacherHomeFragment : Fragment() {
     private fun initQuestionRecyclerView() {
 
         questionAdapter = QuestionAdapter { questionId: String ->
-            selectedQuestionId = questionId
-            waitingSnackbar.show()
-            offerTeacher(questionId)
+
+            // 먼저 제안했던 질문이 있다면 철회한다
+            selectedQuestionId?.let {
+                offerRemoveViewModel.removeOffer(it)
+            }
+
+            // 이전에 제안했던 질문을 다시 클릭하면
+            if (selectedQuestionId == questionId) {
+                selectedQuestionId = null
+                waitingSnackbar.dismiss()
+            }
+            // 이전에 제안했던 질문이 아닌 질문을 클릭하면
+            else {
+                selectedQuestionId = questionId
+                waitingSnackbar.show()
+                offerTeacher(questionId)
+            }
         }
 
         binding.rvQuestion.apply {
@@ -169,6 +186,7 @@ class TeacherHomeFragment : Fragment() {
     private fun observe() {
         observeQuestions()
         observeAnswer()
+        observeOfferRemove()
         observeCheck()
     }
 
@@ -185,6 +203,15 @@ class TeacherHomeFragment : Fragment() {
     private fun observeAnswer() {
         answerViewModel.answer.observe(viewLifecycleOwner) {
             Log.d("answer", it.exampleData)
+        }
+    }
+
+    private fun observeOfferRemove() {
+        offerRemoveViewModel.notiOfferRemove.observe(viewLifecycleOwner) {
+            if (it != SUCCESS_OFFER_REMOVE) {
+                Log.d("error", "failed to remove offer")
+            }
+            Log.d("hhcc", it)
         }
     }
 
