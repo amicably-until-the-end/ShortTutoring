@@ -98,7 +98,7 @@
                         style="@style/button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_corner_radius_10_disabled"
+                        android:background="@drawable/btn_corner_radius_10_enabled"
                         android:gravity="center"
                         android:paddingVertical="12dp"
                         android:text="찜하기 0"
