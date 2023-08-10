@@ -14,8 +14,8 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.decreaseWidth
 import org.softwaremaestro.presenter.increaseWidth
 import org.softwaremaestro.presenter.teacher_home.ReviewAdapter
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.NumOfFollowerViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 
 private const val NUM_OF_CLIP = 15
@@ -27,7 +27,7 @@ class TeacherMyPageFragment : Fragment() {
 
     private val reviewsViewModel: ReviewsViewModel by viewModels()
     private val numOfFollowerViewModel: NumOfFollowerViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
 
@@ -91,7 +91,7 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun setExampleText() {
 
-        profileViewModel.profile.observe(viewLifecycleOwner) {
+        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
             with(binding) {
                 Picasso.with(requireContext()).load(it.profileImage).fit().centerCrop()
                     .into(ivTeacherImg)
@@ -102,7 +102,7 @@ class TeacherMyPageFragment : Fragment() {
             }
         }
 
-        profileViewModel.getProfile()
+        myProfileViewModel.getMyProfile()
 
         numOfFollowerViewModel.numOfFollower.observe(viewLifecycleOwner) {
             binding.btnFollow.text = "찜하기 $it"

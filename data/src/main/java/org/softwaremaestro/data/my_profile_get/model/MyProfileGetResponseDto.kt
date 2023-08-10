@@ -1,8 +1,8 @@
-package org.softwaremaestro.data.profile_get.model
+package org.softwaremaestro.data.my_profile_get.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ProfileGetResponseDto(
+data class MyProfileGetResponseDto(
     @SerializedName("following") val following: List<String>?,
     @SerializedName("school") val school: SchoolDto?,
     @SerializedName("role") val role: String?,

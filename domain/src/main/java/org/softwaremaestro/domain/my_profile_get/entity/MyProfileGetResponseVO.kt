@@ -1,6 +1,6 @@
-package org.softwaremaestro.domain.profile_get.entity
+package org.softwaremaestro.domain.my_profile_get.entity
 
-data class ProfileGetResponseVO(
+data class MyProfileGetResponseVO(
     val following: List<String>?,
     val schoolLevel: String?,
     val schoolGrade: Int?,
