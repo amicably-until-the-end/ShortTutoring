@@ -136,7 +136,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        questionAdapter = QuestionAdapter { questionId: String ->
+        questionAdapter = QuestionAdapter { questionId, imageUrl ->
 
             // 먼저 제안했던 질문이 있다면 철회한다
             selectedQuestionId?.let {
@@ -153,7 +153,9 @@ class TeacherHomeFragment : Fragment() {
                 selectedQuestionId = questionId
                 waitingSnackbar.show()
                 offerTeacher(questionId)
+                checkViewModel.selectedQuestionImgUrl = imageUrl
             }
+
         }
 
         binding.rvQuestion.apply {
@@ -238,6 +240,7 @@ class TeacherHomeFragment : Fragment() {
                     )
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
+                        putExtra("problemImgUrl", checkViewModel.selectedQuestionImgUrl)
                         putExtra("whiteBoardInfo", whiteBoardRoomInfo)
                         putExtra("voiceRoomInfo", voiceRoomInfo)
                     }

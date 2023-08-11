@@ -11,7 +11,7 @@ import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
+class QuestionAdapter(private val answerBtnClickListener: (String, String) -> Unit) :
     ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionAdapter.ViewHolder {
@@ -37,7 +37,10 @@ class QuestionAdapter(private val answerBtnClickListener: (String) -> Unit) :
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
                 root.setOnClickListener {
-                    item.id?.let { answerBtnClickListener(it) }
+                    answerBtnClickListener(
+                        item.id ?: EMPTY_STRING,
+                        item.problemImage ?: EMPTY_STRING
+                    )
                 }
             }
         }
