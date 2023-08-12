@@ -27,6 +27,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 import java.text.DecimalFormat
@@ -44,6 +45,7 @@ class TeacherHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherHomeBinding
     private val questionsViewModel: QuestionsViewModel by viewModels()
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val answerViewModel: AnswerViewModel by viewModels()
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
@@ -65,6 +67,8 @@ class TeacherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        myProfileViewModel.getMyProfile()
 
         setTexts()
 
