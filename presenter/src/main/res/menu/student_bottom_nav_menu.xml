@@ -6,7 +6,7 @@
         android:title="홈" />
 
     <item
-        android:id="@+id/searchingTeacherFragment"
+        android:id="@+id/teacherSearchFragment"
         android:icon="@drawable/ic_search_48"
         android:title="선생님 찾기" />
 
