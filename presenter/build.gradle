@@ -101,11 +101,11 @@ dependencies {
     //Agora Voice RTC
     implementation 'io.agora.rtc:voice-sdk:4.2.0'
 
-    // Picasso
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     // email check
     implementation 'com.github.in-seo:univcert:master-SNAPSHOT'
-    
+
 }
 

@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.Util.decreaseWidth
 import org.softwaremaestro.presenter.Util.increaseWidth
+import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.teacher_home.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
@@ -74,8 +74,7 @@ class TeacherMyPageFragment : Fragment() {
 
         myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
             with(binding) {
-                Picasso.with(requireContext()).load(it.profileImage).fit().centerCrop()
-                    .into(ivTeacherImg)
+                Glide.with(requireContext()).load(it.profileImage).circleCrop().into(ivTeacherImg)
                 tvTeacherSchool.text = "${it.schoolName} ${it.schoolDepartment}"
                 tvTeacherName.text = it.name
                 tvRating.text = "%.2f".format(RATING)

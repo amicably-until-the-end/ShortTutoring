@@ -5,14 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val onOfferBtnClickListener: (String, Int) -> Unit) :
+class QuestionAdapter(
+    private val onImageClickListener: (String) -> Unit,
+    private val onOfferBtnClickListener: (String) -> Unit
+) :
     ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
 
     // 신청하기 버튼의 색을 결정하기 위해 선택된 질문 id를 저장한다
@@ -39,8 +42,14 @@ class QuestionAdapter(private val onOfferBtnClickListener: (String, Int) -> Unit
 
             with(binding) {
 
-                Picasso.with(root.context).load(item.problemImage).fit().centerCrop()
+                Glide.with(root.context).load(item.problemImage).centerCrop()
                     .into(ivPhoto)
+
+                if (item.problemImage != null) {
+                    ivPhoto.setOnClickListener {
+                        onImageClickListener(item.problemImage!!)
+                    }
+                }
 
                 tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
                 tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
@@ -55,7 +64,7 @@ class QuestionAdapter(private val onOfferBtnClickListener: (String, Int) -> Unit
                 }
 
                 btnOffer.setOnClickListener {
-                    item.id?.let { onOfferBtnClickListener(it, adapterPosition) }
+                    item.id?.let { onOfferBtnClickListener(it) }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.teacher_home
 
-import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -140,52 +138,52 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        val onImageClickedListener = { image: String, iv: ImageView ->
+        val onImageClickListener = { image: String ->
 
             val intent = Intent(requireActivity(), ImageActivity::class.java)
             intent.putExtra("image", image)
-            val opt =
-                ActivityOptions.makeSceneTransitionAnimation(requireActivity(), view, "imgTrans")
-            startActivity(intent, opt.toBundle())
+            startActivity(intent)
+        }
+
+        val onOfferBtnClickListener: (String) -> Unit = { questionId: String ->
+
+            // 먼저 제안했던 질문이 있다면 철회한다
+            questionAdapter.selectedQuestionId?.let {
+                offerRemoveViewModel.removeOffer(it)
+
+                val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
+                    it.hashCode().toLong()
+                ) as QuestionAdapter.ViewHolder
+
+                selectedViewHolder.setActiveOnOfferButton(false)
+            }
+
+            // 이전에 제안했던 질문을 다시 클릭하면
+            if (questionAdapter.selectedQuestionId == questionId) {
+                questionAdapter.selectedQuestionId = null
+
+                waitingSnackbar.dismiss()
+            }
+            // 이전에 제안했던 질문이 아닌 질문을 클릭하면
+            else {
+                questionAdapter.selectedQuestionId = questionId
+
+                waitingSnackbar.show()
+            }
+
+            questionAdapter.selectedQuestionId?.let {
+                offerTeacher(it)
+
+                val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
+                    it.hashCode().toLong()
+                ) as QuestionAdapter.ViewHolder
+
+                selectedViewHolder.setActiveOnOfferButton(true)
+            }
         }
 
         questionAdapter =
-            QuestionAdapter { questionId: String ->
-
-                // 먼저 제안했던 질문이 있다면 철회한다
-                questionAdapter.selectedQuestionId?.let {
-                    offerRemoveViewModel.removeOffer(it)
-
-                    val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
-                        it.hashCode().toLong()
-                    ) as QuestionAdapter.ViewHolder
-
-                    selectedViewHolder.setActiveOnOfferButton(false)
-                }
-
-                // 이전에 제안했던 질문을 다시 클릭하면
-                if (questionAdapter.selectedQuestionId == questionId) {
-                    questionAdapter.selectedQuestionId = null
-
-                    waitingSnackbar.dismiss()
-                }
-                // 이전에 제안했던 질문이 아닌 질문을 클릭하면
-                else {
-                    questionAdapter.selectedQuestionId = questionId
-
-                    waitingSnackbar.show()
-                }
-
-                questionAdapter.selectedQuestionId?.let {
-                    offerTeacher(it)
-
-                    val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
-                        it.hashCode().toLong()
-                    ) as QuestionAdapter.ViewHolder
-
-                    selectedViewHolder.setActiveOnOfferButton(true)
-                }
-            }.apply {
+            QuestionAdapter(onImageClickListener, onOfferBtnClickListener).apply {
                 setHasStableIds(true)
             }
 

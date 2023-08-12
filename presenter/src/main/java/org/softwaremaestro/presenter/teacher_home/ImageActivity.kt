@@ -2,8 +2,9 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import org.softwaremaestro.presenter.databinding.ActivityImageBinding
+
 
 class ImageActivity : AppCompatActivity() {
 
@@ -19,11 +20,12 @@ class ImageActivity : AppCompatActivity() {
         if (image == null) {
             // 에러 처리
         } else {
-            Picasso.with(this).load(image).fit().centerCrop().into(binding.containerImage)
+            Glide.with(this).load(image).sizeMultiplier(0.1f).fitCenter()
+                .into(binding.containerImage)
         }
 
         binding.containerImage.setOnClickListener {
-            supportFinishAfterTransition()
+            finish()
         }
     }
 }
