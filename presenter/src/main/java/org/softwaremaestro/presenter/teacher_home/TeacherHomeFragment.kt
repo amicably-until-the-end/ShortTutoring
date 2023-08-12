@@ -52,7 +52,7 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var waitingSnackbar: Snackbar
 
-    private var selectedQuestionId: String? = null
+    private var selectedViewHolder: QuestionAdapter.ViewHolder? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -136,25 +136,36 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        questionAdapter = QuestionAdapter { questionId: String ->
+        questionAdapter =
+            QuestionAdapter { questionId: String, viewHolder: QuestionAdapter.ViewHolder ->
 
-            // 먼저 제안했던 질문이 있다면 철회한다
-            selectedQuestionId?.let {
-                offerRemoveViewModel.removeOffer(it)
-            }
+                // 먼저 제안했던 질문이 있다면 철회한다
+                questionAdapter.selectedQuestionId?.let {
+                    offerRemoveViewModel.removeOffer(it)
+                    selectedViewHolder!!.toggleSelectedAndChangeColor()
+                }
 
-            // 이전에 제안했던 질문을 다시 클릭하면
-            if (selectedQuestionId == questionId) {
-                selectedQuestionId = null
-                waitingSnackbar.dismiss()
+                // 이전에 제안했던 질문을 다시 클릭하면
+                if (questionAdapter.selectedQuestionId == questionId) {
+
+                    questionAdapter.selectedQuestionId = null
+                    selectedViewHolder = null
+
+                    waitingSnackbar.dismiss()
+                }
+                // 이전에 제안했던 질문이 아닌 질문을 클릭하면
+                else {
+                    questionAdapter.selectedQuestionId = questionId
+                    selectedViewHolder = viewHolder
+
+                    waitingSnackbar.show()
+                }
+
+                questionAdapter.selectedQuestionId?.let { id ->
+                    offerTeacher(id)
+                    selectedViewHolder!!.toggleSelectedAndChangeColor()
+                }
             }
-            // 이전에 제안했던 질문이 아닌 질문을 클릭하면
-            else {
-                selectedQuestionId = questionId
-                waitingSnackbar.show()
-                offerTeacher(questionId)
-            }
-        }
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
@@ -266,9 +277,9 @@ class TeacherHomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 // 학생의 선택을 기다리는 스낵바가 떠있을때
-                if (waitingSnackbar.isShown && selectedQuestionId != null) {
+                if (waitingSnackbar.isShown && questionAdapter.selectedQuestionId != null) {
                     checkViewModel.checkQuestion(
-                        selectedQuestionId!!,
+                        questionAdapter.selectedQuestionId!!,
                         QuestionCheckRequestVO(TEACHER_ID)
                     )
                 }
