@@ -76,6 +76,20 @@
 
             </LinearLayout>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_offer"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="12dp"
+                android:textColor='@color/white'
+                tools:background="@drawable/btn_corner_radius_10_enabled"
+                tools:text="신청하기" />
+
         </LinearLayout>
 
 
