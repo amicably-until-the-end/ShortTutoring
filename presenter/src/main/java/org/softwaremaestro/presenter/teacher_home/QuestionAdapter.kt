@@ -12,7 +12,7 @@ import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val onOfferBtnClickListener: (String, ViewHolder) -> Unit) :
+class QuestionAdapter(private val onOfferBtnClickListener: (String, Int) -> Unit) :
     ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
 
     // 신청하기 버튼의 색을 결정하기 위해 선택된 질문 id를 저장한다
@@ -24,29 +24,29 @@ class QuestionAdapter(private val onOfferBtnClickListener: (String, ViewHolder) 
     }
 
     override fun onBindViewHolder(holder: QuestionAdapter.ViewHolder, position: Int) {
-        holder.onBind(getItem(position))
+        holder.bind(getItem(position))
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.hashCode().toLong()
     }
 
     inner class ViewHolder(private val binding: ItemQuestionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        // 신청하기 버튼의 색을 결정하는 변수
-        private var selected = false
-
-        fun onBind(item: QuestionGetResponseVO) {
-
-            // 기존에 선택된 질문 id와 나의 질문 id가 같으면 선택된 상태라고 판단
-            selected = selectedQuestionId == item.id
+        // 뷰홀더가 처음 생성될 때만 실행되는 코드
+        fun bind(item: QuestionGetResponseVO) {
 
             with(binding) {
 
-                Picasso.with(root.context).load(item.problemImage).fit().centerCrop().into(ivPhoto)
+                Picasso.with(root.context).load(item.problemImage).fit().centerCrop()
+                    .into(ivPhoto)
 
                 tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
                 tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
-                if (selected) {
+                if (selectedQuestionId == item.id) {
                     binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
                     binding.btnOffer.text = "신청 완료"
                 } else {
@@ -55,15 +55,14 @@ class QuestionAdapter(private val onOfferBtnClickListener: (String, ViewHolder) 
                 }
 
                 btnOffer.setOnClickListener {
-                    item.id?.let { onOfferBtnClickListener(it, this@ViewHolder) }
+                    item.id?.let { onOfferBtnClickListener(it, adapterPosition) }
                 }
             }
         }
 
-        fun toggleSelectedAndChangeColor() {
-            selected = !selected
-
-            if (selected) {
+        fun setActiveOnOfferButton(active: Boolean) {
+            // 기존에 선택된 질문 id와 나의 질문 id가 같으면 선택된 상태라고 판단
+            if (active) {
                 binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
                 binding.btnOffer.text = "신청 완료"
             } else {

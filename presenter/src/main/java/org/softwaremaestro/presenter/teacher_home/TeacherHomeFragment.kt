@@ -38,7 +38,7 @@ private const val TEACHER_NAME = "김민수수학"
 private const val TEACHER_RATING = 4.8989897f
 private const val TEACHER_TEMPERATURE = 48
 private const val TEACHER_ANSWER_COST = 2500
-private const val REFRESHING_TIME_INTERVAL = 10000L
+private const val REFRESHING_TIME_INTERVAL = 3000L
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -53,8 +53,6 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var waitingSnackbar: Snackbar
-
-    private var selectedViewHolder: QuestionAdapter.ViewHolder? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -141,34 +139,43 @@ class TeacherHomeFragment : Fragment() {
     private fun initQuestionRecyclerView() {
 
         questionAdapter =
-            QuestionAdapter { questionId: String, viewHolder: QuestionAdapter.ViewHolder ->
+            QuestionAdapter { questionId: String, itemId: Int ->
 
                 // 먼저 제안했던 질문이 있다면 철회한다
                 questionAdapter.selectedQuestionId?.let {
                     offerRemoveViewModel.removeOffer(it)
-                    selectedViewHolder!!.toggleSelectedAndChangeColor()
+
+                    val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
+                        it.hashCode().toLong()
+                    ) as QuestionAdapter.ViewHolder
+
+                    selectedViewHolder.setActiveOnOfferButton(false)
                 }
 
                 // 이전에 제안했던 질문을 다시 클릭하면
                 if (questionAdapter.selectedQuestionId == questionId) {
-
                     questionAdapter.selectedQuestionId = null
-                    selectedViewHolder = null
 
                     waitingSnackbar.dismiss()
                 }
                 // 이전에 제안했던 질문이 아닌 질문을 클릭하면
                 else {
                     questionAdapter.selectedQuestionId = questionId
-                    selectedViewHolder = viewHolder
 
                     waitingSnackbar.show()
                 }
 
-                questionAdapter.selectedQuestionId?.let { id ->
-                    offerTeacher(id)
-                    selectedViewHolder!!.toggleSelectedAndChangeColor()
+                questionAdapter.selectedQuestionId?.let {
+                    offerTeacher(it)
+
+                    val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
+                        it.hashCode().toLong()
+                    ) as QuestionAdapter.ViewHolder
+
+                    selectedViewHolder.setActiveOnOfferButton(true)
                 }
+            }.apply {
+                setHasStableIds(true)
             }
 
         binding.rvQuestion.apply {
@@ -226,7 +233,6 @@ class TeacherHomeFragment : Fragment() {
             if (it != SUCCESS_OFFER_REMOVE) {
                 Log.d("error", "failed to remove offer")
             }
-            Log.d("hhcc", it)
         }
     }
 
