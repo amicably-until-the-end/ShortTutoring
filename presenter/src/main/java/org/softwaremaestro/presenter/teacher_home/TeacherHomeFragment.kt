@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.teacher_home
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -138,8 +140,17 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
+        val onImageClickedListener = { image: String, iv: ImageView ->
+
+            val intent = Intent(requireActivity(), ImageActivity::class.java)
+            intent.putExtra("image", image)
+            val opt =
+                ActivityOptions.makeSceneTransitionAnimation(requireActivity(), view, "imgTrans")
+            startActivity(intent, opt.toBundle())
+        }
+
         questionAdapter =
-            QuestionAdapter { questionId: String, itemId: Int ->
+            QuestionAdapter { questionId: String ->
 
                 // 먼저 제안했던 질문이 있다면 철회한다
                 questionAdapter.selectedQuestionId?.let {
