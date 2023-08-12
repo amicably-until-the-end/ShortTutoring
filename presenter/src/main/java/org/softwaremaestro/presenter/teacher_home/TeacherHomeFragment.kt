@@ -38,7 +38,7 @@ private const val TEACHER_NAME = "김민수수학"
 private const val TEACHER_RATING = 4.8989897f
 private const val TEACHER_TEMPERATURE = 48
 private const val TEACHER_ANSWER_COST = 2500
-private const val REFRESHING_TIME_INTERVAL = 3000L
+private const val REFRESHING_TIME_INTERVAL = 10000L
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
