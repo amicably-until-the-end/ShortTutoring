@@ -20,6 +20,7 @@ import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.offer_remove.SUCCESS_OFFER_REMOVE
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
@@ -39,6 +40,11 @@ private const val TEACHER_RATING = 4.8989897f
 private const val TEACHER_TEMPERATURE = 48
 private const val TEACHER_ANSWER_COST = 2500
 private const val REFRESHING_TIME_INTERVAL = 10000L
+
+const val IMAGE = "image"
+const val SUBJECT = "subject"
+const val DIFFICULTY = "difficulty"
+const val DESCRIPTION = "description"
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -138,10 +144,14 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        val onImageClickListener = { image: String ->
+        val onImageClickListener = { question: QuestionGetResponseVO ->
 
-            val intent = Intent(requireActivity(), ImageActivity::class.java)
-            intent.putExtra("image", image)
+            val intent = Intent(requireActivity(), ImageActivity::class.java).apply {
+                putExtra(IMAGE, question.problemImage)
+                putExtra(SUBJECT, question.problemSchoolSubject)
+                putExtra(DIFFICULTY, question.problemDifficulty)
+                putExtra(DESCRIPTION, question.problemDescription)
+            }
             startActivity(intent)
         }
 

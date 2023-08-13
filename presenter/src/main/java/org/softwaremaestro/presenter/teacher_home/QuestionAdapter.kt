@@ -13,7 +13,7 @@ import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 private const val EMPTY_STRING = "-"
 
 class QuestionAdapter(
-    private val onImageClickListener: (String) -> Unit,
+    private val onImageClickListener: (QuestionGetResponseVO) -> Unit,
     private val onOfferBtnClickListener: (String) -> Unit
 ) :
     ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
@@ -45,10 +45,8 @@ class QuestionAdapter(
                 Glide.with(root.context).load(item.problemImage).centerCrop()
                     .into(ivPhoto)
 
-                if (item.problemImage != null) {
-                    ivPhoto.setOnClickListener {
-                        onImageClickListener(item.problemImage!!)
-                    }
+                ivPhoto.setOnClickListener {
+                    onImageClickListener(item)
                 }
 
                 tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
