@@ -49,8 +49,11 @@ class QuestionAdapter(
                     onImageClickListener(item)
                 }
 
-                tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
-                tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
+                tvSubjectAndDifficulty.text =
+                    if (item.problemSchoolSubject != null && item.problemDifficulty != null) {
+                        "${item.problemSchoolSubject} · ${item.problemDifficulty}"
+                    } else EMPTY_STRING
+
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
                 if (selectedQuestionId == item.id) {
