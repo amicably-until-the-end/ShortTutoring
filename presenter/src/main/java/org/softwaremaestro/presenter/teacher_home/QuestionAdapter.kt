@@ -14,9 +14,8 @@ private const val EMPTY_STRING = "-"
 
 class QuestionAdapter(
     private val onImageClickListener: (QuestionGetResponseVO) -> Unit,
-    private val onOfferBtnClickListener: (String) -> Unit
-) :
-    ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
+    private val onOfferBtnClickListener: (String, String) -> Unit
+) : ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
 
     // 신청하기 버튼의 색을 결정하기 위해 선택된 질문 id를 저장한다
     var selectedQuestionId: String? = null
@@ -65,7 +64,9 @@ class QuestionAdapter(
                 }
 
                 btnOffer.setOnClickListener {
-                    item.id?.let { onOfferBtnClickListener(it) }
+                    if (item.id != null && item.problemImage != null) {
+                        onOfferBtnClickListener(item.id, item.problemImage)
+                    }
                 }
             }
         }

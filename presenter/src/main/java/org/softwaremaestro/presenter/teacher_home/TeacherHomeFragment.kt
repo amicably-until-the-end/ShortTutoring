@@ -155,7 +155,7 @@ class TeacherHomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        val onOfferBtnClickListener: (String) -> Unit = { questionId: String ->
+        val onOfferBtnClickListener: (String, String) -> Unit = { questionId: String, imageUrl: String ->
 
             // 먼저 제안했던 질문이 있다면 철회한다
             questionAdapter.selectedQuestionId?.let {
@@ -189,7 +189,10 @@ class TeacherHomeFragment : Fragment() {
                 ) as QuestionAdapter.ViewHolder
 
                 selectedViewHolder.setActiveOnOfferButton(true)
+                
+                checkViewModel.selectedQuestionImgUrl = imageUrl
             }
+
         }
 
         questionAdapter =
@@ -278,6 +281,7 @@ class TeacherHomeFragment : Fragment() {
                     )
                     // 교실 액티비티로 이동한다
                     val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
+                        putExtra("problemImgUrl", checkViewModel.selectedQuestionImgUrl)
                         putExtra("whiteBoardInfo", whiteBoardRoomInfo)
                         putExtra("voiceRoomInfo", voiceRoomInfo)
                     }

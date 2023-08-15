@@ -64,6 +64,7 @@ class ClassroomFragment : Fragment() {
 
     // Room State
     private var isMicOn = true
+    private var isProblemImgUploaded = false
 
 
     private var whiteBoardRoom: Room? = null
@@ -133,6 +134,7 @@ class ClassroomFragment : Fragment() {
         setRedoButton()
         setUndoButton()
         setUpFinishButton()
+        uploadProblemImg()
     }
 
     private fun setVoiceFunctions() {
@@ -381,6 +383,16 @@ class ClassroomFragment : Fragment() {
                 voiceEngine.enableLocalAudio(false)
                 Toast.makeText(requireContext(), "마이크가 꺼졌습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+
+    private fun uploadProblemImg() {
+        if (whiteBoardInfo.uid == "1" && !isProblemImgUploaded) {
+            val imgUrl = requireActivity().intent.getStringExtra("problemImgUrl")
+            val imageInfo = ImageInformationWithUrl(0.0, 0.0, 400.0, 400.0, imgUrl)
+            whiteBoardRoom?.insertImage(imageInfo)
+            isProblemImgUploaded = true
         }
     }
 

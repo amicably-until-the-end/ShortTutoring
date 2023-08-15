@@ -21,6 +21,8 @@ class CheckViewModel @Inject constructor(private val questionCheckUseCase: Quest
     private val _check: MutableLiveData<QuestionCheckResultVO?> = MutableLiveData()
     val check: LiveData<QuestionCheckResultVO?> get() = _check
 
+    var selectedQuestionImgUrl: String? = null
+
     fun checkQuestion(requestId: String, questionCheckRequestVO: QuestionCheckRequestVO) {
         viewModelScope.launch {
             questionCheckUseCase.execute(requestId, questionCheckRequestVO)
