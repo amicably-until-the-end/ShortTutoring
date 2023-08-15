@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_FOLLOW
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_UNFOLLOW
@@ -81,8 +81,7 @@ class TeacherProfileFragment : Fragment() {
         profileViewModel.profile.observe(viewLifecycleOwner) {
 
             with(binding) {
-                Picasso.with(requireContext()).load(it.profileImage).fit().centerCrop()
-                    .into(ivTeacherImg)
+                Glide.with(requireContext()).load(it.profileImage).circleCrop().into(ivTeacherImg)
                 tvTeacherSchool.text = "${it.schoolName} ${it.schoolDepartment}"
                 tvTeacherName.text = it.name
                 tvRating.text = "%.2f".format(RATING)

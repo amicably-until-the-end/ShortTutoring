@@ -5,6 +5,9 @@
 
     <application>
         <activity
+            android:name=".teacher_home.ImageActivity"
+            android:exported="false" />
+        <activity
             android:name=".teacher_home.TeacherHomeActivity"
             android:exported="false" />
         <activity
