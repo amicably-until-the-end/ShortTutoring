@@ -4,18 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:padding="32dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <Button
         android:id="@+id/btn_new_question"
+        style="@style/button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="새로 질문하기" />
+        android:layout_height="80dp"
+        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:text="새로 질문하기"
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/btn_re_question"
+        style="@style/button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="해결하지 못한 문제 다시 물어보기" />
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:text="해결하지 못한 문제 다시 물어보기"
+        android:textColor="@color/white" />
 </LinearLayout>
