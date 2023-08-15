@@ -25,7 +25,6 @@
                 android:id="@+id/container_question_pool"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                 android:orientation="vertical">
 
                 <TextView
@@ -33,6 +32,7 @@
                     style="@style/h6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                     android:textColor="@color/black"
                     tools:text="38명의 학생이 선생님을 기다리고 있어요" />
 
@@ -40,7 +40,9 @@
                     android:id="@+id/rv_question"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="24dp" />
+                    android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/margin_horizontal_default" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -217,7 +219,6 @@
                 android:id="@+id/container_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                 android:layout_marginTop="40dp"
                 android:orientation="vertical">
 
@@ -225,6 +226,7 @@
                     style="@style/h6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/margin_horizontal_default"
                     android:text="수업을 들은 학생들이 남긴 리뷰에요"
                     android:textColor="@color/black" />
 
@@ -232,7 +234,9 @@
                     android:id="@+id/rv_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp" />
+                    android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/margin_horizontal_default" />
             </LinearLayout>
 
         </LinearLayout>

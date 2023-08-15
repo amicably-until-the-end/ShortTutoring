@@ -260,7 +260,6 @@
                 android:id="@+id/container_lecture_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                 android:layout_marginTop="48dp">
 
                 <TextView
@@ -268,6 +267,7 @@
                     style="@style/h6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/margin_horizontal_default"
                     android:text="나의 과외 영상"
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -278,6 +278,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/margin_horizontal_default"
                     app:layout_constraintTop_toBottomOf="@id/tv_lecture_desc" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
