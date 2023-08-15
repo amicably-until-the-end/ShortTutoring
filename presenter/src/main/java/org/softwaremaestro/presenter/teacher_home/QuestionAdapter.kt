@@ -5,14 +5,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
 
-class QuestionAdapter(private val answerBtnClickListener: (String, String) -> Unit) :
-    ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
+class QuestionAdapter(
+    private val onImageClickListener: (QuestionGetResponseVO) -> Unit,
+    private val onOfferBtnClickListener: (String, String) -> Unit
+) : ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
+
+    // 신청하기 버튼의 색을 결정하기 위해 선택된 질문 id를 저장한다
+    var selectedQuestionId: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionAdapter.ViewHolder {
         val view = ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,28 +26,59 @@ class QuestionAdapter(private val answerBtnClickListener: (String, String) -> Un
     }
 
     override fun onBindViewHolder(holder: QuestionAdapter.ViewHolder, position: Int) {
-        holder.onBind(getItem(position))
+        holder.bind(getItem(position))
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.hashCode().toLong()
     }
 
     inner class ViewHolder(private val binding: ItemQuestionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: QuestionGetResponseVO) {
+        // 뷰홀더가 처음 생성될 때만 실행되는 코드
+        fun bind(item: QuestionGetResponseVO) {
 
             with(binding) {
 
-                Picasso.with(root.context).load(item.problemImage).fit().centerCrop().into(ivPhoto)
+                Glide.with(root.context).load(item.problemImage).centerCrop()
+                    .into(ivPhoto)
 
-                tvSubject.text = item.problemSchoolSubject ?: EMPTY_STRING
-                tvDifficulty.text = item.problemDifficulty ?: EMPTY_STRING
+                ivPhoto.setOnClickListener {
+                    onImageClickListener(item)
+                }
+
+                tvSubjectAndDifficulty.text =
+                    if (item.problemSchoolSubject != null && item.problemDifficulty != null) {
+                        "${item.problemSchoolSubject} · ${item.problemDifficulty}"
+                    } else EMPTY_STRING
+
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
-                root.setOnClickListener {
-                    answerBtnClickListener(
-                        item.id ?: EMPTY_STRING,
-                        item.problemImage ?: EMPTY_STRING
-                    )
+                if (selectedQuestionId == item.id) {
+                    binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+                    binding.btnOffer.text = "신청 완료"
+                } else {
+                    binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+                    binding.btnOffer.text = "신청하기"
                 }
+
+                btnOffer.setOnClickListener {
+                    if (item.id != null && item.problemImage != null) {
+                        onOfferBtnClickListener(item.id, item.problemImage)
+                    }
+                }
+            }
+        }
+
+        fun setActiveOnOfferButton(active: Boolean) {
+            // 기존에 선택된 질문 id와 나의 질문 id가 같으면 선택된 상태라고 판단
+            if (active) {
+                binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+                binding.btnOffer.text = "신청 완료"
+            } else {
+                binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+                binding.btnOffer.text = "신청하기"
             }
         }
     }

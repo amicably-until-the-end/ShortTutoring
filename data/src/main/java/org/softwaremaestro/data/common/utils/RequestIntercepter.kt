@@ -36,7 +36,6 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     private fun getJWT(role: String?): String? {
         return if (role.isNullOrEmpty())
             prefs.getJWT()
-        // 학생
         else if (role == "student")
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsInVzZXJJZCI6InRlc3Qtc3R1ZGVudC1pZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjkxMTMyODk3LCJleHAiOjE3MjI2OTA0OTd9.VwHlj3s8ZbruX4dQpPrvnTV93_LRVt_7YGMGP7emNuM"
         else

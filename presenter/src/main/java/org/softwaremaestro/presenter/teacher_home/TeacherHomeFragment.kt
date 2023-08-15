@@ -20,6 +20,7 @@ import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.offer_remove.SUCCESS_OFFER_REMOVE
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
@@ -27,6 +28,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 import java.text.DecimalFormat
@@ -39,11 +41,17 @@ private const val TEACHER_TEMPERATURE = 48
 private const val TEACHER_ANSWER_COST = 2500
 private const val REFRESHING_TIME_INTERVAL = 10000L
 
+const val IMAGE = "image"
+const val SUBJECT = "subject"
+const val DIFFICULTY = "difficulty"
+const val DESCRIPTION = "description"
+
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherHomeBinding
     private val questionsViewModel: QuestionsViewModel by viewModels()
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val answerViewModel: AnswerViewModel by viewModels()
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
@@ -51,8 +59,6 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var waitingSnackbar: Snackbar
-
-    private var selectedQuestionId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +71,8 @@ class TeacherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        myProfileViewModel.getMyProfile()
 
         setTexts()
 
@@ -136,27 +144,61 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        questionAdapter = QuestionAdapter { questionId, imageUrl ->
+        val onImageClickListener = { question: QuestionGetResponseVO ->
+
+            val intent = Intent(requireActivity(), ImageActivity::class.java).apply {
+                putExtra(IMAGE, question.problemImage)
+                putExtra(SUBJECT, question.problemSchoolSubject)
+                putExtra(DIFFICULTY, question.problemDifficulty)
+                putExtra(DESCRIPTION, question.problemDescription)
+            }
+            startActivity(intent)
+        }
+
+        val onOfferBtnClickListener: (String, String) -> Unit = { questionId: String, imageUrl: String ->
 
             // 먼저 제안했던 질문이 있다면 철회한다
-            selectedQuestionId?.let {
+            questionAdapter.selectedQuestionId?.let {
                 offerRemoveViewModel.removeOffer(it)
+
+                val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
+                    it.hashCode().toLong()
+                ) as QuestionAdapter.ViewHolder
+
+                selectedViewHolder.setActiveOnOfferButton(false)
             }
 
             // 이전에 제안했던 질문을 다시 클릭하면
-            if (selectedQuestionId == questionId) {
-                selectedQuestionId = null
+            if (questionAdapter.selectedQuestionId == questionId) {
+                questionAdapter.selectedQuestionId = null
+
                 waitingSnackbar.dismiss()
             }
             // 이전에 제안했던 질문이 아닌 질문을 클릭하면
             else {
-                selectedQuestionId = questionId
+                questionAdapter.selectedQuestionId = questionId
+
                 waitingSnackbar.show()
-                offerTeacher(questionId)
+            }
+
+            questionAdapter.selectedQuestionId?.let {
+                offerTeacher(it)
+
+                val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
+                    it.hashCode().toLong()
+                ) as QuestionAdapter.ViewHolder
+
+                selectedViewHolder.setActiveOnOfferButton(true)
+                
                 checkViewModel.selectedQuestionImgUrl = imageUrl
             }
 
         }
+
+        questionAdapter =
+            QuestionAdapter(onImageClickListener, onOfferBtnClickListener).apply {
+                setHasStableIds(true)
+            }
 
         binding.rvQuestion.apply {
             adapter = questionAdapter
@@ -213,7 +255,6 @@ class TeacherHomeFragment : Fragment() {
             if (it != SUCCESS_OFFER_REMOVE) {
                 Log.d("error", "failed to remove offer")
             }
-            Log.d("hhcc", it)
         }
     }
 
@@ -269,9 +310,9 @@ class TeacherHomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 // 학생의 선택을 기다리는 스낵바가 떠있을때
-                if (waitingSnackbar.isShown && selectedQuestionId != null) {
+                if (waitingSnackbar.isShown && questionAdapter.selectedQuestionId != null) {
                     checkViewModel.checkQuestion(
-                        selectedQuestionId!!,
+                        questionAdapter.selectedQuestionId!!,
                         QuestionCheckRequestVO(TEACHER_ID)
                     )
                 }

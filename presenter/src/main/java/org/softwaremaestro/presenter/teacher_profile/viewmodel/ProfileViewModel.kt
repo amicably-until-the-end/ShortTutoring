@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page.viewmodel
+package org.softwaremaestro.presenter.teacher_profile.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -20,19 +20,30 @@ class ProfileViewModel @Inject constructor(private val profileGetUseCase: Profil
     private val _profile: MutableLiveData<ProfileGetResponseVO> = MutableLiveData()
     val profile: LiveData<ProfileGetResponseVO> get() = _profile
 
-    fun getProfile() {
+    private val _numOfFollower: MutableLiveData<Int> = MutableLiveData()
+    val numOfFollower: LiveData<Int> get() = _numOfFollower
+
+    fun getProfile(userId: String) {
         viewModelScope.launch {
-            profileGetUseCase.execute()
+            profileGetUseCase.execute(userId)
                 .catch { exception ->
                     // Todo: 추후에 에러 어떻게 처리할지 생각해보기
                     Log.d("Error", exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _profile.postValue(result.data)
+                        is BaseResult.Success -> {
+                            _profile.postValue(result.data)
+                            _numOfFollower.postValue(result.data.followersCount ?: -1)
+                        }
+
                         is BaseResult.Error -> Log.d("Error", result.toString())
                     }
                 }
         }
     }
+
+    fun addOne() = _numOfFollower.postValue(_numOfFollower.value!! + 1)
+
+    fun minusOne() = _numOfFollower.postValue(_numOfFollower.value!! - 1)
 }

@@ -4,26 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_student_home"
     app:startDestination="@id/studentHomeFragment">
-
     <fragment
         android:id="@+id/studentHomeFragment"
         android:name="org.softwaremaestro.presenter.student_home.StudentHomeFragment"
-        android:label="학생 홈">
+        android:label="학생 홈"
+        tools:layout="@layout/fragment_student_home">
         <action
             android:id="@+id/action_studentHomeFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_studentHomeFragment_to_teacherProfileFragment"
+            app:destination="@id/teacherProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
         android:name="org.softwaremaestro.presenter.student_home.NotificationFragment"
-        android:label="알림" />
-    <fragment
-        android:id="@+id/studentMyPageFragment"
-        android:name="org.softwaremaestro.presenter.student_home.StudentMyPageFragment"
-        android:label="fragment_student_my_page"
-        tools:layout="@layout/fragment_student_my_page">
+        android:label="알림"
+        tools:layout="@layout/fragment_notification">
         <action
             android:id="@+id/action_notificationFragment_to_studentHomeFragment"
             app:destination="@id/studentHomeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/studentMyPageFragment"
+        android:name="org.softwaremaestro.presenter.student_home.StudentMyPageFragment"
+        android:label="fragment_student_my_page"
+        tools:layout="@layout/fragment_student_my_page" />
+    <fragment
+        android:id="@+id/teacherProfileFragment"
+        android:name="org.softwaremaestro.presenter.teacher_profile.TeacherProfileFragment"
+        android:label="fragment_teacher_profile"
+        tools:layout="@layout/fragment_teacher_profile">
+        <argument
+            android:name="teacherId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherSearchFragment"
+        android:name="org.softwaremaestro.presenter.teacher_search.TeacherSearchFragment"
+        android:label="fragment_teacher_search"
+        tools:layout="@layout/fragment_teacher_search" />
 </navigation>

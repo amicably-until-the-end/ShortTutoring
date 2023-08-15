@@ -102,8 +102,6 @@ fun View.increaseWidth(
 
 fun Button.setEnabledAndChangeColor(enabled: Boolean) {
 
-    isEnabled = enabled
-
     if (enabled) {
         setBackgroundColor(resources.getColor(R.color.primary, null))
         setTextColor(resources.getColor(R.color.white, null))

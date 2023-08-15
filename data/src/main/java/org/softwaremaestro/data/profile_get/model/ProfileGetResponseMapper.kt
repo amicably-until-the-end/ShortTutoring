@@ -6,15 +6,18 @@ object ProfileGetResultMapper {
     fun asDomain(profileGetResponseDto: ProfileGetResponseDto): ProfileGetResponseVO {
         with(profileGetResponseDto) {
             return ProfileGetResponseVO(
-                following,
-                school?.level,
-                school?.grade,
-                role,
-                followers,
-                bio,
                 id,
                 name,
-                profileImage
+                bio,
+                profileImage,
+                role,
+                school?.level,
+                school?.grade,
+                school?.schoolDivision,
+                school?.schoolName,
+                school?.schoolDepartment,
+                followersCount,
+                followingCount
             )
         }
     }
