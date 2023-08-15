@@ -65,7 +65,7 @@ class QuestionAdapter(
 
                 btnOffer.setOnClickListener {
                     if (item.id != null && item.problemImage != null) {
-                        onOfferBtnClickListener(item.id, item.problemImage)
+                        onOfferBtnClickListener(item.id!!, item.problemImage!!)
                     }
                 }
             }
