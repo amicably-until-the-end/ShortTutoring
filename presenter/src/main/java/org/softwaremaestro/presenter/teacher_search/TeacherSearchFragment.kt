@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeFragmentDirections
-import org.softwaremaestro.presenter.student_home.adapter.BestTeacherAdapter
-import org.softwaremaestro.presenter.student_home.adapter.FollowingAdapter
+import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
+import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.teacher_search.viewmodel.MyProfileViewModel
@@ -25,8 +25,8 @@ class TeacherSearchFragment : Fragment() {
     private val followingViewModel: FollowingViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
 
-    private lateinit var followingAdapter: FollowingAdapter
-    private lateinit var bestTeacherAdapter: BestTeacherAdapter
+    private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
+    private lateinit var teacherAdapter: TeacherAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,14 +53,14 @@ class TeacherSearchFragment : Fragment() {
     }
 
     private fun setFollowingRecyclerView() {
-        followingAdapter = FollowingAdapter {
+        teacherFollowingAdapter = TeacherFollowingAdapter {
             val action =
                 StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
             findNavController().navigate(action)
         }
 
         binding.rvFollowing.apply {
-            adapter = followingAdapter
+            adapter = teacherFollowingAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -68,10 +68,10 @@ class TeacherSearchFragment : Fragment() {
 
     private fun setBestTeacherRecyclerView() {
 
-        bestTeacherAdapter = BestTeacherAdapter {}
+        teacherAdapter = TeacherAdapter {}
 
         binding.rvBestTeacher.apply {
-            adapter = bestTeacherAdapter
+            adapter = teacherAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         }
@@ -102,13 +102,13 @@ class TeacherSearchFragment : Fragment() {
                 )
             }
         }
-        bestTeacherAdapter.setItem(lectures)
+        teacherAdapter.setItem(lectures)
     }
 
     private fun observeFollowing() {
         followingViewModel.following.observe(viewLifecycleOwner) {
-            followingAdapter.setItem(it)
-            followingAdapter.notifyDataSetChanged()
+            teacherFollowingAdapter.setItem(it)
+            teacherFollowingAdapter.notifyDataSetChanged()
         }
     }
 

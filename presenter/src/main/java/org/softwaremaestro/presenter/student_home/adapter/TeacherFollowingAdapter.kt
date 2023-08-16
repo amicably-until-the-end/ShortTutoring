@@ -4,20 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
-import org.softwaremaestro.presenter.databinding.ItemTeacherCircularBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherFollowingBinding
 
-class FollowingAdapter(private val onItemClickListener: (String) -> Unit) :
-    RecyclerView.Adapter<FollowingAdapter.ViewHolder>() {
+class TeacherFollowingAdapter(private val onItemClickListener: (String) -> Unit) :
+    RecyclerView.Adapter<TeacherFollowingAdapter.ViewHolder>() {
 
     private var items: List<FollowingGetResponseVO> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowingAdapter.ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): TeacherFollowingAdapter.ViewHolder {
         val view =
-            ItemTeacherCircularBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTeacherFollowingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FollowingAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TeacherFollowingAdapter.ViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 
@@ -29,7 +32,7 @@ class FollowingAdapter(private val onItemClickListener: (String) -> Unit) :
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemTeacherCircularBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherFollowingBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: FollowingGetResponseVO) {
