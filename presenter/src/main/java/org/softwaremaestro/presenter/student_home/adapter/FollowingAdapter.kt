@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
-import org.softwaremaestro.presenter.databinding.ItemMyTeacherBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherCircularBinding
 
 class FollowingAdapter(private val onItemClickListener: (String) -> Unit) :
     RecyclerView.Adapter<FollowingAdapter.ViewHolder>() {
@@ -12,7 +12,8 @@ class FollowingAdapter(private val onItemClickListener: (String) -> Unit) :
     private var items: List<FollowingGetResponseVO> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowingAdapter.ViewHolder {
-        val view = ItemMyTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            ItemTeacherCircularBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
@@ -28,7 +29,7 @@ class FollowingAdapter(private val onItemClickListener: (String) -> Unit) :
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemMyTeacherBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherCircularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: FollowingGetResponseVO) {

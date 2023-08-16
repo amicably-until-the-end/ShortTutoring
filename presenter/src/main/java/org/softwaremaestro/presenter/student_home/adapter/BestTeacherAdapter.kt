@@ -4,7 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.presenter.databinding.ItemBestTeacherBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
 
 class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
@@ -17,7 +17,7 @@ class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
         viewType: Int
     ): BestTeacherAdapter.ViewHolder {
         val view =
-            ItemBestTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
@@ -33,7 +33,7 @@ class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemBestTeacherBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: BestTeacher) {

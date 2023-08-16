@@ -1,13 +1,11 @@
 package org.softwaremaestro.presenter.question_upload
 
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
-import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
-import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
+import org.softwaremaestro.presenter.databinding.ItemTeacherSelectableBinding
 
 private const val EMPTY_STRING = "-"
 
@@ -15,7 +13,8 @@ class TeacherAdapter(private var items: List<TeacherVO>, private val listener: (
     RecyclerView.Adapter<TeacherAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeacherAdapter.ViewHolder {
-        val view = ItemTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            ItemTeacherSelectableBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
@@ -31,7 +30,7 @@ class TeacherAdapter(private var items: List<TeacherVO>, private val listener: (
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemTeacherBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherSelectableBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: TeacherVO) {
