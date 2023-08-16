@@ -28,7 +28,7 @@ class TeacherSelectFragment : Fragment() {
 
     lateinit var binding: FragmentTeacherSelectBinding
     private val viewModel: TeacherSelectViewModel by viewModels()
-    lateinit var teacherListAdapter: TeacherAdapter
+    lateinit var teacherSelectableAdapter: TeacherSelectableAdapter
 
     private lateinit var loadingDialog: LoadingDialog
 
@@ -77,8 +77,8 @@ class TeacherSelectFragment : Fragment() {
                 noTeacher = true
                 binding.layoutParent.addView(binding.ivWaitingIcon)
             }
-            teacherListAdapter.setItems(viewModel.teacherList.value ?: emptyList())
-            teacherListAdapter.notifyDataSetChanged()
+            teacherSelectableAdapter.setItems(viewModel.teacherList.value ?: emptyList())
+            teacherSelectableAdapter.notifyDataSetChanged()
 
         }
     }
@@ -144,9 +144,11 @@ class TeacherSelectFragment : Fragment() {
     }
 
     private fun setTeacherRecycler(questionId: String) {
-        teacherListAdapter =
-            TeacherAdapter(viewModel.teacherList.value ?: emptyList()) { teacherId: String ->
-                if (viewModel.teacherSelectState.value == UIState.Loading) return@TeacherAdapter
+        teacherSelectableAdapter =
+            TeacherSelectableAdapter(
+                viewModel.teacherList.value ?: emptyList()
+            ) { teacherId: String ->
+                if (viewModel.teacherSelectState.value == UIState.Loading) return@TeacherSelectableAdapter
                 viewModel.pickTeacher(
                     TeacherPickReqVO(
                         questionId = questionId,
@@ -156,10 +158,10 @@ class TeacherSelectFragment : Fragment() {
                 )
             }
         binding.rvTeacherList.apply {
-            adapter = teacherListAdapter
+            adapter = teacherSelectableAdapter
             layoutManager = LinearLayoutManager(requireActivity())
         }
-        teacherListAdapter.setItems(
+        teacherSelectableAdapter.setItems(
             viewModel.teacherList.value ?: emptyList()
         )
     }

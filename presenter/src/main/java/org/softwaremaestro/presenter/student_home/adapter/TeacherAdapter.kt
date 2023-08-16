@@ -4,24 +4,24 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.presenter.databinding.ItemBestTeacherBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
 
-class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
-    RecyclerView.Adapter<BestTeacherAdapter.ViewHolder>() {
+class TeacherAdapter(private val onItemClickListener: (String) -> Unit) :
+    RecyclerView.Adapter<TeacherAdapter.ViewHolder>() {
 
     private var items: List<BestTeacher> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BestTeacherAdapter.ViewHolder {
+    ): TeacherAdapter.ViewHolder {
         val view =
-            ItemBestTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: BestTeacherAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TeacherAdapter.ViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 
@@ -33,7 +33,7 @@ class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemBestTeacherBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: BestTeacher) {
@@ -44,6 +44,10 @@ class BestTeacherAdapter(private val onItemClickListener: (String) -> Unit) :
                 tvUniv.text = item.univ
                 tvPickCount.text = "찜한 학생 ${item.pickCount}명"
                 tvRating.text = "%.1f".format(item.rating)
+            }
+
+            itemView.setOnClickListener {
+//                item.id?.let { onItemClickListener(it) }
             }
         }
     }

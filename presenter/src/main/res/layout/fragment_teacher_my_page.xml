@@ -41,7 +41,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_teacherName"
+                        android:id="@+id/tv_teacher_name"
                         style="@style/subtitle1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
