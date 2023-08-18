@@ -41,7 +41,7 @@ class TeacherSelectableAdapter(
 
         fun onBind(item: TeacherVO) {
             binding.tvLikes.text = " · 찜한 사람 ${item.likes}명" ?: EMPTY_STRING
-            binding.tvTeacherName.text = item.teacherId ?: EMPTY_STRING
+            binding.tvTeacherName.text = item.name ?: EMPTY_STRING
             binding.tvTeacherSchool.text = item.school ?: EMPTY_STRING
 
             item.teacherId?.let { teacherId ->
