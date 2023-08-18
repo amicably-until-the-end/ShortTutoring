@@ -35,23 +35,42 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_question"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_top_default"
-                android:background="@drawable/border"
-                android:padding="12dp"
-                android:text="질문하기"
-                android:textColor="@color/black" />
+                android:background="#C2E8FD"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    style="@style/h5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="현재 13명의 선생님이 활동중이에요!"
+                    android:textColor="@color/grey" />
+
+                <Button
+                    android:id="@+id/btn_question"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/btn_corner_radius_10_enabled"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="12dp"
+                    android:text="Q   질문하기"
+                    android:textColor="@color/white" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/container_my_teacher_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="48dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -156,7 +175,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="12dp"
-                        android:text=">"
+                        android:text="❯"
                         android:textColor="@color/black" />
 
                     <LinearLayout
@@ -309,7 +328,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"
-                        android:text="더보기 >" />
+                        android:text="더보기 ❯" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

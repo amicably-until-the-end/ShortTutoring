@@ -6,7 +6,7 @@
     <color name="light_grey">#4D000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
-    <color name="primary">#FF6200EE</color>
-    <color name="primary_bright">#FFAA77FF</color>
+    <color name="primary">#4EA6EC</color>
+    <color name="primary_bright">#C2E8FD</color>
     <color name="kakao">#FEE500</color>
 </resources>

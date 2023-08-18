@@ -40,6 +40,9 @@
         <item name="android:paddingTop">24dp</item>
         <item name="android:paddingBottom">24dp</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="elevation">16dp</item>
+        <item name="background">@color/white</item>
+        <item name="addElevationShadow">true</item>
     </style>
 
     <style name="ToolBarTitle">
@@ -51,6 +54,7 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="layout_constraintRight_toRightOf">parent</item>
+
     </style>
 
 
