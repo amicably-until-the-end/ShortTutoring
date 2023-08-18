@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
@@ -69,8 +70,8 @@ class LoginFragment @Inject constructor() :
 
     private fun setKakaoButton() {
         binding.btnLoginByKakao.setOnClickListener {
-            viewModel.loginWithKakao(requireContext())
-
+            //viewModel.loginWithKakao(requireContext())
+            findNavController().navigate(R.id.action_loginFragment_to_registerRoleFragment)
         }
     }
 
