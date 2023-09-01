@@ -30,4 +30,4 @@ jobs:
         KAKAO_APP_KEY: ${{secrets.KAKAO_APP_KEY }}
         UNIVCERT_API_KEY: ${{secrets.UNIVCERT_API_KEY }}
     - name: Build with Gradle
-      run: ./gradlew build
+      run: bash ./gradlew assembleDebug --stacktrace
