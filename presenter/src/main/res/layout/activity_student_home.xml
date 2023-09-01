@@ -18,8 +18,13 @@
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        app:contentInsetStart="0dp"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="0dp"
+        app:fabCradleRoundedCornerRadius="0dp"
+        app:fabCradleVerticalOffset="0dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav_view"
@@ -27,6 +32,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             app:itemBackground="@color/white"
+            app:itemTextColor="@color/black"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/student_bottom_nav_menu" />
     </com.google.android.material.bottomappbar.BottomAppBar>
