@@ -1,5 +1,5 @@
 # 숏과외
-SWMAESTRO 프로젝트
+SWMAESTRO 14기 프로젝트
 # Contributers
 |Github Profile|Contact|
 |--------|---------|
