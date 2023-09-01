@@ -7,11 +7,13 @@
     <dimen name="padding_vertical_rb">12dp</dimen>
 
     <!-- bottom navigation view -->
-    <dimen name="design_bottom_navigation_item_max_width" tools:override="true">1000dp</dimen>
-    <dimen name="design_bottom_navigation_active_item_max_width" tools:override="true">1000dp
-    </dimen>
+
 
     <dimen name="classroom_toolbox_item_width">40dp</dimen>
     <dimen name="classroom_toolbox_item_height">40dp</dimen>
+
+    <!--floating action button-->
+    <dimen name="design_fab_size_normal" tools:override="true">50dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">50dp</dimen>
 
 </resources>

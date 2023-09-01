@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.student_home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -9,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityStudentHomeBinding
+import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 
 @AndroidEntryPoint
 class StudentHomeActivity : AppCompatActivity() {
@@ -32,8 +34,19 @@ class StudentHomeActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         binding.bottomNavView.setupWithNavController(navController)
         binding.bottomNavView.setOnItemSelectedListener {
+            if (it.itemId == R.id.questionCameraFragment) {
+                var intent = Intent(this, QuestionUploadActivity::class.java)
+                startActivity(intent)
+                return@setOnItemSelectedListener false
+            }
             NavigationUI.onNavDestinationSelected(it, navController)
             return@setOnItemSelectedListener true
         }
+        binding.bottomNavView.background = null
+        binding.fab.setOnClickListener {
+            var intent = Intent(this, QuestionUploadActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }

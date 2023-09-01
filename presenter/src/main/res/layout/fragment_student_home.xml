@@ -12,7 +12,14 @@
         android:id="@+id/container_toolbar"
         style="@style/ToolBar">
 
-        <TextView style="@style/ToolBarAppName" />
+        <ImageView
+            android:layout_width="109dp"
+            android:layout_height="52dp"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_toolbar_notification"
@@ -22,6 +29,36 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/container_coin_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:background="@drawable/border_radius_13"
+            android:backgroundTint="#eeeff1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="2dp"
+            android:paddingRight="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="2dp"
+                android:src="@drawable/ic_coin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="1,350"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -35,42 +72,87 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#C2E8FD"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="24dp">
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="10dp"
+                android:elevation="15dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="#e7e8eb"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="9dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        app:cardBackgroundColor="@color/black">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center"
+                            android:text="🔔 알림"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="오늘 오후 14:00dp 강해린 선생님과 함께 수업이 진행예정이에요." />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_question"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/shape_radius_5_grad_blue">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/ic_home_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
                 <TextView
-                    style="@style/h5"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="현재 13명의 선생님이 활동중이에요!"
-                    android:textColor="@color/grey" />
+                    android:text="질문하기"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
 
-                <Button
-                    android:id="@+id/btn_question"
-                    style="@style/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/btn_corner_radius_10_enabled"
-                    android:paddingHorizontal="24dp"
-                    android:paddingVertical="12dp"
-                    android:text="Q   질문하기"
-                    android:textColor="@color/white" />
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <LinearLayout
                 android:id="@+id/container_my_teacher_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                android:layout_marginTop="48dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -78,7 +160,7 @@
                     style="@style/h6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="내가 찜한 선생님에게 질문해볼까요?"
+                    android:text="관심 선생님에게 질문해볼까요?"
                     android:textColor="@color/black" />
 
                 <LinearLayout
@@ -86,40 +168,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/container_profile_img"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:elevation="0dp"
-                            app:cardCornerRadius="100dp"
-                            app:cardUseCompatPadding="false">
-
-                            <ImageView
-                                android:id="@+id/iv_photo"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@color/light_grey" />
-                        </androidx.cardview.widget.CardView>
-
-                        <TextView
-                            android:id="@+id/tv_name"
-                            style="@style/subtitle1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="닉네임"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/container_profile_img" />
-
-                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_teacher_following"
@@ -134,9 +182,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                 android:layout_marginTop="48dp"
-                android:orientation="vertical">
+                android:background="#ecf1fb"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="30dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -144,11 +195,18 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/subtitle1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수학 개념, 잘 알고 있는지 확인해볼까요?"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="다른 학생들이 했던 질문을 통해 알아봐요"
-                        android:textColor="@color/hint" />
+                        android:textColor="#0f4bdf"
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
