@@ -1,10 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="margin_horizontal_default">32dp</dimen>
+    <dimen name="margin_horizontal_default">20dp</dimen>
     <dimen name="margin_top_default">16dp</dimen>
 
-    <dimen name="padding_horizontal_rb">16dp</dimen>
+    <dimen name="section_horizontal_padding_default">20dp</dimen>
     <dimen name="padding_vertical_rb">12dp</dimen>
+    <dimen name="padding_horizontal_rb">12dp</dimen>
+    <dimen name="toolbar_height">70dp</dimen>
 
     <!-- bottom navigation view -->
 

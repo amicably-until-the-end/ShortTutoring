@@ -40,7 +40,7 @@
 
                 <TextView
                     android:id="@+id/tv_teacher_name"
-                    style="@style/subtitle1"
+                    style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -89,7 +89,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/subtitle1"
+                    style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#FFFFAA55"
@@ -97,7 +97,7 @@
 
                 <TextView
                     android:id="@+id/tv_rating"
-                    style="@style/subtitle1"
+                    style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"

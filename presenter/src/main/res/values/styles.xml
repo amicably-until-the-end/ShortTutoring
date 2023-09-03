@@ -9,6 +9,12 @@
         <item name="android:background">@drawable/shape_top_radius_20</item>
     </style>
 
+    <style name="section_title" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="h1" parent="TextAppearance.MaterialComponents.Headline1" />
 
     <style name="h2" parent="TextAppearance.MaterialComponents.Headline2" />
@@ -21,8 +27,6 @@
 
     <style name="h6" parent="TextAppearance.MaterialComponents.Headline6" />
 
-    <style name="subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1" />
-
     <style name="subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2" />
 
     <style name="body1" parent="TextAppearance.MaterialComponents.Body1" />
@@ -34,7 +38,7 @@
     <style name="ToolBar">
         <item name="android:background">@color/white</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
         <item name="android:paddingStart">22dp</item>
         <item name="android:paddingEnd">22dp</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
@@ -54,8 +58,6 @@
         <item name="layout_constraintRight_toRightOf">parent</item>
 
     </style>
-
-
 
 
     <style name="ToolBarAppName">

@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.student_home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherFollowingBinding
 
@@ -37,6 +38,8 @@ class TeacherFollowingAdapter(private val onItemClickListener: (String) -> Unit)
 
         fun onBind(item: FollowingGetResponseVO) {
             binding.tvName.text = item.name
+            Glide.with(binding.root.context).load(item.profileImage).centerCrop()
+                .into(binding.ivPhoto)
             binding.ivPhoto.setOnClickListener {
                 item.id?.let { onItemClickListener(it) }
             }

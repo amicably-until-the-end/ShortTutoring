@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.Util.toPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
@@ -79,15 +80,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setOthersQuestionRecyclerView() {
-        with(binding) {
-            btnSubject.text = SUBJECT
-            btnMajorSection1.text = MAJOR_SECTION_1
-            btnMajorSection2.text = MAJOR_SECTION_2
-            btnMajorSection3.text = MAJOR_SECTION_3
-            tvNumOfProblems1.text = PROBLEM_NUMBER_1.toString()
-            tvNumOfProblems2.text = PROBLEM_NUMBER_2.toString()
-            tvNumOfProblems3.text = PROBLEM_NUMBER_3.toString()
-        }
+        return
     }
 
     private fun initBottomSheetDialog() {
@@ -161,6 +154,41 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun observeFollowing() {
+        val sampleData = mutableListOf<FollowingGetResponseVO>().apply {
+            add(
+                FollowingGetResponseVO(
+                    "1",
+                    "강해린",
+                    "a",
+                    "https://yt3.ggpht.com/tWxrapVNxQBe-VnvRxOMAOmyVNsnEmFlT8ON3oQyqLPr6_QwwevRIHsslAmYSNogDehyCQNvqg=s176-c-k-c0x00ffffff-no-nd-rj",
+                    "f",
+                    "f",
+                    "d",
+                    "d",
+                    1,
+                    "d",
+                    "f"
+                )
+            )
+            add(
+                FollowingGetResponseVO(
+                    "1",
+                    "강해린",
+                    "a",
+                    "https://yt3.ggpht.com/tWxrapVNxQBe-VnvRxOMAOmyVNsnEmFlT8ON3oQyqLPr6_QwwevRIHsslAmYSNogDehyCQNvqg=s176-c-k-c0x00ffffff-no-nd-rj",
+                    "f",
+                    "f",
+                    "d",
+                    "d",
+                    1,
+                    "d",
+                    "f"
+                )
+            )
+        }
+        teacherFollowingAdapter.setItem(sampleData)
+
+        return
         followingViewModel.following.observe(viewLifecycleOwner) {
             teacherFollowingAdapter.setItem(it)
             teacherFollowingAdapter.notifyDataSetChanged()

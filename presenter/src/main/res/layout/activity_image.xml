@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/tv_subject_and_difficulty"
-            style="@style/subtitle1"
+            style="@style/section_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
