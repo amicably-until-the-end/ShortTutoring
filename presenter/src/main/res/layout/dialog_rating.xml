@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="600dp"
     android:layout_height="240dp"
-    android:background="@drawable/shape_radius_20">
+    android:background="@drawable/bg_radius_20_white">
 
     <LinearLayout
         android:id="@+id/container_notice"

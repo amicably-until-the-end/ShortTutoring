@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/btn_login_google"
+        android:background="@drawable/bg_radius_12_stroke_black_1"
         android:drawableStart="@drawable/logo_google_24"
         android:gravity="center"
         android:padding="16dp"

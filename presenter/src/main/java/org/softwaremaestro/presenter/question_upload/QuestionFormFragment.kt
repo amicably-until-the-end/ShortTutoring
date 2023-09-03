@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
@@ -17,6 +19,8 @@ import org.softwaremaestro.presenter.Util.UIState
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.question_upload.adapter.FormImageAdapter
+import org.softwaremaestro.presenter.question_upload.adapter.TimeSelectAdapter
 
 
 @AndroidEntryPoint
@@ -27,13 +31,12 @@ class QuestionFormFragment : Fragment() {
     lateinit var binding: FragmentQuestionFormBinding
     private val viewModel: QuestionUploadViewModel by activityViewModels()
 
-//    private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
 
-    private val ets: List<TextInputEditText> by lazy {
-        with(binding) {
-            listOf(etDescription, etSchoolLevel, etSubject, etDifficulty)
-        }
-    }
+    //recyclerView adapters
+    private lateinit var imageAdapter: FormImageAdapter
+    private lateinit var timeSelectAdapter: TimeSelectAdapter
+
+//    private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
 
 
     override fun onCreateView(
@@ -54,6 +57,9 @@ class QuestionFormFragment : Fragment() {
 
         setToolBar()
 
+        setImageRecyclerView()
+
+        setDesiredTimeRecyclerView()
         // 모든 내용이 입력되었으면 제출 버튼을 활성화한다
         checkAndEnableSubjectBtn()
 
@@ -71,24 +77,12 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun setFieldButtons() {
-
-        binding.ivImage.setOnClickListener {
-            findNavController().navigate(R.id.action_questionFormFragment_to_questionCameraFragment)
+        binding.btnSchoolSelect.setOnClickListener {
+            //show dialog
         }
-
-        binding.etSchoolLevel.setOnClickListener {
-            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormSchoolLevelFragment)
+        binding.btnSubjectSelect.setOnClickListener {
+            //show dialog
         }
-        binding.etDescription.setOnClickListener {
-            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormDescriptionFragment)
-        }
-        binding.etSubject.setOnClickListener {
-            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormSubjectFragment)
-        }
-        binding.etDifficulty.setOnClickListener {
-            findNavController().navigate(R.id.action_questionFormFragment_to_questionFormDifficultyFragment)
-        }
-
     }
 
 
@@ -104,40 +98,53 @@ class QuestionFormFragment : Fragment() {
     private fun Boolean.toggle() = !this
 
 
-    private fun observeImage() {
+    private fun setImageRecyclerView() {
+        imageAdapter = FormImageAdapter()
+
+        binding.rvQuestionImages.apply {
+            adapter = imageAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+    }
+
+    private fun setDesiredTimeRecyclerView() {
+        timeSelectAdapter = TimeSelectAdapter()
+
+        binding.rvDesiredTime.apply {
+            adapter = timeSelectAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        timeSelectAdapter.items = listOf("오후 6:00")
+
+    }
+
+
+    private fun observeImages() {
         viewModel.image.observe(viewLifecycleOwner) {
-            binding.ivImage.setImageBitmap(it)
+            imageAdapter.setItem(it!!)
             checkAndEnableSubjectBtn()
         }
     }
 
-    private fun observeDescription() {
-        viewModel.description.observe(viewLifecycleOwner) {
-            binding.etDescription.setText(it)
-            checkAndEnableSubjectBtn()
-        }
-    }
 
     private fun observeSchoolLevel() {
         viewModel.school.observe(viewLifecycleOwner) {
-            binding.etSchoolLevel.setText(it)
+            binding.tvSchoolSelected.text = it
             checkAndEnableSubjectBtn()
         }
     }
 
     private fun observeSubject() {
         viewModel.subject.observe(viewLifecycleOwner) {
-            binding.etSubject.setText(it)
+            binding.tvSubjectSelected.text = it
             checkAndEnableSubjectBtn()
         }
     }
 
-    private fun observeDifficulty() {
-        viewModel.difficulty.observe(viewLifecycleOwner) {
-            binding.etDifficulty.setText(it)
-            checkAndEnableSubjectBtn()
-        }
-    }
 
     private fun observeQuestionId() {
         viewModel.questionUploadState.observe(viewLifecycleOwner) {
@@ -163,18 +170,16 @@ class QuestionFormFragment : Fragment() {
                     binding.btnSubmit.setEnabledAndChangeColor(true)
                 }
             }
-            
+
         }
         checkAndEnableSubjectBtn()
     }
 
 
     private fun setObserver() {
-        observeImage()
-        observeDescription()
+        observeImages()
         observeSchoolLevel()
         observeSubject()
-        observeDifficulty()
         observeQuestionId()
     }
 
@@ -182,7 +187,7 @@ class QuestionFormFragment : Fragment() {
     private fun setSubmitButton() {
         binding.btnSubmit.setOnClickListener {
             //버튼 여러번 눌러지는 거 방지
-            binding.btnSubmit.isEnabled = false
+            binding.btnSubmit.setEnabledAndChangeColor(false)
 
             viewModel.uploadQuestion()
 

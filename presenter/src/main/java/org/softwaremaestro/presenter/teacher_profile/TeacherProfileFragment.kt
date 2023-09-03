@@ -116,7 +116,7 @@ class TeacherProfileFragment : Fragment() {
         following = !following
 
         if (following) {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
             profileViewModel.addOne()
 
             binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
@@ -126,7 +126,7 @@ class TeacherProfileFragment : Fragment() {
             notiFollowUserViewModel.followUser(selectedUserId)
 
         } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_blue)
             profileViewModel.minusOne()
 
             binding.btnFollow.increaseWidth(156, 500L, requireContext(),

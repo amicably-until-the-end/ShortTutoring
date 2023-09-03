@@ -43,7 +43,7 @@
                 android:layout_marginBottom="30dp"
                 android:clipToPadding="false" />
 
-            <Space
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:background="@color/background_grey" />
@@ -69,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/border_radius_5"
+                    android:background="@drawable/bg_radius_5"
                     android:backgroundTint="@color/background_grey"
                     android:gravity="top"
                     android:hint="어떤점이 궁금하신가요?"
@@ -106,16 +106,17 @@
                             android:id="@+id/btn_school_select"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:background="@drawable/border_radius_5"
+                            android:background="@drawable/bg_radius_5"
                             android:backgroundTint="@color/background_grey"
                             android:paddingHorizontal="15dp">
 
                             <TextView
+                                android:id="@+id/tv_school_selected"
                                 style="@style/sub_text_grey"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="학년 선택"
+                                android:text="학교 선택"
                                 app:layout_constraintLeft_toLeftOf="parent" />
 
                             <ImageView
@@ -145,11 +146,12 @@
                             android:id="@+id/btn_subject_select"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:background="@drawable/border_radius_5"
+                            android:background="@drawable/bg_radius_5"
                             android:backgroundTint="@color/background_grey"
                             android:paddingHorizontal="15dp">
 
                             <TextView
+                                android:id="@+id/tv_subject_selected"
                                 style="@style/sub_text_grey"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -214,6 +216,7 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_desired_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -231,7 +234,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="30dp"
-        android:background="@drawable/shape_radius_5_grad_blue"
+        android:background="@drawable/selector_safe_button_bg"
+        android:enabled="false"
         android:gravity="center"
         android:padding="17dp"
         android:text="제출하기"

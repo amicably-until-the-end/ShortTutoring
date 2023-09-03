@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_horizontal_default"
                 android:layout_marginTop="40dp"
-                android:background="@drawable/border_radius_10_light_grey"
+                android:background="@drawable/bg_radius_10_light_grey"
                 android:orientation="vertical"
                 android:padding="24dp"
                 android:paddingBottom="48dp">
@@ -216,7 +216,7 @@
                         style="@style/h6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_bottom_hint"
+                        android:background="@drawable/bg_bottom_hint"
                         android:insetTop="0dp"
                         android:insetBottom="0dp"
                         android:minWidth="0dp"

@@ -6,7 +6,7 @@
     </style>
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/shape_top_radius_20</item>
+        <item name="android:background">@drawable/bg_radius_20_20_0_0</item>
     </style>
 
     <style name="section_title" parent="TextAppearance.MaterialComponents.Subtitle1">
@@ -18,6 +18,16 @@
     <style name="sub_text_grey" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/sub_text_grey</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="safeButtonEnabled">
+        <item name="android:background">@drawable/bg_radius_5_grad_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="safeButtonDisabled">
+        <item name="android:background">@color/background_grey</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 

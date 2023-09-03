@@ -49,7 +49,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_top_hint"
+        android:background="@drawable/bg_top_hint"
         android:padding="24dp">
 
         <TextView

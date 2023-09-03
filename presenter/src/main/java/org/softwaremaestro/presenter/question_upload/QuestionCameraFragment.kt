@@ -60,7 +60,7 @@ class QuestionCameraFragment : Fragment() {
     private fun setShutterListener() {
         binding.btnShutter.setOnClickListener {
             val image = binding.textureView.capture()
-            viewModel._image.postValue(image)
+            viewModel._image.postValue(listOf(image))
             navigateToQuestionForm()
         }
     }

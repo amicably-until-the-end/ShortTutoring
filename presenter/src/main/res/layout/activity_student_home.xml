@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/transparent"
         android:outlineProvider="none"
-        android:src="@drawable/btn_navi_camera"
+        android:src="@drawable/ic_camera"
         app:borderWidth="0dp"
         app:fabSize="normal"
         app:layout_anchor="@id/bottom_app_bar"

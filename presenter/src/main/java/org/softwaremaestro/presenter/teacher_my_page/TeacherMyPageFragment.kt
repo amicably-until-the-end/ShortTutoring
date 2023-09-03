@@ -53,7 +53,7 @@ class TeacherMyPageFragment : Fragment() {
 
         binding.tvReview.setOnClickListener {
             binding.tvReview.background =
-                resources.getDrawable(R.drawable.border_bottom, null)
+                resources.getDrawable(R.drawable.bg_bottom, null)
             binding.tvClip.background = null
             binding.containerReview.visibility = View.VISIBLE
             binding.containerClip.visibility = View.INVISIBLE
@@ -62,7 +62,7 @@ class TeacherMyPageFragment : Fragment() {
         binding.tvClip.setOnClickListener {
             binding.tvReview.background = null
             binding.tvClip.background =
-                resources.getDrawable(R.drawable.border_bottom, null)
+                resources.getDrawable(R.drawable.bg_bottom, null)
             binding.containerReview.visibility = View.INVISIBLE
             binding.containerClip.visibility = View.VISIBLE
         }
@@ -112,14 +112,14 @@ class TeacherMyPageFragment : Fragment() {
         following = !following
 
         if (following) {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
             myProfileViewModel.addOne()
 
             binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
                 onEnd = { binding.btnReserve.visibility = View.VISIBLE }
             )
         } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_blue)
             myProfileViewModel.minusOne()
 
             binding.btnFollow.increaseWidth(156, 500L, requireContext(),
