@@ -1,5 +1,4 @@
-package org.softwaremaestro.presenter.question_upload
-
+package org.softwaremaestro.presenter.question_upload.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

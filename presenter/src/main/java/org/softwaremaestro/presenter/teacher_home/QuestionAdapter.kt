@@ -56,10 +56,10 @@ class QuestionAdapter(
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
                 if (selectedQuestionId == item.id) {
-                    binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+                    binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
                     binding.btnOffer.text = "신청 완료"
                 } else {
-                    binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+                    binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_blue)
                     binding.btnOffer.text = "신청하기"
                 }
 
@@ -74,10 +74,10 @@ class QuestionAdapter(
         fun setActiveOnOfferButton(active: Boolean) {
             // 기존에 선택된 질문 id와 나의 질문 id가 같으면 선택된 상태라고 판단
             if (active) {
-                binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_disabled)
+                binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
                 binding.btnOffer.text = "신청 완료"
             } else {
-                binding.btnOffer.setBackgroundResource(R.drawable.btn_corner_radius_10_enabled)
+                binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_blue)
                 binding.btnOffer.text = "신청하기"
             }
         }

@@ -12,8 +12,8 @@
         style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/btn_corner_radius_10_enabled"
-        android:backgroundTint="@color/primary"
+        android:background="@drawable/bg_radius_10_blue"
+        android:backgroundTint="@color/primary_blue"
         android:text="새로 질문하기"
         android:textColor="@color/white" />
 
@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/btn_corner_radius_10_enabled"
-        android:backgroundTint="@color/primary"
+        android:background="@drawable/bg_radius_10_blue"
+        android:backgroundTint="@color/primary_blue"
         android:text="해결하지 못한 문제 다시 물어보기"
         android:textColor="@color/white" />
 </LinearLayout>

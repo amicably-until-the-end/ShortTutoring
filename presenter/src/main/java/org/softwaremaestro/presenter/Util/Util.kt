@@ -103,11 +103,11 @@ fun View.increaseWidth(
 fun Button.setEnabledAndChangeColor(enabled: Boolean) {
 
     if (enabled) {
-        setBackgroundColor(resources.getColor(R.color.primary, null))
+        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
         setTextColor(resources.getColor(R.color.white, null))
     } else {
-        setBackgroundColor(resources.getColor(R.color.light_grey, null))
-        setTextColor(resources.getColor(R.color.grey, null))
+        setBackgroundResource(R.drawable.bg_radius_5_grey)
+        setTextColor(resources.getColor(R.color.black, null))
     }
 }
 

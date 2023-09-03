@@ -21,6 +21,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
+import org.softwaremaestro.presenter.question_upload.adapter.TeacherSelectableAdapter
 import org.softwaremaestro.presenter.question_upload.viewmodel.TeacherSelectViewModel
 
 private const val STUDENT_ID = "test-student-id"

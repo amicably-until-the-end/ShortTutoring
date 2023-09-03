@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal_default"
         android:layout_marginBottom="56dp"
-        android:background="@drawable/btn_corner_radius_10_enabled"
+        android:background="@drawable/bg_radius_10_blue"
         android:gravity="center"
         android:padding="16dp"
         android:text="다음"

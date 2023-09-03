@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/border_radius_10_light_grey"
+    android:background="@drawable/bg_radius_10_light_grey"
     android:padding="24dp">
 
     <androidx.cardview.widget.CardView
@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/tv_name"
-            style="@style/subtitle1"
+            style="@style/section_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/subtitle1"
+            style="@style/section_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="★ "
@@ -99,7 +99,7 @@
 
         <TextView
             android:id="@+id/tv_rating"
-            style="@style/subtitle1"
+            style="@style/section_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"

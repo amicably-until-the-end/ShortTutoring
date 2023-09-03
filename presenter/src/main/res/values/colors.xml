@@ -6,7 +6,10 @@
     <color name="light_grey">#4D000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
-    <color name="primary">#4EA6EC</color>
+    <color name="primary_blue">#0f4bdf</color>
+    <color name="secondary_blue">#006fff</color>
     <color name="primary_bright">#C2E8FD</color>
     <color name="kakao">#FEE500</color>
+    <color name="background_grey">#F6F7F8</color>
+    <color name="sub_text_grey">#A3A9B5</color>
 </resources>

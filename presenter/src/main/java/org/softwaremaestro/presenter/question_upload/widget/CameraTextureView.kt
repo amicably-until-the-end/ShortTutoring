@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.question_upload
+package org.softwaremaestro.presenter.question_upload.widget
 
 import android.Manifest
 import android.app.Activity

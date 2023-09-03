@@ -66,7 +66,7 @@
                 android:minHeight="0dp"
                 android:paddingVertical="12dp"
                 android:textColor='@color/white'
-                tools:background="@drawable/btn_corner_radius_10_enabled"
+                tools:background="@drawable/bg_radius_10_blue"
                 tools:text="신청하기" />
 
         </LinearLayout>
