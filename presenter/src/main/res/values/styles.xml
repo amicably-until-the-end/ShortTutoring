@@ -25,6 +25,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+
     <style name="safeButtonDisabled">
         <item name="android:background">@color/background_grey</item>
         <item name="android:textColor">@color/black</item>

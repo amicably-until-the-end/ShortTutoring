@@ -16,5 +16,6 @@
         <!-- Customize your theme here. -->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:timePickerStyle">@style/MyTimePickerTheme</item>
     </style>
 </resources>

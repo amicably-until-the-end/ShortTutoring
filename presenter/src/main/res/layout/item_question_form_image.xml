@@ -6,21 +6,23 @@
     android:layout_height="345dp"
     android:layout_gravity="center"
     android:layout_marginRight="15dp"
+    app:cardBackgroundColor="#EEEFF1"
     app:cardCornerRadius="15dp"
     app:cardElevation="0dp">
 
     <TextView
         android:id="@+id/tv_add_image_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:gravity="center"
         android:text="추가하기"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_grey"
         android:scaleType="fitXY" />
 </androidx.cardview.widget.CardView>

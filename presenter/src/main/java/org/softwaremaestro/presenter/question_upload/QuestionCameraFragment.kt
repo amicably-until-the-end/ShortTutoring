@@ -11,9 +11,11 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionCameraBinding
+import org.softwaremaestro.presenter.question_upload.adapter.CapturePreviewAdapter
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,6 +33,11 @@ class QuestionCameraFragment : Fragment() {
 
 
     private val viewModel: QuestionUploadViewModel by activityViewModels()
+
+    private lateinit var previewAdapter: CapturePreviewAdapter
+
+    private var previewSelected = 0
+
 
     //private var capturedFileName: String? = null;
     var mCameraId = "0"
@@ -54,15 +61,49 @@ class QuestionCameraFragment : Fragment() {
         binding = FragmentQuestionCameraBinding.inflate(inflater, container, false)
         //setViewHolder()
         setShutterListener()
+        setPreviewRecyclerView()
+        setNextButton()
+
         return binding.root
     }
+
 
     private fun setShutterListener() {
         binding.btnShutter.setOnClickListener {
             val image = binding.textureView.capture()
-            viewModel._image.postValue(listOf(image))
+            if (previewSelected < 5) {
+                previewAdapter.items.add(image)
+                previewSelected += 1
+            } else {
+                previewAdapter.items[4] = image
+            }
+            previewAdapter.notifyDataSetChanged()
+        }
+    }
+
+
+    private fun setNextButton() {
+        binding.btnNext.setOnClickListener {
+            viewModel._images.postValue(previewAdapter.items)
             navigateToQuestionForm()
         }
+    }
+
+    private fun setPreviewRecyclerView() {
+        previewAdapter = CapturePreviewAdapter() {
+            if (it < previewAdapter.items.size) {
+                previewAdapter.items.removeAt(it)
+                previewSelected -= 1
+                previewAdapter.notifyDataSetChanged()
+            }
+        }
+
+        binding.rvCapturePreview.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = previewAdapter
+        }
+
     }
 
     private fun navigateToQuestionForm() {

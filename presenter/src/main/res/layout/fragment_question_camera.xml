@@ -55,25 +55,10 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_capture_desc">
 
-                    <include
-                        android:id="@+id/iv_capture_1"
-                        layout="@layout/item_capture_preview" />
-
-                    <include
-                        android:id="@+id/iv_capture_2"
-                        layout="@layout/item_capture_preview" />
-
-                    <include
-                        android:id="@+id/iv_capture_3"
-                        layout="@layout/item_capture_preview" />
-
-                    <include
-                        android:id="@+id/iv_capture_4"
-                        layout="@layout/item_capture_preview" />
-
-                    <include
-                        android:id="@+id/iv_capture_5"
-                        layout="@layout/item_capture_preview" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_capture_preview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -95,28 +80,30 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/baseline_add_photo_alternate_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/btn_shutter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_shutter" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_shutter"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_flash"
+            android:id="@+id/btn_next"
             android:layout_width="56dp"
             android:layout_height="38dp"
             android:background="@drawable/bg_radius_18"
             android:backgroundTint="@color/white"
             android:gravity="center"
             android:text="다음"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/btn_shutter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_shutter" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

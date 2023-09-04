@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.ItemDesiredClassTimeBinding
 
-class TimeSelectAdapter() : RecyclerView.Adapter<TimeSelectAdapter.ViewHolder>() {
+class TimeSelectAdapter(private val onAddClick: () -> Unit) :
+    RecyclerView.Adapter<TimeSelectAdapter.ViewHolder>() {
 
 
-    var items: List<String> = emptyList()
+    var items: MutableList<String> = mutableListOf()
 
 
     override fun onCreateViewHolder(
@@ -38,10 +39,16 @@ class TimeSelectAdapter() : RecyclerView.Adapter<TimeSelectAdapter.ViewHolder>()
         fun onBind(item: String?) {
             if (item != null) {
                 binding.tvTime.text = item
+                binding.tvAddTime.visibility = ViewGroup.GONE
+                binding.root.setOnClickListener {
+                    items.remove(item)
+                    notifyDataSetChanged()
+                }
             } else {
+                binding.tvTime.text = ""
                 binding.tvAddTime.visibility = ViewGroup.VISIBLE
                 binding.root.setOnClickListener {
-                    binding.root.isEnabled = false
+                    onAddClick()
                 }
             }
         }
