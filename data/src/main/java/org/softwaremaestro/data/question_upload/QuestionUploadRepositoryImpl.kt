@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.model.asDomain
+import org.softwaremaestro.data.question_upload.model.asDto
 import org.softwaremaestro.data.question_upload.remote.QuestionUploadApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
@@ -23,14 +24,7 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
 
     override suspend fun uploadQuestion(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>> {
         return flow {
-            val dto = QuestionUploadRequestDto(
-                questionUploadVO.imageBase64,
-                questionUploadVO.imageFormat,
-                questionUploadVO.description,
-                questionUploadVO.schoolLevel,
-                questionUploadVO.schoolSubject,
-                questionUploadVO.difficulty
-            )
+            val dto = questionUploadVO.asDto()
             val response = questionUploadApi.uploadQuestion(dto)
             if (response.isSuccessful) {
                 val body = response.body()

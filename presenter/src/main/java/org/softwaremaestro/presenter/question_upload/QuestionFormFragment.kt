@@ -23,6 +23,7 @@ import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadVie
 import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.question_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.adapter.TimeSelectAdapter
+import java.text.SimpleDateFormat
 
 
 @AndroidEntryPoint
@@ -55,6 +56,7 @@ class QuestionFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         parseMathSubjectJson()
         setObserver()
         setToolBar()
@@ -62,8 +64,7 @@ class QuestionFormFragment : Fragment() {
         setDesiredTimeRecyclerView()
         checkAndEnableSubjectBtn()
         setSubmitButton()
-        setFieldButtons()
-
+        setFields()
     }
 
     /**
@@ -78,7 +79,11 @@ class QuestionFormFragment : Fragment() {
     /**
     뷰를 클릭하면 해당 뷰에 값을 입력하는 페이지로 이동한다
      */
-    private fun setFieldButtons() {
+    private fun setFields() {
+        binding.etQuestionDesc.setText(viewModel.description.value)
+        binding.etQuestionDesc.setOnFocusChangeListener { _, hasFocus ->
+            viewModel._description.value = binding.etQuestionDesc.text.toString()
+        }
         binding.btnSchoolSelect.setOnClickListener {
             showSchoolSelectDialog()
         }
@@ -95,7 +100,7 @@ class QuestionFormFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setItems(mathSubjects.keys.toTypedArray()) { _, which ->
                 val selectedSchool = mathSubjects.keys.toTypedArray()[which]
-                binding.tvSchoolSelected.text = selectedSchool
+                viewModel._school.value = selectedSchool
                 showSubjectSelectDialog()
             }
             .setTitle("학교")
@@ -107,12 +112,12 @@ class QuestionFormFragment : Fragment() {
 
     private fun showSubjectSelectDialog() {
         var subjects =
-            mathSubjects[binding.tvSchoolSelected.text.toString()]?.keys?.toTypedArray()!!
+            mathSubjects[viewModel.school.value]?.keys?.toTypedArray()!!
 
         AlertDialog.Builder(requireContext())
             .setItems(subjects) { _, which ->
                 val selectedSchool = subjects[which]
-                binding.tvSubjectSelected.text = selectedSchool
+                viewModel._subject.value = selectedSchool
             }
             .setTitle("구분")
             .setPositiveButton("확인", null)
@@ -126,11 +131,8 @@ class QuestionFormFragment : Fragment() {
                 viewModel.images.value != null &&
                         viewModel.description.value != null &&
                         viewModel.school.value != null &&
-                        viewModel.subject.value != null &&
-                        viewModel.difficulty.value != null)
+                        viewModel.subject.value != null)
     }
-
-    private fun Boolean.toggle() = !this
 
 
     private fun setImageRecyclerView() {
@@ -147,8 +149,9 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun setDesiredTimeRecyclerView() {
-        var hour: Int = 0;
-        var time: Int = 0;
+        var currentTime = System.currentTimeMillis()
+        var hour: Int = SimpleDateFormat("HH").format(currentTime).toInt()
+        var time: Int = SimpleDateFormat("mm").format(currentTime).toInt()
         timeSelectAdapter = TimeSelectAdapter() {
             val picker = TimePickerDialog(
                 requireContext(),
@@ -160,7 +163,7 @@ class QuestionFormFragment : Fragment() {
                 },
                 hour,
                 time,
-                true
+                false
             )
             picker.show()
         }
@@ -222,7 +225,6 @@ class QuestionFormFragment : Fragment() {
                     binding.btnSubmit.setEnabledAndChangeColor(true)
                 }
             }
-
         }
         checkAndEnableSubjectBtn()
     }
@@ -246,12 +248,8 @@ class QuestionFormFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             //버튼 여러번 눌러지는 거 방지
             binding.btnSubmit.setEnabledAndChangeColor(false)
-
             viewModel.uploadQuestion()
-
         }
-
-
     }
 
     private fun setToolBar() {

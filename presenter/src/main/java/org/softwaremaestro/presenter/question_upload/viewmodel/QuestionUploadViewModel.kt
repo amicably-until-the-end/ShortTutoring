@@ -47,13 +47,10 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
 
     fun uploadQuestion() {
         val questionUploadVO = QuestionUploadVO(
-            studentId = "test-student-id",
-            imageBase64 = images.value?.get(0)?.toBase64() ?: "",
-            imageFormat = "png",
+            images = images.value?.map { it.toBase64() } ?: listOf(),
             description = description.value ?: "",
             schoolLevel = school.value ?: "",
             schoolSubject = subject.value ?: "",
-            difficulty = difficulty.value ?: "",
         )
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)

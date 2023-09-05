@@ -43,8 +43,6 @@ class CapturePreviewAdapter(private val onClick: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: Bitmap?, position: Int) {
-            Log.d("onBind", "position: $position $item")
-
             binding.ivCapture.setImageBitmap(item)
             binding.root.setOnClickListener {
                 onClick(position)
