@@ -1,12 +1,13 @@
 package org.softwaremaestro.presenter.question_upload.adapter
 
+import android.content.DialogInterface.OnClickListener
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.ItemQuestionFormImageBinding
 
-class FormImageAdapter() :
+class FormImageAdapter(private val onClick: () -> Unit) :
     RecyclerView.Adapter<FormImageAdapter.ViewHolder>() {
 
     private var items: List<Bitmap> = emptyList()
@@ -20,12 +21,13 @@ class FormImageAdapter() :
     override fun onBindViewHolder(holder: FormImageAdapter.ViewHolder, position: Int) {
         if (position < items.size) {
             holder.onBind(items[position])
+        } else {
+            holder.onBind(null)
         }
-        holder.onBind(null)
     }
 
     override fun getItemCount(): Int {
-        return items.size + 1
+        return (items.size + 1).coerceAtMost(5)
     }
 
     fun setItem(items: List<Bitmap>) {
@@ -36,10 +38,16 @@ class FormImageAdapter() :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: Bitmap?) {
-            if (item != null) {
-                binding.ivImage.setImageBitmap(item)
-            } else {
+            if (item == null) {
                 binding.tvAddImageDesc.visibility = ViewGroup.VISIBLE
+                binding.ivImage.visibility = ViewGroup.GONE
+                binding.root.setOnClickListener {
+                    onClick()
+                }
+            } else {
+                binding.ivImage.setImageBitmap(item)
+                binding.tvAddImageDesc.visibility = ViewGroup.GONE
+                binding.ivImage.visibility = ViewGroup.VISIBLE
             }
         }
     }

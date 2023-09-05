@@ -8,22 +8,22 @@ import org.softwaremaestro.presenter.databinding.ItemTeacherSelectableBinding
 
 private const val EMPTY_STRING = "-"
 
-class TeacherSelectableAdapter(
+class TeacherSelectAdapter(
     private var items: List<TeacherVO>,
     private val listener: (String) -> Unit
 ) :
-    RecyclerView.Adapter<TeacherSelectableAdapter.ViewHolder>() {
+    RecyclerView.Adapter<TeacherSelectAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TeacherSelectableAdapter.ViewHolder {
+    ): TeacherSelectAdapter.ViewHolder {
         val view =
             ItemTeacherSelectableBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TeacherSelectableAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TeacherSelectAdapter.ViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 

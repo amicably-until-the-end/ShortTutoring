@@ -15,6 +15,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TimePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
+
     <style name="sub_text_grey" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/sub_text_grey</item>
         <item name="android:textSize">12sp</item>
@@ -24,6 +28,7 @@
         <item name="android:background">@drawable/bg_radius_5_grad_blue</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
 
     <style name="safeButtonDisabled">
         <item name="android:background">@color/background_grey</item>

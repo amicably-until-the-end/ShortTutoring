@@ -31,24 +31,26 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val _school: MutableLiveData<String?> = MutableLiveData();
     val _subject: MutableLiveData<String?> = MutableLiveData();
     val _difficulty: MutableLiveData<String?> = MutableLiveData();
-    val _image: MutableLiveData<List<Bitmap>?> = MutableLiveData();
+    val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData();
 
 
     val description: LiveData<String?> get() = _description
     val school: LiveData<String?> get() = _school
     val subject: LiveData<String?> get() = _subject
     val difficulty: LiveData<String?> get() = _difficulty
-    val image: LiveData<List<Bitmap>?> get() = _image
+    val images: LiveData<List<Bitmap>?> get() = _images
+
+
+    init {
+        _images.postValue(listOf())
+    }
 
     fun uploadQuestion() {
         val questionUploadVO = QuestionUploadVO(
-            studentId = "test-student-id",
-            imageBase64 = image.value?.get(0)?.toBase64() ?: "",
-            imageFormat = "png",
+            images = images.value?.map { it.toBase64() } ?: listOf(),
             description = description.value ?: "",
             schoolLevel = school.value ?: "",
             schoolSubject = subject.value ?: "",
-            difficulty = difficulty.value ?: "",
         )
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)

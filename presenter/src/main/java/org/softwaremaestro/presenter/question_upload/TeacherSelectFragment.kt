@@ -21,7 +21,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSelectBinding
-import org.softwaremaestro.presenter.question_upload.adapter.TeacherSelectableAdapter
+import org.softwaremaestro.presenter.question_upload.adapter.TeacherSelectAdapter
 import org.softwaremaestro.presenter.question_upload.viewmodel.TeacherSelectViewModel
 
 private const val STUDENT_ID = "test-student-id"
@@ -31,7 +31,7 @@ class TeacherSelectFragment : Fragment() {
 
     lateinit var binding: FragmentTeacherSelectBinding
     private val viewModel: TeacherSelectViewModel by viewModels()
-    lateinit var teacherSelectableAdapter: TeacherSelectableAdapter
+    lateinit var teacherSelectAdapter: TeacherSelectAdapter
 
     private lateinit var loadingDialog: LoadingDialog
 
@@ -92,8 +92,8 @@ class TeacherSelectFragment : Fragment() {
                 noTeacher = true
                 binding.layoutParent.addView(binding.ivWaitingIcon)
             }
-            teacherSelectableAdapter.setItems(viewModel.teacherList.value ?: emptyList())
-            teacherSelectableAdapter.notifyDataSetChanged()
+            teacherSelectAdapter.setItems(viewModel.teacherList.value ?: emptyList())
+            teacherSelectAdapter.notifyDataSetChanged()
 
         }
     }
@@ -159,11 +159,11 @@ class TeacherSelectFragment : Fragment() {
     }
 
     private fun setTeacherRecycler(questionId: String) {
-        teacherSelectableAdapter =
-            TeacherSelectableAdapter(
+        teacherSelectAdapter =
+            TeacherSelectAdapter(
                 viewModel.teacherList.value ?: emptyList()
             ) { teacherId: String ->
-                if (viewModel.teacherSelectState.value == UIState.Loading) return@TeacherSelectableAdapter
+                if (viewModel.teacherSelectState.value == UIState.Loading) return@TeacherSelectAdapter
                 viewModel.pickTeacher(
                     TeacherPickReqVO(
                         questionId = questionId,
@@ -173,10 +173,10 @@ class TeacherSelectFragment : Fragment() {
                 )
             }
         binding.rvTeacherList.apply {
-            adapter = teacherSelectableAdapter
+            adapter = teacherSelectAdapter
             layoutManager = LinearLayoutManager(requireActivity())
         }
-        teacherSelectableAdapter.setItems(
+        teacherSelectAdapter.setItems(
             viewModel.teacherList.value ?: emptyList()
         )
     }

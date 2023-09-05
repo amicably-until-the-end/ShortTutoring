@@ -112,11 +112,11 @@
 
                             <TextView
                                 android:id="@+id/tv_school_selected"
-                                style="@style/sub_text_grey"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="학교 선택"
+                                android:hint="학교 선택"
+                                android:textColorHint="@color/sub_text_grey"
                                 app:layout_constraintLeft_toLeftOf="parent" />
 
                             <ImageView
@@ -152,11 +152,11 @@
 
                             <TextView
                                 android:id="@+id/tv_subject_selected"
-                                style="@style/sub_text_grey"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="과목 선택"
+                                android:hint="과목 선택"
+                                android:textColorHint="@color/sub_text_grey"
                                 app:layout_constraintLeft_toLeftOf="parent" />
 
                             <ImageView
