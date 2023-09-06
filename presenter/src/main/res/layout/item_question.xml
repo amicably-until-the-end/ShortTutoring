@@ -1,117 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="12dp"
-    android:background="#11000000"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true">
+    android:layout_width="220dp"
+    android:layout_height="170dp"
+    android:layout_marginRight="20dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="240dp"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
         <ImageView
             android:id="@+id/iv_photo"
-            android:layout_width="240dp"
-            android:layout_height="160dp"
-            android:background="#22000000"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/light_grey" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_radius_10"
+            android:backgroundTint="@color/black"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:text="🕗 14:00"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
+            android:background="#80000000"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="12dp"
-            app:layout_constraintTop_toBottomOf="@id/iv_photo">
-
-            <TextView
-                android:id="@+id/tv_subject_and_difficulty"
-                style="@style/body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                tools:text="수학 1 · 어려움" />
+            android:paddingHorizontal="15dp"
+            android:paddingTop="9dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 android:id="@+id/tv_desciption"
-                style="@style/body1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/tv_subject"
-                tools:text="답지가 이해가 안돼요" />
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text="undefined" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_offer"
-                style="@style/button"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_subject"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:paddingVertical="12dp"
-                android:textColor='@color/white'
-                tools:background="@drawable/bg_radius_10_blue"
-                tools:text="신청하기" />
-
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                tools:text="undefined" />
         </LinearLayout>
-
-
-        <!--
-        <LinearLayout
-            android:id="@+id/container_review"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/container_description_of_student"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <TextView
-                android:id="@+id/tv_review_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#이해가 빨라요"
-                android:textSize="@dimen/text_medium"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tv_review_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#개념을 잘 이해하고 있어요"
-                android:textSize="@dimen/text_medium"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:id="@+id/tv_review_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#자신감이 넘쳐요"
-                android:textSize="@dimen/text_medium"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="10dp"/>
-
-        </LinearLayout>
-        -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>

@@ -1,103 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="12dp"
-    android:background="@drawable/bg_radius_10_light_grey"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:clipToPadding="false"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_name"
-            style="@style/body2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            tools:text="이채연" />
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="340dp"
+        android:layout_height="130dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="4dp"
+        android:clipToPadding="false"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:strokeColor="@color/bright_grey"
+        app:strokeWidth="1dp">
 
-        <TextView
-            android:id="@+id/tv_created_at"
-            style="@style/body2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="@color/black"
-            tools:text="2023.7.20" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
-    <TextView
-        android:id="@+id/tv_content"
-        style="@style/body2"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:maxLines="3"
-        android:textColor="@color/black"
-        tools:text="선생님 최고에요" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_profile"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:cardCornerRadius="35dp"
+                app:cardElevation="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/light_grey"
+                    android:scaleType="fitXY" />
+            </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/tv_thumb_up"
-            style="@style/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="👍 " />
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toRightOf="@id/cv_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="이채연" />
 
-        <TextView
-            android:id="@+id/tv_num_of_thumb_up"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:layout_width="16dp"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            tools:text="3" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⭐ 5.0"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_thumb_down"
-            style="@style/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 👎 " />
+            <TextView
+                android:id="@+id/tv_grade"
+                style="@style/sub_text_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="고등학교 1학년"
+                app:layout_constraintLeft_toLeftOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
-        <TextView
-            android:id="@+id/tv_num_of_thumb_down"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:layout_width="16dp"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            tools:text="" />
+            <TextView
+                android:id="@+id/tv_comment"
+                style="@style/sub_text_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_grade"
+                tools:text="선생님 최고에요" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/Btn_comment"
-            style="@style/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="0dp"
-            android:text=" 답글"
-            android:textSize="12sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_created_at"
+                style="@style/sub_text_grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="2023.7.20"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toLeftOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_comment" />
 
-    <TextView
-        android:id="@+id/tv_view_comment"
-        style="@style/body2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="⌵ 답글 보기" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

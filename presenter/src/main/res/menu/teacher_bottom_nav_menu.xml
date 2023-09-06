@@ -2,16 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/teacherHomeFragment"
-        android:icon="@drawable/ic_home_24"
+        android:icon="@drawable/selector_ic_home"
         android:title="홈" />
-
+    <item
+        android:id="@+id/teacherSearchFragment"
+        android:icon="@drawable/selector_ic_black_board"
+        android:title="수업하기" />
     <item
         android:id="@+id/teacherCoinFragment"
-        android:icon="@drawable/ic_database_48"
+        android:icon="@drawable/selector_ic_won_sign"
         android:title="정산하기" />
-
     <item
         android:id="@+id/teacherMyPageFragment"
-        android:icon="@drawable/ic_person_48"
-        android:title="마이페이지" />
+        android:icon="@drawable/selector_ic_person"
+        android:title="내 정보" />
 </menu>

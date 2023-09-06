@@ -12,4 +12,5 @@
     <color name="kakao">#FEE500</color>
     <color name="background_grey">#F6F7F8</color>
     <color name="sub_text_grey">#A3A9B5</color>
+    <color name="bright_grey">#E7E8EB</color>
 </resources>

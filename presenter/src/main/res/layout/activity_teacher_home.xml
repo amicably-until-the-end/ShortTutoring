@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".teacher_home.TeacherHomeActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_toolbar"
-        style="@style/ToolBar"
-        tools:ignore="MissingConstraints">
-
-        <TextView style="@style/ToolBarAppName" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view_teacher"
@@ -22,16 +14,16 @@
         android:layout_height="0dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
-        app:layout_constraintTop_toBottomOf="@id/container_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_teacher_home" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/bottom_navigation_height"
         android:background="@android:color/white"
-        app:itemBackground="@color/white"
-        app:labelVisibilityMode="selected"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/teacher_bottom_nav_menu" />
 

@@ -11,14 +11,14 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="?attr/actionBarSize"
+        android:paddingBottom="@dimen/bottom_navigation_height"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_student_home" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/bottom_navigation_height"
         android:layout_gravity="bottom"
         app:contentInsetStart="0dp"
         app:fabAlignmentMode="center"
@@ -29,7 +29,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/bottom_navigation_height"
             android:background="@color/transparent"
             app:itemBackground="@color/white"
             app:itemTextColor="@color/black"

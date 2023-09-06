@@ -38,11 +38,7 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
 
                 tvName.text = item.name ?: EMPTY_STRING
                 tvCreatedAt.text = item.createdAt ?: EMPTY_STRING
-                tvContent.text = item.content ?: EMPTY_STRING
-                tvNumOfThumbUp.text =
-                    item.numOfThumbUp?.let { if (it > 0) it.toString() else "" } ?: EMPTY_STRING
-                tvNumOfThumbDown.text =
-                    item.numOfThumbDown?.let { if (it > 0) it.toString() else "" } ?: EMPTY_STRING
+                tvComment.text = item.content ?: EMPTY_STRING
             }
         }
     }
