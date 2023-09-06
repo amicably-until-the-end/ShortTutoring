@@ -17,8 +17,7 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
     override suspend fun uploadAnswer(answerUploadVO: AnswerUploadVO): Flow<BaseResult<AnswerUploadResultVO, String>> {
         return flow {
             val dto = AnswerUploadRequestDto(
-                answerUploadVO.requestId,
-                TeacherDto(answerUploadVO.teacherVO.teacherId)
+                answerUploadVO.requestId
             )
             val response = answerUploadApi.uploadAnswer(dto.id)
             val body = response.body()!!

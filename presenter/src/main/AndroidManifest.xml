@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name=".teacher_home.ImageActivity"
+            android:name=".teacher_home.QuestionDetailActivity"
             android:exported="false" />
         <activity
             android:name=".teacher_home.TeacherHomeActivity"

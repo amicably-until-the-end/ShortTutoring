@@ -324,13 +324,13 @@ class ClassroomFragment : Fragment() {
 
 
     private fun setSceneListButton() {
-        binding.btnShowScenes.setOnClickListener {
+        /*binding.btnShowScenes.setOnClickListener {
             binding.containerSceneList.apply {
                 if (visibility == View.VISIBLE) visibility = View.GONE
                 else visibility = View.VISIBLE
             }
             (binding.rvSceneList.adapter as SceneAdapter).getPreview()
-        }
+        }*/
 
     }
 
@@ -373,7 +373,8 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun setMicToggleButton() {
-        binding.btnMic.setOnClickListener {
+
+        /*binding.btnMic.setOnClickListener {
             if (!isMicOn) {
                 isMicOn = true
                 voiceEngine.enableLocalAudio(true)
@@ -383,7 +384,7 @@ class ClassroomFragment : Fragment() {
                 voiceEngine.enableLocalAudio(false)
                 Toast.makeText(requireContext(), "마이크가 꺼졌습니다.", Toast.LENGTH_SHORT).show()
             }
-        }
+        }*/
     }
 
 

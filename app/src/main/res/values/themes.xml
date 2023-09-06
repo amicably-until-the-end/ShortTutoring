@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.ShortTutoring" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.ShortTutoring" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#4EA6EC</item>
-        <item name="colorPrimaryVariant">#C2E8FD</item>
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryVariant">@color/secondary_blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
