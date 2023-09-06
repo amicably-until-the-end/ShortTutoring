@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_grey"
+    android:orientation="vertical"
+    tools:context=".teacher_home.QuestionDetailActivity">
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_close"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/ic_close_48"
+        android:backgroundTint="@color/grey"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_images"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="30dp"
+        app:layout_constraintBottom_toTopOf="@id/container_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_close"
+        app:layout_constraintVertical_weight="1" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_radius_20_20_0_0"
+        android:backgroundTint="@color/white"
+        android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+        android:paddingVertical="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_description_desc"
+            style="@style/content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="학생 설명"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_subject_desc"
+            style="@style/content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="과목"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_description_desc" />
+
+        <TextView
+            android:id="@+id/tv_hope_time_desc"
+            style="@style/content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="희망 수업 시간"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_subject_desc" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            style="@style/content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="선생님 도와주세요."
+            app:layout_constraintLeft_toRightOf="@id/tv_hope_time_desc"
+            app:layout_constraintTop_toTopOf="@id/tv_description_desc" />
+
+        <TextView
+            android:id="@+id/tv_subject"
+            style="@style/content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="미적분"
+            app:layout_constraintLeft_toLeftOf="@id/tv_description"
+            app:layout_constraintTop_toTopOf="@id/tv_subject_desc" />
+
+        <TextView
+            android:id="@+id/tv_hope_time"
+            style="@style/content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지금 바로, 오늘 16:30, 오늘 19:00"
+            app:layout_constraintLeft_toLeftOf="@id/tv_description"
+            app:layout_constraintTop_toTopOf="@id/tv_hope_time_desc" />
+
+        <TextView
+
+            android:id="@+id/btn_offer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_radius_5_grad_blue"
+            android:gravity="center"
+            android:paddingVertical="14dp"
+            android:text="수업 신청하기"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_hope_time_desc" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

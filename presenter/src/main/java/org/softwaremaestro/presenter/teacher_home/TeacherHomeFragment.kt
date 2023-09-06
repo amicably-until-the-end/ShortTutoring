@@ -18,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
-import org.softwaremaestro.domain.offer_remove.SUCCESS_OFFER_REMOVE
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
@@ -45,6 +44,8 @@ const val IMAGE = "image"
 const val SUBJECT = "subject"
 const val DIFFICULTY = "difficulty"
 const val DESCRIPTION = "description"
+const val QUESTION_ID = "questionId"
+const val HOPE_TIME = "hopeTime"
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -140,13 +141,17 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        val onImageClickListener = { question: QuestionGetResponseVO ->
+        val onQuestionClick = { question: QuestionGetResponseVO ->
 
-            val intent = Intent(requireActivity(), ImageActivity::class.java).apply {
-                putExtra(IMAGE, question.problemImage)
+            val intent = Intent(requireActivity(), QuestionDetailActivity::class.java).apply {
+                putStringArrayListExtra(IMAGE, question.images as ArrayList<String>)
                 putExtra(SUBJECT, question.problemSchoolSubject)
-                putExtra(DIFFICULTY, question.problemDifficulty)
                 putExtra(DESCRIPTION, question.problemDescription)
+                putExtra(QUESTION_ID, question.id)
+                putStringArrayListExtra(
+                    HOPE_TIME,
+                    question.hopeTutoringTime as ArrayList<String>
+                )
             }
             startActivity(intent)
         }
@@ -193,7 +198,7 @@ class TeacherHomeFragment : Fragment() {
             }
 
         questionAdapter =
-            QuestionAdapter(onImageClickListener, onOfferBtnClickListener).apply {
+            QuestionAdapter(onQuestionClick).apply {
                 setHasStableIds(true)
             }
 
@@ -207,8 +212,7 @@ class TeacherHomeFragment : Fragment() {
     private fun offerTeacher(requestId: String) {
         answerViewModel.uploadAnswer(
             AnswerUploadVO(
-                requestId,
-                TeacherVO(TEACHER_ID)
+                requestId
             )
         )
     }
@@ -249,9 +253,9 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeOfferRemove() {
         offerRemoveViewModel.notiOfferRemove.observe(viewLifecycleOwner) {
-            if (it != SUCCESS_OFFER_REMOVE) {
+            /*if (it != SUCCESS_OFFER_REMOVE) {
                 Log.d("error", "failed to remove offer")
-            }
+            }*/
         }
     }
 
