@@ -31,10 +31,13 @@ class TeacherHomeActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view_teacher) as NavHostFragment
         navController = navHostFragment.navController
-        binding.bottomNavView.setupWithNavController(navController)
-        binding.bottomNavView.setOnItemSelectedListener {
-            NavigationUI.onNavDestinationSelected(it, navController)
-            return@setOnItemSelectedListener true
+        binding.bottomNavView.apply {
+            setupWithNavController(navController)
+            setOnItemSelectedListener {
+                NavigationUI.onNavDestinationSelected(it, navController)
+                return@setOnItemSelectedListener true
+            }
+            itemIconTintList = null
         }
     }
 }

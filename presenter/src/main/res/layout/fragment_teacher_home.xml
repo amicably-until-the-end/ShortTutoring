@@ -8,6 +8,59 @@
     android:orientation="vertical"
     tools:context=".teacher_home.TeacherHomeActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar">
+
+        <ImageView
+            android:layout_width="109dp"
+            android:layout_height="52dp"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_toolbar_notification"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/baseline_notifications_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/container_coin_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:background="@drawable/bg_radius_13"
+            android:backgroundTint="#eeeff1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="2dp"
+            android:paddingRight="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="2dp"
+                android:src="@drawable/ic_coin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="1,350"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -18,246 +71,158 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginVertical="@dimen/margin_top_default"
             android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="10dp"
+                android:elevation="15dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="#e7e8eb"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="9dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        app:cardBackgroundColor="@color/black">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center"
+                            android:text="🔔 알림"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="오늘 오후 14:00에 강해린 선생님과 함께 수업이 진행예정이에요." />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_question"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/bg_radius_5_grad_blue">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="수업하기"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <LinearLayout
                 android:id="@+id/container_question_pool"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                android:paddingTop="30dp">
 
                 <TextView
                     android:id="@+id/tv_num_of_questions"
-                    style="@style/h6"
+                    style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                    android:textColor="@color/black"
-                    tools:text="38명의 학생이 선생님을 기다리고 있어요" />
+                    tools:text="38명의 학생이 선생님을 기다리고 있어요." />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_question"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="24dp"
-                    android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/margin_horizontal_default" />
+                    android:layout_marginTop="14dp"
+                    android:clipToPadding="false" />
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_noti"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/bg_radius_10_light_grey"
-                android:orientation="vertical"
-                android:padding="24dp"
-                android:paddingBottom="48dp">
+                android:layout_marginHorizontal="@dimen/section_horizontal_padding_default"
+                android:layout_marginTop="35dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="6dp"
+                app:strokeColor="@color/primary_blue"
+                app:strokeWidth="1dp">
 
-                <TextView
-                    android:id="@+id/tv_dismiss"
-                    style="@style/h6"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/container_noti"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="╳"
-                    android:textColor="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_noti"
-                    style="@style/h6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="선생님의 활동이 학생들에게 도움이 되고 있어요!" />
-
-                <LinearLayout
-                    android:id="@+id/container_example_likes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_noti">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="50dp"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:id="@+id/iv_example_likes"
-                            style="@style/h6"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="#11000000" />
-
-                    </androidx.cardview.widget.CardView>
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="20dp">
 
                     <TextView
-                        android:id="@+id/tv_example_likes"
-                        style="@style/body2"
+                        android:id="@+id/tv_rating_and_temperature"
+                        style="@style/section_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:textColor="@color/black"
-                        tools:text="학생이 선생님을 찜했어요" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/container_example_review2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/container_example_likes">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="50dp"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:id="@+id/iv_example_review"
-                            style="@style/h6"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="#11000000" />
-
-                    </androidx.cardview.widget.CardView>
+                        android:text="현재 별점은 ⭐3.8점이에요."
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_example_review"
-                        style="@style/body2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:textColor="@color/black"
-                        tools:text="학생이 리뷰를 작성했어요" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/container_example_review2">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="50dp"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:id="@+id/iv_example_review2"
-                            style="@style/h6"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="#11000000" />
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/tv_example_rating"
-                        style="@style/body2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:textColor="@color/black"
-                        tools:text="별점이 4.9가 되었어요" />
-
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="40dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_rating_and_temperature"
-                    style="@style/h6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="현재 별점은 4.8점, 매너 온도는 48도에요"
-                    android:textColor="@color/black" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/h6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="설정된 답변 비용은 10분당 약 "
-                        android:textColor="@color/hint" />
-
-                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_answer_cost"
-                        style="@style/h6"
+                        style="@style/sub_text_blue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_bottom_hint"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:padding="0dp"
-                        android:textColor="@color/hint"
-                        tools:text="3,000원" />
+                        android:layout_marginTop="9dp"
+                        android:text="설정된 답변 비용은 10분당 약 3,000원 이에요."
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_rating_and_temperature" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        style="@style/h6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" 이에요"
-                        android:textColor="@color/hint" />
+            </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/container_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="30dp">
 
                 <TextView
-                    style="@style/h6"
+                    style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/margin_horizontal_default"
-                    android:text="수업을 들은 학생들이 남긴 리뷰에요"
+                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                    android:text="학생들이 남긴 리뷰"
                     android:textColor="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="20dp"
                     android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/margin_horizontal_default" />
+                    android:paddingHorizontal="@dimen/section_horizontal_padding_default" />
             </LinearLayout>
 
         </LinearLayout>

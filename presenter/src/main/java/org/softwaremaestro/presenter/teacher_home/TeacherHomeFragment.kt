@@ -93,18 +93,13 @@ class TeacherHomeFragment : Fragment() {
 
     private fun setTexts() {
 
-        // 선생님 정보
-        binding.tvNoti.text = "${TEACHER_NAME} 선생님의 활동이 학생들에게 도움이 되고 있어요!"
 
         binding.tvRatingAndTemperature.text =
             "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
 
         binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
 
-        // 알림
-        binding.tvExampleLikes.text = "조미연 학생이 김민수 선생님을 찜했어요"
-        binding.tvExampleReview.text = "이미주 학생이 리뷰를 작성했어요"
-        binding.tvExampleRating.text = "평점이 4.9가 되었어요"
+
     }
 
     private fun setItemToReviewAdapter() {
@@ -167,7 +162,7 @@ class TeacherHomeFragment : Fragment() {
                         it.hashCode().toLong()
                     ) as QuestionAdapter.ViewHolder
 
-                    selectedViewHolder.setActiveOnOfferButton(false)
+                    //selectedViewHolder.setActiveOnOfferButton(false)
                 }
 
                 // 이전에 제안했던 질문을 다시 클릭하면
@@ -190,7 +185,7 @@ class TeacherHomeFragment : Fragment() {
                         it.hashCode().toLong()
                     ) as QuestionAdapter.ViewHolder
 
-                    selectedViewHolder.setActiveOnOfferButton(true)
+                    //selectedViewHolder.setActiveOnOfferButton(true)
 
                     checkViewModel.selectedQuestionImgUrl = imageUrl
                 }

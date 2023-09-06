@@ -21,6 +21,6 @@
 
     <item
         android:id="@+id/studentMyPageFragment"
-        android:icon="@drawable/ic_profile_btn"
+        android:icon="@drawable/ic_person_outline"
         android:title="마이페이지" />
 </menu>

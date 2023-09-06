@@ -48,22 +48,10 @@ class QuestionAdapter(
                     onImageClickListener(item)
                 }
 
-                tvSubjectAndDifficulty.text =
-                    if (item.problemSchoolSubject != null && item.problemDifficulty != null) {
-                        "${item.problemSchoolSubject} · ${item.problemDifficulty}"
-                    } else EMPTY_STRING
-
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
-                if (selectedQuestionId == item.id) {
-                    binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
-                    binding.btnOffer.text = "신청 완료"
-                } else {
-                    binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_blue)
-                    binding.btnOffer.text = "신청하기"
-                }
 
-                btnOffer.setOnClickListener {
+                root.setOnClickListener {
                     if (item.id != null && item.problemImage != null) {
                         onOfferBtnClickListener(item.id!!, item.problemImage!!)
                     }
@@ -71,7 +59,7 @@ class QuestionAdapter(
             }
         }
 
-        fun setActiveOnOfferButton(active: Boolean) {
+        /*fun setActiveOnOfferButton(active: Boolean) {
             // 기존에 선택된 질문 id와 나의 질문 id가 같으면 선택된 상태라고 판단
             if (active) {
                 binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
@@ -80,7 +68,7 @@ class QuestionAdapter(
                 binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_blue)
                 binding.btnOffer.text = "신청하기"
             }
-        }
+        }*/
     }
 }
 

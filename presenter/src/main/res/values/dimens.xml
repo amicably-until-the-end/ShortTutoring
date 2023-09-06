@@ -9,7 +9,7 @@
     <dimen name="toolbar_height">70dp</dimen>
 
     <!-- bottom navigation view -->
-
+    <dimen name="bottom_navigation_height">54dp</dimen>
 
     <dimen name="classroom_toolbox_item_width">40dp</dimen>
     <dimen name="classroom_toolbox_item_height">40dp</dimen>
