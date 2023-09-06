@@ -116,7 +116,8 @@ fun Button.setEnabledAndChangeColor(enabled: Boolean) {
 fun Bitmap.toBase64(): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-    return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+    val data = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+    return "data:image/png;base64,$data"
 }
 
 fun requestFocusAndShowKeyboard(view: View, context: Context) {

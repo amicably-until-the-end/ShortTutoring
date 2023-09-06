@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.LoadingDialog
 import org.softwaremaestro.presenter.Util.UIState
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.Util.toBase64
 import org.softwaremaestro.presenter.question_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.adapter.TimeSelectAdapter
 import java.text.SimpleDateFormat
@@ -245,10 +247,21 @@ class QuestionFormFragment : Fragment() {
      * 제출 버튼을 클릭하면 과외 요청을 보낸다.
      */
     private fun setSubmitButton() {
-        binding.btnSubmit.setOnClickListener {
-            //버튼 여러번 눌러지는 거 방지
-            binding.btnSubmit.setEnabledAndChangeColor(false)
-            viewModel.uploadQuestion()
+        binding.btnSubmit.apply {
+            setOnClickListener {
+                //버튼 여러번 눌러지는 거 방지
+                val questionUploadVO = QuestionUploadVO(
+                    images = viewModel.images.value!!.map { it.toBase64() },
+                    description = binding.etQuestionDesc.text.toString(),
+                    schoolLevel = binding.tvSchoolSelected.text.toString(),
+                    schoolSubject = binding.tvSubjectSelected.text.toString(),
+                    hopeImmediate = binding.toogleImmediate.isChecked,
+                    hopeTutoringTime = timeSelectAdapter.items,
+                    mainImageIndex = 0
+                )
+                viewModel.uploadQuestion(questionUploadVO)
+            }
+            setEnabledAndChangeColor(false)
         }
     }
 

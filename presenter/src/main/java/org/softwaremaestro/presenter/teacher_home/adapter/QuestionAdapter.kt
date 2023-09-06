@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_home
+package org.softwaremaestro.presenter.teacher_home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 
 private const val EMPTY_STRING = "-"
@@ -19,12 +18,12 @@ class QuestionAdapter(
     // 신청하기 버튼의 색을 결정하기 위해 선택된 질문 id를 저장한다
     var selectedQuestionId: String? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: QuestionAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
@@ -46,6 +45,15 @@ class QuestionAdapter(
 
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
 
+                tvSubject.text = item.problemSubject ?: EMPTY_STRING
+
+                val times = "${if (item.hopeImmediately == true) "지금 바로, " else ""} ${
+                    item.hopeTutoringTime?.joinToString(", ") ?: "undefined"
+                }"
+
+
+                tvTimeText.text = times
+
                 root.setOnClickListener {
                     if (item.id != null && item.images != null) {
                         onClick(item)
@@ -54,16 +62,7 @@ class QuestionAdapter(
             }
         }
 
-        /*fun setActiveOnOfferButton(active: Boolean) {
-            // 기존에 선택된 질문 id와 나의 질문 id가 같으면 선택된 상태라고 판단
-            if (active) {
-                binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
-                binding.btnOffer.text = "신청 완료"
-            } else {
-                binding.btnOffer.setBackgroundResource(R.drawable.bg_radius_10_blue)
-                binding.btnOffer.text = "신청하기"
-            }
-        }*/
+
     }
 }
 

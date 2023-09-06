@@ -29,8 +29,6 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
             if (response.isSuccessful) {
                 val body = response.body()
                 val resultVO = QuestionUploadResultVO(body?.data?.questionId ?: "")
-
-
                 emit(BaseResult.Success(resultVO))
             } else {
                 val errorString = "error"

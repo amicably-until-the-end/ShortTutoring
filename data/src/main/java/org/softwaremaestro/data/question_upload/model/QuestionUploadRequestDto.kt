@@ -7,4 +7,7 @@ data class QuestionUploadRequestDto(
     @SerializedName("description") var description: String,
     @SerializedName("schoolLevel") var schoolLevel: String,
     @SerializedName("schoolSubject") var schoolSubject: String,
+    @SerializedName("hopeImmediate") var hopeImmediate: Boolean,
+    @SerializedName("hopeTutoringTime") var hopeTutoringTime: List<String>,
+    @SerializedName("mainImageIndex") var mainImageIndex: Int,
 )
