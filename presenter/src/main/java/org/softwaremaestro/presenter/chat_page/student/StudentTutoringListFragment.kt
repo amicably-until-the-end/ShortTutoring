@@ -5,22 +5,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
+import org.softwaremaestro.presenter.chat_page.student.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.student.adapter.MessageListAdapter
-import org.softwaremaestro.presenter.chat_page.student.adapter.ChatListTeacherAdapter
+import org.softwaremaestro.presenter.chat_page.student.adapter.ChatRoomListAdapter
 import org.softwaremaestro.presenter.databinding.FragmentStudentTutoringListBinding
 
 
 class StudentTutoringListFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentTutoringListBinding
-    private lateinit var applyAdapter: ChatListTeacherAdapter
-    private lateinit var reservedAdapter: ChatListTeacherAdapter
+    private lateinit var applyAdapter: ChatRoomListAdapter
+    private lateinit var reservedAdapter: ChatRoomListAdapter
     private lateinit var messageListAdapter: MessageListAdapter
+    private lateinit var offeringTeacherAdapter: ChatRoomListAdapter
+    private lateinit var applyIconAdapter: ChatRoomIconListAdapter
+    private lateinit var reservedIconAdapter: ChatRoomIconListAdapter
 
 
     override fun onCreateView(
@@ -34,15 +40,27 @@ class StudentTutoringListFragment : Fragment() {
         setReservedRecyclerView()
         setChatMsgRecyclerView()
         setQuestionTypeSelectToggle()
+        setApplyIconRecyclerView()
+        setReservedIconRecyclerView()
+        setOfferingTeacherRecyclerView()
+        setCloseOfferingTeacherButton()
 
         return binding.root
 
     }
 
+    private fun setCloseOfferingTeacherButton() {
+        binding.btnCloseOfferingTeacher.setOnClickListener {
+            unSetOfferingTeacherMode()
+        }
+    }
+
     private fun setApplyRecyclerView() {
 
-
-        applyAdapter = ChatListTeacherAdapter()
+        applyAdapter = ChatRoomListAdapter(
+            onQuestionClick = onQuestionRoomClick,
+            onTeacherClick = onTeacherRoomClick,
+        )
         binding.rvApplyList.apply {
             adapter = applyAdapter
             layoutManager =
@@ -79,72 +97,12 @@ class StudentTutoringListFragment : Fragment() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
             when (checkId) {
                 R.id.rb_normal_question -> {
-                    val applyList = listOf(
-                        ChatRoom(
-                            title = "문제 이해가 안돼요 ㅠㅠ",
-                            roomType = 1,
-                            subTitle = " 고등학교 · 미적분",
-                            id = "1",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        ),
-                        ChatRoom(
-                            title = "미분 하는 방법을 알려주세요",
-                            roomType = 1,
-                            subTitle = "고등학교 · 수학(상)",
-                            id = "2",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        )
-                    )
                     setApplySectionItems(applyList)
-                    val reservList = listOf(
-                        ChatRoom(
-                            title = "강해린 쌤",
-                            roomType = 0,
-                            subTitle = "오늘 13:00",
-                            id = "1",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        ),
-                        ChatRoom(
-                            title = "팜하니 쌤",
-                            roomType = 0,
-                            subTitle = "오늘 15:00",
-                            id = "2",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        )
-                    )
                     setReservedSectionItems(reservList)
                 }
 
                 R.id.rb_selected_question -> {
                     //TODO : GET SELECTED QUESTION LIST FROM SERVER
-                    val applyList = listOf(
-                        ChatRoom(
-                            title = "다니엘 쌤",
-                            roomType = 0,
-                            subTitle = "영어",
-                            id = "1",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        ),
-                        ChatRoom(
-                            title = "민지 쌤",
-                            roomType = 0,
-                            subTitle = "수학",
-                            id = "2",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        )
-                    )
                     setApplySectionItems(applyList)
                     val reservList = listOf(
                         ChatRoom(
@@ -172,7 +130,6 @@ class StudentTutoringListFragment : Fragment() {
         }
     }
 
-
     private fun setReservedSectionItems(list: List<ChatRoom>) {
         binding.apply {
             tvReservedCount.text = list.size.toString()
@@ -190,7 +147,10 @@ class StudentTutoringListFragment : Fragment() {
     }
 
     private fun setReservedRecyclerView() {
-        reservedAdapter = ChatListTeacherAdapter()
+        reservedAdapter = ChatRoomListAdapter(
+            onQuestionClick = onQuestionRoomClick,
+            onTeacherClick = onTeacherRoomClick,
+        )
         binding.rvReservedList.apply {
             adapter = reservedAdapter
             layoutManager =
@@ -261,6 +221,163 @@ class StudentTutoringListFragment : Fragment() {
             )
         )
         messageListAdapter.notifyDataSetChanged()
+    }
+
+    private fun setOfferingTeacherRecyclerView() {
+
+        binding.rvOfferingTeacherList.apply {
+            offeringTeacherAdapter = ChatRoomListAdapter(
+                onQuestionClick = onQuestionRoomClick,
+                onTeacherClick = onTeacherRoomClick,
+            )
+            adapter = offeringTeacherAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
+        }
+        offeringTeacherAdapter.setItem(offerList)
+        offeringTeacherAdapter.notifyDataSetChanged()
+    }
+
+    private fun setApplyIconRecyclerView() {
+
+        binding.rvApplyIconList.apply {
+            applyIconAdapter = ChatRoomIconListAdapter(
+                onQuestionClick = onQuestionRoomClick,
+                onTeacherClick = onTeacherRoomClick,
+            )
+            adapter = applyIconAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
+        }
+
+    }
+
+    private fun setReservedIconRecyclerView() {
+
+        binding.rvReservedIconList.apply {
+            reservedIconAdapter = ChatRoomIconListAdapter(
+                onQuestionClick = onQuestionRoomClick,
+                onTeacherClick = onTeacherRoomClick,
+            )
+            adapter = reservedIconAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
+        }
+
+    }
+
+
+    private fun setOfferingTeacherMode() {
+        binding.containerTutoringList.visibility = View.GONE
+        binding.containerIconSideSection.visibility = View.VISIBLE
+        binding.containerOfferingTeacher.visibility = View.VISIBLE
+        binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            leftToRight = binding.containerOfferingTeacher.id
+        }
+
+    }
+
+    private fun unSetOfferingTeacherMode() {
+        binding.containerTutoringList.visibility = View.VISIBLE
+        binding.containerIconSideSection.visibility = View.GONE
+        binding.containerOfferingTeacher.visibility = View.GONE
+        binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            leftToRight = binding.containerTutoringList.id
+        }
+    }
+
+
+    private fun setOfferingTeacherListItems(teacher: List<ChatRoom>) {
+        offeringTeacherAdapter.setItem(teacher)
+        offeringTeacherAdapter.notifyDataSetChanged()
+    }
+
+    private fun setReservedIconItems(items: List<ChatRoom>) {
+        offeringTeacherAdapter.setItem(items)
+        offeringTeacherAdapter.notifyDataSetChanged()
+    }
+
+    private fun setApplyIconItems(items: List<ChatRoom>) {
+        applyIconAdapter.setItem(items)
+        applyIconAdapter.notifyDataSetChanged()
+    }
+
+
+    private val onQuestionRoomClick: (String) -> Unit = { questionId ->
+        setOfferingTeacherMode()
+        setOfferingTeacherListItems(offerList)
+        setApplyIconItems(applyList)
+        setReservedIconItems(reservList)
+
+    }
+    private val onTeacherRoomClick: (String) -> Unit = {
+        //
+    }
+
+    companion object {
+        val offerList = listOf(
+            ChatRoom(
+                title = "강해린 쌤",
+                roomType = 0,
+                subTitle = "오늘 13:00",
+                id = "1",
+                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                contentId = "d",
+                newMessage = 0
+            ),
+            ChatRoom(
+                title = "팜하니 쌤",
+                roomType = 0,
+                subTitle = "오늘 15:00",
+                id = "2",
+                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                contentId = "d",
+                newMessage = 0
+            )
+        )
+        val applyList = listOf(
+            ChatRoom(
+                title = "강해린 쌤",
+                roomType = 1,
+                subTitle = "영어",
+                id = "1",
+                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                contentId = "d",
+                newMessage = 0
+            ),
+            ChatRoom(
+                title = "팜하니 쌤",
+                roomType = 0,
+                subTitle = "수학",
+                id = "2",
+                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                contentId = "d",
+                newMessage = 0
+            )
+        )
+        val reservList = listOf(
+            ChatRoom(
+                title = "강해린 쌤",
+                roomType = 0,
+                subTitle = "오늘 13:00",
+                id = "1",
+                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                contentId = "d",
+                newMessage = 0
+            ),
+            ChatRoom(
+                title = "팜하니 쌤",
+                roomType = 0,
+                subTitle = "오늘 15:00",
+                id = "2",
+                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                contentId = "d",
+                newMessage = 0
+            )
+        )
     }
 
 

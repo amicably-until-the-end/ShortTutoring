@@ -30,6 +30,138 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/container_icon_side_section"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/section_horizontal_padding_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_toolbar">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_close_offering_teacher"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_chevron_left"
+            android:backgroundTint="@color/primary_blue" />
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/sub_text_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:text="신청한 수업"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_apply_icon_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="15dp"
+                    android:background="@color/background_light_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/sub_text_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:text="예정된 수업"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_reserved_icon_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/bright_grey"
+        app:layout_constraintBottom_toBottomOf="@id/container_icon_side_section"
+        app:layout_constraintRight_toRightOf="@+id/container_icon_side_section"
+        app:layout_constraintTop_toTopOf="@id/container_icon_side_section" />
+
+    <LinearLayout
+        android:id="@+id/container_offering_teacher"
+        android:layout_width="280dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="@dimen/section_horizontal_padding_default"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/container_icon_side_section"
+        app:layout_constraintTop_toBottomOf="@id/divider_toolbar">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_offering_teacher_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never" />
+
+
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/bright_grey"
+        app:layout_constraintBottom_toBottomOf="@id/container_offering_teacher"
+        app:layout_constraintRight_toRightOf="@id/container_offering_teacher"
+        app:layout_constraintTop_toTopOf="@id/container_offering_teacher" />
 
     <LinearLayout
         android:id="@+id/container_tutoring_list"
@@ -177,6 +309,7 @@
         app:layout_constraintTop_toTopOf="@id/container_tutoring_list" />
 
     <LinearLayout
+        android:id="@+id/container_chat_room"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/background_grey"
