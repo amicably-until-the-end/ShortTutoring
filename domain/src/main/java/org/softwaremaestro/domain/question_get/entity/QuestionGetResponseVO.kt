@@ -12,7 +12,7 @@ data class QuestionGetResponseVO(
     val hopeTutoringTime: List<String>?,
     val hopeImmediately: Boolean?,
     val problemSchoolLevel: String?,
-    val problemSchoolSubject: String?,
+    val problemSubject: String?,
     val problemDescription: String?,
     val teacherIds: List<String>?,
     val status: String?,

@@ -5,4 +5,7 @@ data class QuestionUploadVO(
     var description: String,
     var schoolLevel: String,
     var schoolSubject: String,
+    var hopeImmediate: Boolean,
+    var hopeTutoringTime: List<String>,
+    var mainImageIndex: Int,
 )

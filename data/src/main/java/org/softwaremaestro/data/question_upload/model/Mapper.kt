@@ -21,7 +21,10 @@ object Mapper {
             images = questionUploadVO.images,
             description = questionUploadVO.description,
             schoolLevel = questionUploadVO.schoolLevel,
-            schoolSubject = questionUploadVO.schoolSubject
+            schoolSubject = questionUploadVO.schoolSubject,
+            hopeImmediate = questionUploadVO.hopeImmediate,
+            hopeTutoringTime = questionUploadVO.hopeTutoringTime,
+            mainImageIndex = questionUploadVO.mainImageIndex
         )
     }
 

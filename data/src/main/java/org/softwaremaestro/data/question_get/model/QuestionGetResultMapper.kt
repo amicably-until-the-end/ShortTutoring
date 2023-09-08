@@ -17,7 +17,7 @@ object QuestionGetResultMapper {
                 hopeTutoringTime = hopeTutoringTime,
                 hopeImmediately = hopeImmediately,
                 problemSchoolLevel = problemDto?.schoolLevel,
-                problemSchoolSubject = problemDto?.schoolSubject,
+                problemSubject = problemDto?.schoolSubject,
                 createdAt = createdAt,
                 problemDescription = problemDto?.description,
                 teacherIds = teacherIds,

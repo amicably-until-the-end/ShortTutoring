@@ -17,7 +17,6 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
-import org.softwaremaestro.domain.answer_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
@@ -25,6 +24,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
+import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
@@ -145,7 +145,7 @@ class TeacherHomeFragment : Fragment() {
 
             val intent = Intent(requireActivity(), QuestionDetailActivity::class.java).apply {
                 putStringArrayListExtra(IMAGE, question.images as ArrayList<String>)
-                putExtra(SUBJECT, question.problemSchoolSubject)
+                putExtra(SUBJECT, question.problemSubject)
                 putExtra(DESCRIPTION, question.problemDescription)
                 putExtra(QUESTION_ID, question.id)
                 putStringArrayListExtra(
