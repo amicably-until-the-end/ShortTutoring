@@ -5,12 +5,14 @@ import android.animation.ValueAnimator
 import android.app.Service
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
 
@@ -127,3 +129,25 @@ fun requestFocusAndShowKeyboard(view: View, context: Context) {
         context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.showSoftInput(view, 0)
 }
+
+fun RecyclerView.getVerticalSpaceDecoration(
+    space: Int,
+    context: Context
+): RecyclerView.ItemDecoration {
+    return VerticalSpaceItemDecoration(space, context)
+}
+
+private class VerticalSpaceItemDecoration(
+    private val verticalSpaceHeight: Int,
+    private val context: Context
+) :
+    RecyclerView.ItemDecoration() {
+
+    override fun getItemOffsets(
+        outRect: Rect, view: View, parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        outRect.bottom = Util.toPx(verticalSpaceHeight, context)
+    }
+}
+
