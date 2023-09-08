@@ -5,9 +5,6 @@
 
     <application>
         <activity
-            android:name=".chat_page.student.StudentTutoringListActivity"
-            android:exported="false" />
-        <activity
             android:name=".teacher_home.QuestionDetailActivity"
             android:exported="false" />
         <activity

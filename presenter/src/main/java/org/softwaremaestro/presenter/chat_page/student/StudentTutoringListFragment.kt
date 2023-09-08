@@ -74,7 +74,6 @@ class StudentTutoringListFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(getVerticalSpaceDecoration(15, requireContext()))
-
         }
         messageListAdapter.setItem(
             listOf(

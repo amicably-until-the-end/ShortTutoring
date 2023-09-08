@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.chat_page.student.StudentTutoringListActivity
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
@@ -70,10 +69,9 @@ class LoginFragment @Inject constructor() :
 
     private fun setKakaoButton() {
         binding.btnLoginByKakao.setOnClickListener {
-            //viewModel.loginWithKakao(requireContext())
+            viewModel.loginWithKakao(requireContext())
             //findNavController().navigate(R.id.action_loginFragment_to_registerRoleFragment)
-            val intent = Intent(activity, StudentTutoringListActivity::class.java)
-            startActivity(intent)
+
         }
     }
 

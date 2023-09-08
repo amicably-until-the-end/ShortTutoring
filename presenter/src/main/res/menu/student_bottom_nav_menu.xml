@@ -8,19 +8,19 @@
     <item
         android:id="@+id/teacherSearchFragment"
         android:icon="@drawable/ic_search_btn"
-        android:title="선생님 찾기" />
+        android:title="숏츠" />
 
     <item
         android:id="@+id/questionCameraFragment"
         android:title="질문하기" />
 
     <item
-        android:id="@+id/studentCoinFragment"
+        android:id="@+id/studentTutoringListFragment"
         android:icon="@drawable/ic_coin_btn"
-        android:title="코인 충전하기" />
+        android:title="채팅" />
 
     <item
         android:id="@+id/studentMyPageFragment"
         android:icon="@drawable/ic_person_outline"
-        android:title="마이페이지" />
+        android:title="내 정보" />
 </menu>
