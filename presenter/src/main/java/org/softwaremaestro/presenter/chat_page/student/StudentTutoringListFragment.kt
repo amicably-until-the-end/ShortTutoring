@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
@@ -28,6 +29,11 @@ class StudentTutoringListFragment : Fragment() {
     private lateinit var applyIconAdapter: ChatRoomIconListAdapter
     private lateinit var reservedIconAdapter: ChatRoomIconListAdapter
 
+    private var selectedTutoringIndex: Int? = null
+    private var selectedTeacher: Int? = null
+
+    private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +51,22 @@ class StudentTutoringListFragment : Fragment() {
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
 
+
+        makeAdapterList()
+
         return binding.root
 
+    }
+
+    private fun makeAdapterList() {
+        recyclerViewAdapters.apply {
+            add(applyAdapter)
+            add(reservedAdapter)
+            add(messageListAdapter)
+            add(offeringTeacherAdapter)
+            add(applyIconAdapter)
+            add(reservedIconAdapter)
+        }
     }
 
     private fun setCloseOfferingTeacherButton() {
@@ -93,8 +113,27 @@ class StudentTutoringListFragment : Fragment() {
         binding.tvApplyCount.text = applyAdapter.itemCount.toString()
     }
 
+
+    private fun clearRecyclersSelectedView(caller: RecyclerView.Adapter<*>?) {
+
+        recyclerViewAdapters.listIterator().forEach {
+            when (it) {
+                is ChatRoomListAdapter -> {
+                    it.clearSelectedItem(caller)
+                }
+
+                is ChatRoomIconListAdapter -> {
+                    it.clearSelectedView(caller)
+                }
+            }
+        }
+
+    }
+
     private fun setQuestionTypeSelectToggle() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
+            clearRecyclersSelectedView(null)
+
             when (checkId) {
                 R.id.rb_normal_question -> {
                     setApplySectionItems(applyList)
@@ -306,16 +345,19 @@ class StudentTutoringListFragment : Fragment() {
     }
 
 
-    private val onQuestionRoomClick: (String) -> Unit = { questionId ->
-        setOfferingTeacherMode()
-        setOfferingTeacherListItems(offerList)
-        setApplyIconItems(applyList)
-        setReservedIconItems(reservList)
-
-    }
-    private val onTeacherRoomClick: (String) -> Unit = {
-        //
-    }
+    private val onQuestionRoomClick: (String, Int, RecyclerView.Adapter<*>) -> Unit =
+        { questionId, position, caller ->
+            setOfferingTeacherMode()
+            setOfferingTeacherListItems(offerList)
+            setApplyIconItems(applyList)
+            setReservedIconItems(reservList)
+            clearRecyclersSelectedView(null)
+            applyIconAdapter.setSelectedPosition(position)
+        }
+    private val onTeacherRoomClick: (String, RecyclerView.Adapter<*>) -> Unit =
+        { teacherId, caller ->
+            clearRecyclersSelectedView(caller)
+        }
 
     companion object {
         val offerList = listOf(
