@@ -25,7 +25,7 @@
             android:padding="15dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_profile"
+                android:id="@+id/cv_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:clipToPadding="false"
@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/iv_profile"
+                    android:id="@+id/iv_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background_light_blue"
@@ -44,7 +44,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/tv_name"
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -52,16 +52,17 @@
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toRightOf="@id/cv_profile"
+                app:layout_constraintLeft_toRightOf="@id/cv_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tv_sub_title"
                 style="@style/sub_text_grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="undefined"
-                app:layout_constraintLeft_toLeftOf="@id/tv_name"
-                app:layout_constraintTop_toBottomOf="@id/tv_name" />
+                app:layout_constraintLeft_toLeftOf="@id/tv_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

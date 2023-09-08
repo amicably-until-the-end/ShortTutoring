@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
+import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.chat_page.student.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.student.adapter.ChatListTeacherAdapter
 import org.softwaremaestro.presenter.databinding.FragmentStudentTutoringListBinding
@@ -32,6 +33,8 @@ class StudentTutoringListFragment : Fragment() {
         setApplyRecyclerView()
         setReservedRecyclerView()
         setChatMsgRecyclerView()
+        setQuestionTypeSelectToggle()
+
         return binding.root
 
     }
@@ -48,12 +51,142 @@ class StudentTutoringListFragment : Fragment() {
         }
         applyAdapter.setItem(
             listOf(
-                TutoringInfoVO(teacherId = "강해린 쌤"),
-                TutoringInfoVO(teacherId = "팜하니 쌤")
+                ChatRoom(
+                    title = "강해린 쌤",
+                    roomType = 1,
+                    subTitle = "영어",
+                    id = "1",
+                    imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                    contentId = "d",
+                    newMessage = 0
+                ),
+                ChatRoom(
+                    title = "팜하니 쌤",
+                    roomType = 0,
+                    subTitle = "수학",
+                    id = "2",
+                    imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                    contentId = "d",
+                    newMessage = 0
+                )
             )
         )
         applyAdapter.notifyDataSetChanged()
         binding.tvApplyCount.text = applyAdapter.itemCount.toString()
+    }
+
+    private fun setQuestionTypeSelectToggle() {
+        binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
+            when (checkId) {
+                R.id.rb_normal_question -> {
+                    val applyList = listOf(
+                        ChatRoom(
+                            title = "문제 이해가 안돼요 ㅠㅠ",
+                            roomType = 1,
+                            subTitle = " 고등학교 · 미적분",
+                            id = "1",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        ),
+                        ChatRoom(
+                            title = "미분 하는 방법을 알려주세요",
+                            roomType = 1,
+                            subTitle = "고등학교 · 수학(상)",
+                            id = "2",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        )
+                    )
+                    setApplySectionItems(applyList)
+                    val reservList = listOf(
+                        ChatRoom(
+                            title = "강해린 쌤",
+                            roomType = 0,
+                            subTitle = "오늘 13:00",
+                            id = "1",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        ),
+                        ChatRoom(
+                            title = "팜하니 쌤",
+                            roomType = 0,
+                            subTitle = "오늘 15:00",
+                            id = "2",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        )
+                    )
+                    setReservedSectionItems(reservList)
+                }
+
+                R.id.rb_selected_question -> {
+                    //TODO : GET SELECTED QUESTION LIST FROM SERVER
+                    val applyList = listOf(
+                        ChatRoom(
+                            title = "다니엘 쌤",
+                            roomType = 0,
+                            subTitle = "영어",
+                            id = "1",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        ),
+                        ChatRoom(
+                            title = "민지 쌤",
+                            roomType = 0,
+                            subTitle = "수학",
+                            id = "2",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        )
+                    )
+                    setApplySectionItems(applyList)
+                    val reservList = listOf(
+                        ChatRoom(
+                            title = "팜하니 쌤",
+                            roomType = 0,
+                            subTitle = "8월 5일 14:00",
+                            id = "1",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        ),
+                        ChatRoom(
+                            title = "혜인 쌤",
+                            roomType = 0,
+                            subTitle = "8월 6일 15:00",
+                            id = "2",
+                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                            contentId = "d",
+                            newMessage = 0
+                        )
+                    )
+                    setReservedSectionItems(reservList)
+                }
+            }
+        }
+    }
+
+
+    private fun setReservedSectionItems(list: List<ChatRoom>) {
+        binding.apply {
+            tvReservedCount.text = list.size.toString()
+            reservedAdapter.setItem(list)
+            reservedAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun setApplySectionItems(list: List<ChatRoom>) {
+        binding.apply {
+            tvApplyCount.text = list.size.toString()
+            applyAdapter.setItem(list)
+            applyAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun setReservedRecyclerView() {

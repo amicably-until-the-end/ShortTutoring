@@ -55,12 +55,14 @@
             android:weightSum="2">
 
             <RadioButton
+                android:id="@+id/rb_normal_question"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_rb_radio_toggle"
                 android:button="@null"
+                android:checked="true"
                 android:gravity="center"
                 android:minHeight="0dp"
                 android:paddingVertical="4dp"
@@ -68,6 +70,7 @@
                 android:textColor="@color/black" />
 
             <RadioButton
+                android:id="@+id/rb_selected_question"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
