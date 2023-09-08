@@ -11,11 +11,7 @@
         android:id="@+id/container_toolbar"
         style="@style/ToolBar"
         tools:ignore="MissingConstraints">
-
-        <Button
-            android:id="@+id/btn_toolbar_back"
-            style="@style/ToolBarBackButton" />
-
+        
         <TextView
             style="@style/ToolBarTitle"
             android:text="수업 리스트" />
@@ -319,15 +315,42 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar">
 
-        <TextView
-            android:id="@+id/tv_chat_room_title"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white"
-            android:gravity="center"
-            android:text="undefined"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:paddingHorizontal="30dp">
+
+            <TextView
+                android:id="@+id/tv_chat_room_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="undefined"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_enter_classroom"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/bg_radius_15"
+                android:backgroundTint="@color/primary_blue"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:text="강의실 입장하기"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_messages"
@@ -349,7 +372,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="30dp"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="55dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/container_input_box"

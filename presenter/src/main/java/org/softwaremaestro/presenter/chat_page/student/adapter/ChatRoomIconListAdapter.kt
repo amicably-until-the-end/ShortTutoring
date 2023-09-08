@@ -65,7 +65,6 @@ class ChatRoomIconListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: ChatRoom, position: Int) {
-            Log.d("ChatRoomIconListAdapter", "onBind: ${position} ${selectedPosition}")
             binding.apply {
                 if (item.roomType == 3) {
                     root.setOnClickListener {

@@ -16,12 +16,12 @@ import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.chat_page.student.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.student.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.student.adapter.ChatRoomListAdapter
-import org.softwaremaestro.presenter.databinding.FragmentStudentTutoringListBinding
+import org.softwaremaestro.presenter.databinding.FragmentStudentChatPageBinding
 
 
 class StudentTutoringListFragment : Fragment() {
 
-    private lateinit var binding: FragmentStudentTutoringListBinding
+    private lateinit var binding: FragmentStudentChatPageBinding
     private lateinit var applyAdapter: ChatRoomListAdapter
     private lateinit var reservedAdapter: ChatRoomListAdapter
     private lateinit var messageListAdapter: MessageListAdapter
@@ -40,7 +40,7 @@ class StudentTutoringListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentStudentTutoringListBinding.inflate(inflater, container, false)
+        binding = FragmentStudentChatPageBinding.inflate(inflater, container, false)
 
         setApplyRecyclerView()
         setReservedRecyclerView()
@@ -143,26 +143,6 @@ class StudentTutoringListFragment : Fragment() {
                 R.id.rb_selected_question -> {
                     //TODO : GET SELECTED QUESTION LIST FROM SERVER
                     setApplySectionItems(applyList)
-                    val reservList = listOf(
-                        ChatRoom(
-                            title = "팜하니 쌤",
-                            roomType = 0,
-                            subTitle = "8월 5일 14:00",
-                            id = "1",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        ),
-                        ChatRoom(
-                            title = "혜인 쌤",
-                            roomType = 0,
-                            subTitle = "8월 6일 15:00",
-                            id = "2",
-                            imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                            contentId = "d",
-                            newMessage = 0
-                        )
-                    )
                     setReservedSectionItems(reservList)
                 }
             }
@@ -388,7 +368,7 @@ class StudentTutoringListFragment : Fragment() {
                 id = "1",
                 imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
                 contentId = "d",
-                newMessage = 0
+                newMessage = 2
             ),
             ChatRoom(
                 title = "팜하니 쌤",
@@ -408,7 +388,7 @@ class StudentTutoringListFragment : Fragment() {
                 id = "1",
                 imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
                 contentId = "d",
-                newMessage = 0
+                newMessage = 3
             ),
             ChatRoom(
                 title = "팜하니 쌤",
@@ -417,7 +397,7 @@ class StudentTutoringListFragment : Fragment() {
                 id = "2",
                 imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
                 contentId = "d",
-                newMessage = 0
+                newMessage = 1
             )
         )
     }

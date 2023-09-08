@@ -49,5 +49,5 @@
         android:id="@+id/studentTutoringListFragment"
         android:name="org.softwaremaestro.presenter.chat_page.student.StudentTutoringListFragment"
         android:label="fragment_student_tutoring_list"
-        tools:layout="@layout/fragment_student_tutoring_list" />
+        tools:layout="@layout/fragment_student_chat_page" />
 </navigation>

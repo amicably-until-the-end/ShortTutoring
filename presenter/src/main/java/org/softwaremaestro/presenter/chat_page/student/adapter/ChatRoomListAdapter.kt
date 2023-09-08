@@ -48,7 +48,6 @@ class ChatRoomListAdapter(
     }
 
     fun clearSelectedItem(caller: RecyclerView.Adapter<*>?) {
-        Log.d("ChatRoomListAdapter", "clearSelectedItem: " + caller.toString())
         if (caller !== this@ChatRoomListAdapter) {
             selectedView?.strokeColor = selectedView?.context?.getColor(R.color.background_grey)!!
             selectedView = null
@@ -77,6 +76,13 @@ class ChatRoomListAdapter(
                             binding.root.context.getColor(R.color.primary_blue)
                         selectedView = cvContainer
                     }
+
+                }
+                if (item.newMessage > 0) {
+                    tvNewMsgCnt.text = item.newMessage.toString()
+                    tvNewMsgCnt.visibility = android.view.View.VISIBLE
+                } else {
+                    tvNewMsgCnt.visibility = android.view.View.GONE
                 }
 
                 tvTitle.text = item.title
