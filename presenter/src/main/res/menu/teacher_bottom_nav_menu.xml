@@ -6,12 +6,12 @@
         android:title="홈" />
     <item
         android:id="@+id/teacherSearchFragment"
-        android:icon="@drawable/selector_ic_black_board"
-        android:title="수업하기" />
+        android:icon="@drawable/selector_ic_shorts"
+        android:title="숏츠" />
     <item
-        android:id="@+id/teacherCoinFragment"
-        android:icon="@drawable/selector_ic_won_sign"
-        android:title="정산하기" />
+        android:id="@+id/teacherChatFragment"
+        android:icon="@drawable/selector_ic_chat"
+        android:title="채팅" />
     <item
         android:id="@+id/teacherMyPageFragment"
         android:icon="@drawable/selector_ic_person"

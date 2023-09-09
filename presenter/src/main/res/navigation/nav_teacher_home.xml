@@ -14,4 +14,9 @@
         android:name="org.softwaremaestro.presenter.teacher_my_page.TeacherMyPageFragment"
         android:label="fragment_teacher_my_page"
         tools:layout="@layout/fragment_teacher_my_page" />
+    <fragment
+        android:id="@+id/teacherChatFragment"
+        android:name="org.softwaremaestro.presenter.chat_page.teacher.TeacherChatFragment"
+        android:label="TeacherChatFragment"
+        tools:layout="@layout/fragment_chat_page" />
 </navigation>

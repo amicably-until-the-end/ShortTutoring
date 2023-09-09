@@ -4,27 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chat_page.student.StudentTutoringListFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_toolbar"
-        style="@style/ToolBar"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            style="@style/ToolBarTitle"
-            android:text="수업 리스트" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/primary_blue"
-        app:layout_constraintBottom_toBottomOf="@id/container_toolbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    tools:context=".chat_page.student.StudentChatFragment">
 
     <LinearLayout
         android:id="@+id/container_icon_side_section"
@@ -37,7 +17,7 @@
         android:padding="@dimen/section_horizontal_padding_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_close_offering_teacher"
@@ -137,7 +117,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/container_icon_side_section"
-        app:layout_constraintTop_toBottomOf="@id/divider_toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -169,7 +149,7 @@
         android:padding="@dimen/section_horizontal_padding_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <RadioGroup
             android:id="@+id/rg_tutoring_list"
@@ -313,7 +293,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/container_tutoring_list"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -407,7 +387,11 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bright_grey"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

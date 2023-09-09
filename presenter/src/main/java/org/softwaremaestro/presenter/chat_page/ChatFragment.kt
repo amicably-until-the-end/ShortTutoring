@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.chat_page.student
+package org.softwaremaestro.presenter.chat_page
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,13 +18,12 @@ import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
-import org.softwaremaestro.presenter.chat_page.widget.AnsweringTeacherSelectDialog
-import org.softwaremaestro.presenter.databinding.FragmentStudentChatPageBinding
+import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 
 
-class StudentTutoringListFragment : Fragment() {
+abstract class ChatFragment : Fragment() {
 
-    private lateinit var binding: FragmentStudentChatPageBinding
+    private lateinit var binding: FragmentChatPageBinding
     private lateinit var applyAdapter: ChatRoomListAdapter
     private lateinit var reservedAdapter: ChatRoomListAdapter
     private lateinit var messageListAdapter: MessageListAdapter
@@ -43,7 +42,7 @@ class StudentTutoringListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentStudentChatPageBinding.inflate(inflater, container, false)
+        binding = FragmentChatPageBinding.inflate(inflater, container, false)
 
         setApplyRecyclerView()
         setReservedRecyclerView()
