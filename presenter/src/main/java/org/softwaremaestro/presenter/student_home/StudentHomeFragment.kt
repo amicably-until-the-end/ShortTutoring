@@ -27,6 +27,7 @@ import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.item.Lecture
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
@@ -102,9 +103,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
-            val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
-            findNavController().navigate(action)
+            val dialog = TeacherProfileDialog(it)
+            dialog.show(parentFragmentManager, "teacherProfile")
         }
 
         binding.rvTeacherFollowing.apply {

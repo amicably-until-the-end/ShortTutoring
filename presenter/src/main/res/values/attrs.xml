@@ -3,4 +3,7 @@
     <declare-styleable name="IntervalTimePicker">
         <attr name="timeInterval" format="integer" />
     </declare-styleable>
+    <declare-styleable name="SimpleDatePicker">
+        <attr name="isSelect" format="reference|string" />
+    </declare-styleable>
 </resources>

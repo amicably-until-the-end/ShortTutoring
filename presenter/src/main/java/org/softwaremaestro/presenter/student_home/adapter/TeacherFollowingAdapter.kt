@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherFollowingBinding
 
-class TeacherFollowingAdapter(private val onItemClickListener: (String) -> Unit) :
+class TeacherFollowingAdapter(private val onItemClickListener: (FollowingGetResponseVO) -> Unit) :
     RecyclerView.Adapter<TeacherFollowingAdapter.ViewHolder>() {
 
     private var items: List<FollowingGetResponseVO> = emptyList()
@@ -41,7 +42,7 @@ class TeacherFollowingAdapter(private val onItemClickListener: (String) -> Unit)
             Glide.with(binding.root.context).load(item.profileImage).centerCrop()
                 .into(binding.ivPhoto)
             binding.ivPhoto.setOnClickListener {
-                item.id?.let { onItemClickListener(it) }
+                item.id?.let { onItemClickListener(item) }
             }
         }
     }
