@@ -3,13 +3,14 @@ package org.softwaremaestro.presenter.question_upload.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.softwaremaestro.presenter.Util.TimePickerBottomDialog
 import org.softwaremaestro.presenter.databinding.ItemDesiredClassTimeBinding
 
 class TimeSelectAdapter(private val onAddClick: () -> Unit) :
     RecyclerView.Adapter<TimeSelectAdapter.ViewHolder>() {
 
 
-    var items: MutableList<String> = mutableListOf()
+    var items: MutableList<TimePickerBottomDialog.SpecificTime> = mutableListOf()
 
 
     override fun onCreateViewHolder(
@@ -36,9 +37,9 @@ class TimeSelectAdapter(private val onAddClick: () -> Unit) :
     inner class ViewHolder(private val binding: ItemDesiredClassTimeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: String?) {
+        fun onBind(item: TimePickerBottomDialog.SpecificTime?) {
             if (item != null) {
-                binding.tvTime.text = item
+                binding.tvTime.text = item.toString()
                 binding.tvAddTime.visibility = ViewGroup.GONE
                 binding.root.setOnClickListener {
                     items.remove(item)
@@ -52,7 +53,6 @@ class TimeSelectAdapter(private val onAddClick: () -> Unit) :
                 }
             }
         }
-
     }
 
 }

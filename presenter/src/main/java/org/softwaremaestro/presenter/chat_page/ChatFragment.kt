@@ -23,7 +23,7 @@ import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 
 abstract class ChatFragment : Fragment() {
 
-    private lateinit var binding: FragmentChatPageBinding
+    protected lateinit var binding: FragmentChatPageBinding
     private lateinit var applyAdapter: ChatRoomListAdapter
     private lateinit var reservedAdapter: ChatRoomListAdapter
     private lateinit var messageListAdapter: MessageListAdapter
@@ -59,17 +59,13 @@ abstract class ChatFragment : Fragment() {
 
     }
 
+    abstract fun onChatRightOptionButtonClick(): Unit
+    abstract fun onChatLeftOptionButtonClick(): Unit
+
 
     private fun setChatRoomRightButton() {
         binding.btnChatRoomRight.setOnClickListener {
-            //TODO : SHOW DIALOG TO SELECT TEACHER
-            val dialog = DetailAlertDialog {
-                Toast.makeText(requireContext(), "확인 누름", Toast.LENGTH_SHORT).show()
-            }.apply {
-                setTitle("질문을 삭제하시겠습니까")
-                setDescription("삭제된 질문은 복구할 수 없습니다.")
-            }
-            dialog.show(activity?.supportFragmentManager!!, "detail_alert_dialog")
+            onChatRightOptionButtonClick()
         }
     }
 
