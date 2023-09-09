@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.chat_page.student.adapter
+package org.softwaremaestro.presenter.chat_page.adapter
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -28,7 +28,7 @@ class ChatRoomIconListAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ChatRoomIconListAdapter.ViewHolder {
+    ): ViewHolder {
         val view = ItemTutoringListRoomIconBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -37,7 +37,7 @@ class ChatRoomIconListAdapter(
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ChatRoomIconListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBind(items[position], position)
     }
 

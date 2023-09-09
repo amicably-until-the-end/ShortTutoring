@@ -5,17 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.Util.DetailAlertDialog
 import org.softwaremaestro.presenter.Util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
-import org.softwaremaestro.presenter.chat_page.student.adapter.ChatRoomIconListAdapter
-import org.softwaremaestro.presenter.chat_page.student.adapter.MessageListAdapter
-import org.softwaremaestro.presenter.chat_page.student.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.widget.AnsweringTeacherSelectDialog
 import org.softwaremaestro.presenter.databinding.FragmentStudentChatPageBinding
 
 
@@ -50,14 +53,30 @@ class StudentTutoringListFragment : Fragment() {
         setReservedIconRecyclerView()
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
-
-
+        setChatRoomRightButton()
         makeAdapterList()
 
         return binding.root
 
     }
 
+
+    private fun setChatRoomRightButton() {
+        binding.btnChatRoomRight.setOnClickListener {
+            //TODO : SHOW DIALOG TO SELECT TEACHER
+            val dialog = DetailAlertDialog {
+                Toast.makeText(requireContext(), "확인 누름", Toast.LENGTH_SHORT).show()
+            }.apply {
+                setTitle("질문을 삭제하시겠습니까")
+                setDescription("삭제된 질문은 복구할 수 없습니다.")
+            }
+            dialog.show(activity?.supportFragmentManager!!, "detail_alert_dialog")
+        }
+    }
+
+    /**
+     * 모든 어댑터를 초기화 한 이후에 실행해야 함
+     */
     private fun makeAdapterList() {
         recyclerViewAdapters.apply {
             add(applyAdapter)

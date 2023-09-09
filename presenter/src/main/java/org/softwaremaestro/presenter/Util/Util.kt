@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.Util
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.app.Service
 import android.content.Context
 import android.graphics.Bitmap
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.qualifiers.ActivityContext
 import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
 
@@ -25,6 +27,19 @@ object Util {
     fun toDp(px: Int, context: Context): Int {
         val metrics = context.resources.displayMetrics
         return px / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    fun getBottomSheetDialogDefaultHeight(activity: Activity): Int {
+        return getWindowHeight(activity) * 80 / 100
+        // 기기 높이 대비 비율 설정 부분!!
+        // 위 수치는 기기 높이 대비 80%로 다이얼로그 높이를 설정
+    }
+
+    private fun getWindowHeight(activity: Activity): Int {
+        // Calculate window height for fullscreen use
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.heightPixels
     }
 }
 

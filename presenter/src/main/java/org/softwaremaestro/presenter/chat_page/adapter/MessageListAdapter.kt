@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.chat_page.student.adapter
+package org.softwaremaestro.presenter.chat_page.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
