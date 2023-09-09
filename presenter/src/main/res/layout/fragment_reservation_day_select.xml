@@ -20,10 +20,10 @@
             android:text="질문 예약" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <org.softwaremaestro.presenter.question_upload.widget.SimpleDatePicker
+    <org.softwaremaestro.presenter.Util.Widget.SimpleDatePicker
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:isSelect="tru"
+        android:layout_height="400dp"
+        app:isSelect="true"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

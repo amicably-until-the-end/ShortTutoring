@@ -6,19 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.FragmentDaySelectBinding
+import org.softwaremaestro.presenter.databinding.FragmentReservationDaySelectBinding
 
 
 class DaySelectFragment : Fragment() {
 
-    private lateinit var binding: FragmentDaySelectBinding
+    private lateinit var binding: FragmentReservationDaySelectBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDaySelectBinding.inflate(layoutInflater)
+        binding = FragmentReservationDaySelectBinding.inflate(layoutInflater)
         return binding.root
     }
 

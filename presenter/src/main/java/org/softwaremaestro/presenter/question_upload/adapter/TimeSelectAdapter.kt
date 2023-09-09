@@ -3,7 +3,7 @@ package org.softwaremaestro.presenter.question_upload.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.presenter.Util.TimePickerBottomDialog
+import org.softwaremaestro.presenter.Util.Widget.TimePickerBottomDialog
 import org.softwaremaestro.presenter.databinding.ItemDesiredClassTimeBinding
 
 class TimeSelectAdapter(private val onAddClick: () -> Unit) :

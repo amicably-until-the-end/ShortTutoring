@@ -4,15 +4,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
-import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.LoadingDialog
-import org.softwaremaestro.presenter.Util.UIState
 import org.softwaremaestro.presenter.databinding.ActivityQuestionDetailBinding
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionDetailImagesAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel

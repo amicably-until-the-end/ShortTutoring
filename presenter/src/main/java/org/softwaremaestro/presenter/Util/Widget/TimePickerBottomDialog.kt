@@ -1,10 +1,12 @@
-package org.softwaremaestro.presenter.Util
+package org.softwaremaestro.presenter.Util.Widget
 
 import android.app.Dialog
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogTimePickerBinding
@@ -38,6 +40,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         var currentTime = System.currentTimeMillis()
         binding.timePicker.hour = SimpleDateFormat("HH").format(currentTime).toInt()
         binding.timePicker.minute = SimpleDateFormat("mm").format(currentTime).toInt()
+
     }
 
     private fun setDialogTitle() {
@@ -73,3 +76,4 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     }
 
 }
+

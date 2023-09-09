@@ -9,6 +9,16 @@
         <item name="android:background">@drawable/bg_radius_20_20_0_0</item>
     </style>
 
+    <style name="calendar_day_black" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="calendar_day_grey" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="section_title" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18sp</item>
