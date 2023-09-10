@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.Util.LoadingDialog
+import org.softwaremaestro.presenter.Util.TimePickerBottomDialog
 import org.softwaremaestro.presenter.Util.UIState
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
@@ -151,23 +152,19 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun setDesiredTimeRecyclerView() {
+
+
         var currentTime = System.currentTimeMillis()
         var hour: Int = SimpleDateFormat("HH").format(currentTime).toInt()
         var time: Int = SimpleDateFormat("mm").format(currentTime).toInt()
         timeSelectAdapter = TimeSelectAdapter() {
-            val picker = TimePickerDialog(
-                requireContext(),
-                { _, hourOfDay, minute ->
-                    hour = hourOfDay
-                    time = minute
-                    timeSelectAdapter.items.add("${hourOfDay}시 ${minute}분")
-                    timeSelectAdapter.notifyDataSetChanged()
-                },
-                hour,
-                time,
-                false
-            )
-            picker.show()
+            val picker = TimePickerBottomDialog {
+                timeSelectAdapter.items.add(it)
+                timeSelectAdapter.notifyDataSetChanged()
+            }.apply {
+                setTitle("희망 수업 시간을 선택해주세요")
+            }
+            picker.show(parentFragmentManager, "timePicker")
         }
 
         binding.rvDesiredTime.apply {
@@ -256,7 +253,9 @@ class QuestionFormFragment : Fragment() {
                     schoolLevel = binding.tvSchoolSelected.text.toString(),
                     schoolSubject = binding.tvSubjectSelected.text.toString(),
                     hopeImmediate = binding.toogleImmediate.isChecked,
-                    hopeTutoringTime = timeSelectAdapter.items,
+                    hopeTutoringTime = timeSelectAdapter.items.map {
+                        it.toString()
+                    },
                     mainImageIndex = 0
                 )
                 viewModel.uploadQuestion(questionUploadVO)

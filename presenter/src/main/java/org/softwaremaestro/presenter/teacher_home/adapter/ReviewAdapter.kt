@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_home
+package org.softwaremaestro.presenter.teacher_home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -37,8 +37,10 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
             with(binding) {
 
                 tvName.text = item.name ?: EMPTY_STRING
-                tvCreatedAt.text = item.createdAt ?: EMPTY_STRING
-                tvComment.text = item.content ?: EMPTY_STRING
+                tvCreatedAt.text =
+                    item.createdAt ?: EMPTY_STRING
+                tvComment.text =
+                    item.content ?: EMPTY_STRING
             }
         }
     }
