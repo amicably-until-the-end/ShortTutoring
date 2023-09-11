@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
-import org.softwaremaestro.presenter.Util.Widget.LoadingDialog
-import org.softwaremaestro.presenter.Util.UIState
+import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo

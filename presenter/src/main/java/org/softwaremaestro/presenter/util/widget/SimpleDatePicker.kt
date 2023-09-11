@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.Util.Widget
+package org.softwaremaestro.presenter.util.widget
 
 import android.content.Context
 import android.graphics.Rect
@@ -9,8 +9,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.Widget.adapter.CalendarDateAdapter
+import org.softwaremaestro.presenter.util.widget.adapter.CalendarDateAdapter
 import org.softwaremaestro.presenter.databinding.WidgetSimpleDatePickerBinding
+import java.time.LocalDate
 
 class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
@@ -20,7 +21,9 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
 
     private lateinit var adapter: CalendarDateAdapter
 
-    var selectedDate: CalendarDateAdapter.DateItem? = null
+    var selectedDate: LocalDate? = null
+
+    private var onDateClickListener: ((Int, Int, Int) -> Unit)? = null
 
     init {
         attrs?.let {
@@ -31,11 +34,20 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
         setDateRecyclerView()
     }
 
+    fun setOnRangeSelectListener(listener: (Int, Int, Int) -> Unit) {
+        onDateClickListener = listener
+    }
+
     private fun setDateRecyclerView() {
         binding.rvCalendar.apply {
-            adapter = CalendarDateAdapter(this, { date -> selectedDate = date }, { year, month ->
-                binding.tvMonth.text = "${year}년 ${month}월"
-            })
+            adapter = CalendarDateAdapter(
+                this,
+                onMonthChange = { year, month ->
+                    binding.tvMonth.text = "${year}년 ${month}월"
+                },
+                onSelectedDayChange = { year, month, day ->
+                    if (onDateClickListener != null) onDateClickListener!!(year, month, day)
+                })
             layoutManager = GridLayoutManager(context, 7)
             addItemDecoration(GridSpacingItemDecoration(7, 0))
         }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationDaySelectBinding
 
@@ -19,7 +20,16 @@ class DaySelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReservationDaySelectBinding.inflate(layoutInflater)
+
+        setDatePicker()
+
         return binding.root
+    }
+
+    private fun setDatePicker() {
+        binding.datePicker.setOnRangeSelectListener() { year, month, day ->
+            Toast.makeText(requireContext(), "$year-$month-$day", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

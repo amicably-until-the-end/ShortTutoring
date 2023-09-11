@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.Util
+package org.softwaremaestro.presenter.util
 
 sealed class UIState<out T>(val _data: T?) {
     object Pending : UIState<Nothing>(null)

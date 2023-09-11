@@ -17,7 +17,7 @@ import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.domain.question_upload.usecase.TeacherListGetUseCase
 import org.softwaremaestro.domain.question_upload.usecase.TeacherPickUseCase
-import org.softwaremaestro.presenter.Util.UIState
+import org.softwaremaestro.presenter.util.UIState
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject

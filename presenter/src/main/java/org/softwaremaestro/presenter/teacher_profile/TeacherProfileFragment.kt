@@ -13,8 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_FOLLOW
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_UNFOLLOW
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.decreaseWidth
-import org.softwaremaestro.presenter.Util.increaseWidth
+import org.softwaremaestro.presenter.util.decreaseWidth
+import org.softwaremaestro.presenter.util.increaseWidth
 import org.softwaremaestro.presenter.databinding.FragmentTeacherProfileBinding
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.NotiFollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.ProfileViewModel

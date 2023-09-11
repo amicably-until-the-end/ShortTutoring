@@ -1,17 +1,14 @@
 package org.softwaremaestro.presenter.chat_page.adapter
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.Util
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomIconBinding
-import org.softwaremaestro.presenter.login.LoginActivity_GeneratedInjector
 
 class ChatRoomIconListAdapter(
     private val onQuestionClick: (String, Int, RecyclerView.Adapter<*>) -> Unit,

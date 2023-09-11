@@ -14,7 +14,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchMajorBinding
 import org.softwaremaestro.presenter.login.adapter.SearchAdapter
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.Util.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.util.requestFocusAndShowKeyboard
 
 const val SELECTED_MAJOR = "selected-major"
 private const val IME_ACTION = IME_ACTION_NEXT
