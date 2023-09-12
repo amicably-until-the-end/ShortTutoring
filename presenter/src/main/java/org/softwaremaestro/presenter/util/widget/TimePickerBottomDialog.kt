@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.Util
+package org.softwaremaestro.presenter.util.widget
 
 import android.app.Dialog
 import android.os.Bundle
@@ -38,6 +38,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         var currentTime = System.currentTimeMillis()
         binding.timePicker.hour = SimpleDateFormat("HH").format(currentTime).toInt()
         binding.timePicker.minute = SimpleDateFormat("mm").format(currentTime).toInt()
+
     }
 
     private fun setDialogTitle() {
@@ -73,3 +74,4 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     }
 
 }
+

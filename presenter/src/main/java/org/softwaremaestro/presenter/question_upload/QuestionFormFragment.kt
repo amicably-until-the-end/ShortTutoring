@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.question_upload
 
 import android.app.AlertDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,13 +16,13 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.LoadingDialog
-import org.softwaremaestro.presenter.Util.TimePickerBottomDialog
-import org.softwaremaestro.presenter.Util.UIState
+import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
+import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
 import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
-import org.softwaremaestro.presenter.Util.setEnabledAndChangeColor
-import org.softwaremaestro.presenter.Util.toBase64
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.question_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.adapter.TimeSelectAdapter
 import java.text.SimpleDateFormat
@@ -67,6 +66,10 @@ class QuestionFormFragment : Fragment() {
         setDesiredTimeRecyclerView()
         checkAndEnableSubjectBtn()
         setSubmitButton()
+
+        binding.tvLetsQuestionDesc.setOnClickListener {
+            findNavController().navigate(R.id.action_questionFormFragment_to_daySelectFragment)
+        }
         setFields()
     }
 

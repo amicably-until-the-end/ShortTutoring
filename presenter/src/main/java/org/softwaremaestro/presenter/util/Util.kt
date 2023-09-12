@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.Util
+package org.softwaremaestro.presenter.util
 
 import android.animation.Animator
 import android.animation.ValueAnimator
@@ -14,7 +14,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import dagger.hilt.android.qualifiers.ActivityContext
 import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
 

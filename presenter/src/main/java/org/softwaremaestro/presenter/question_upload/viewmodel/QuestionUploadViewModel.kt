@@ -13,8 +13,7 @@ import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.usecase.QuestionUploadUseCase
-import org.softwaremaestro.presenter.Util.UIState
-import org.softwaremaestro.presenter.Util.toBase64
+import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 

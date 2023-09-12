@@ -54,8 +54,9 @@ class TeacherSearchFragment : Fragment() {
 
     private fun setFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
+            //TODO: 선생님별
             val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
+                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment("null")
             findNavController().navigate(action)
         }
 

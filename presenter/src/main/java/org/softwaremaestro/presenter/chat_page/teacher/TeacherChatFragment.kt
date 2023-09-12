@@ -1,7 +1,7 @@
 package org.softwaremaestro.presenter.chat_page.teacher
 
 import android.widget.Toast
-import org.softwaremaestro.presenter.Util.TimePickerBottomDialog
+import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 
 

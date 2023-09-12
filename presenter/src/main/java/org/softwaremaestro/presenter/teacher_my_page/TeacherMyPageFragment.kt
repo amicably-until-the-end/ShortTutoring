@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.decreaseWidth
-import org.softwaremaestro.presenter.Util.increaseWidth
+import org.softwaremaestro.presenter.util.decreaseWidth
+import org.softwaremaestro.presenter.util.increaseWidth
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel

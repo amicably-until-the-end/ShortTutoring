@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.Util
+package org.softwaremaestro.presenter.util.widget
 
 import android.app.Dialog
 import android.content.Context

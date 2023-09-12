@@ -5,14 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.DetailAlertDialog
-import org.softwaremaestro.presenter.Util.getVerticalSpaceDecoration
+import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter

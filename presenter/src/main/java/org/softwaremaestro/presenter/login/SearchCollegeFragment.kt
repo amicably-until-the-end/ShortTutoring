@@ -15,7 +15,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchCollegeBinding
 import org.softwaremaestro.presenter.login.adapter.SearchAdapter
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.Util.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.util.requestFocusAndShowKeyboard
 
 const val SELECTED_COLLEGE = "selected-college"
 private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT

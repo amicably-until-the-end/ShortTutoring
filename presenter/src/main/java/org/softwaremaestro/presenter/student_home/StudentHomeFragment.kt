@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.Util.Util.toPx
+import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
@@ -27,6 +27,7 @@ import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.item.Lecture
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
@@ -102,9 +103,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
-            val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
-            findNavController().navigate(action)
+            val dialog = TeacherProfileDialog(it)
+            dialog.show(parentFragmentManager, "teacherProfile")
         }
 
         binding.rvTeacherFollowing.apply {
@@ -207,6 +207,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setItemToBestTeacherAdapter() {
+
         val lectures = mutableListOf<BestTeacher>().apply {
             add(
                 BestTeacher(
