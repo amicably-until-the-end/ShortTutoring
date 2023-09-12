@@ -16,18 +16,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.review_get.LectureVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
 import org.softwaremaestro.presenter.student_home.item.BestTeacher
-import org.softwaremaestro.presenter.student_home.item.Lecture
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.util.Util.toPx
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
 private const val GRIDLAYOUT_SPICING = 8
@@ -188,11 +188,12 @@ class StudentHomeFragment : Fragment() {
         }
         teacherFollowingAdapter.setItem(sampleData)
 
-        return
         followingViewModel.following.observe(viewLifecycleOwner) {
             teacherFollowingAdapter.setItem(it)
             teacherFollowingAdapter.notifyDataSetChanged()
         }
+
+        return
     }
 
     private fun observeMyProfile() {
@@ -236,9 +237,9 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setItemToLectureAdapter() {
-        val lectures = mutableListOf<Lecture>().apply {
-            add(Lecture("경우의 수를 다 셌는데 안 맞아요", "수학1"))
-            add(Lecture("이차곡선의 성질이 이해가 안 돼요", "기하"))
+        val lectures = mutableListOf<LectureVO>().apply {
+            add(LectureVO("경우의 수를 다 셌는데 안 맞아요", "수학1", ""))
+            add(LectureVO("이차곡선의 성질이 이해가 안 돼요", "기하", ""))
         }
         lectureAdapter.setItem(lectures)
     }
