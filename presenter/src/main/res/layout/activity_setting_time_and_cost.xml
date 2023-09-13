@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".teacher_my_page.SettingTimeAndCostActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btn_toolbar_back"
+            style="@style/ToolBarBackButton" />
+
+        <TextView
+            style="@style/ToolBarTitle"
+            android:text="답변 시간 / 비용 설정" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:paddingHorizontal="20dp"
+        android:text="답변 가능한 시간을 설정해주세요"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:paddingHorizontal="20dp"
+        android:text="학생이 수업시간을 미리 정할 수 있어요."
+        android:textColor="@color/sub_text_grey"
+        android:textSize="13sp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_time_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="20dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
+        app:contentPaddingBottom="30dp"
+        app:contentPaddingTop="30dp"
+        app:strokeColor="@color/bright_grey"
+        app:strokeWidth="1dp">
+
+        <org.softwaremaestro.presenter.util.widget.TimeRangePicker
+            android:id="@+id/trp_tutoring_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

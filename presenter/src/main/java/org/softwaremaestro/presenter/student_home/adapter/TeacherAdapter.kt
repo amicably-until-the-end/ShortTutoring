@@ -4,13 +4,17 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
-import org.softwaremaestro.presenter.student_home.item.BestTeacher
+import java.lang.Integer.min
 
-class TeacherAdapter(private val onItemClickListener: (String) -> Unit) :
+class TeacherAdapter(
+    private val itemCountLimit: Int? = null,
+    private val onItemClickListener: (String) -> Unit
+) :
     RecyclerView.Adapter<TeacherAdapter.ViewHolder>() {
 
-    private var items: List<BestTeacher> = emptyList()
+    private var items: List<TeacherVO> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -26,17 +30,18 @@ class TeacherAdapter(private val onItemClickListener: (String) -> Unit) :
     }
 
     override fun getItemCount(): Int {
-        return if (items.size >= 3) 3 else items.size
+        return if (itemCountLimit == null) items.size
+        else min(itemCountLimit, items.size)
     }
 
-    fun setItem(items: List<BestTeacher>) {
+    fun setItem(items: List<TeacherVO>) {
         this.items = items
     }
 
     inner class ViewHolder(private val binding: ItemTeacherBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: BestTeacher) {
+        fun onBind(item: TeacherVO) {
 
             with(binding) {
                 ivProfile.setImageURI(Uri.parse(item.profileUrl))
@@ -47,7 +52,7 @@ class TeacherAdapter(private val onItemClickListener: (String) -> Unit) :
             }
 
             itemView.setOnClickListener {
-//                item.id?.let { onItemClickListener(it) }
+                item.teacherId?.let { onItemClickListener(it) }
             }
         }
     }

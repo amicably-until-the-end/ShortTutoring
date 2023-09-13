@@ -3,16 +3,12 @@ package org.softwaremaestro.presenter.classroom.adapter
 import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.domain.Promise
 import com.herewhite.sdk.domain.SDKError
-import com.herewhite.sdk.domain.Scene
-import org.softwaremaestro.presenter.databinding.ItemLectureBinding
 import org.softwaremaestro.presenter.databinding.ItemWhiteboardSceneBinding
-import org.softwaremaestro.presenter.student_home.item.Lecture
 
 class SceneAdapter(
     private val whiteBoardRoom: Room, private val onItemClickListener: (String) -> Unit,

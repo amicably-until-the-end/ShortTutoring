@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.teacher_my_page
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.decreaseWidth
-import org.softwaremaestro.presenter.util.increaseWidth
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
+import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 
@@ -26,9 +27,11 @@ class TeacherMyPageFragment : Fragment() {
     private lateinit var binding: FragmentTeacherMyPageBinding
 
     private val reviewsViewModel: ReviewsViewModel by viewModels()
+    private val lecturesViewModel: LecturesViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
+    private lateinit var lectureAdapter: LectureAdapter
 
     private var following = false
 
@@ -46,26 +49,17 @@ class TeacherMyPageFragment : Fragment() {
         setProfile()
 
         initReviewRecyclerView()
+        initLectureRecyclerView()
 
         binding.btnFollow.setOnClickListener {
             toggleFollowing()
         }
 
-        binding.tvReview.setOnClickListener {
-            binding.tvReview.background =
-                resources.getDrawable(R.drawable.bg_bottom, null)
-            binding.tvClip.background = null
-            binding.containerReview.visibility = View.VISIBLE
-            binding.containerClip.visibility = View.INVISIBLE
-        }
+        setOnClickListenerToTvReview()
 
-        binding.tvClip.setOnClickListener {
-            binding.tvReview.background = null
-            binding.tvClip.background =
-                resources.getDrawable(R.drawable.bg_bottom, null)
-            binding.containerReview.visibility = View.INVISIBLE
-            binding.containerClip.visibility = View.VISIBLE
-        }
+        setOnClickListenerToTvClip()
+
+        setActionToFollowerMenu()
     }
 
     private fun setProfile() {
@@ -75,15 +69,15 @@ class TeacherMyPageFragment : Fragment() {
         myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
             with(binding) {
                 Glide.with(requireContext()).load(it.profileImage).circleCrop().into(ivTeacherImg)
-                tvTeacherSchool.text = "${it.schoolName} ${it.schoolDepartment}"
+                tvTeacherUniv.text = "${it.schoolName} ${it.schoolDepartment}"
                 tvTeacherName.text = it.name
-                tvRating.text = "%.2f".format(RATING)
+                tvTeacherRating.text = "%.2f".format(RATING)
                 tvNumOfClip.text = NUM_OF_CLIP.toString()
             }
         }
 
         myProfileViewModel.numOfFollower.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "찜하기 $it"
+            binding.btnFollow.text = "나를 찜한 학생 $it"
         }
     }
 
@@ -99,7 +93,7 @@ class TeacherMyPageFragment : Fragment() {
 
         reviewsViewModel.reviews.observe(requireActivity()) {
             binding.containerReviewEmpty.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.INVISIBLE
+                if (it.isEmpty()) View.VISIBLE else View.GONE
 
             reviewAdapter.setItem(it)
             binding.tvNumOfReview.text = it.size.toString()
@@ -108,23 +102,73 @@ class TeacherMyPageFragment : Fragment() {
         reviewsViewModel.getReviews()
     }
 
+    private fun initLectureRecyclerView() {
+
+        lectureAdapter = LectureAdapter {
+            // url을 이용해 영상 재생
+            it
+        }
+
+        binding.rvClip.apply {
+            adapter = lectureAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        lecturesViewModel.lectures.observe(requireActivity()) {
+            binding.containerClipEmpty.visibility =
+                if (it.isEmpty()) View.VISIBLE else View.GONE
+
+            lectureAdapter.setItem(it)
+            binding.tvNumOfClip.text = it.size.toString()
+        }
+
+        lecturesViewModel.getLectures()
+    }
+
     private fun toggleFollowing() {
         following = !following
 
         if (following) {
-            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_dark_grey)
             myProfileViewModel.addOne()
-
-            binding.btnFollow.decreaseWidth(156, 500L, requireContext(),
-                onEnd = { binding.btnReserve.visibility = View.VISIBLE }
-            )
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_5_sub_text_grey)
         } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_blue)
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
             myProfileViewModel.minusOne()
+        }
+    }
 
-            binding.btnFollow.increaseWidth(156, 500L, requireContext(),
-                onStart = { binding.btnReserve.visibility = View.GONE }
-            )
+    private fun setOnClickListenerToTvReview() {
+        binding.tvReview.setOnClickListener {
+            with(binding) {
+                containerReview.visibility = View.VISIBLE
+                containerClip.visibility = View.GONE
+
+                tvReview.setTextColor(resources.getColor(R.color.black, null))
+                tvNumOfReview.setTextColor(resources.getColor(R.color.primary_blue, null))
+                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            }
+        }
+    }
+
+    private fun setOnClickListenerToTvClip() {
+        binding.tvClip.setOnClickListener {
+            with(binding) {
+                containerReview.visibility = View.GONE
+                containerClip.visibility = View.VISIBLE
+
+                tvClip.setTextColor(resources.getColor(R.color.black, null))
+                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
+                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            }
+        }
+    }
+
+    private fun setActionToFollowerMenu() {
+        binding.containerFollower.setOnClickListener {
+            startActivity(Intent(requireActivity(), FollowerActivity::class.java))
         }
     }
 }

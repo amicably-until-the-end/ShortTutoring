@@ -5,6 +5,12 @@
 
     <application>
         <activity
+            android:name=".teacher_my_page.SettingTimeAndCostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".teacher_my_page.FollowerActivity"
+            android:exported="false" />
+        <activity
             android:name=".teacher_home.QuestionDetailActivity"
             android:exported="false" />
         <activity

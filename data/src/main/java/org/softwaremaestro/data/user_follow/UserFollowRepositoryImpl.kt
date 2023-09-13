@@ -1,7 +1,8 @@
-package org.softwaremaestro.data.user_follow.remote
+package org.softwaremaestro.data.user_follow
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.softwaremaestro.data.user_follow.remote.UserFollowApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_FOLLOW
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_UNFOLLOW
