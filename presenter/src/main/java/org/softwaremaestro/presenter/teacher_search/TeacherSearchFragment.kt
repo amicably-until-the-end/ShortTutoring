@@ -9,11 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeFragmentDirections
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
-import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.teacher_search.viewmodel.MyProfileViewModel
 
@@ -43,7 +43,7 @@ class TeacherSearchFragment : Fragment() {
         setFollowingRecyclerView()
         setBestTeacherRecyclerView()
 
-        setItemToBestTeacherAdapter()
+        setItemToTeacherAdapter()
 
         observeFollowing()
         observeMyProfile()
@@ -78,10 +78,10 @@ class TeacherSearchFragment : Fragment() {
         }
     }
 
-    private fun setItemToBestTeacherAdapter() {
-        val lectures = mutableListOf<BestTeacher>().apply {
+    private fun setItemToTeacherAdapter() {
+        val teachers = mutableListOf<TeacherVO>().apply {
             add(
-                BestTeacher(
+                TeacherVO(
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                     "강해린",
                     "1",
@@ -92,7 +92,7 @@ class TeacherSearchFragment : Fragment() {
             )
             (1..4).forEach {
                 add(
-                    BestTeacher(
+                    TeacherVO(
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                         "팜하니",
                         "1",
@@ -103,7 +103,7 @@ class TeacherSearchFragment : Fragment() {
                 )
             }
         }
-        teacherAdapter.setItem(lectures)
+        teacherAdapter.setItem(teachers)
     }
 
     private fun observeFollowing() {

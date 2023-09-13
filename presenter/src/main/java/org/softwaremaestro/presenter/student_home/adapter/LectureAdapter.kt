@@ -3,7 +3,7 @@ package org.softwaremaestro.presenter.student_home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.domain.review_get.LectureVO
+import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
 
 class LectureAdapter(private val onItemClickListener: (String) -> Unit) :

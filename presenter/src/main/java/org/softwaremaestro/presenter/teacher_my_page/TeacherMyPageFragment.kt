@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.teacher_my_page
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,29 +55,11 @@ class TeacherMyPageFragment : Fragment() {
             toggleFollowing()
         }
 
-        binding.tvReview.setOnClickListener {
-            with(binding) {
-                containerReview.visibility = View.VISIBLE
-                containerClip.visibility = View.GONE
+        setOnClickListenerToTvReview()
 
-                tvReview.setTextColor(resources.getColor(R.color.black, null))
-                tvNumOfReview.setTextColor(resources.getColor(R.color.primary_blue, null))
-                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            }
-        }
+        setOnClickListenerToTvClip()
 
-        binding.tvClip.setOnClickListener {
-            with(binding) {
-                containerReview.visibility = View.GONE
-                containerClip.visibility = View.VISIBLE
-
-                tvClip.setTextColor(resources.getColor(R.color.black, null))
-                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
-                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            }
-        }
+        setActionToFollowerMenu()
     }
 
     private fun setProfile() {
@@ -152,6 +135,40 @@ class TeacherMyPageFragment : Fragment() {
         } else {
             binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
             myProfileViewModel.minusOne()
+        }
+    }
+
+    private fun setOnClickListenerToTvReview() {
+        binding.tvReview.setOnClickListener {
+            with(binding) {
+                containerReview.visibility = View.VISIBLE
+                containerClip.visibility = View.GONE
+
+                tvReview.setTextColor(resources.getColor(R.color.black, null))
+                tvNumOfReview.setTextColor(resources.getColor(R.color.primary_blue, null))
+                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            }
+        }
+    }
+
+    private fun setOnClickListenerToTvClip() {
+        binding.tvClip.setOnClickListener {
+            with(binding) {
+                containerReview.visibility = View.GONE
+                containerClip.visibility = View.VISIBLE
+
+                tvClip.setTextColor(resources.getColor(R.color.black, null))
+                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
+                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            }
+        }
+    }
+
+    private fun setActionToFollowerMenu() {
+        binding.containerFollower.setOnClickListener {
+            startActivity(Intent(requireActivity(), FollowerActivity::class.java))
         }
     }
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.review_get.LectureVO
+import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import javax.inject.Inject
 
 @HiltViewModel

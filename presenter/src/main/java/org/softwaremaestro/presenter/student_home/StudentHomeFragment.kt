@@ -16,14 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
-import org.softwaremaestro.domain.review_get.LectureVO
+import org.softwaremaestro.domain.lecture_get.entity.LectureVO
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
-import org.softwaremaestro.presenter.student_home.item.BestTeacher
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
@@ -123,7 +123,7 @@ class StudentHomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        binding.rvBestTeacher.apply {
+        binding.rvTeacher.apply {
             adapter = teacherAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -209,9 +209,9 @@ class StudentHomeFragment : Fragment() {
 
     private fun setItemToBestTeacherAdapter() {
 
-        val lectures = mutableListOf<BestTeacher>().apply {
+        val teachers = mutableListOf<TeacherVO>().apply {
             add(
-                BestTeacher(
+                TeacherVO(
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                     "강해린",
                     "1",
@@ -222,7 +222,7 @@ class StudentHomeFragment : Fragment() {
             )
             (1..4).forEach {
                 add(
-                    BestTeacher(
+                    TeacherVO(
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                         "팜하니",
                         "1",
@@ -233,7 +233,7 @@ class StudentHomeFragment : Fragment() {
                 )
             }
         }
-        teacherAdapter.setItem(lectures)
+        teacherAdapter.setItem(teachers)
     }
 
     private fun setItemToLectureAdapter() {

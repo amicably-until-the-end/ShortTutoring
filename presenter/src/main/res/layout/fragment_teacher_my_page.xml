@@ -17,14 +17,42 @@
             android:orientation="vertical"
             android:paddingVertical="22dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="내 정보"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:layout_marginHorizontal="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="내 정보"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_notification"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_notification"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_more_horizontal"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_more_horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/iv_notification"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_info_box"
@@ -75,6 +103,7 @@
                             </androidx.cardview.widget.CardView>
 
                             <ImageView
+                                android:id="@+id/iv_edit_profile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end|bottom"
@@ -532,10 +561,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/iv_notification"
+                        android:id="@+id/iv_notice"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/ic_notification"
+                        android:background="@drawable/ic_notice"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -549,7 +578,7 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/iv_notification"
+                        app:layout_constraintLeft_toRightOf="@id/iv_notice"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
