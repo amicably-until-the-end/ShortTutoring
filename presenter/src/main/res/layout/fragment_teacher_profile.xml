@@ -102,7 +102,7 @@
                 android:layout_width="156dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:background="@drawable/bg_radius_10_blue"
+                android:background="@drawable/bg_radius_10_grad_blue"
                 android:gravity="center"
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="12dp"
