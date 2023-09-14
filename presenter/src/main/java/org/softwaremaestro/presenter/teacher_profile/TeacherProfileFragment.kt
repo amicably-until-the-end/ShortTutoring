@@ -13,11 +13,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_FOLLOW
 import org.softwaremaestro.domain.user_follow.SUCCESS_USER_UNFOLLOW
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.decreaseWidth
-import org.softwaremaestro.presenter.util.increaseWidth
 import org.softwaremaestro.presenter.databinding.FragmentTeacherProfileBinding
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.NotiFollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.util.decreaseWidth
+import org.softwaremaestro.presenter.util.increaseWidth
 
 private const val RATING = 4.83333f
 private const val NUM_OF_CLIP = 23
@@ -126,7 +126,7 @@ class TeacherProfileFragment : Fragment() {
             notiFollowUserViewModel.followUser(selectedUserId)
 
         } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_blue)
+            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_10_grad_blue)
             profileViewModel.minusOne()
 
             binding.btnFollow.increaseWidth(156, 500L, requireContext(),

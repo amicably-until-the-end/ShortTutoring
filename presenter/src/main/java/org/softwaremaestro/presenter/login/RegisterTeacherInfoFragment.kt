@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -12,8 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
+import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 
 // 회원가입 두 번째 화면.
 // 개인정보를 입력한다.
@@ -41,11 +44,20 @@ class RegisterTeacherInfoFragment : Fragment() {
         setOnClickListener()
 
         // 다음 버튼을 누르면 로고화면으로 돌아간다
-
         setFieldButtons()
         setNextButton()
         setObserver()
         setToolBar()
+
+        val univs = arrayOf("고려대학교", "연세대학교", "서울대학교", "성균관대학교", "숭실대학교", "한양대학교")
+        val univAdpater = ArrayAdapter(requireContext(), R.layout.item_univ, univs)
+        binding.atvUniv.setAdapter(univAdpater)
+
+        binding.atvUniv.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, _, _ ->
+
+                hideKeyboardAndRemoveFocus(binding.atvUniv)
+            }
     }
 
     private fun setToolBar() {
@@ -61,43 +73,44 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     private fun setNextButton() {
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_emailCheckFragment)
+            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_univAuthFragment)
         }
     }
 
     private fun setFieldButtons() {
-        binding.etCollege.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchCollegeFragment)
-        }
-        binding.etUniv.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchUnivFragment)
-        }
-        binding.etMajor.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchMajorFragment)
-        }
-        binding.etYearOfAdmission.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchYearOfAdmissionFragment)
-        }
+//        binding.etCollege.setOnClickListener {
+//            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchCollegeFragment)
+//        }
+//        binding.etUniv.setOnClickListener {
+//            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchUnivFragment)
+//        }
+//        binding.etMajor.setOnClickListener {
+//            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchMajorFragment)
+//        }
+//        binding.etYearOfAdmission.setOnClickListener {
+//            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_searchYearOfAdmissionFragment)
+//        }
     }
 
 
     private fun setObserver() {
-        viewModel.admissonYear.observe(viewLifecycleOwner) {
-            binding.etYearOfAdmission.setText(it)
-            checkFields()
-        }
-        viewModel.univ.observe(viewLifecycleOwner) {
-            binding.etUniv.setText(it)
-            checkFields()
-        }
-        viewModel.college.observe(viewLifecycleOwner) {
-            binding.etCollege.setText(it)
-            checkFields()
-        }
-        viewModel.major.observe(viewLifecycleOwner) {
-            binding.etMajor.setText(it)
-            checkFields()
-        }
+//        viewModel.admissonYear.observe(viewLifecycleOwner) {
+//            binding.etYearOfAdmission.setText(it)
+//            checkFields()
+//        }
+//        viewModel.univ.observe(viewLifecycleOwner) {
+//            binding.etUniv.setText(it)
+//            checkFields()
+//        }
+//        viewModel.college.observe(viewLifecycleOwner) {
+//            binding.etCollege.setText(it)
+//            checkFields()
+//        }
+//        viewModel.major.observe(viewLifecycleOwner) {
+//            binding.etMajor.setText(it)
+//            checkFields()
+//        }
+
         viewModel.registerResult.observe(viewLifecycleOwner) { isRegisterSuccess ->
             if (isRegisterSuccess) {
                 val intent = Intent(requireContext(), TeacherHomeActivity::class.java)
@@ -114,7 +127,6 @@ class RegisterTeacherInfoFragment : Fragment() {
      * // 입력받지 않은 에딧텍스트가 있으면 버튼을 활성화하지 않는다
      */
     private fun checkFields() {
-
 
         if (viewModel.major.value != null && viewModel.univ.value != null && viewModel.college.value != null && viewModel.admissonYear.value != null) {
             binding.btnNext.setEnabledAndChangeColor(true)

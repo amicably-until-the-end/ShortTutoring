@@ -5,7 +5,7 @@
 
     <dimen name="section_horizontal_padding_default">20dp</dimen>
     <dimen name="padding_vertical_rb">12dp</dimen>
-    <dimen name="padding_horizontal_rb">12dp</dimen>
+    <dimen name="padding_horizontal_rb">18dp</dimen>
     <dimen name="toolbar_height">70dp</dimen>
 
     <!-- bottom navigation view -->

@@ -17,37 +17,45 @@
 
         <TextView
             style="@style/ToolBarTitle"
-            android:text="질문 올리기" />
+            android:text="회원가입" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_blue"
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
     <TextView
         android:id="@+id/tv_question"
-        style="@style/h6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_horizontal_default"
-        android:text="어떤 회원으로 가입할까요?"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="계정 정보를 선택해주세요."
         android:textColor="@color/black"
+        android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-        android:layout_marginTop="48dp"
+        android:layout_marginHorizontal="70dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_question">
 
         <RadioButton
             android:id="@+id/tv_student"
-            style="button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_rb_corner_radius"
             android:button="@null"
-            android:checked="true"
+            android:checked="false"
             android:paddingHorizontal="@dimen/padding_horizontal_rb"
             android:paddingVertical="@dimen/padding_vertical_rb"
             android:text="학생"
@@ -71,16 +79,17 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_next"
-        style="@style/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_default"
-        android:layout_marginBottom="56dp"
-        android:background="@drawable/bg_radius_10_blue"
+        android:layout_margin="30dp"
+        android:background="@drawable/bg_radius_10_background_grey"
+        android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:padding="16dp"
-        android:text="다음"
-        android:textColor="@color/white"
+        android:stateListAnimator="@null"
+        android:text="선택하기"
+        android:textColor="@color/sub_text_grey"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
