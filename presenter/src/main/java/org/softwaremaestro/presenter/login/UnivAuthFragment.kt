@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentUnivAuthBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
@@ -31,14 +33,10 @@ class UnivAuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setButtons()
-        setObserver()
-        setRegisterButton()
-    }
-
-    private fun setButtons() {
         setSendMailButton()
-        setRegisterButton()
+        setEtAuthCode()
+        setNextButton()
+        setObserver()
     }
 
     private fun setSendMailButton() {
@@ -47,7 +45,7 @@ class UnivAuthFragment : Fragment() {
         }
     }
 
-    private fun setRegisterButton() {
+    private fun setEtAuthCode() {
 
         binding.etAuthCode.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -65,6 +63,12 @@ class UnivAuthFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setNextButton() {
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(R.id.action_univAuthFragment_to_completeTeacherProfileFragment)
+        }
     }
 
     private fun setObserver() {

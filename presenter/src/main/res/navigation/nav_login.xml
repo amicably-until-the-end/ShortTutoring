@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/registerRoleFragment">
+    app:startDestination="@id/loginFrament">
 
     <fragment
         android:id="@+id/loginFrament"
@@ -45,62 +45,18 @@
             app:destination="@id/loginFrament"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_registerTeacherInfoFragment_to_searchUnivFragment"
-            app:destination="@id/searchUnivFragment" />
-        <action
-            android:id="@+id/action_registerTeacherInfoFragment_to_searchCollegeFragment"
-            app:destination="@id/searchCollegeFragment" />
-        <action
-            android:id="@+id/action_registerTeacherInfoFragment_to_searchMajorFragment"
-            app:destination="@id/searchMajorFragment" />
-        <action
-            android:id="@+id/action_registerTeacherInfoFragment_to_searchYearOfAdmissionFragment"
-            app:destination="@id/searchYearOfAdmissionFragment" />
-        <action
             android:id="@+id/action_registerTeacherInfoFragment_to_univAuthFragment"
             app:destination="@id/univAuthFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchUnivFragment"
-        android:name="org.softwaremaestro.presenter.login.SearchUnivFragment"
-        android:label="대학교 검색">
-        <action
-            android:id="@+id/action_searchUnivFragment_to_searchCollegeFragment"
-            app:destination="@id/searchCollegeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchCollegeFragment"
-        android:name="org.softwaremaestro.presenter.login.SearchCollegeFragment"
-        android:label="단과대학 검색"
-        tools:layout="@layout/fragment_search_college">
-        <action
-            android:id="@+id/action_searchCollegeFragment_to_searchMajorFragment"
-            app:destination="@id/searchMajorFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchMajorFragment"
-        android:name="org.softwaremaestro.presenter.login.SearchMajorFragment"
-        android:label="전공 선택"
-        tools:layout="@layout/fragment_search_major">
-        <action
-            android:id="@+id/action_searchMajorFragment_to_searchYearOfAdmissionFragment"
-            app:destination="@id/searchYearOfAdmissionFragment"
-            app:popUpTo="@id/registerTeacherInfoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchYearOfAdmissionFragment"
-        android:name="org.softwaremaestro.presenter.login.SearchYearOfAdmissionFragment"
-        android:label="학번 입력"
-        tools:layout="@layout/fragment_search_year_of_admission">
-        <action
-            android:id="@+id/action_searchYearOfAdmissionFragment_to_registerTeacherInfoFragment"
-            app:destination="@id/registerTeacherInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/univAuthFragment"
         android:name="org.softwaremaestro.presenter.login.UnivAuthFragment"
         android:label="학교 인증"
-        tools:layout="@layout/fragment_univ_auth" />
+        tools:layout="@layout/fragment_univ_auth">
+        <action
+            android:id="@+id/action_univAuthFragment_to_completeTeacherProfileFragment"
+            app:destination="@id/completeTeacherProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/completeStudentProfileFragment"
         android:name="org.softwaremaestro.presenter.login.CompleteStudentProfileFragment"
@@ -108,6 +64,17 @@
         tools:layout="@layout/fragment_complete_student_profile">
         <action
             android:id="@+id/action_completeStudentProfileFragment_to_loginFrament"
+            app:destination="@id/loginFrament"
+            app:popUpTo="@id/loginFrament"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/completeTeacherProfileFragment"
+        android:name="org.softwaremaestro.presenter.login.CompleteTeacherProfileFragment"
+        android:label="fragment_complete_teacher_profile"
+        tools:layout="@layout/fragment_complete_teacher_profile">
+        <action
+            android:id="@+id/action_completeTeacherProfileFragment_to_loginFrament"
             app:destination="@id/loginFrament"
             app:popUpTo="@id/loginFrament"
             app:popUpToInclusive="true" />

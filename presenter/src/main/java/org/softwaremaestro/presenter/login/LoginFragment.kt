@@ -49,8 +49,8 @@ class LoginFragment @Inject constructor() :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setObserver()
         super.onViewCreated(view, savedInstanceState)
+        setObserver()
     }
 
     override fun onStop() {

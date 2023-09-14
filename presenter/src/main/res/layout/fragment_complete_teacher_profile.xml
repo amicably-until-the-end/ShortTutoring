@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".login.CompleteStudentProfileFragment">
+    tools:context=".login.CompleteTeacherProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_toolbar"
@@ -36,7 +35,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
-        android:text="학생 프로필을 완성해주세요"
+        android:text="선생님 프로필을 완성해주세요"
         android:textColor="@color/black"
         android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -49,14 +48,14 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/pretendard_medium"
-        android:text="선생님에게 보이는 프로필은 아래와 같아요"
+        android:text="학생에게 보이는 프로필은 아래와 같아요"
         android:textColor="@color/sub_text_grey"
         android:textSize="13dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_main_question" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_student_profile"
+        android:id="@+id/cv_teacher_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="70dp"
@@ -75,21 +74,21 @@
             android:paddingVertical="24dp">
 
             <FrameLayout
-                android:id="@+id/container_student_img"
+                android:id="@+id/container_teacher_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_student_img"
+                    android:id="@+id/cv_teacher_img"
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     app:cardCornerRadius="100dp"
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:id="@+id/iv_student_img"
+                        android:id="@+id/iv_teacher_img"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/light_grey" />
@@ -111,7 +110,7 @@
                 android:layout_marginLeft="15dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/container_student_img"
+                app:layout_constraintLeft_toRightOf="@id/container_teacher_img"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -126,19 +125,45 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pretendard_bold"
                         android:textColor="@color/sub_text_grey"
-                        android:textSize="22sp"
-                        tools:text="학생 닉네임" />
+                        android:textSize="20sp"
+                        tools:text="선생님 닉네임" />
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="6dp"
+                        android:background="@drawable/ic_star" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="5.0" />
+
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_profile_student_grade"
+                    android:id="@+id/tv_profile_teacher_univ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:textColor="@color/primary_blue"
                     android:textSize="13sp"
-                    tools:text="고등학교 2학년" />
+                    tools:text="서울대학교 의예과" />
+
+                <TextView
+                    android:id="@+id/tv_profile_teacher_bio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    tools:text="모든 학생들이 깨달음을 얻을 수 있도록!" />
 
             </LinearLayout>
 
@@ -150,7 +175,7 @@
                 android:background="@drawable/bg_radius_5_grad_blue"
                 android:fontFamily="@font/pretendard_medium"
                 android:gravity="center"
-                android:text="찜한 선생님 13명"
+                android:text="찜한 학생 563명"
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -180,7 +205,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_medium"
-                    android:text=" 2개"
+                    android:text=" 23개"
                     android:textColor="@color/alert_red"
                     android:textSize="13sp" />
 
@@ -191,7 +216,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/tv_student_name"
+        android:id="@+id/tv_teacher_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
@@ -201,10 +226,10 @@
         android:textColor="@color/sub_text_grey"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_student_profile" />
+        app:layout_constraintTop_toBottomOf="@id/cv_teacher_profile" />
 
     <LinearLayout
-        android:id="@+id/container_student_name"
+        android:id="@+id/container_teacher_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="70dp"
@@ -212,7 +237,7 @@
         android:background="@drawable/bg_radius_10_background_grey"
         android:gravity="center_vertical"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_student_name">
+        app:layout_constraintTop_toBottomOf="@id/tv_teacher_name">
 
         <EditText
             android:id="@+id/et_student_name"
@@ -221,7 +246,45 @@
             android:layout_marginLeft="15dp"
             android:background="@null"
             android:fontFamily="@font/pretendard_medium"
-            android:hint="학생 닉네임"
+            android:hint="선생님 닉네임"
+            android:textColor="@color/black"
+            android:textColorHint="@color/sub_text_grey"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_teacher_bio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="한줄 소개"
+        android:textColor="@color/sub_text_grey"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_teacher_name" />
+
+    <LinearLayout
+        android:id="@+id/container_teacher_bio"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_radius_10_background_grey"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_teacher_bio">
+
+        <EditText
+            android:id="@+id/et_teacher_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:background="@null"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="모든 학생들이 깨달음을 얻을 수 있도록!"
             android:textColor="@color/black"
             android:textColorHint="@color/sub_text_grey"
             android:textSize="14sp" />

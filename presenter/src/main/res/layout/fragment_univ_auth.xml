@@ -137,6 +137,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_radius_10_background_grey"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -146,9 +147,9 @@
                 android:layout_marginLeft="15dp"
                 android:background="@null"
                 android:fontFamily="@font/pretendard_medium"
+                android:text="skku.edu"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                tools:text="skku.edu" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -186,6 +187,7 @@
         android:layout_marginHorizontal="70dp"
         android:layout_marginTop="12dp"
         android:layout_weight="1"
+        android:background="@drawable/bg_radius_10_background_grey"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
