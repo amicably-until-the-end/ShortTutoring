@@ -86,6 +86,7 @@
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:padding="16dp"
+        android:stateListAnimator="@null"
         android:text="선택하기"
         android:textColor="@color/sub_text_grey"
         android:textSize="14dp"

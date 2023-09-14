@@ -30,7 +30,11 @@
         android:id="@+id/registerStudentInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterStudentInfoFragment"
         android:label="정보 입력"
-        tools:layout="@layout/fragment_register_student_info"></fragment>
+        tools:layout="@layout/fragment_register_student_info">
+        <action
+            android:id="@+id/action_registerStudentInfoFragment_to_completeStudentProfileFragment"
+            app:destination="@id/completeStudentProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/registerTeacherInfoFragment"
         android:name="org.softwaremaestro.presenter.login.RegisterTeacherInfoFragment"
@@ -97,4 +101,15 @@
         android:name="org.softwaremaestro.presenter.login.EmailCheckFragment"
         android:label="학교 이메일 인증"
         tools:layout="@layout/fragment_email_check" />
+    <fragment
+        android:id="@+id/completeStudentProfileFragment"
+        android:name="org.softwaremaestro.presenter.login.CompleteStudentProfileFragment"
+        android:label="fragment_complete_student_profile"
+        tools:layout="@layout/fragment_complete_student_profile">
+        <action
+            android:id="@+id/action_completeStudentProfileFragment_to_loginFrament"
+            app:destination="@id/loginFrament"
+            app:popUpTo="@id/loginFrament"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

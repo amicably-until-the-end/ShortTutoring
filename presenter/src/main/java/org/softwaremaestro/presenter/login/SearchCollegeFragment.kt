@@ -15,7 +15,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchCollegeBinding
 import org.softwaremaestro.presenter.login.adapter.SearchAdapter
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.util.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
 
 const val SELECTED_COLLEGE = "selected-college"
 private const val IME_ACTION = EditorInfo.IME_ACTION_NEXT
@@ -47,7 +47,7 @@ class SearchCollegeFragment : Fragment() {
         Log.d("mymymy", "share viewmodel ${viewModel.univ}")
 
         // 자동으로 대학 텍스트필드에 포커스가 가게 한다
-        requestFocusAndShowKeyboard(binding.atvCollege, requireContext())
+        showKeyboardAndRequestFocus(binding.atvCollege)
     }
 
     private fun setAdapter(view: AutoCompleteTextView) {

@@ -14,7 +14,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentSearchMajorBinding
 import org.softwaremaestro.presenter.login.adapter.SearchAdapter
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.util.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
 
 const val SELECTED_MAJOR = "selected-major"
 private const val IME_ACTION = IME_ACTION_NEXT
@@ -43,7 +43,7 @@ class SearchMajorFragment : Fragment() {
         setAdapter(binding.atvMajor)
 
         // 자동으로 전공 텍스트필드에 포커스가 가게 한다
-        requestFocusAndShowKeyboard(binding.atvMajor, requireContext())
+        showKeyboardAndRequestFocus(binding.atvMajor)
     }
 
     private fun setAdapter(view: AutoCompleteTextView) {

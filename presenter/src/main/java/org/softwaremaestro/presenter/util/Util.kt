@@ -136,12 +136,18 @@ fun Bitmap.toBase64(): String {
     return "data:image/png;base64,$data"
 }
 
-fun requestFocusAndShowKeyboard(view: View, context: Context) {
+fun showKeyboardAndRequestFocus(view: View) {
     view.requestFocus()
-
     val imm: InputMethodManager =
-        context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+        view.context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.showSoftInput(view, 0)
+}
+
+fun hideKeyboardAndRemoveFocus(view: View) {
+    val imm =
+        view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
+    view.clearFocus()
 }
 
 fun RecyclerView.getVerticalSpaceDecoration(

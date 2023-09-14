@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentSearchYearOfAdmissionBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.util.requestFocusAndShowKeyboard
+import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
 
 const val SELECTED_YEAR_OF_ADMISSION = "selected-year-of-admission"
 private const val IME_ACTION = IME_ACTION_NEXT
@@ -37,7 +37,7 @@ class SearchYearOfAdmissionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 자동으로 학번 텍스트필드에 포커스가 가게 한다
-        requestFocusAndShowKeyboard(binding.atvYearOfAdmission, requireContext())
+        showKeyboardAndRequestFocus(binding.atvYearOfAdmission)
 
         // 다음 버튼을 누르면 선생님 정보 입력 페이지로 돌아간다
         setOnEditorActionLister(binding.atvYearOfAdmission)
