@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.UnivAuthFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_toolbar"
+        style="@style/ToolBar"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btn_toolbar_back"
+            style="@style/ToolBarBackButton" />
+
+        <TextView
+            style="@style/ToolBarTitle"
+            android:text="질문 올리기" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_blue"
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
+
+    <TextView
+        android:id="@+id/tv_univ_auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:paddingLeft="70dp"
+        android:text="학력 사항을 인증해주세요"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
+
+    <RadioGroup
+        android:id="@+id/rg_univ_auth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_univ_auth">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_rb_corner_radius"
+            android:button="@null"
+            android:checked="true"
+            android:fontFamily="@font/pretendard_medium"
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="8dp"
+            android:text="학교 메일로 인증하기"
+            android:textColor="@drawable/selector_rb_text_color"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/selector_rb_corner_radius"
+            android:button="@null"
+            android:checked="false"
+            android:fontFamily="@font/pretendard_medium"
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="8dp"
+            android:text="학생증으로 인증하기"
+            android:textColor="@drawable/selector_rb_text_color"
+            android:textSize="14sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_univ_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="학교 메일"
+        android:textColor="@color/sub_text_grey"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rg_univ_auth" />
+
+    <LinearLayout
+        android:id="@+id/container_univ_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="70dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_univ_mail">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_radius_10_background_grey"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_univ_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@null"
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="학교 메일 입력"
+                android:imeOptions="actionDone"
+                android:textColor="@color/black"
+                android:textColorHint="@color/sub_text_grey"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:text=" @ "
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@null"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="skku.edu" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_send_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="28dp"
+            android:background="@color/background_grey"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:paddingHorizontal="36dp"
+            android:text="인증 메일 받기"
+            android:textColor="@color/sub_text_grey"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_auth_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="인증번호"
+        android:textColor="@color/sub_text_grey"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_univ_mail" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="70dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_auth_code">
+
+        <EditText
+            android:id="@+id/et_auth_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:background="@null"
+            android:fontFamily="@font/pretendard_medium"
+            android:hint="인증번호 입력"
+            android:imeOptions="actionDone"
+            android:textColor="@color/black"
+            android:textColorHint="@color/sub_text_grey"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/bg_radius_10_background_grey"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:padding="16dp"
+        android:stateListAnimator="@null"
+        android:text="인증하기"
+        android:textColor="@color/sub_text_grey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

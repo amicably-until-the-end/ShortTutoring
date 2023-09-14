@@ -19,6 +19,7 @@
         <TextView
             style="@style/ToolBarTitle"
             android:text="질문 올리기" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.divider.MaterialDivider

@@ -125,6 +125,7 @@
                     android:fontFamily="@font/pretendard_medium"
                     android:hint="학과 입력"
                     android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/sub_text_grey"
                     android:textSize="14sp" />

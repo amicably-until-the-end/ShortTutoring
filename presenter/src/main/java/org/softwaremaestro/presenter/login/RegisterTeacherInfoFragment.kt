@@ -73,7 +73,7 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     private fun setNextButton() {
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_emailCheckFragment)
+            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_univAuthFragment)
         }
     }
 
