@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login.viewmodel
+package org.softwaremaestro.presenter.teacher_search.login.viewmodel
 
 import android.content.Context
 import android.util.Log

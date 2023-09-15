@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import org.softwaremaestro.presenter.databinding.DialogDetailAlertBinding
 
-class DetailAlertDialog(private val onConfirmClick: () -> Unit) : DialogFragment() {
+class DetailAlertDialog(
+    private val title: String,
+    private val description: String,
+    private val onConfirmClick: () -> Unit
+) : DialogFragment() {
 
     private lateinit var binding: DialogDetailAlertBinding
-
-    private var title: String? = null
-    private var description: String? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,29 +21,23 @@ class DetailAlertDialog(private val onConfirmClick: () -> Unit) : DialogFragment
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogDetailAlertBinding.inflate(layoutInflater)
-
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        binding.btnConfirm.setOnClickListener {
-            //on click()
-            onConfirmClick()
-            dismiss()
-        }
-        binding.btnCancel.setOnClickListener {
-            dismiss()
-        }
-        if (!title.isNullOrEmpty()) binding.tvTitle.text = title
-        if (!description.isNullOrEmpty()) binding.tvDesciption.text = description
-
         return binding.root
     }
 
-    fun setTitle(title: String) {
-        this.title = title
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    fun setDescription(desc: String) {
-        this.description = desc
-    }
+        binding.btnConfirm.setOnClickListener {
+            onConfirmClick()
+            dismiss()
+        }
 
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
+
+        binding.tvTitle.text = title
+        binding.tvDesciption.text = description
+    }
 }
