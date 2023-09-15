@@ -1,12 +1,10 @@
 package org.softwaremaestro.presenter.util.widget.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemTimeRangePickerItemBinding
-import java.sql.Time
 
 class TimeRangePickerAdapter(
     private val minuteInterval: Int,
@@ -66,46 +64,60 @@ class TimeRangePickerAdapter(
     inner class ViewHolder(private val binding: ItemTimeRangePickerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        lateinit var dateItem: TimeItem
+        private lateinit var mItem: TimeItem
+        private lateinit var mBinding: ItemTimeRangePickerItemBinding
 
         fun onBind(item: TimeItem) {
-            binding.apply {
-                if (item.minute % (minuteInterval * 3) == 0) {
-                    tvTimeTag.text = "${item.hour}:${String.format("%02d", item.minute)}"
-                    divierLarge.visibility = ViewGroup.VISIBLE
-                    divierSmall.visibility = ViewGroup.GONE
+
+            mItem = item
+            mBinding = binding
+
+            setVisibility()
+            setColor()
+            setBtnSelect()
+        }
+
+        private fun setVisibility() {
+            with(mBinding) {
+                if (mItem.minute % (minuteInterval * 3) == 0) {
+                    tvTimeTag.text = "${mItem.hour}:${mItem.minute.toString().format("%02d")}"
+                    dividerLarge.visibility = ViewGroup.VISIBLE
+                    dividerSmall.visibility = ViewGroup.GONE
                 } else {
                     tvTimeTag.text = ""
-                    divierLarge.visibility = ViewGroup.GONE
-                    divierSmall.visibility = ViewGroup.VISIBLE
+                    dividerLarge.visibility = ViewGroup.GONE
+                    dividerSmall.visibility = ViewGroup.VISIBLE
                 }
-                if ((rangeStart?.equals(item) == true) && rangeEnd == null) {
+            }
+        }
+
+        private fun setColor() {
+            with(mBinding) {
+                if ((rangeStart?.equals(mItem) == true) && rangeEnd == null) {
                     btnSelect.background = root.context.getDrawable(R.color.secondary_blue)
-                } else if (rangeEnd != null && (item >= rangeStart!! && item <= rangeEnd!!)) {
+                } else if (rangeEnd != null && (mItem >= rangeStart!! && mItem <= rangeEnd!!)) {
                     btnSelect.background =
                         root.context.getDrawable(R.color.primary_blue)
                 } else {
                     btnSelect.background = root.context.getDrawable(R.color.background_grey)
                 }
-
-                btnSelect.setOnClickListener {
-                    if (rangeStart == null || rangeStart!! > item) {
-                        rangeStart = item
-                        rangeEnd = null
-                    } else if (rangeEnd == null && item > rangeStart!!) {
-                        rangeEnd = item
-                        onRangeChange(rangeStart!!, rangeEnd!!)
-                    } else {
-                        rangeStart = item
-                        rangeEnd = null
-                    }
-                    Log.d("TimeRangePickerAdapter", "rangeStart: $rangeStart, rangeEnd: $rangeEnd")
-                    notifyDataSetChanged()
-                }
-
             }
+        }
 
-            dateItem = item
+        private fun setBtnSelect() {
+            mBinding.btnSelect.setOnClickListener {
+                if (rangeStart == null || rangeStart!! > mItem) {
+                    rangeStart = mItem
+                    rangeEnd = null
+                } else if (rangeEnd == null && mItem > rangeStart!!) {
+                    rangeEnd = mItem
+                    onRangeChange(rangeStart!!, rangeEnd!!)
+                } else {
+                    rangeStart = mItem
+                    rangeEnd = null
+                }
+                notifyDataSetChanged()
+            }
         }
     }
 
