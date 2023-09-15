@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.util.widget.adapter
+package org.softwaremaestro.presenter.util.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -36,7 +36,7 @@ class TimeRangePickerAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TimeRangePickerAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemTimeRangePickerItemBinding.inflate(
                 LayoutInflater.from(parent.context),

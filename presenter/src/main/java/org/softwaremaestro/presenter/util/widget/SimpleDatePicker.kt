@@ -9,8 +9,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.widget.adapter.CalendarDateAdapter
 import org.softwaremaestro.presenter.databinding.WidgetSimpleDatePickerBinding
+import org.softwaremaestro.presenter.util.adapter.CalendarDateAdapter
 import java.time.LocalDate
 
 class SimpleDatePicker(context: Context, attrs: AttributeSet?) :

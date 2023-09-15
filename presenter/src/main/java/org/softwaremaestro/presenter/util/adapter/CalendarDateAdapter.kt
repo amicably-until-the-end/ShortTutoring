@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.util.widget.adapter
+package org.softwaremaestro.presenter.util.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,6 @@ import org.softwaremaestro.presenter.databinding.ItemCalendarDayBinding
 import java.lang.Integer.max
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalTime
 
 class CalendarDateAdapter(
     private val recyclerView: RecyclerView,
@@ -21,7 +20,7 @@ class CalendarDateAdapter(
 
     private var lastShowedItemPosition: Int = 0
 
-    var selectedHolder: CalendarDateAdapter.ViewHolder? = null
+    var selectedHolder: ViewHolder? = null
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -41,7 +40,7 @@ class CalendarDateAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CalendarDateAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemCalendarDayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
@@ -99,7 +98,7 @@ class CalendarDateAdapter(
 
     }
 
-    override fun onBindViewHolder(holder: CalendarDateAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         lastShowedItemPosition = max(lastShowedItemPosition, position)
         holder.onBind(items[position])
     }

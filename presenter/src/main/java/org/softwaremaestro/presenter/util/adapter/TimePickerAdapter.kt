@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.util.widget.adapter
+package org.softwaremaestro.presenter.util.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -21,7 +21,7 @@ class TimePickerAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TimePickerAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemTimeRangePickerItemBinding.inflate(
                 LayoutInflater.from(parent.context),
