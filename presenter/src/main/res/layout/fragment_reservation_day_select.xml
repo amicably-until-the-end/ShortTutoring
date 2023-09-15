@@ -72,7 +72,7 @@
             app:strokeColor="@color/bright_grey"
             app:strokeWidth="1dp">
 
-            <org.softwaremaestro.presenter.util.widget.TimeRangePicker
+            <org.softwaremaestro.presenter.util.widget.TimePicker
                 android:id="@+id/trp_tutoring_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="IntervalTimePicker">
-        <attr name="timeInterval" format="integer" />
-    </declare-styleable>
     <declare-styleable name="SimpleDatePicker">
         <attr name="isSelect" format="reference|string" />
     </declare-styleable>

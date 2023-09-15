@@ -28,19 +28,19 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <LinearLayout
-        android:id="@+id/divier_large"
+        android:id="@+id/divider_large"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/light_grey"
+        android:background="#CFD1D8"
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <LinearLayout
-        android:id="@+id/divier_small"
+        android:id="@+id/divider_small"
         android:layout_width="1dp"
         android:layout_height="16dp"
-        android:background="@color/light_grey"
+        android:background="#CFD1D8"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />

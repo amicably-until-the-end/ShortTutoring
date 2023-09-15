@@ -51,15 +51,13 @@ class TeacherMyPageFragment : Fragment() {
         initReviewRecyclerView()
         initLectureRecyclerView()
 
-        binding.btnFollow.setOnClickListener {
-            toggleFollowing()
-        }
+        setBtnFollow()
+        setTvSettingTimeAndCost()
 
-        setOnClickListenerToTvReview()
+        setTvReview()
+        setTvClip()
 
-        setOnClickListenerToTvClip()
-
-        setActionToFollowerMenu()
+        setFollowerMenu()
     }
 
     private fun setProfile() {
@@ -126,6 +124,12 @@ class TeacherMyPageFragment : Fragment() {
         lecturesViewModel.getLectures()
     }
 
+    private fun setBtnFollow() {
+        binding.btnFollow.setOnClickListener {
+            toggleFollowing()
+        }
+    }
+
     private fun toggleFollowing() {
         following = !following
 
@@ -138,7 +142,13 @@ class TeacherMyPageFragment : Fragment() {
         }
     }
 
-    private fun setOnClickListenerToTvReview() {
+    private fun setTvSettingTimeAndCost() {
+        binding.containerSettingTimeAndCost.setOnClickListener {
+            startActivity(Intent(requireContext(), SettingTimeAndCostActivity::class.java))
+        }
+    }
+
+    private fun setTvReview() {
         binding.tvReview.setOnClickListener {
             with(binding) {
                 containerReview.visibility = View.VISIBLE
@@ -152,7 +162,7 @@ class TeacherMyPageFragment : Fragment() {
         }
     }
 
-    private fun setOnClickListenerToTvClip() {
+    private fun setTvClip() {
         binding.tvClip.setOnClickListener {
             with(binding) {
                 containerReview.visibility = View.GONE
@@ -166,7 +176,7 @@ class TeacherMyPageFragment : Fragment() {
         }
     }
 
-    private fun setActionToFollowerMenu() {
+    private fun setFollowerMenu() {
         binding.containerFollower.setOnClickListener {
             startActivity(Intent(requireActivity(), FollowerActivity::class.java))
         }
