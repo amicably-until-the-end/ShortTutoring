@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -51,7 +52,9 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherAdapter
-    private lateinit var bottomSheetDialog: BottomSheetDialog
+
+    private lateinit var dialogQuestionType: BottomSheetDialog
+    private lateinit var dialogTeacherProfile: BottomSheetDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +65,9 @@ class StudentHomeFragment : Fragment() {
 
         myProfileViewModel.getMyProfile()
 
-        initBottomSheetDialog()
+        initDialogQuestionType()
+        initDialogTeacherProfile()
+
         setQuestionButton()
         setTeacherFollowingRecyclerView()
         setOthersQuestionRecyclerView()
@@ -84,18 +89,18 @@ class StudentHomeFragment : Fragment() {
         return
     }
 
-    private fun initBottomSheetDialog() {
+    private fun initDialogQuestionType() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_question_type, null).apply {
             findViewById<Button>(R.id.btn_new_question).setOnClickListener {
                 startActivity(Intent(requireContext(), QuestionUploadActivity::class.java))
-                bottomSheetDialog.dismiss()
+                dialogQuestionType.dismiss()
             }
             findViewById<Button>(R.id.btn_re_question).setOnClickListener {
                 Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
-                bottomSheetDialog.dismiss()
+                dialogQuestionType.dismiss()
             }
         }
-        bottomSheetDialog = BottomSheetDialog(requireContext()).apply {
+        dialogQuestionType = BottomSheetDialog(requireContext()).apply {
             setContentView(dialogView)
         }
     }
@@ -118,15 +123,13 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherRecyclerView() {
 
         teacherAdapter = TeacherAdapter {
-            val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
-            findNavController().navigate(action)
+            dialogTeacherProfile.show()
         }
 
         binding.rvTeacher.apply {
             adapter = teacherAdapter
             layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
@@ -141,9 +144,24 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun initDialogTeacherProfile() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_teacher_profile, null).apply {
+            findViewById<Button>(R.id.btn_follow).setOnClickListener {
+
+            }
+
+            findViewById<LinearLayout>(R.id.container_reserve).setOnClickListener {
+
+            }
+        }
+        dialogTeacherProfile = BottomSheetDialog(requireContext()).apply {
+            setContentView(dialogView)
+        }
+    }
+
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
-            bottomSheetDialog.show()
+            dialogQuestionType.show()
         }
     }
 
@@ -215,6 +233,7 @@ class StudentHomeFragment : Fragment() {
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                     "강해린",
                     "1",
+                    "풀 수 없는 문제는 없다.",
                     35,
                     "성균관대학교",
                     4.9f
@@ -226,6 +245,7 @@ class StudentHomeFragment : Fragment() {
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                         "팜하니",
                         "1",
+                        "풀 수 없는 문제는 없다.",
                         31,
                         "피식대학교",
                         4.8f

@@ -186,13 +186,13 @@
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_follow"
-                            android:layout_width="150dp"
+                            android:layout_width="120dp"
                             android:layout_height="40dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/bg_radius_5_grad_blue"
                             android:fontFamily="@font/pretendard_medium"
                             android:gravity="center"
-                            android:text="나를 찜한 학생 0명"
+                            android:text="찜한 학생 0명"
                             android:textColor="@color/white"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -201,7 +201,7 @@
 
                         <LinearLayout
                             android:id="@+id/container_reserve"
-                            android:layout_width="150dp"
+                            android:layout_width="120dp"
                             android:layout_height="40dp"
                             android:background="@drawable/bg_radius_5_stroke_blue"
                             android:gravity="center"
@@ -214,7 +214,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/pretendard_medium"
-                                android:text="받은 예약 질문"
+                                android:text="예약 질문"
                                 android:textColor="@color/black"
                                 android:textSize="13sp" />
 
@@ -476,7 +476,7 @@
                         android:id="@+id/iv_heart"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/ic_heart"
+                        android:background="@drawable/ic_heart_empty"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
