@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login
+package org.softwaremaestro.presenter.teacher_search.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
-import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.teacher_search.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor

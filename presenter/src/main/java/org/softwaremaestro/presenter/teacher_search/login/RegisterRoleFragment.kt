@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login
+package org.softwaremaestro.presenter.teacher_search.login
 
 import android.os.Bundle
 import android.view.LayoutInflater

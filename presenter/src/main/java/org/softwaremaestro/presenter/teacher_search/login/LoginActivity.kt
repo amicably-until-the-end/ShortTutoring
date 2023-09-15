@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.login
+package org.softwaremaestro.presenter.teacher_search.login
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
