@@ -38,8 +38,8 @@
         tools:layout="@layout/fragment_teacher_select"></fragment>
     <fragment
         android:id="@+id/daySelectFragment"
-        android:name="org.softwaremaestro.presenter.question_upload.DaySelectFragment"
+        android:name="org.softwaremaestro.presenter.question_reserve.ReservationFormFragment"
         android:label="fragment_reservation_day_select"
-        tools:layout="@layout/fragment_reservation_day_select" />
+        tools:layout="@layout/fragment_reservation_form" />
 
 </navigation>

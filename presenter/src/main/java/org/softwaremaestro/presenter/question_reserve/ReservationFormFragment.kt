@@ -1,25 +1,24 @@
-package org.softwaremaestro.presenter.question_upload
+package org.softwaremaestro.presenter.question_reserve
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.FragmentReservationDaySelectBinding
+import androidx.fragment.app.Fragment
+import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
 
 
-class DaySelectFragment : Fragment() {
+class ReservationFormFragment : Fragment() {
 
-    private lateinit var binding: FragmentReservationDaySelectBinding
+    private lateinit var binding: FragmentReservationFormBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentReservationDaySelectBinding.inflate(layoutInflater)
+        binding = FragmentReservationFormBinding.inflate(layoutInflater)
 
         setDatePicker()
 
@@ -27,7 +26,7 @@ class DaySelectFragment : Fragment() {
     }
 
     private fun setDatePicker() {
-        binding.datePicker.setOnRangeSelectListener() { year, month, day ->
+        binding.dpQuestionReserve.setOnRangeSelectListener() { year, month, day ->
             Toast.makeText(requireContext(), "$year-$month-$day", Toast.LENGTH_SHORT).show()
         }
     }

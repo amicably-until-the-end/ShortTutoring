@@ -21,6 +21,7 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.question_reserve.QuestionReserveActivity
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
@@ -151,7 +152,7 @@ class StudentHomeFragment : Fragment() {
             }
 
             findViewById<LinearLayout>(R.id.container_reserve).setOnClickListener {
-
+                startActivity(Intent(requireActivity(), QuestionReserveActivity::class.java))
             }
         }
         dialogTeacherProfile = BottomSheetDialog(requireContext()).apply {
