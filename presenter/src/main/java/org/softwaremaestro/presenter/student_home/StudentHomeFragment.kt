@@ -265,7 +265,10 @@ class StudentHomeFragment : Fragment() {
                 QUESTION_UPLOAD_RESULT -> {
                     val questionId =
                         data?.getStringExtra(QuestionFormFragment.QUESTION_UPLOAD_RESULT)
-                    // TODO : 채팅 탭으로 이동
+                    (activity as StudentHomeActivity).apply {
+                        
+                        moveToChatTab()
+                    }
                 }
             }
         }

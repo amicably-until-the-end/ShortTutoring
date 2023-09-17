@@ -52,6 +52,7 @@ class QuestionCameraFragment : Fragment() {
         setShutterListener()
         setPreviewRecyclerView()
         setNextButton()
+        setCloseBtn()
 
         return binding.root
     }
@@ -103,6 +104,14 @@ class QuestionCameraFragment : Fragment() {
             adapter = previewAdapter
         }
 
+    }
+
+    private fun setCloseBtn() {
+        binding.btnClose.setOnClickListener {
+            if (!findNavController().popBackStack()) {
+                activity?.finish()
+            }
+        }
     }
 
     private fun navigateToQuestionForm() {
