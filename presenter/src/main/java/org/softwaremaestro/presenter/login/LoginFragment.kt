@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_search.login
+package org.softwaremaestro.presenter.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
-import org.softwaremaestro.presenter.teacher_search.login.viewmodel.LoginViewModel
+import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import javax.inject.Inject

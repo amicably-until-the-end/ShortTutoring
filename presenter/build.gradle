@@ -107,5 +107,13 @@ dependencies {
     // email check
     implementation 'com.github.in-seo:univcert:master-SNAPSHOT'
 
+    //Socket IO
+    implementation('io.socket:socket.io-client:2.1.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
+
 }
 

@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_search.login
+package org.softwaremaestro.presenter.login
 
 import android.os.Bundle
 import android.text.Editable
@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentUnivAuthBinding
-import org.softwaremaestro.presenter.teacher_search.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 
 @AndroidEntryPoint

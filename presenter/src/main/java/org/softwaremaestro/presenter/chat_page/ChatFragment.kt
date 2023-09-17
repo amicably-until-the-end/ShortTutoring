@@ -7,8 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.QuestionInfoVO
+import org.softwaremaestro.domain.chat.entity.StudentInfoVO
+import org.softwaremaestro.domain.chat.entity.TeacherInfoVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
@@ -16,13 +22,16 @@ import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.util.UIState
 
 
+@AndroidEntryPoint
 abstract class ChatFragment : Fragment() {
 
     protected lateinit var binding: FragmentChatPageBinding
-    private lateinit var applyAdapter: ChatRoomListAdapter
+    private lateinit var proposedAdapter: ChatRoomListAdapter
     private lateinit var reservedAdapter: ChatRoomListAdapter
     private lateinit var messageListAdapter: MessageListAdapter
     private lateinit var offeringTeacherAdapter: ChatRoomListAdapter
@@ -34,6 +43,8 @@ abstract class ChatFragment : Fragment() {
 
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
+    private val chatViewModel: ChatViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +53,7 @@ abstract class ChatFragment : Fragment() {
 
         binding = FragmentChatPageBinding.inflate(inflater, container, false)
 
-        setApplyRecyclerView()
+        setProposedRecyclerView()
         setReservedRecyclerView()
         setChatMsgRecyclerView()
         setQuestionTypeSelectToggle()
@@ -52,9 +63,93 @@ abstract class ChatFragment : Fragment() {
         setCloseOfferingTeacherButton()
         setChatRoomRightButton()
         makeAdapterList()
+        getNormalRoomList()
+        setSendMessageButton()
 
         return binding.root
 
+    }
+
+
+    private fun setSendMessageButton() {
+        binding.btnSendMessage.setOnClickListener {
+            chatViewModel.sendMessage(binding.etMessage.text.toString())
+        }
+    }
+
+    private fun getNormalRoomList() {
+        chatViewModel.getProposedNormalChatRoomList()
+        chatViewModel.getReservedNormalChatRoomList()
+    }
+
+    private fun getSelectedRoomList() {
+        chatViewModel.getProposedSelectedChatRoomList()
+        chatViewModel.getReservedSelectedChatRoomList()
+    }
+
+    private fun refreshProposedRoomList() {
+        if (binding.rbNormalQuestion.isChecked) {
+            chatViewModel.proposedNormalChatRoomList.value?.let {
+                when (chatViewModel.proposedNormalChatRoomList.value) {
+                    is UIState.Success -> {
+                        setProposedSectionItems(it._data!!)
+                    }
+
+                    else -> {}
+                }
+            }
+
+        } else {
+            chatViewModel.proposedSelectedChatRoomList.value?.let {
+                when (chatViewModel.proposedSelectedChatRoomList.value) {
+                    is UIState.Success -> {
+                        setProposedSectionItems(it._data!!)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun refreshReservedRoomList() {
+        if (binding.rbNormalQuestion.isChecked) {
+            chatViewModel.reservedNormalChatRoomList.value?.let {
+                when (chatViewModel.reservedNormalChatRoomList.value) {
+                    is UIState.Success -> {
+                        setReservedSectionItems(it._data!!)
+                    }
+
+                    else -> {}
+                }
+            }
+
+        } else {
+            chatViewModel.reservedSelectedChatRoomList.value?.let {
+                when (chatViewModel.reservedSelectedChatRoomList.value) {
+                    is UIState.Success -> {
+                        setReservedSectionItems(it._data!!)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun observeChatRoomList() {
+        chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
+            refreshProposedRoomList()
+        }
+        chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
+            refreshProposedRoomList()
+        }
+        chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
+            refreshReservedRoomList()
+        }
+        chatViewModel.reservedNormalChatRoomList.observe(viewLifecycleOwner) {
+            refreshReservedRoomList()
+        }
     }
 
     abstract fun onChatRightOptionButtonClick(): Unit
@@ -72,7 +167,7 @@ abstract class ChatFragment : Fragment() {
      */
     private fun makeAdapterList() {
         recyclerViewAdapters.apply {
-            add(applyAdapter)
+            add(proposedAdapter)
             add(reservedAdapter)
             add(messageListAdapter)
             add(offeringTeacherAdapter)
@@ -87,42 +182,19 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    private fun setApplyRecyclerView() {
+    private fun setProposedRecyclerView() {
 
-        applyAdapter = ChatRoomListAdapter(
+        proposedAdapter = ChatRoomListAdapter(
             onQuestionClick = onQuestionRoomClick,
             onTeacherClick = onTeacherRoomClick,
         )
         binding.rvApplyList.apply {
-            adapter = applyAdapter
+            adapter = proposedAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
         }
-        applyAdapter.setItem(
-            listOf(
-                ChatRoom(
-                    title = "강해린 쌤",
-                    roomType = 1,
-                    subTitle = "영어",
-                    id = "1",
-                    imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                    contentId = "d",
-                    newMessage = 0
-                ),
-                ChatRoom(
-                    title = "팜하니 쌤",
-                    roomType = 0,
-                    subTitle = "수학",
-                    id = "2",
-                    imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                    contentId = "d",
-                    newMessage = 0
-                )
-            )
-        )
-        applyAdapter.notifyDataSetChanged()
-        binding.tvApplyCount.text = applyAdapter.itemCount.toString()
+        binding.tvApplyCount.text = proposedAdapter.itemCount.toString()
     }
 
 
@@ -148,20 +220,17 @@ abstract class ChatFragment : Fragment() {
 
             when (checkId) {
                 R.id.rb_normal_question -> {
-                    setApplySectionItems(applyList)
-                    setReservedSectionItems(reservList)
+                    getNormalRoomList()
                 }
 
                 R.id.rb_selected_question -> {
-                    //TODO : GET SELECTED QUESTION LIST FROM SERVER
-                    setApplySectionItems(applyList)
-                    setReservedSectionItems(reservList)
+                    getSelectedRoomList()
                 }
             }
         }
     }
 
-    private fun setReservedSectionItems(list: List<ChatRoom>) {
+    private fun setReservedSectionItems(list: List<ChatRoomVO>) {
         binding.apply {
             tvReservedCount.text = list.size.toString()
             reservedAdapter.setItem(list)
@@ -169,11 +238,11 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    private fun setApplySectionItems(list: List<ChatRoom>) {
+    private fun setProposedSectionItems(list: List<ChatRoomVO>) {
         binding.apply {
             tvApplyCount.text = list.size.toString()
-            applyAdapter.setItem(list)
-            applyAdapter.notifyDataSetChanged()
+            proposedAdapter.setItem(list)
+            proposedAdapter.notifyDataSetChanged()
         }
     }
 
@@ -200,56 +269,7 @@ abstract class ChatFragment : Fragment() {
             addItemDecoration(getVerticalSpaceDecoration(15, requireContext()))
         }
         messageListAdapter.setItem(
-            listOf(
-                ChatMsg(
-                    id = "1",
-                    myMsg = true,
-                    message = "첫번째 내가 보낸 텍스트 메시지",
-                    time = "오후 5:00",
-                    buttonNumber = 0,
-                    buttonString = null,
-                    type = MessageListAdapter.TYPE_TEXT,
-                    questionDesc = null,
-                    questionImageUrl = null,
-                    questionId = null
-                ),
-                ChatMsg(
-                    id = "2",
-                    myMsg = false,
-                    message = "첫번째 상대방이 보낸 텍스트 메시지",
-                    time = "오후 5:01",
-                    buttonNumber = 0,
-                    buttonString = null,
-                    type = MessageListAdapter.TYPE_TEXT,
-                    questionDesc = null,
-                    questionImageUrl = null,
-                    questionId = null
-                ),
-                ChatMsg(
-                    id = "3",
-                    myMsg = false,
-                    message = "두번째 내가 보낸 질문 메시지",
-                    time = "오후 5:02",
-                    buttonNumber = 0,
-                    buttonString = null,
-                    type = MessageListAdapter.TYPE_QUESTION,
-                    questionDesc = "아무리 봐도 모르는 문제입니다. 도와주세요",
-                    questionImageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                    questionId = "1234"
-                ),
-                ChatMsg(
-                    id = "4",
-                    myMsg = false,
-                    message = "두번째 상대방이 보낸 버튼 메시지",
-                    time = "오후 5:03",
-                    buttonNumber = 3,
-                    buttonString = listOf("예", "아니오", "모르겠어요"),
-                    type = MessageListAdapter.TYPE_BUTTONS,
-                    questionDesc = null,
-                    questionImageUrl = null,
-                    questionId = null
-                ),
-            )
+            chatSample
         )
         messageListAdapter.notifyDataSetChanged()
     }
@@ -266,8 +286,6 @@ abstract class ChatFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
         }
-        offeringTeacherAdapter.setItem(offerList)
-        offeringTeacherAdapter.notifyDataSetChanged()
     }
 
     private fun setApplyIconRecyclerView() {
@@ -321,17 +339,17 @@ abstract class ChatFragment : Fragment() {
     }
 
 
-    private fun setOfferingTeacherListItems(teacher: List<ChatRoom>) {
+    private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
         offeringTeacherAdapter.setItem(teacher)
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
-    private fun setReservedIconItems(items: List<ChatRoom>) {
+    private fun setReservedIconItems(items: List<ChatRoomVO>) {
         offeringTeacherAdapter.setItem(items)
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
-    private fun setApplyIconItems(items: List<ChatRoom>) {
+    private fun setProposedIconItems(items: List<ChatRoomVO>) {
         applyIconAdapter.setItem(items)
         applyIconAdapter.notifyDataSetChanged()
     }
@@ -340,9 +358,6 @@ abstract class ChatFragment : Fragment() {
     private val onQuestionRoomClick: (String, Int, RecyclerView.Adapter<*>) -> Unit =
         { questionId, position, caller ->
             setOfferingTeacherMode()
-            setOfferingTeacherListItems(offerList)
-            setApplyIconItems(applyList)
-            setReservedIconItems(reservList)
             clearRecyclersSelectedView(null)
             applyIconAdapter.setSelectedPosition(position)
         }
@@ -352,66 +367,58 @@ abstract class ChatFragment : Fragment() {
         }
 
     companion object {
-        val offerList = listOf(
-            ChatRoom(
-                title = "강해린 쌤",
-                roomType = 0,
-                subTitle = "오늘 13:00",
+        val chatSample = listOf(
+            ChatMsg(
                 id = "1",
-                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                contentId = "d",
-                newMessage = 0
+                myMsg = true,
+                message = "첫번째 내가 보낸 텍스트 메시지",
+                time = "오후 5:00",
+                buttonNumber = 0,
+                buttonString = null,
+                type = MessageListAdapter.TYPE_TEXT,
+                questionDesc = null,
+                questionImageUrl = null,
+                questionId = null
             ),
-            ChatRoom(
-                title = "팜하니 쌤",
-                roomType = 0,
-                subTitle = "오늘 15:00",
+            ChatMsg(
                 id = "2",
-                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                contentId = "d",
-                newMessage = 0
-            )
-        )
-        val applyList = listOf(
-            ChatRoom(
-                title = "강해린 쌤",
-                roomType = 1,
-                subTitle = "영어",
-                id = "1",
-                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                contentId = "d",
-                newMessage = 2
+                myMsg = false,
+                message = "첫번째 상대방이 보낸 텍스트 메시지",
+                time = "오후 5:01",
+                buttonNumber = 0,
+                buttonString = null,
+                type = MessageListAdapter.TYPE_TEXT,
+                questionDesc = null,
+                questionImageUrl = null,
+                questionId = null
             ),
-            ChatRoom(
-                title = "팜하니 쌤",
-                roomType = 0,
-                subTitle = "수학",
-                id = "2",
-                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                contentId = "d",
-                newMessage = 0
-            )
-        )
-        val reservList = listOf(
-            ChatRoom(
-                title = "강해린 쌤",
-                roomType = 0,
-                subTitle = "오늘 13:00",
-                id = "1",
-                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                contentId = "d",
-                newMessage = 3
+            ChatMsg(
+                id = "3",
+                myMsg = false,
+                message = "두번째 내가 보낸 질문 메시지",
+                time = "오후 5:02",
+                buttonNumber = 0,
+                buttonString = null,
+                type = MessageListAdapter.TYPE_QUESTION,
+                questionDesc = "아무리 봐도 모르는 문제입니다. 도와주세요",
+                questionImageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
+                questionId = "1234"
             ),
-            ChatRoom(
-                title = "팜하니 쌤",
-                roomType = 0,
-                subTitle = "오늘 15:00",
-                id = "2",
-                imageUrl = "https://chat.openai.com/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fa%2FAAcHTtcaPO8nwFeU42FJpHZ6N7jkBX4_T6ziRAhKpwDC7eM4iQ%3Ds96-c&w=96&q=75",
-                contentId = "d",
-                newMessage = 1
-            )
+            ChatMsg(
+                id = "4",
+                myMsg = false,
+                message = "두번째 상대방이 보낸 버튼 메시지",
+                time = "오후 5:03",
+                buttonNumber = 3,
+                buttonString = listOf("예", "아니오", "모르겠어요"),
+                type = MessageListAdapter.TYPE_BUTTONS,
+                questionDesc = null,
+                questionImageUrl = null,
+                questionId = null
+            ),
         )
+
+
     }
 
 
