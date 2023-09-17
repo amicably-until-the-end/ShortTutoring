@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -56,5 +57,11 @@ class StudentHomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    fun moveToChatTab() {
+        val chatItem = binding.bottomNavView.menu.findItem(R.id.studentChatFragment)
+        NavigationUI.onNavDestinationSelected(chatItem, navController)
+        //파라미터 넘기고 싶으면 navController navigate 직접 호출하고 바텀 네비게이션은 선택된 아이콘 직접 바꾸기
     }
 }
