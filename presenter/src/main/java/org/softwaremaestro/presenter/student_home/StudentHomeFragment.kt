@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.student_home
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -20,6 +21,7 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.question_upload.QuestionFormFragment
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
@@ -62,7 +64,6 @@ class StudentHomeFragment : Fragment() {
 
         myProfileViewModel.getMyProfile()
 
-        initBottomSheetDialog()
         setQuestionButton()
         setTeacherFollowingRecyclerView()
         setOthersQuestionRecyclerView()
@@ -84,27 +85,12 @@ class StudentHomeFragment : Fragment() {
         return
     }
 
-    private fun initBottomSheetDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_question_type, null).apply {
-            findViewById<Button>(R.id.btn_new_question).setOnClickListener {
-                startActivity(Intent(requireContext(), QuestionUploadActivity::class.java))
-                bottomSheetDialog.dismiss()
-            }
-            findViewById<Button>(R.id.btn_re_question).setOnClickListener {
-                Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
-                bottomSheetDialog.dismiss()
-            }
-        }
-        bottomSheetDialog = BottomSheetDialog(requireContext()).apply {
-            setContentView(dialogView)
-        }
-    }
-
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
-            val dialog = TeacherProfileDialog(it)
-            dialog.show(parentFragmentManager, "teacherProfile")
+            val action =
+                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment("it")
+            findNavController().navigate(action)
         }
 
         binding.rvTeacherFollowing.apply {
@@ -143,8 +129,13 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
-            bottomSheetDialog.show()
+            startQuestionUploadActivity()
         }
+    }
+
+    private fun startQuestionUploadActivity() {
+        val intent = Intent(requireContext(), QuestionUploadActivity::class.java)
+        startActivityForResult(intent, QUESTION_UPLOAD_RESULT)
     }
 
     private fun setToolBar() {
@@ -264,5 +255,23 @@ class StudentHomeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                QUESTION_UPLOAD_RESULT -> {
+                    val questionId =
+                        data?.getStringExtra(QuestionFormFragment.QUESTION_UPLOAD_RESULT)
+                    // TODO : 채팅 탭으로 이동
+                }
+            }
+        }
+    }
+
+    companion object {
+        val QUESTION_UPLOAD_RESULT = 1001
     }
 }

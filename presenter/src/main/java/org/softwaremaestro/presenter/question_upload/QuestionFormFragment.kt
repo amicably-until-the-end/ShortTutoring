@@ -1,12 +1,16 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -39,7 +43,7 @@ class QuestionFormFragment : Fragment() {
 
     //recyclerView adapters
     private lateinit var imageAdapter: FormImageAdapter
-    private lateinit var timeSelectAdapter: TimeSelectAdapter
+    private var timeSelectAdapter: TimeSelectAdapter? = null
 
 
     private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
@@ -77,7 +81,7 @@ class QuestionFormFragment : Fragment() {
      *  모든 내용이 입력되었으면 제출 버튼을 활성화한다
      */
     private fun checkAndEnableSubjectBtn() {
-        isAllValuesEntered().let {
+        isAllFieldsEntered().let {
             binding.btnSubmit.setEnabledAndChangeColor(it)
         }
     }
@@ -87,8 +91,8 @@ class QuestionFormFragment : Fragment() {
      */
     private fun setFields() {
         binding.etQuestionDesc.setText(viewModel.description.value)
-        binding.etQuestionDesc.setOnFocusChangeListener { _, hasFocus ->
-            viewModel._description.value = binding.etQuestionDesc.text.toString()
+        binding.etQuestionDesc.addTextChangedListener {
+            viewModel._description.value = it.toString()
         }
         binding.btnSchoolSelect.setOnClickListener {
             showSchoolSelectDialog()
@@ -100,6 +104,7 @@ class QuestionFormFragment : Fragment() {
                 showSubjectSelectDialog()
             }
         }
+        setAnswerNowToggleBtn()
     }
 
     private fun showSchoolSelectDialog() {
@@ -125,19 +130,10 @@ class QuestionFormFragment : Fragment() {
                 val selectedSchool = subjects[which]
                 viewModel._subject.value = selectedSchool
             }
-            .setTitle("구분")
+            .setTitle("교과 과정")
             .setPositiveButton("확인", null)
             .setNegativeButton("취소", null)
             .create().show()
-    }
-
-
-    private fun isAllValuesEntered(): Boolean {
-        return (
-                viewModel.images.value != null &&
-                        viewModel.description.value != null &&
-                        viewModel.school.value != null &&
-                        viewModel.subject.value != null)
     }
 
 
@@ -155,15 +151,14 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun setDesiredTimeRecyclerView() {
-
-
         var currentTime = System.currentTimeMillis()
         var hour: Int = SimpleDateFormat("HH").format(currentTime).toInt()
         var time: Int = SimpleDateFormat("mm").format(currentTime).toInt()
         timeSelectAdapter = TimeSelectAdapter() {
             val picker = TimePickerBottomDialog {
-                timeSelectAdapter.items.add(it)
-                timeSelectAdapter.notifyDataSetChanged()
+                timeSelectAdapter?.items?.add(it)
+                checkAndEnableSubjectBtn()
+                timeSelectAdapter?.notifyDataSetChanged()
             }.apply {
                 setTitle("희망 수업 시간을 선택해주세요")
             }
@@ -179,6 +174,11 @@ class QuestionFormFragment : Fragment() {
 
     }
 
+    private fun setAnswerNowToggleBtn() {
+        binding.toggleAnswerNow.setOnClickListener {
+            checkAndEnableSubjectBtn()
+        }
+    }
 
     private fun observeImages() {
         viewModel.images.observe(viewLifecycleOwner) {
@@ -214,17 +214,16 @@ class QuestionFormFragment : Fragment() {
 
                 is UIState.Success -> {
                     loadingDialog.dismiss()
-                    Toast.makeText(requireContext(), "질문 등록에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                    val bundle = bundleOf("questionId" to it.data.questionId)
-                    findNavController().navigate(
-                        R.id.action_questionFormFragment_to_teacherSelectFragment,
-                        bundle
-                    )
+                    val intent = Intent()
+                    intent.putExtra(QUESTION_UPLOAD_RESULT, it.data.questionId)
+                    activity?.setResult(Activity.RESULT_OK, intent)
+                    activity?.finish()
                 }
 
                 else -> {
                     loadingDialog.dismiss()
                     binding.btnSubmit.setEnabledAndChangeColor(true)
+                    Toast.makeText(requireContext(), "질문 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -249,21 +248,52 @@ class QuestionFormFragment : Fragment() {
     private fun setSubmitButton() {
         binding.btnSubmit.apply {
             setOnClickListener {
-                //버튼 여러번 눌러지는 거 방지
-                val questionUploadVO = QuestionUploadVO(
-                    images = viewModel.images.value!!.map { it.toBase64() },
-                    description = binding.etQuestionDesc.text.toString(),
-                    schoolLevel = binding.tvSchoolSelected.text.toString(),
-                    schoolSubject = binding.tvSubjectSelected.text.toString(),
-                    hopeImmediate = binding.toogleImmediate.isChecked,
-                    hopeTutoringTime = timeSelectAdapter.items.map {
-                        it.toString()
-                    },
-                    mainImageIndex = 0
-                )
-                viewModel.uploadQuestion(questionUploadVO)
+                if (isAllFieldsEntered()) {
+                    //버튼 여러번 눌러지는 거 방지
+                    val questionUploadVO = QuestionUploadVO(
+                        images = viewModel.images.value!!.map { it.toBase64() },
+                        description = binding.etQuestionDesc.text.toString(),
+                        schoolLevel = binding.tvSchoolSelected.text.toString(),
+                        schoolSubject = binding.tvSubjectSelected.text.toString(),
+                        hopeImmediate = binding.toggleAnswerNow.isChecked,
+                        hopeTutoringTime = timeSelectAdapter!!.items.map {
+                            it.toString()
+                        },
+                        mainImageIndex = 0
+                    )
+                    viewModel.uploadQuestion(questionUploadVO)
+                } else {
+                    alertEmptyField()
+                }
             }
-            setEnabledAndChangeColor(false)
+        }
+    }
+
+    private fun alertEmptyField() {
+        with(binding) {
+            if (viewModel.images.value.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "사진을 등록해주세요", Toast.LENGTH_SHORT).show()
+            } else if (etQuestionDesc.text.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "질문 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else if (tvSchoolSelected.text.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "학교를 선택해주세요", Toast.LENGTH_SHORT).show()
+            } else if (tvSubjectSelected.text.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "과목을 선택해주세요", Toast.LENGTH_SHORT).show()
+            } else if (!toggleAnswerNow.isChecked || timeSelectAdapter?.items.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "희망 답변 시간을 선택해주세요", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(requireContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun isAllFieldsEntered(): Boolean {
+        with(binding) {
+            return (viewModel.images.value != null &&
+                    etQuestionDesc.text != null && tvSchoolSelected.text != null
+                    && tvSubjectSelected.text != null && (
+                    toggleAnswerNow.isChecked || !timeSelectAdapter?.items.isNullOrEmpty()))
         }
     }
 
@@ -287,5 +317,9 @@ class QuestionFormFragment : Fragment() {
         } catch (e: Exception) {
             return
         }
+    }
+
+    companion object {
+        const val QUESTION_UPLOAD_RESULT = "questionUploadResult"
     }
 }

@@ -39,32 +39,29 @@ class QuestionCameraFragment : Fragment() {
     private var previewSelected = 0
 
 
-    //private var capturedFileName: String? = null;
-    var mCameraId = "0"
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         questionUploadActivity = context as QuestionUploadActivity
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getPermission()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentQuestionCameraBinding.inflate(inflater, container, false)
-        //setViewHolder()
         setShutterListener()
         setPreviewRecyclerView()
         setNextButton()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel._images.value?.let {
+            previewAdapter.items = it.toMutableList()
+            previewAdapter.notifyDataSetChanged()
+        }
     }
 
 
@@ -84,8 +81,10 @@ class QuestionCameraFragment : Fragment() {
 
     private fun setNextButton() {
         binding.btnNext.setOnClickListener {
-            viewModel._images.postValue(previewAdapter.items)
-            navigateToQuestionForm()
+            if (previewAdapter.items.size > 0) {
+                viewModel._images.postValue(previewAdapter.items)
+                navigateToQuestionForm()
+            }
         }
     }
 
@@ -108,35 +107,6 @@ class QuestionCameraFragment : Fragment() {
 
     private fun navigateToQuestionForm() {
         findNavController().navigate(R.id.action_questionCameraFragment_to_questionFormFragment)
-    }
-
-    private fun getPermission() {
-        var permissionList = arrayOf<String>()
-
-        if (checkSelfPermission(
-                questionUploadActivity,
-                android.Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionList += android.Manifest.permission.CAMERA
-        }
-        if (checkSelfPermission(
-                questionUploadActivity,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionList += android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        }
-        if (checkSelfPermission(
-                questionUploadActivity,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionList += android.Manifest.permission.READ_EXTERNAL_STORAGE
-        }
-
-        ActivityCompat.requestPermissions(questionUploadActivity, permissionList, 1001);
-
     }
 
 
