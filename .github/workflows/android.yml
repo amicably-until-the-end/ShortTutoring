@@ -26,7 +26,7 @@ jobs:
       run: |
         echo UNIVCERT_API_KEY=\"$UNIVCERT_API_KEY\" >> local.properties
         echo KAKAO_APP_KEY=$KAKAO_APP_KEY >> local.properties
-        echo GOOGLE_SERVICE > /app/google-services.json
+        echo GOOGLE_SERVICE > ./app/google-services.json
       env:
         KAKAO_APP_KEY: ${{secrets.KAKAO_APP_KEY }}
         UNIVCERT_API_KEY: ${{secrets.UNIVCERT_API_KEY }}
