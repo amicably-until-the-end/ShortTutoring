@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
+import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
 
 
 class ReservationFormFragment : Fragment() {
@@ -21,6 +25,11 @@ class ReservationFormFragment : Fragment() {
         binding = FragmentReservationFormBinding.inflate(layoutInflater)
 
         setDatePicker()
+        setTimeRangePicker()
+
+        binding.btnSubmit.setOnClickListener {
+            findNavController().navigate(R.id.action_reservationFormFragment_to_studentChatFragment)
+        }
 
         return binding.root
     }
@@ -31,5 +40,12 @@ class ReservationFormFragment : Fragment() {
         }
     }
 
-
+    private fun setTimeRangePicker() {
+        binding.trpTutoringTime.rvTimePicker.apply {
+            adapter = TimeRangePickerAdapter(10) { start, end ->
+//                if (onRangeChangeListener != null) onRangeChangeListener!!(start, end)
+            }
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
 }

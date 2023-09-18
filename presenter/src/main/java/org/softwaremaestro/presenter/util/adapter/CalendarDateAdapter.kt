@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.util.adapter
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -117,7 +116,6 @@ class CalendarDateAdapter(
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         super.onViewAttachedToWindow(holder)
         val item = holder.dateItem
-        Log.d("hhcc", "attach: ${item}")
         if (item.dayOfMonth >= item.lengthOfMonth() - 7) {
             monthShown = item.monthValue
             onMonthChange(item.year, item.monthValue)
@@ -160,7 +158,6 @@ class CalendarDateAdapter(
         lateinit var dateItem: LocalDate
 
         fun onBind(item: LocalDate) {
-            Log.d("hhcc", "bind: ${item}")
             dateItem = item
             binding.tvDate.text = item.dayOfMonth.toString()
 

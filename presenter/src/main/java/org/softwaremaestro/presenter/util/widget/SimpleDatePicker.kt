@@ -3,7 +3,6 @@ package org.softwaremaestro.presenter.util.widget
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -74,8 +73,6 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
                     (viewHolder as CalendarDateAdapter.ViewHolder).onBind(
                         LocalDate.of(mYear, mMonth, date)
                     )
-                } else {
-                    Log.d("hhcc", "cant bind: ${LocalDate.of(mYear, mMonth, date)}")
                 }
             }
         }

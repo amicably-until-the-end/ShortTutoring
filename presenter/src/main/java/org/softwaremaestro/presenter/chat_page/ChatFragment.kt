@@ -1,22 +1,22 @@
 package org.softwaremaestro.presenter.chat_page
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
+import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
-import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
-import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
-import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 
 
 abstract class ChatFragment : Fragment() {
@@ -149,13 +149,13 @@ abstract class ChatFragment : Fragment() {
             when (checkId) {
                 R.id.rb_normal_question -> {
                     setApplySectionItems(applyList)
-                    setReservedSectionItems(reservList)
+                    setReservedSectionItems(reserveList)
                 }
 
                 R.id.rb_selected_question -> {
                     //TODO : GET SELECTED QUESTION LIST FROM SERVER
                     setApplySectionItems(applyList)
-                    setReservedSectionItems(reservList)
+                    setReservedSectionItems(reserveList)
                 }
             }
         }
@@ -342,7 +342,7 @@ abstract class ChatFragment : Fragment() {
             setOfferingTeacherMode()
             setOfferingTeacherListItems(offerList)
             setApplyIconItems(applyList)
-            setReservedIconItems(reservList)
+            setReservedIconItems(reserveList)
             clearRecyclersSelectedView(null)
             applyIconAdapter.setSelectedPosition(position)
         }
@@ -392,7 +392,7 @@ abstract class ChatFragment : Fragment() {
                 newMessage = 0
             )
         )
-        val reservList = listOf(
+        val reserveList = listOf(
             ChatRoom(
                 title = "강해린 쌤",
                 roomType = 0,

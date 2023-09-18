@@ -8,5 +8,16 @@
         android:id="@+id/reservationFormFragment"
         android:name="org.softwaremaestro.presenter.question_reserve.ReservationFormFragment"
         android:label="fragment_reservation_form"
-        tools:layout="@layout/fragment_reservation_form" />
+        tools:layout="@layout/fragment_reservation_form">
+        <action
+            android:id="@+id/action_reservationFormFragment_to_studentChatFragment"
+            app:destination="@id/studentChatFragment"
+            app:popUpTo="@id/reservationFormFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentChatFragment"
+        android:name="org.softwaremaestro.presenter.chat_page.student.StudentChatFragment"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_page" />
 </navigation>
