@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFrament"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.LoginFragment"
+        android:name="org.softwaremaestro.presenter.login.LoginFragment"
         android:label="로그인"
         tools:layout="@layout/fragment_login">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerRoleFragment"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.RegisterRoleFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterRoleFragment"
         android:label="회원가입"
         tools:layout="@layout/fragment_register_role">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerStudentInfoFragment"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.RegisterStudentInfoFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterStudentInfoFragment"
         android:label="정보 입력"
         tools:layout="@layout/fragment_register_student_info">
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerTeacherInfoFragment"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.RegisterTeacherInfoFragment"
+        android:name="org.softwaremaestro.presenter.login.RegisterTeacherInfoFragment"
         android:label="정보 입력"
         tools:layout="@layout/fragment_register_teacher_info">
         <action
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/univAuthFragment"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.UnivAuthFragment"
+        android:name="org.softwaremaestro.presenter.login.UnivAuthFragment"
         android:label="학교 인증"
         tools:layout="@layout/fragment_univ_auth">
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/completeStudentProfileFragment"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.CompleteStudentProfileFragment"
+        android:name="org.softwaremaestro.presenter.login.CompleteStudentProfileFragment"
         android:label="fragment_complete_student_profile"
         tools:layout="@layout/fragment_complete_student_profile">
         <action
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/completeTeacherProfileFragment"
-        android:name="org.softwaremaestro.presenter.teacher_search.login.CompleteTeacherProfileFragment"
+        android:name="org.softwaremaestro.presenter.login.CompleteTeacherProfileFragment"
         android:label="fragment_complete_teacher_profile"
         tools:layout="@layout/fragment_complete_teacher_profile">
         <action

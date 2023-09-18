@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
@@ -16,7 +17,7 @@ class ChatRoomIconListAdapter(
 ) :
     RecyclerView.Adapter<ChatRoomIconListAdapter.ViewHolder>() {
 
-    private var items: List<ChatRoom> = emptyList()
+    private var items: List<ChatRoomVO> = emptyList()
 
     private var selectedView: MaterialCardView? = null
 
@@ -42,14 +43,16 @@ class ChatRoomIconListAdapter(
         return items.size
     }
 
-    fun setItem(items: List<ChatRoom>) {
+    fun setItem(items: List<ChatRoomVO>) {
         this.items = items
     }
 
     fun clearSelectedView(caller: RecyclerView.Adapter<*>?) {
         if (caller == null) {
-            selectedView?.strokeColor = selectedView?.context?.getColor(R.color.background_grey)!!
-            selectedView = null
+            selectedView?.let {
+                it.strokeColor = it.context.getColor(R.color.background_grey)
+                selectedView = null
+            }
         }
     }
 
@@ -61,12 +64,12 @@ class ChatRoomIconListAdapter(
     inner class ViewHolder(private val binding: ItemTutoringListRoomIconBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: ChatRoom, position: Int) {
+        fun onBind(item: ChatRoomVO, position: Int) {
             binding.apply {
                 if (item.roomType == 3) {
                     root.setOnClickListener {
                         onQuestionClick(
-                            item.contentId, position,
+                            item.questionInfo.id, position,
                             this@ChatRoomIconListAdapter
                         )
                     }
@@ -74,7 +77,7 @@ class ChatRoomIconListAdapter(
                 } else {
                     cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
                     root.setOnClickListener {
-                        onTeacherClick(item.contentId, this@ChatRoomIconListAdapter)
+                        onTeacherClick(item.questionInfo.id, this@ChatRoomIconListAdapter)
                         clearSelectedView(null)
                         cvContainer.strokeWidth = Util.toPx(1, binding.root.context)
                         cvContainer.strokeColor =
@@ -87,7 +90,7 @@ class ChatRoomIconListAdapter(
                     selectedView = cvContainer
                 }
                 Glide.with(binding.root.context)
-                    .load(item.imageUrl)
+                    .load(item.questionInfo.imageUrl)
                     .into(ivImage)
             }
         }

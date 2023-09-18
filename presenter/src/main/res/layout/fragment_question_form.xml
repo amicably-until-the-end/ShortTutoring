@@ -199,7 +199,7 @@
                     app:layout_constraintTop_toTopOf="@id/tv_question_time_desc">
 
                     <ToggleButton
-                        android:id="@+id/toogle_immediate"
+                        android:id="@+id/toggle_answer_now"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="22dp"

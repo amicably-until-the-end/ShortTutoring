@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,7 +20,6 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
-import org.softwaremaestro.presenter.question_reserve.QuestionReserveActivity
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
@@ -53,8 +51,6 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherAdapter
-
-    private lateinit var dialogQuestionType: BottomSheetDialog
     private lateinit var dialogTeacherProfile: BottomSheetDialog
 
     override fun onCreateView(
@@ -65,9 +61,6 @@ class StudentHomeFragment : Fragment() {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
 
         myProfileViewModel.getMyProfile()
-
-        initDialogQuestionType()
-        initDialogTeacherProfile()
 
         setQuestionButton()
         setTeacherFollowingRecyclerView()
@@ -89,23 +82,6 @@ class StudentHomeFragment : Fragment() {
     private fun setOthersQuestionRecyclerView() {
         return
     }
-
-    private fun initDialogQuestionType() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_question_type, null).apply {
-            findViewById<Button>(R.id.btn_new_question).setOnClickListener {
-                startActivity(Intent(requireContext(), QuestionUploadActivity::class.java))
-                dialogQuestionType.dismiss()
-            }
-            findViewById<Button>(R.id.btn_re_question).setOnClickListener {
-                Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
-                dialogQuestionType.dismiss()
-            }
-        }
-        dialogQuestionType = BottomSheetDialog(requireContext()).apply {
-            setContentView(dialogView)
-        }
-    }
-
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
@@ -162,8 +138,13 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
-            dialogQuestionType.show()
+            startQuestionUploadActivity()
         }
+    }
+
+    private fun startQuestionUploadActivity() {
+        val intent = Intent(requireContext(), QuestionUploadActivity::class.java)
+        startActivityForResult(intent, QUESTION_UPLOAD_RESULT)
     }
 
     private fun setToolBar() {
@@ -285,5 +266,26 @@ class StudentHomeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                QUESTION_UPLOAD_RESULT -> {
+                    val questionId =
+                        data?.getStringExtra(QuestionFormFragment.QUESTION_UPLOAD_RESULT)
+                    (activity as StudentHomeActivity).apply {
+
+                        moveToChatTab()
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        val QUESTION_UPLOAD_RESULT = 1001
     }
 }

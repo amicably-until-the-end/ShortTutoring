@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
@@ -16,7 +17,7 @@ class ChatRoomListAdapter(
 ) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>() {
 
-    private var items: List<ChatRoom> = emptyList()
+    private var items: List<ChatRoomVO> = emptyList()
 
     private var selectedView: MaterialCardView? = null
 
@@ -42,7 +43,7 @@ class ChatRoomListAdapter(
         return items.size
     }
 
-    fun setItem(items: List<ChatRoom>) {
+    fun setItem(items: List<ChatRoomVO>) {
         this.items = items
     }
 
@@ -56,12 +57,12 @@ class ChatRoomListAdapter(
     inner class ViewHolder(private val binding: ItemTutoringListRoomBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: ChatRoom, position: Int) {
+        fun onBind(item: ChatRoomVO, position: Int) {
             binding.apply {
                 if (item.roomType == 1) {
                     root.setOnClickListener {
                         onQuestionClick(
-                            item.contentId, position,
+                            item.questionInfo.id, position,
                             this@ChatRoomListAdapter
                         )
                     }
@@ -69,7 +70,7 @@ class ChatRoomListAdapter(
                 } else {
                     cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
                     root.setOnClickListener {
-                        onTeacherClick(item.contentId, this@ChatRoomListAdapter)
+                        onTeacherClick(item.questionInfo.id, this@ChatRoomListAdapter)
                         clearSelectedItem(null)
                         cvContainer.strokeColor =
                             binding.root.context.getColor(R.color.primary_blue)
@@ -84,10 +85,10 @@ class ChatRoomListAdapter(
                     tvNewMsgCnt.visibility = android.view.View.GONE
                 }
 
-                tvTitle.text = item.title
-                tvSubTitle.text = item.subTitle
+                tvTitle.text = item.questionInfo.title
+                tvSubTitle.text = item.questionInfo.category
                 Glide.with(binding.root.context)
-                    .load(item.imageUrl)
+                    .load(item.questionInfo.imageUrl)
                     .into(ivImage)
             }
         }
