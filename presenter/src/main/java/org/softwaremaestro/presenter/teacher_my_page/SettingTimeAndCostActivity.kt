@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.ActivitySettingTimeAndCostBinding
-import org.softwaremaestro.presenter.util.widget.adapter.TimePickerAdapter
+import org.softwaremaestro.presenter.util.adapter.TimePickerAdapter
 
 @AndroidEntryPoint
 class SettingTimeAndCostActivity : AppCompatActivity() {

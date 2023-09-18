@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +21,7 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.question_reserve.QuestionReserveActivity
 import org.softwaremaestro.presenter.question_upload.QuestionFormFragment
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
@@ -53,7 +54,7 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherAdapter
-    private lateinit var bottomSheetDialog: BottomSheetDialog
+    private lateinit var dialogTeacherProfile: BottomSheetDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +64,8 @@ class StudentHomeFragment : Fragment() {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
 
         myProfileViewModel.getMyProfile()
+
+        initDialogTeacherProfile()
 
         setQuestionButton()
         setTeacherFollowingRecyclerView()
@@ -85,12 +88,10 @@ class StudentHomeFragment : Fragment() {
         return
     }
 
-
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
-            val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment("it")
-            findNavController().navigate(action)
+            val dialog = TeacherProfileDialog(it)
+            dialog.show(parentFragmentManager, "teacherProfile")
         }
 
         binding.rvTeacherFollowing.apply {
@@ -104,15 +105,13 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherRecyclerView() {
 
         teacherAdapter = TeacherAdapter {
-            val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment(it)
-            findNavController().navigate(action)
+            dialogTeacherProfile.show()
         }
 
         binding.rvTeacher.apply {
             adapter = teacherAdapter
             layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
@@ -124,6 +123,21 @@ class StudentHomeFragment : Fragment() {
             adapter = lectureAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun initDialogTeacherProfile() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_teacher_profile, null).apply {
+            findViewById<Button>(R.id.btn_follow).setOnClickListener {
+
+            }
+
+            findViewById<LinearLayout>(R.id.container_reserve).setOnClickListener {
+                startActivity(Intent(requireActivity(), QuestionReserveActivity::class.java))
+            }
+        }
+        dialogTeacherProfile = BottomSheetDialog(requireContext()).apply {
+            setContentView(dialogView)
         }
     }
 
@@ -206,6 +220,7 @@ class StudentHomeFragment : Fragment() {
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                     "강해린",
                     "1",
+                    "풀 수 없는 문제는 없다.",
                     35,
                     "성균관대학교",
                     4.9f
@@ -217,6 +232,7 @@ class StudentHomeFragment : Fragment() {
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
                         "팜하니",
                         "1",
+                        "풀 수 없는 문제는 없다.",
                         31,
                         "피식대학교",
                         4.8f
@@ -266,7 +282,7 @@ class StudentHomeFragment : Fragment() {
                     val questionId =
                         data?.getStringExtra(QuestionFormFragment.QUESTION_UPLOAD_RESULT)
                     (activity as StudentHomeActivity).apply {
-                        
+
                         moveToChatTab()
                     }
                 }

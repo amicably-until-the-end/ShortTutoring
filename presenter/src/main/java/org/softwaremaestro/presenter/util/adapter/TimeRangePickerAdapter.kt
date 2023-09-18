@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.util.widget.adapter
+package org.softwaremaestro.presenter.util.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,6 +23,10 @@ class TimeRangePickerAdapter(
         for (hour in 0 until 24) {
             for (minute in 0 until 60 step minuteInterval) { // 10분 간격으로 생성
                 val isAvailable = true // 원하는 조건을 여기에 추가할 수 있습니다.
+//                val mHour = (LocalDateTime.now().hour + hour) % 24
+//                val mMinute = ((LocalDateTime.now().minute / 10 * 10) + minute) % 60
+//                val timeItem = TimeItem(mHour, mMinute, isAvailable)
+
                 val timeItem = TimeItem(hour, minute, isAvailable)
                 items.add(timeItem)
             }
@@ -36,7 +40,7 @@ class TimeRangePickerAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TimeRangePickerAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemTimeRangePickerItemBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -80,7 +84,7 @@ class TimeRangePickerAdapter(
         private fun setVisibility() {
             with(mBinding) {
                 if (mItem.minute % (minuteInterval * 3) == 0) {
-                    tvTimeTag.text = "${mItem.hour}:${mItem.minute.toString().format("%02d")}"
+                    tvTimeTag.text = "${mItem.hour}:${"%02d".format(mItem.minute)}"
                     dividerLarge.visibility = ViewGroup.VISIBLE
                     dividerSmall.visibility = ViewGroup.GONE
                 } else {

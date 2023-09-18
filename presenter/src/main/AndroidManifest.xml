@@ -23,6 +23,9 @@
             android:name=".classroom.ClassroomActivity"
             android:exported="false" />
         <activity
+            android:name=".question_reserve.QuestionReserveActivity"
+            android:exported="false" />
+        <activity
             android:name=".question_upload.QuestionUploadActivity"
             android:exported="false"
             android:noHistory="true" />

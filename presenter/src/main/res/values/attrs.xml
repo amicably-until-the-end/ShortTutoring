@@ -3,4 +3,8 @@
     <declare-styleable name="SimpleDatePicker">
         <attr name="isSelect" format="reference|string" />
     </declare-styleable>
+    <declare-styleable name="StarRatingBar">
+        <attr name="numOfStars" format="integer" />
+        <attr name="starSize" format="integer" />
+    </declare-styleable>
 </resources>

@@ -1,6 +1,9 @@
-package org.softwaremaestro.presenter.util.widget.adapter
+package org.softwaremaestro.presenter.util.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
@@ -8,7 +11,6 @@ import org.softwaremaestro.presenter.databinding.ItemCalendarDayBinding
 import java.lang.Integer.max
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalTime
 
 class CalendarDateAdapter(
     private val recyclerView: RecyclerView,
@@ -20,8 +22,9 @@ class CalendarDateAdapter(
     private lateinit var items: MutableList<LocalDate>
 
     private var lastShowedItemPosition: Int = 0
+    private var monthShown = LocalDate.now().monthValue
 
-    var selectedHolder: CalendarDateAdapter.ViewHolder? = null
+    var selectedHolder: ViewHolder? = null
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -33,6 +36,11 @@ class CalendarDateAdapter(
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        val item = items[position]
+        return "${item.year}${"%02d".format(item.monthValue)}${"%02d".format(item.dayOfMonth)}".toLong()
+    }
+
     init {
         initializeDateItem()
         recyclerView.addOnScrollListener(scrollListener)
@@ -41,7 +49,7 @@ class CalendarDateAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CalendarDateAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemCalendarDayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
@@ -57,14 +65,14 @@ class CalendarDateAdapter(
 
     private fun addFollowingMonthItem() {
         val lastItem = items.last()
-        val nextYear = lastItem.year + (if (lastItem.monthValue == 12) 1 else 0)
+        val yearOfNextMonth = lastItem.year + (if (lastItem.monthValue == 12) 1 else 0)
         val nextMonth = if (lastItem.monthValue == 12) 1 else (lastItem.monthValue + 1)
-        addMonthItems(nextYear, nextMonth)
+        addMonthItems(yearOfNextMonth, nextMonth)
     }
 
 
     private fun addFollowingTwoMonth() {
-        (0..2).forEach { _ ->
+        repeat(2) {
             addFollowingMonthItem()
         }
     }
@@ -72,34 +80,31 @@ class CalendarDateAdapter(
     private fun initializeDateItem() {
         items = mutableListOf()
 
-        val today = LocalDate.now()
-        val month = today.monthValue
-        val startOfWeek = if (today.dayOfWeek == DayOfWeek.SUNDAY) today else today.minusWeeks(1)
-            .with(DayOfWeek.SUNDAY)
-        while (startOfWeek.monthValue != month) {
-            items.add(
-                LocalDate.of(
-                    startOfWeek.year,
-                    startOfWeek.monthValue,
-                    startOfWeek.dayOfMonth
-                )
-            )
-            startOfWeek.plusDays(1)
-        }
-        (startOfWeek.dayOfMonth..startOfWeek.lengthOfMonth()).forEach {
-            items.add(
-                LocalDate.of(
-                    startOfWeek.year,
-                    startOfWeek.monthValue,
-                    it
-                )
-            )
-        }
+        addDateFromStartOfThisWeekToLastOfThisMonth()
         addFollowingTwoMonth()
-
     }
 
-    override fun onBindViewHolder(holder: CalendarDateAdapter.ViewHolder, position: Int) {
+    private fun addDateFromStartOfThisWeekToLastOfThisMonth() {
+
+        val today = LocalDate.now()
+        val thisMonth = today.monthValue
+        var startOfThisWeek =
+            if (today.dayOfWeek == DayOfWeek.SUNDAY) today
+            else today.minusWeeks(1).with(DayOfWeek.SUNDAY)
+
+        while (startOfThisWeek.monthValue <= thisMonth) {
+            items.add(
+                LocalDate.of(
+                    startOfThisWeek.year,
+                    startOfThisWeek.monthValue,
+                    startOfThisWeek.dayOfMonth
+                )
+            )
+            startOfThisWeek = startOfThisWeek.plusDays(1)
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         lastShowedItemPosition = max(lastShowedItemPosition, position)
         holder.onBind(items[position])
     }
@@ -110,37 +115,41 @@ class CalendarDateAdapter(
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         super.onViewAttachedToWindow(holder)
-        if (holder.dateItem.dayOfMonth > 20) {
-            onMonthChange(holder.dateItem.year, holder.dateItem.monthValue)
+        val item = holder.dateItem
+        if (item.dayOfMonth >= item.lengthOfMonth() - 7) {
+            monthShown = item.monthValue
+            onMonthChange(item.year, item.monthValue)
         }
     }
 
     private fun onDateClick(nowSelect: ViewHolder) {
-        nowSelect.binding.apply {
-            tvDate.setTextColor(
-                root.context.getColor(R.color.white)
-            )
-            cvDateMarker.setCardBackgroundColor(
-                root.context.getColor(R.color.primary_blue)
-            )
-        }
         if (selectedHolder != null) {
-            selectedHolder!!.binding.apply {
-                cvDateMarker?.setCardBackgroundColor(
-                    if (selectedHolder?.dateItem?.compareTo(LocalDate.now()) == 0) root.context.getColor(
-                        R.color.background_grey
-                    ) else root.context.getColor(R.color.transparent)
+            with(selectedHolder!!.binding) {
+                cvDateMarker.setCardBackgroundColor(
+                    if (selectedHolder!!.dateItem == LocalDate.now())
+                        root.context.getColor(R.color.background_grey)
+                    else
+                        root.context.getColor(R.color.transparent)
                 )
-                tvDate?.setTextColor(
-                    root.context.getColor(R.color.black)
+
+                tvDate.setTextColor(
+                    if (selectedHolder!!.dateItem.monthValue == monthShown)
+                        root.context.getColor(R.color.black)
+                    else
+                        Color.parseColor("#FFCFD1D8")
                 )
             }
         }
         selectedHolder = nowSelect
-        nowSelect.dateItem.let { it ->
+
+        with(nowSelect.binding) {
+            tvDate.setTextColor(root.context.getColor(R.color.white))
+            cvDateMarker.setCardBackgroundColor(root.context.getColor(R.color.primary_blue))
+        }
+        nowSelect.dateItem.let {
             onSelectedDayChange(it.year, it.monthValue, it.dayOfMonth)
         }
-        onMonthChange(nowSelect.dateItem.year, nowSelect.dateItem.monthValue)
+//        onMonthChange(nowSelect.dateItem.year, nowSelect.dateItem.monthValue)
     }
 
     inner class ViewHolder(val binding: ItemCalendarDayBinding) :
@@ -151,20 +160,25 @@ class CalendarDateAdapter(
         fun onBind(item: LocalDate) {
             dateItem = item
             binding.tvDate.text = item.dayOfMonth.toString()
-            if (item.compareTo(LocalDate.now()) < 0) {
-                binding.tvDate.setTextColor(binding.root.context.getColor(R.color.grey))
-                binding.root.isEnabled = false
-            } else {
-                binding.tvDate.setTextColor(binding.root.context.getColor(R.color.black))
-                binding.root.isEnabled = true
-            }
-            if (LocalDate.now().compareTo(item) == 0) {
-                binding.cvDateMarker.setCardBackgroundColor(binding.root.context.getColor(R.color.background_grey))
-                binding.tvToday.visibility = ViewGroup.VISIBLE
-            } else {
-                binding.tvToday.visibility = ViewGroup.INVISIBLE
-                binding.cvDateMarker.setCardBackgroundColor(binding.root.context.getColor(R.color.transparent))
-            }
+
+            binding.root.isEnabled = LocalDate.now() <= item
+
+            binding.tvDate.setTextColor(
+                if (item.monthValue == monthShown)
+                    binding.root.context.getColor(R.color.black)
+                else
+                    Color.parseColor("#FFCFD1D8")
+            )
+
+            binding.tvToday.visibility = if (LocalDate.now() == item) VISIBLE else INVISIBLE
+
+            binding.cvDateMarker.setCardBackgroundColor(
+                if (LocalDate.now() == item)
+                    binding.root.context.getColor(R.color.background_grey)
+                else
+                    binding.root.context.getColor(R.color.transparent)
+            )
+
             binding.root.setOnClickListener {
                 onDateClick(this)
             }

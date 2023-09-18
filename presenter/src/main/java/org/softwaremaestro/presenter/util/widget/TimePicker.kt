@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.WidgetTimePickerBinding
-import org.softwaremaestro.presenter.util.widget.adapter.TimeRangePickerAdapter
+import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
 
 class TimePicker(context: Context, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {

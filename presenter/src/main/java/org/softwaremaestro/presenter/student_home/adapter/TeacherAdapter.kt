@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
-import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherSimpleBinding
 import java.lang.Integer.min
 
 class TeacherAdapter(
@@ -21,7 +21,7 @@ class TeacherAdapter(
         viewType: Int
     ): TeacherAdapter.ViewHolder {
         val view =
-            ItemTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTeacherSimpleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
@@ -38,17 +38,18 @@ class TeacherAdapter(
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemTeacherBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherSimpleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: TeacherVO) {
 
             with(binding) {
                 ivProfile.setImageURI(Uri.parse(item.profileUrl))
-                tvName.text = "${item.nickname} 선생님"
-                tvUniv.text = item.univ
-                tvPickCount.text = "찜한 학생 ${item.pickCount}명"
-                tvRating.text = "%.1f".format(item.rating)
+                tvTeacherName.text = item.nickname
+                tvTeacherUniv.text = item.univ
+                tvTeacherBio.text = item.bio
+                tvRating.text = item.rating.toString()
+                tvFollowCnt.text = item.pickCount.toString()
             }
 
             itemView.setOnClickListener {
