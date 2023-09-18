@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <application>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application android:usesCleartextTraffic="true">
         <activity
             android:name=".teacher_my_page.SettingTimeAndCostActivity"
             android:exported="false" />
@@ -24,7 +27,7 @@
             android:exported="false"
             android:noHistory="true" />
         <activity
-            android:name=".teacher_search.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
