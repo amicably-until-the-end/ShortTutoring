@@ -92,9 +92,7 @@ class TeacherHomeFragment : Fragment() {
         setTexts()
 
         initWaitingSnackbar()
-
         initQuestionRecyclerView()
-
         initReviewRecyclerView()
 
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
@@ -155,7 +153,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
-        val onQuestionClick = { question: QuestionGetResponseVO ->
+        val onQuestionClickListener = { question: QuestionGetResponseVO ->
 
             val intent = Intent(requireActivity(), QuestionDetailActivity::class.java).apply {
                 putStringArrayListExtra(IMAGE, question.images as ArrayList<String>)
@@ -212,7 +210,7 @@ class TeacherHomeFragment : Fragment() {
             }
 
         questionAdapter =
-            QuestionAdapter(onQuestionClick).apply {
+            QuestionAdapter(onQuestionClickListener).apply {
                 setHasStableIds(true)
             }
 
