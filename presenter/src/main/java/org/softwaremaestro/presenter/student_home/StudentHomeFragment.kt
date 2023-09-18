@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.student_home
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -7,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,8 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.question_reserve.QuestionReserveActivity
+import org.softwaremaestro.presenter.question_upload.QuestionFormFragment
 import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
@@ -61,6 +64,8 @@ class StudentHomeFragment : Fragment() {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
 
         myProfileViewModel.getMyProfile()
+
+        initDialogTeacherProfile()
 
         setQuestionButton()
         setTeacherFollowingRecyclerView()
