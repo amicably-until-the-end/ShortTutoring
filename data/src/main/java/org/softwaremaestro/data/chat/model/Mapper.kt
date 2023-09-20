@@ -1,48 +1,71 @@
 package org.softwaremaestro.data.chat.model
 
+import android.util.Log
+import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.QuestionInfoVO
+import org.softwaremaestro.domain.chat.entity.MessageBodyVO
+import org.softwaremaestro.domain.chat.entity.MessageVO
+import org.softwaremaestro.domain.chat.entity.QuestionState
+import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.entity.StudentInfoVO
 import org.softwaremaestro.domain.chat.entity.TeacherInfoVO
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Mapper {
+
+    fun asDomain(chatRoomListDto: ChatRoomListDto): ChatRoomListVO {
+        chatRoomListDto.apply {
+            return ChatRoomListVO(
+                normalProposed = normalProposed.map { it.asDomain() },
+                normalReserved = normalReserved.map { it.asDomain() },
+                selectedProposed = selectedProposed.map { it.asDomain() },
+                selectedReserved = selectedReserved.map { it.asDomain() },
+            )
+        }
+    }
+
     fun asDomain(chatRoomDto: ChatRoomDto): ChatRoomVO {
-        return ChatRoomVO(
-            id = chatRoomDto.tutoringId,
-            questionInfo = chatRoomDto.questionInfo.asDomain(),
-            studentInfo = chatRoomDto.studentInfo.asDomain(),
-            teacherInfo = chatRoomDto.teacherInfo.asDomain(),
-            roomType = chatRoomDto.roomType,
-        )
+        chatRoomDto.apply {
+            return ChatRoomVO(
+                id = tutoringId,
+                questionState = if (questionState == "PROPOSED") QuestionState.PROPOSED else QuestionState.RESERVED,
+                opponentId = opponentId,
+                title = title,
+                schoolSubject = schoolSubject,
+                schoolLevel = schoolLevel,
+                messages = messages?.map { it.asDomain() },
+                roomImage = roomImage,
+                roomType = if (isSelect == true) RoomType.TEACHER else RoomType.QUESTION,
+                teachers = null,
+            )
+        }
     }
 
-    fun asDomain(teacherInfoDto: TeacherInfoDto): TeacherInfoVO {
-        return TeacherInfoVO(
-            id = teacherInfoDto.id,
-            name = teacherInfoDto.name,
-            profileImageUrl = teacherInfoDto.profileImageUrl
-        )
-    }
+    fun asDomain(messageDto: MessageDto): MessageVO {
+        Log.d("chat", messageDto.toString())
 
-    fun asDomain(studentInfoDto: StudentInfoDto): StudentInfoVO {
-        return StudentInfoVO(
-            id = studentInfoDto.id,
-            name = studentInfoDto.name,
-            profileImageUrl = studentInfoDto.profileImageUrl
-        )
-    }
+        var bodyVO = when (messageDto.format) {
+            "problem-image" -> MessageBodyVO.Text(messageDto.body.text)
+            "text" -> MessageBodyVO.ProblemImage(
+                messageDto.body.imageUrl,
+                messageDto.body.description
+            )
 
-    fun asDomain(questionInfoDto: QuestionInfoDto): QuestionInfoVO {
-        return QuestionInfoVO(
-            id = questionInfoDto.id,
-            title = questionInfoDto.title,
-            content = questionInfoDto.content,
-            imageUrl = questionInfoDto.imageUrl,
-            category = questionInfoDto.category,
-            createdAt = questionInfoDto.createdAt,
-            updatedAt = questionInfoDto.updatedAt,
-            isAnswered = questionInfoDto.isAnswered,
-            isDeleted = questionInfoDto.isDeleted
+            "appoint-request" -> {
+                var dateTime = LocalDateTime.parse(
+                    messageDto.body.startDateTime,
+                    DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                )
+                MessageBodyVO.AppointRequest(dateTime)
+            }
+
+            else -> MessageBodyVO.Text(messageDto.body.text)
+        }
+        return MessageVO(
+            time = messageDto.time,
+            bodyVO = bodyVO,
+            sender = messageDto.sender,
         )
     }
 }
@@ -51,15 +74,10 @@ fun ChatRoomDto.asDomain(): ChatRoomVO {
     return Mapper().asDomain(this)
 }
 
-fun TeacherInfoDto.asDomain(): TeacherInfoVO {
+fun ChatRoomListDto.asDomain(): ChatRoomListVO {
     return Mapper().asDomain(this)
 }
 
-fun StudentInfoDto.asDomain(): StudentInfoVO {
+fun MessageDto.asDomain(): MessageVO {
     return Mapper().asDomain(this)
 }
-
-fun QuestionInfoDto.asDomain(): QuestionInfoVO {
-    return Mapper().asDomain(this)
-}
-

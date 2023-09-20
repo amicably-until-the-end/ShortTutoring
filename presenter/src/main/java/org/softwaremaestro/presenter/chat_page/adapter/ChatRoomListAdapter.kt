@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.chat_page.item.ChatRoom
@@ -59,36 +60,52 @@ class ChatRoomListAdapter(
 
         fun onBind(item: ChatRoomVO, position: Int) {
             binding.apply {
-                if (item.roomType == 1) {
-                    root.setOnClickListener {
-                        onQuestionClick(
-                            item.questionInfo.id, position,
-                            this@ChatRoomListAdapter
-                        )
-                    }
-                    cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
-                } else {
-                    cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
-                    root.setOnClickListener {
-                        onTeacherClick(item.questionInfo.id, this@ChatRoomListAdapter)
-                        clearSelectedItem(null)
-                        cvContainer.strokeColor =
-                            binding.root.context.getColor(R.color.primary_blue)
-                        selectedView = cvContainer
+                when (item.roomType) {
+                    RoomType.QUESTION -> {
+                        root.setOnClickListener {
+                            onQuestionClick(
+                                "ddd", position,
+                                this@ChatRoomListAdapter
+                            )
+                        }
+                        cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
                     }
 
+                    RoomType.TEACHER -> {
+                        cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
+                        root.setOnClickListener {
+                            onTeacherClick("ddd", this@ChatRoomListAdapter)
+                            clearSelectedItem(null)
+                            cvContainer.strokeColor =
+                                binding.root.context.getColor(R.color.primary_blue)
+                            selectedView = cvContainer
+                        }
+
+                    }
                 }
-                if (item.newMessage > 0) {
-                    tvNewMsgCnt.text = item.newMessage.toString()
+                if (!item.messages.isNullOrEmpty()) {
                     tvNewMsgCnt.visibility = android.view.View.VISIBLE
+                    when (item.roomType) {
+                        RoomType.QUESTION -> {
+                            var cnt = 0
+                            item.teachers?.listIterator()?.forEach { teacherRoom ->
+                                cnt += teacherRoom.messages?.size ?: 0
+                            }
+                            tvNewMsgCnt.text = cnt.toString()
+                        }
+
+                        RoomType.TEACHER -> {
+                            tvNewMsgCnt.text = item.messages?.size.toString()
+                        }
+                    }
                 } else {
                     tvNewMsgCnt.visibility = android.view.View.GONE
                 }
 
-                tvTitle.text = item.questionInfo.title
-                tvSubTitle.text = item.questionInfo.category
+                tvTitle.text = item.title
+                tvSubTitle.text = item.schoolSubject
                 Glide.with(binding.root.context)
-                    .load(item.questionInfo.imageUrl)
+                    .load(item.roomImage)
                     .into(ivImage)
             }
         }

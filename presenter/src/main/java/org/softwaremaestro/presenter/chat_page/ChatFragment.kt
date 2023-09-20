@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.QuestionInfoVO
-import org.softwaremaestro.domain.chat.entity.StudentInfoVO
-import org.softwaremaestro.domain.chat.entity.TeacherInfoVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.item.ChatMsg
-import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
@@ -62,8 +58,9 @@ abstract class ChatFragment : Fragment() {
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
         setChatRoomRightButton()
+        observeChatRoomList()
         makeAdapterList()
-        getNormalRoomList()
+        getRoomList()
         setSendMessageButton()
 
         return binding.root
@@ -77,14 +74,8 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    private fun getNormalRoomList() {
-        chatViewModel.getProposedNormalChatRoomList()
-        chatViewModel.getReservedNormalChatRoomList()
-    }
-
-    private fun getSelectedRoomList() {
-        chatViewModel.getProposedSelectedChatRoomList()
-        chatViewModel.getReservedSelectedChatRoomList()
+    private fun getRoomList() {
+        chatViewModel.getChatRoomList()
     }
 
     private fun refreshProposedRoomList() {
@@ -220,11 +211,15 @@ abstract class ChatFragment : Fragment() {
 
             when (checkId) {
                 R.id.rb_normal_question -> {
-                    getNormalRoomList()
+                    setReservedSectionItems(
+                        chatViewModel.reservedNormalChatRoomList.value?._data ?: emptyList()
+                    )
                 }
 
                 R.id.rb_selected_question -> {
-                    getSelectedRoomList()
+                    setReservedSectionItems(
+                        chatViewModel.reservedSelectedChatRoomList.value?._data ?: emptyList()
+                    )
                 }
             }
         }

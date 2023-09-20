@@ -66,10 +66,10 @@ class ChatRoomIconListAdapter(
 
         fun onBind(item: ChatRoomVO, position: Int) {
             binding.apply {
-                if (item.roomType == 3) {
+                if (true) {
                     root.setOnClickListener {
                         onQuestionClick(
-                            item.questionInfo.id, position,
+                            "1234", position,
                             this@ChatRoomIconListAdapter
                         )
                     }
@@ -77,7 +77,7 @@ class ChatRoomIconListAdapter(
                 } else {
                     cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
                     root.setOnClickListener {
-                        onTeacherClick(item.questionInfo.id, this@ChatRoomIconListAdapter)
+                        onTeacherClick("234", this@ChatRoomIconListAdapter)
                         clearSelectedView(null)
                         cvContainer.strokeWidth = Util.toPx(1, binding.root.context)
                         cvContainer.strokeColor =
@@ -90,7 +90,7 @@ class ChatRoomIconListAdapter(
                     selectedView = cvContainer
                 }
                 Glide.with(binding.root.context)
-                    .load(item.questionInfo.imageUrl)
+                    .load(item.roomImage)
                     .into(ivImage)
             }
         }
