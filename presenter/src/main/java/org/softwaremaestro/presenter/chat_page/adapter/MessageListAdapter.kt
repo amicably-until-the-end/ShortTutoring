@@ -284,7 +284,12 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         applyTo(root)
                     }
                 }
-                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${item.time.minute}"
+                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${
+                    String.format(
+                        "%02d",
+                        item.time.minute
+                    )
+                }"
                 when (item.bodyVO) {
                     is MessageBodyVO.ProblemImage -> {
                         var body = item.bodyVO as MessageBodyVO.ProblemImage

@@ -22,20 +22,12 @@
         android:label="질문 올리기"
         tools:layout="@layout/fragment_question_form">
         <action
-            android:id="@+id/action_questionFormFragment_to_teacherSelectFragment"
-            app:destination="@id/teacherSelectFragment" />
-        <action
             android:id="@+id/action_questionFormFragment_to_questionCameraFragment"
             app:destination="@id/questionCameraFragment" />
         <action
             android:id="@+id/action_questionFormFragment_to_daySelectFragment"
             app:destination="@id/daySelectFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/teacherSelectFragment"
-        android:name="org.softwaremaestro.presenter.question_upload.TeacherSelectFragment"
-        android:label="선생님 선택하기"
-        tools:layout="@layout/fragment_teacher_select"></fragment>
     <fragment
         android:id="@+id/daySelectFragment"
         android:name="org.softwaremaestro.presenter.question_reserve.ReservationFormFragment"

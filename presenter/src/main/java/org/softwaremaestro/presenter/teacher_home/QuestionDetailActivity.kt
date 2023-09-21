@@ -21,7 +21,7 @@ class QuestionDetailActivity : AppCompatActivity() {
     var images: ArrayList<String>? = null
     var subject: String? = null
     var description: String? = null
-    var questionId: String? = "!234"
+    var questionId: String? = null
     var hopeTime: ArrayList<String>? = null
 
 
@@ -69,6 +69,8 @@ class QuestionDetailActivity : AppCompatActivity() {
             if (it != null) {
                 Toast.makeText(this, "요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                 finish()
+            } else {
+                Toast.makeText(this, "이미 등록한 문제입니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }

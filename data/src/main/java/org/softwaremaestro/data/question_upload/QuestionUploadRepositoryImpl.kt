@@ -61,14 +61,14 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     }
 
     override suspend fun pickTeacher(
-        VO: TeacherPickReqVO
+        chattingId: String, questionId: String
     ): Flow<BaseResult<TeacherPickResVO, String>> {
         return flow {
             val response =
                 questionUploadApi.pickTeacher(
-                    VO.questionId,
+                    questionId = questionId,
                     PickTeacherReqDto(
-                        VO.teacherId
+                        chattingId
                     )
                 )
 

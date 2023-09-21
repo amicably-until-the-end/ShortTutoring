@@ -41,6 +41,8 @@ abstract class ChatFragment : Fragment() {
 
     private val chatViewModel: ChatViewModel by activityViewModels();
 
+    protected var currentChatRoom: ChatRoomVO? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +58,6 @@ abstract class ChatFragment : Fragment() {
         setApplyIconRecyclerView()
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
-        setChatRoomRightButton()
         observeChatRoomList()
         makeAdapterList()
         getRoomList()
@@ -148,15 +149,6 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    abstract fun onChatRightOptionButtonClick(): Unit
-    abstract fun onChatLeftOptionButtonClick(): Unit
-
-
-    private fun setChatRoomRightButton() {
-        binding.btnChatRoomRight.setOnClickListener {
-            onChatRightOptionButtonClick()
-        }
-    }
 
     /**
      * 모든 어댑터를 초기화 한 이후에 실행해야 함
@@ -357,6 +349,7 @@ abstract class ChatFragment : Fragment() {
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
+            currentChatRoom = chatRoom
             setMessageListItems(chatRoom.messages ?: emptyList())
             onChatRoomStateChange(chatRoom)
             binding.tvChatRoomTitle.text = chatRoom.title
