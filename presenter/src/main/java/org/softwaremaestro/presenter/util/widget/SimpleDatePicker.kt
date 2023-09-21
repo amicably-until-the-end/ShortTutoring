@@ -34,7 +34,7 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
         setDateRecyclerView()
     }
 
-    fun setOnRangeSelectListener(listener: (Int, Int, Int) -> Unit) {
+    fun setOnDateSelectListener(listener: (Int, Int, Int) -> Unit) {
         onDateClickListener = listener
     }
 

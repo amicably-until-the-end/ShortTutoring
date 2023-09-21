@@ -8,6 +8,7 @@ import org.softwaremaestro.presenter.databinding.ItemTimeRangePickerItemBinding
 
 class TimeRangePickerAdapter(
     private val minuteInterval: Int,
+    private val onBtnClick: (TimeItem?, TimeItem?) -> Unit,
     private val onRangeChange: (TimeItem, TimeItem) -> Unit,
 ) :
     RecyclerView.Adapter<TimeRangePickerAdapter.ViewHolder>() {
@@ -120,6 +121,7 @@ class TimeRangePickerAdapter(
                     rangeStart = mItem
                     rangeEnd = null
                 }
+                onBtnClick(rangeStart, rangeEnd)
                 notifyDataSetChanged()
             }
         }
@@ -136,8 +138,10 @@ class TimeRangePickerAdapter(
         }
 
         override fun toString(): String {
-            return "${hour}: ${minute}"
+            return "${"%2d".format(hour)}:${"%02d".format(minute)}"
         }
+
+        fun toTime() = hour * 60 + minute
     }
 
 
