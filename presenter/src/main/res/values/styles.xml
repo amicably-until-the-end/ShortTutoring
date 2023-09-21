@@ -5,39 +5,39 @@
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
 
-    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+    <style name="AppModalStyle" parent="PretendardTextView">
         <item name="android:background">@drawable/bg_radius_20_20_0_0</item>
     </style>
 
-    <style name="calendar_day_black" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="calendar_day_black" parent="PretendardTextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="calendar_day_grey" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="calendar_day_grey" parent="PretendardTextView">
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="section_title" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="section_title" parent="PretendardTextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="item_title" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="item_title" parent="PretendardTextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="content_title" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="content_title" parent="PretendardTextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="content_detail" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="content_detail" parent="PretendardTextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -47,64 +47,64 @@
         <item name="android:timePickerMode">spinner</item>
     </style>
 
-    <style name="sub_text_grey" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="sub_text_grey" parent="PretendardTextView">
         <item name="android:textColor">@color/sub_text_grey</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="sub_text_black" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="sub_text_black" parent="PretendardTextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="sub_text_blue" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="sub_text_blue" pparent="PretendardTextView">
         <item name="android:textColor">@color/primary_blue</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="safeButtonEnabled">
+    <style name="safeButtonEnabled" parent="PretendardButton">
         <item name="android:background">@drawable/bg_radius_5_grad_blue</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
 
-    <style name="chatTextRight">
+    <style name="chatTextRight" parent="PretendardTextView">
         <item name="backgroundTint">@color/primary_blue</item>
         <item name="layout_constraintRight_toRightOf">parent</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="chatTextLeft">
+    <style name="chatTextLeft" parent="PretendardTextView">
         <item name="backgroundTint">@color/white</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="safeButtonDisabled">
+    <style name="safeButtonDisabled" parent="PretendardButton">
         <item name="android:background">@color/background_grey</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
 
-    <style name="h1" parent="TextAppearance.MaterialComponents.Headline1" />
+    <style name="h1" parent="PretendardTextView" />
 
-    <style name="h2" parent="TextAppearance.MaterialComponents.Headline2" />
+    <style name="h2" parent="PretendardTextView" />
 
-    <style name="h3" parent="TextAppearance.MaterialComponents.Headline3" />
+    <style name="h3" parent="PretendardTextView" />
 
-    <style name="h4" parent="TextAppearance.MaterialComponents.Headline4" />
+    <style name="h4" parent="PretendardTextView" />
 
-    <style name="h5" parent="TextAppearance.MaterialComponents.Headline5" />
+    <style name="h5" parent="PretendardTextView" />
 
-    <style name="h6" parent="TextAppearance.MaterialComponents.Headline6" />
+    <style name="h6" parent="PretendardTextView" />
 
-    <style name="subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2" />
+    <style name="subtitle2" parent="PretendardTextView" />
 
-    <style name="body1" parent="TextAppearance.MaterialComponents.Body1" />
+    <style name="body1" parent="PretendardTextView" />
 
-    <style name="body2" parent="TextAppearance.MaterialComponents.Body2" />
+    <style name="body2" parent="PretendardTextView" />
 
-    <style name="button" parent="TextAppearance.MaterialComponents.Button" />
+    <style name="button" parent="PretendardTextView" />
 
     <style name="ToolBar">
         <item name="android:background">@color/white</item>
@@ -154,23 +154,23 @@
         <item name="backgroundTint">@color/black</item>
     </style>
 
-    <style name="PretandardTextView" parent="@android:style/Widget.DeviceDefault.TextView">
+    <style name="PretendardTextView" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/app_font</item>
     </style>
 
-    <style name="PretandardButton" parent="@android:style/Widget.DeviceDefault.Button">
+    <style name="PretendardButton" parent="@android:style/Widget.DeviceDefault.Button">
         <item name="android:fontFamily">@font/app_font</item>
     </style>
 
-    <style name="PretandardEditText" parent="@android:style/Widget.DeviceDefault.EditText">
+    <style name="PretendardEditText" parent="@android:style/Widget.DeviceDefault.EditText">
         <item name="android:fontFamily">@font/app_font</item>
     </style>
 
-    <style name="PretandardRadioButton" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+    <style name="PretendardRadioButton" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
         <item name="android:fontFamily">@font/app_font</item>
     </style>
 
-    <style name="PretandardCheckBox" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+    <style name="PretendardCheckBox" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
         <item name="android:fontFamily">@font/app_font</item>
     </style>
 

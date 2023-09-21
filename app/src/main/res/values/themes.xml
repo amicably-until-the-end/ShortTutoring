@@ -11,12 +11,18 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Component Default -->
         <item name="android:textColorTertiary">@color/black</item>
-        <!-- Status bar color. -->
+        <!-- Status rbar color. -->
         <item name="android:statusBarColor">@color/white</item>
         <!-- Customize your theme here. -->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:timePickerStyle">@style/TimePickerStyle</item>
-
+        <item name="android:textViewStyle">@style/PretendardTextView</item>
+        <item name="android:buttonStyle">@style/PretendardButton</item>
+        <item name="android:editTextStyle">@style/PretendardEditText</item>
+        <item name="android:checkboxStyle">@style/PretendardCheckBox</item>
+        <item name="android:radioButtonStyle">@style/PretendardRadioButton</item>
+        <item name="editTextStyle">@style/PretendardEditText</item>
+        <item name="radioButtonStyle">@style/PretendardRadioButton</item>
     </style>
 </resources>
