@@ -15,7 +15,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface QuestionUploadApi {
-    @POST("/student/question/create")
+    @POST("/student/question/create/normal")
     suspend fun uploadQuestion(
         @Body questionUploadRequestDto: QuestionUploadRequestDto
     ): Response<WrappedResponse<QuestionUploadResultDto>>
