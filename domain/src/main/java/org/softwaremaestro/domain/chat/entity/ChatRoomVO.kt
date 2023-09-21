@@ -1,6 +1,7 @@
 package org.softwaremaestro.domain.chat.entity
 
 import java.awt.TrayIcon
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class ChatRoomListVO(
@@ -47,9 +48,10 @@ data class TeacherInfoVO(
 )
 
 data class MessageVO(
-    val time: String?,
+    val time: LocalDateTime,
     val bodyVO: MessageBodyVO?,
     val sender: String?,
+    val isMyMsg: Boolean,
 )
 
 sealed class MessageBodyVO {

@@ -22,13 +22,15 @@ data class ChatRoomDto(
     @SerializedName("schoolLevel") val schoolLevel: String?,
     @SerializedName("messages") val messages: List<MessageDto>?,
     @SerializedName("teachers") val teachers: List<ChatRoomDto>?,
+    @SerializedName("isTeacherRoom") val isTeacherRoom: Boolean?,
 )
 
 data class MessageDto(
     @SerializedName("sender") val sender: String,
     @SerializedName("format") val format: String,
     @SerializedName("body") val body: MessageBodyDto,
-    @SerializedName("createdAt") val time: String?,
+    @SerializedName("createdAt") val time: String,
+    @SerializedName("isMyMsg") val isMyMsg: Boolean,
 )
 
 

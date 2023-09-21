@@ -9,6 +9,7 @@ import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.entity.StudentInfoVO
 import org.softwaremaestro.domain.chat.entity.TeacherInfoVO
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -36,7 +37,7 @@ class Mapper {
                 schoolLevel = schoolLevel,
                 messages = messages?.map { it.asDomain() },
                 roomImage = roomImage,
-                roomType = if (isSelect == true) RoomType.TEACHER else RoomType.QUESTION,
+                roomType = if (isTeacherRoom == true) RoomType.TEACHER else RoomType.QUESTION,
                 teachers = null,
             )
         }
@@ -46,27 +47,39 @@ class Mapper {
         Log.d("chat", messageDto.toString())
 
         var bodyVO = when (messageDto.format) {
-            "problem-image" -> MessageBodyVO.Text(messageDto.body.text)
-            "text" -> MessageBodyVO.ProblemImage(
+            "text" -> MessageBodyVO.Text(messageDto.body.text)
+            "problem-image" -> MessageBodyVO.ProblemImage(
                 messageDto.body.imageUrl,
                 messageDto.body.description
             )
 
             "appoint-request" -> {
-                var dateTime = LocalDateTime.parse(
-                    messageDto.body.startDateTime,
-                    DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                )
+                var dateTime = ISOParser(messageDto.body.startDateTime!!)
                 MessageBodyVO.AppointRequest(dateTime)
             }
 
             else -> MessageBodyVO.Text(messageDto.body.text)
         }
+        var time = ISOParser(messageDto.time)
         return MessageVO(
-            time = messageDto.time,
+            time = time,
             bodyVO = bodyVO,
             sender = messageDto.sender,
+            isMyMsg = messageDto.isMyMsg,
         )
+    }
+
+    companion object {
+        fun ISOParser(text: String): LocalDateTime {
+            val format: DateTimeFormatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            var dateTime = LocalDateTime.parse(
+                text,
+                format
+            )
+            dateTime = dateTime.plusHours(9)
+            return dateTime
+        }
     }
 }
 

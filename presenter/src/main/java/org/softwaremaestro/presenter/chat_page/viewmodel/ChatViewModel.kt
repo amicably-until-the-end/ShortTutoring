@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
@@ -47,11 +47,6 @@ class ChatViewModel @Inject constructor(
     private val _proposedSelectedChatRoomList = MutableLiveData<UIState<List<ChatRoomVO>>>()
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
-
-    private val _chatMessages = MutableLiveData<UIState<List<ChatMsg>>>()
-    val chatMessages: LiveData<UIState<List<ChatMsg>>>
-        get() = _chatMessages
-
 
     fun getChatRoomList() {
         viewModelScope.launch {

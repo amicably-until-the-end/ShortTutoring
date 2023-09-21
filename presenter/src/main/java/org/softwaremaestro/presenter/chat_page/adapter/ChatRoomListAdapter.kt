@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.Util
-import org.softwaremaestro.presenter.chat_page.item.ChatRoom
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomBinding
 
 class ChatRoomListAdapter(
     private val onQuestionClick: (String, Int, RecyclerView.Adapter<*>) -> Unit,
-    private val onTeacherClick: (String, RecyclerView.Adapter<*>) -> Unit
+    private val onTeacherClick: (String, List<MessageVO>, RecyclerView.Adapter<*>) -> Unit
 ) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>() {
 
@@ -74,7 +74,11 @@ class ChatRoomListAdapter(
                     RoomType.TEACHER -> {
                         cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
                         root.setOnClickListener {
-                            onTeacherClick("ddd", this@ChatRoomListAdapter)
+                            onTeacherClick(
+                                item.opponentId!!,
+                                item.messages!!,
+                                this@ChatRoomListAdapter
+                            )
                             clearSelectedItem(null)
                             cvContainer.strokeColor =
                                 binding.root.context.getColor(R.color.primary_blue)
