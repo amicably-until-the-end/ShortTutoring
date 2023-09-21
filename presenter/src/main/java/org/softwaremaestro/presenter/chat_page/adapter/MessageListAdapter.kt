@@ -3,9 +3,7 @@ package org.softwaremaestro.presenter.chat_page.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
@@ -248,17 +246,17 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         clear(containerBody.id, ConstraintSet.LEFT)
                         applyTo(containerRoot)
                     }
-                    ConstraintSet().apply {
-                        clone(root)
-                        connect(
-                            tvTime.id,
-                            ConstraintSet.RIGHT,
-                            containerBody.id,
-                            ConstraintSet.LEFT
-                        )
-                        clear(tvTime.id, ConstraintSet.LEFT)
-                        applyTo(root)
-                    }
+//                    ConstraintSet().apply {
+//                        clone(root)
+//                        connect(
+//                            tvTime.id,
+//                            ConstraintSet.RIGHT,
+//                            containerBody.id,
+//                            ConstraintSet.LEFT
+//                        )
+//                        clear(tvTime.id, ConstraintSet.LEFT)
+//                        applyTo(root)
+//                    }
                 } else {
                     //set position to left
                     ConstraintSet().apply {
@@ -272,24 +270,24 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         clear(containerBody.id, ConstraintSet.RIGHT)
                         applyTo(root)
                     }
-                    ConstraintSet().apply {
-                        clone(root)
-                        connect(
-                            tvTime.id,
-                            ConstraintSet.LEFT,
-                            containerBody.id,
-                            ConstraintSet.RIGHT
-                        )
-                        clear(tvTime.id, ConstraintSet.RIGHT)
-                        applyTo(root)
-                    }
+//                    ConstraintSet().apply {
+//                        clone(root)
+//                        connect(
+//                            tvTime.id,
+//                            ConstraintSet.LEFT,
+//                            containerBody.id,
+//                            ConstraintSet.RIGHT
+//                        )
+//                        clear(tvTime.id, ConstraintSet.RIGHT)
+//                        applyTo(root)
+//                    }
                 }
-                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${
-                    String.format(
-                        "%02d",
-                        item.time.minute
-                    )
-                }"
+//                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${
+//                    String.format(
+//                        "%02d",
+//                        item.time.minute
+//                    )
+//                }"
                 when (item.bodyVO) {
                     is MessageBodyVO.ProblemImage -> {
                         var body = item.bodyVO as MessageBodyVO.ProblemImage
