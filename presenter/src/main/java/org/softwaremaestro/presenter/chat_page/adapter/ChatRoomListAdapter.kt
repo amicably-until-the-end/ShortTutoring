@@ -13,8 +13,8 @@ import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomBinding
 
 class ChatRoomListAdapter(
-    private val onQuestionClick: (String, Int, RecyclerView.Adapter<*>) -> Unit,
-    private val onTeacherClick: (String, List<MessageVO>, RecyclerView.Adapter<*>) -> Unit
+    private val onQuestionClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit,
+    private val onTeacherClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit
 ) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>() {
 
@@ -64,7 +64,7 @@ class ChatRoomListAdapter(
                     RoomType.QUESTION -> {
                         root.setOnClickListener {
                             onQuestionClick(
-                                "ddd", position,
+                                item.teachers ?: emptyList(), position,
                                 this@ChatRoomListAdapter
                             )
                         }
@@ -75,8 +75,7 @@ class ChatRoomListAdapter(
                         cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
                         root.setOnClickListener {
                             onTeacherClick(
-                                item.opponentId!!,
-                                item.messages!!,
+                                item,
                                 this@ChatRoomListAdapter
                             )
                             clearSelectedItem(null)

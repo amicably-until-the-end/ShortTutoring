@@ -28,6 +28,7 @@ data class ChatRoomVO(
     val schoolLevel: String?,
     val messages: List<MessageVO>?,
     val teachers: List<ChatRoomVO>?,
+    val isSelect: Boolean,
 )
 
 data class NormalQuestionRoomVO(

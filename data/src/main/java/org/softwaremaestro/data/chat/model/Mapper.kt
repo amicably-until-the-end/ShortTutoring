@@ -38,7 +38,8 @@ class Mapper {
                 messages = messages?.map { it.asDomain() },
                 roomImage = roomImage,
                 roomType = if (isTeacherRoom == true) RoomType.TEACHER else RoomType.QUESTION,
-                teachers = null,
+                teachers = teachers?.map { it.asDomain() },
+                isSelect = isSelect ?: false,
             )
         }
     }

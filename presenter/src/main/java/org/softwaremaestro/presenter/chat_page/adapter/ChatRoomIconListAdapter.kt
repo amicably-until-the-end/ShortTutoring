@@ -12,7 +12,7 @@ import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomIconBinding
 
 class ChatRoomIconListAdapter(
-    private val onQuestionClick: (String, Int, RecyclerView.Adapter<*>) -> Unit
+    private val onQuestionClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit
 ) :
     RecyclerView.Adapter<ChatRoomIconListAdapter.ViewHolder>() {
 
@@ -65,24 +65,21 @@ class ChatRoomIconListAdapter(
 
         fun onBind(item: ChatRoomVO, position: Int) {
             binding.apply {
-                if (true) {
-                    root.setOnClickListener {
+                cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
+                root.setOnClickListener {
+                    clearSelectedView(null)
+                    if (position != selectedPosition) {
                         onQuestionClick(
-                            "1234", position,
-                            this@ChatRoomIconListAdapter
+                            item.teachers ?: emptyList(), position, this@ChatRoomIconListAdapter
                         )
+                        selectedPosition = position
                     }
-                    cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
-                } else {
-                    cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
-                    root.setOnClickListener {
-                        clearSelectedView(null)
-                        cvContainer.strokeWidth = Util.toPx(1, binding.root.context)
-                        cvContainer.strokeColor =
-                            binding.root.context.getColor(R.color.primary_blue)
-                        selectedView = cvContainer
-                    }
+                    cvContainer.strokeWidth = Util.toPx(1, binding.root.context)
+                    cvContainer.strokeColor =
+                        binding.root.context.getColor(R.color.primary_blue)
+                    selectedView = cvContainer
                 }
+
                 if (position == selectedPosition) {
                     cvContainer.strokeColor = binding.root.context.getColor(R.color.primary_blue)
                     selectedView = cvContainer
@@ -90,6 +87,7 @@ class ChatRoomIconListAdapter(
                 Glide.with(binding.root.context)
                     .load(item.roomImage)
                     .into(ivImage)
+
             }
         }
     }

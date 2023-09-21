@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.chat_page
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,8 +32,7 @@ abstract class ChatFragment : Fragment() {
     private lateinit var reservedAdapter: ChatRoomListAdapter
     private lateinit var messageListAdapter: MessageListAdapter
     private lateinit var offeringTeacherAdapter: ChatRoomListAdapter
-    private lateinit var applyIconAdapter: ChatRoomIconListAdapter
-    private lateinit var reservedIconAdapter: ChatRoomIconListAdapter
+    private lateinit var proposedIconAdapter: ChatRoomIconListAdapter
 
     private var selectedTutoringIndex: Int? = null
     private var selectedTeacher: Int? = null
@@ -55,7 +54,6 @@ abstract class ChatFragment : Fragment() {
         setChatMsgRecyclerView()
         setQuestionTypeSelectToggle()
         setApplyIconRecyclerView()
-        setReservedIconRecyclerView()
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
         setChatRoomRightButton()
@@ -129,12 +127,18 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    abstract fun isTeacher(): Boolean
+
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
         }
         chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
+            if (!isTeacher()) {
+                // 학생일 경우에만 왼쪽 아이콘 뷰 갱신
+                setProposedIconItems(it._data ?: emptyList())
+            }
         }
         chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
@@ -163,8 +167,7 @@ abstract class ChatFragment : Fragment() {
             add(reservedAdapter)
             add(messageListAdapter)
             add(offeringTeacherAdapter)
-            add(applyIconAdapter)
-            add(reservedIconAdapter)
+            add(proposedIconAdapter)
         }
     }
 
@@ -232,6 +235,8 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    abstract fun onChatRoomStateChange(chatRoomVO: ChatRoomVO)
+
     private fun setReservedSectionItems(list: List<ChatRoomVO>) {
         binding.apply {
             tvReservedCount.text = list.size.toString()
@@ -293,27 +298,14 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+
     private fun setApplyIconRecyclerView() {
 
         binding.rvApplyIconList.apply {
-            applyIconAdapter = ChatRoomIconListAdapter(
+            proposedIconAdapter = ChatRoomIconListAdapter(
                 onQuestionClick = onQuestionRoomClick,
             )
-            adapter = applyIconAdapter
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
-        }
-
-    }
-
-    private fun setReservedIconRecyclerView() {
-
-        binding.rvReservedIconList.apply {
-            reservedIconAdapter = ChatRoomIconListAdapter(
-                onQuestionClick = onQuestionRoomClick,
-            )
-            adapter = reservedIconAdapter
+            adapter = proposedIconAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(getVerticalSpaceDecoration(10, requireContext()))
@@ -343,31 +335,31 @@ abstract class ChatFragment : Fragment() {
 
 
     private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
+        Log.d("chat", teacher.toString())
+        offeringTeacherAdapter.clearSelectedItem(null)
         offeringTeacherAdapter.setItem(teacher)
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
-    private fun setReservedIconItems(items: List<ChatRoomVO>) {
-        offeringTeacherAdapter.setItem(items)
-        offeringTeacherAdapter.notifyDataSetChanged()
-    }
 
     private fun setProposedIconItems(items: List<ChatRoomVO>) {
-        applyIconAdapter.setItem(items)
-        applyIconAdapter.notifyDataSetChanged()
+        proposedIconAdapter.setItem(items)
+        proposedIconAdapter.notifyDataSetChanged()
     }
 
 
-    private val onQuestionRoomClick: (String, Int, RecyclerView.Adapter<*>) -> Unit =
-        { questionId, position, caller ->
+    private val onQuestionRoomClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit =
+        { teacherList, position, caller ->
+            setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             clearRecyclersSelectedView(null)
-            applyIconAdapter.setSelectedPosition(position)
+            proposedIconAdapter.setSelectedPosition(position)
         }
-    private val onTeacherRoomClick: (String, List<MessageVO>, RecyclerView.Adapter<*>) -> Unit =
-        { teacherId, messages, caller ->
-            setMessageListItems(messages)
-
+    private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
+        { chatRoom, caller ->
+            setMessageListItems(chatRoom.messages ?: emptyList())
+            onChatRoomStateChange(chatRoom)
+            binding.tvChatRoomTitle.text = chatRoom.title
             clearRecyclersSelectedView(caller)
         }
 
