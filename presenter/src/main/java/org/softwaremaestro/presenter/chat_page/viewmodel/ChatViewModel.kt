@@ -54,10 +54,9 @@ class ChatViewModel @Inject constructor(
                 .onStart { _reservedNormalChatRoomList.value = UIState.Loading }
                 .catch { exception ->
                     _reservedNormalChatRoomList.value = UIState.Failure
-                    Log.d("Error", exception.message.toString())
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
-                    Log.d("chat", result.toString())
                     when (result) {
                         is BaseResult.Success -> {
                             _reservedNormalChatRoomList.value =

@@ -261,7 +261,6 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeAnswer() {
         answerViewModel.answer.observe(viewLifecycleOwner) {
-            Log.d("answer", it.exampleData)
         }
     }
 

@@ -8,7 +8,10 @@ import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import javax.inject.Inject
 
 class TeacherPickUseCase @Inject constructor(private val questionUploadRepository: QuestionUploadRepository) {
-    suspend fun execute(teacherPickReqVO: TeacherPickReqVO): Flow<BaseResult<TeacherPickResVO, String>> {
-        return questionUploadRepository.pickTeacher(teacherPickReqVO)
+    suspend fun execute(
+        chattingId: String,
+        questionId: String
+    ): Flow<BaseResult<TeacherPickResVO, String>> {
+        return questionUploadRepository.pickTeacher(chattingId, questionId)
     }
 }

@@ -14,6 +14,6 @@ interface QuestionUploadRepository {
     suspend fun getTeacherList(questionId: String): Flow<BaseResult<List<TeacherVO>, String>>
 
     suspend fun pickTeacher(
-        teacherPickReqVO: TeacherPickReqVO
+        chattingId: String, questionId: String
     ): Flow<BaseResult<TeacherPickResVO, String>>
 }

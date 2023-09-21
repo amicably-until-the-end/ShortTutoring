@@ -30,7 +30,7 @@ class Mapper {
         chatRoomDto.apply {
             return ChatRoomVO(
                 id = tutoringId,
-                questionState = if (questionState == "PROPOSED") QuestionState.PROPOSED else QuestionState.RESERVED,
+                questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
                 opponentId = opponentId,
                 title = title,
                 schoolSubject = schoolSubject,
@@ -40,6 +40,7 @@ class Mapper {
                 roomType = if (isTeacherRoom == true) RoomType.TEACHER else RoomType.QUESTION,
                 teachers = teachers?.map { it.asDomain() },
                 isSelect = isSelect ?: false,
+                questionId = questionId,
             )
         }
     }

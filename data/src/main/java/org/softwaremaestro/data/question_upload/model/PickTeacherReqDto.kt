@@ -3,5 +3,5 @@ package org.softwaremaestro.data.question_upload.model
 import com.google.gson.annotations.SerializedName
 
 data class PickTeacherReqDto(
-    @SerializedName("teacherId") val teacherId: String,
+    @SerializedName("chattingId") val chattingId: String,
 )
