@@ -19,8 +19,8 @@ import javax.inject.Inject
 class AnswerViewModel @Inject constructor(private val answerUploadUseCase: AnswerUploadUseCase) :
     ViewModel() {
 
-    private val _answer: MutableLiveData<AnswerUploadResultVO> = MutableLiveData()
-    val answer: LiveData<AnswerUploadResultVO> get() = _answer
+    private val _answer: MutableLiveData<AnswerUploadResultVO?> = MutableLiveData()
+    val answer: LiveData<AnswerUploadResultVO?> get() = _answer
 
     fun uploadAnswer(answerUploadVO: AnswerUploadVO) {
         viewModelScope.launch {
@@ -29,7 +29,7 @@ class AnswerViewModel @Inject constructor(private val answerUploadUseCase: Answe
 
                 }
                 .catch { exception ->
-                    // Todo: 추후에 에러 어떻게 처리할지 생각해보기
+                    _answer.value = null
                     Log.d("Error", exception.message.toString())
                 }
                 .collect { result ->

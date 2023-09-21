@@ -1,14 +1,16 @@
 package org.softwaremaestro.domain.classroom.entity
 
 data class TutoringInfoVO(
-    val id: String? = null,
-    val requestId: String? = null,
-    val teacherId: String? = null,
-    val studentId: String? = null,
+    val id: String,
+    val teacherId: String,
+    val studentId: String,
     val status: String? = null,
     val matchedAt: String? = null,
     val endedAt: String? = null,
-    val whiteBoardAppId: String? = null,
-    val whiteBoardToken: String? = null,
-    val whiteBoardUUID: String? = null,
+    val whiteBoardAppId: String,
+    val whiteBoardToken: String,
+    val whiteBoardUUID: String,
+    val RTCAppId: String,
+    val studentRTCToken: String,
+    val teacherRTCToken: String,
 )

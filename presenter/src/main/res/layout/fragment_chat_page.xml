@@ -68,29 +68,6 @@
                     android:layout_height="1dp"
                     android:layout_marginVertical="15dp"
                     android:background="@color/background_light_blue" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/sub_text_black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
-                        android:text="예정된 수업"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_reserved_icon_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never" />
             </LinearLayout>
 
         </ScrollView>

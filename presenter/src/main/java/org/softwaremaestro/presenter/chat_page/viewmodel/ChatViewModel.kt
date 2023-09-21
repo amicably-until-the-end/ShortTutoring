@@ -15,17 +15,20 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
+import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val getChatRoomListUseCase: GetChatRoomListUseCase
+    private val getChatRoomListUseCase: GetChatRoomListUseCase,
+    private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
 ) :
     ViewModel() {
 
@@ -48,29 +51,59 @@ class ChatViewModel @Inject constructor(
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
 
-    private val _chatMessages = MutableLiveData<UIState<List<ChatMsg>>>()
-    val chatMessages: LiveData<UIState<List<ChatMsg>>>
-        get() = _chatMessages
+    val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
+    val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
+        get() = _tutoringInfo
 
 
-    fun getReservedNormalChatRoomList() {
+    fun getChatRoomList() {
         viewModelScope.launch {
-            getChatRoomListUseCase.execute(QuestionType.NORMAL, QuestionState.RESERVED)
+            getChatRoomListUseCase.execute()
                 .onStart { _reservedNormalChatRoomList.value = UIState.Loading }
                 .catch { exception ->
-                    // Todo: 추후에 에러 어떻게 처리할지 생각해보기
                     _reservedNormalChatRoomList.value = UIState.Failure
-                    Log.d("Error", exception.message.toString())
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _reservedNormalChatRoomList.value =
-                            UIState.Success(result.data)
+                        is BaseResult.Success -> {
+                            _reservedNormalChatRoomList.value =
+                                UIState.Success(result.data.normalReserved)
+                            _reservedSelectedChatRoomList.value =
+                                UIState.Success(result.data.selectedReserved)
+                            _proposedNormalChatRoomList.value =
+                                UIState.Success(result.data.normalProposed)
+                            _proposedSelectedChatRoomList.value =
+                                UIState.Success(result.data.selectedProposed)
+                        }
 
                         is BaseResult.Error -> _reservedNormalChatRoomList.value = UIState.Failure
                     }
                 }
         }
+    }
+
+    fun getClassRoomInfo(questionId: String) {
+        viewModelScope.launch {
+            getTutoringInfoUseCase.execute(questionId)
+                .onStart {
+                    _tutoringInfo.value = UIState.Loading
+                }
+                .catch { exception ->
+                    _tutoringInfo.value = UIState.Failure
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _tutoringInfo.value = UIState.Success(result.data)
+                        }
+
+                        is BaseResult.Error -> UIState.Failure
+                    }
+                }
+        }
+
     }
 
     private fun initSocket(questionId: String) {
@@ -98,59 +131,9 @@ class ChatViewModel @Inject constructor(
         Log.d("socket", "send message")
     }
 
-
-    fun getReservedSelectedChatRoomList() {
-        viewModelScope.launch {
-            getChatRoomListUseCase.execute(QuestionType.SELECTED, QuestionState.RESERVED)
-                .onStart { _reservedSelectedChatRoomList.value = UIState.Loading }
-                .catch { exception -> _reservedSelectedChatRoomList.value = UIState.Failure }
-                .collect() { result ->
-                    when (result) {
-                        is BaseResult.Success -> _reservedSelectedChatRoomList.value =
-                            UIState.Success(result.data)
-
-                        is BaseResult.Error -> _reservedSelectedChatRoomList.value = UIState.Failure
-                    }
-                }
-        }
-    }
-
-    fun getProposedNormalChatRoomList() {
-        viewModelScope.launch {
-            getChatRoomListUseCase.execute(QuestionType.NORMAL, QuestionState.PROPOSED)
-                .onStart { _proposedNormalChatRoomList.value = UIState.Loading }
-                .catch { exception -> UIState.Failure }
-                .collect() { result ->
-                    when (result) {
-                        is BaseResult.Success -> _proposedNormalChatRoomList.value =
-                            UIState.Success(result.data)
-
-                        is BaseResult.Error -> _proposedNormalChatRoomList.value = UIState.Failure
-                    }
-                }
-        }
-    }
-
-    fun getProposedSelectedChatRoomList() {
-        viewModelScope.launch {
-            getChatRoomListUseCase.execute(QuestionType.SELECTED, QuestionState.PROPOSED)
-                .onStart { _proposedSelectedChatRoomList.value = UIState.Loading }
-                .catch { exception -> _proposedSelectedChatRoomList.value = UIState.Failure }
-                .collect() { result ->
-                    when (result) {
-                        is BaseResult.Success -> _proposedSelectedChatRoomList.value =
-                            UIState.Success(result.data)
-
-                        is BaseResult.Error -> _proposedSelectedChatRoomList.value = UIState.Failure
-                    }
-                }
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
         socket?.disconnect()
     }
-
 
 }
