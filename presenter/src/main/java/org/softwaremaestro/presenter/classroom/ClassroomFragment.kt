@@ -39,6 +39,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 
 
 @AndroidEntryPoint
@@ -134,7 +135,7 @@ class ClassroomFragment : Fragment() {
         setRedoButton()
         setUndoButton()
         setUpFinishButton()
-        uploadProblemImg()
+        //uploadProblemImg()
     }
 
     private fun setVoiceFunctions() {
@@ -348,15 +349,11 @@ class ClassroomFragment : Fragment() {
 
     private fun setUpFinishButton() {
         binding.btnToolbarBack.setOnClickListener {
-            val dialog = AlertDialog.Builder(requireContext()).apply {
-                setTitle("과외를 종료하시겠습니까?")
-                setPositiveButton("종료") { _, _ ->
-                    viewModel.finishClass(voiceInfo.channelId)
-                }
-                setNegativeButton("취소") { _, _ ->
-                }
+            val dialogLectureEnd = DetailAlertDialog("수업을 종료할까요?", "과외 영상이 자동으로 저장됩니다") {
+                viewModel.finishClass(voiceInfo.channelId)
+                activity?.finish()
             }
-            dialog.show()
+            dialogLectureEnd.show(requireActivity().supportFragmentManager, "lectureEnd")
         }
     }
 
@@ -395,6 +392,11 @@ class ClassroomFragment : Fragment() {
             whiteBoardRoom?.insertImage(imageInfo)
             isProblemImgUploaded = true
         }
+    }
+
+    companion object {
+        const val RTC_TEACHER_UID = 1
+        const val RTC_STUDENT_UID = 2
     }
 
 }

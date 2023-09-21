@@ -6,5 +6,5 @@ import org.softwaremaestro.domain.common.BaseResult
 
 interface ClassRoomRepository {
     suspend fun finishClass(tutoringId: String): Flow<BaseResult<String, String>>
-    suspend fun getTutoringInfo(tutoringId: String): Flow<BaseResult<TutoringInfoVO, String>>
+    suspend fun getTutoringInfo(questionId: String): Flow<BaseResult<TutoringInfoVO, String>>
 }

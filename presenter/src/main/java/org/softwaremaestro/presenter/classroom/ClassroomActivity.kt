@@ -19,4 +19,10 @@ class ClassroomActivity : AppCompatActivity() {
         setContentView(binding.root)
 
     }
+
+    companion object {
+        const val EXTRA_WHITE_BOARD_INFO = "whiteBoardInfo"
+        const val EXTRA_VOICE_ROOM_INFO = "voiceRoomInfo"
+
+    }
 }

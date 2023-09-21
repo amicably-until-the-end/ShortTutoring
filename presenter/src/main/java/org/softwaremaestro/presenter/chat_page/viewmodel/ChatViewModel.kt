@@ -19,13 +19,16 @@ import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
+import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val getChatRoomListUseCase: GetChatRoomListUseCase
+    private val getChatRoomListUseCase: GetChatRoomListUseCase,
+    private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
 ) :
     ViewModel() {
 
@@ -47,6 +50,11 @@ class ChatViewModel @Inject constructor(
     private val _proposedSelectedChatRoomList = MutableLiveData<UIState<List<ChatRoomVO>>>()
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
+
+    val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
+    val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
+        get() = _tutoringInfo
+
 
     fun getChatRoomList() {
         viewModelScope.launch {
@@ -73,6 +81,29 @@ class ChatViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun getClassRoomInfo(questionId: String) {
+        viewModelScope.launch {
+            getTutoringInfoUseCase.execute(questionId)
+                .onStart {
+                    _tutoringInfo.value = UIState.Loading
+                }
+                .catch { exception ->
+                    _tutoringInfo.value = UIState.Failure
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _tutoringInfo.value = UIState.Success(result.data)
+                        }
+
+                        is BaseResult.Error -> UIState.Failure
+                    }
+                }
+        }
+
     }
 
     private fun initSocket(questionId: String) {
@@ -104,6 +135,5 @@ class ChatViewModel @Inject constructor(
         super.onCleared()
         socket?.disconnect()
     }
-
 
 }
