@@ -1,10 +1,13 @@
 package org.softwaremaestro.data.chat
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.softwaremaestro.data.chat.model.ChatRoomListDto
 import org.softwaremaestro.data.chat.model.asDomain
 import org.softwaremaestro.data.chat.remote.ChatApi
 import org.softwaremaestro.domain.chat.ChatRepository
+import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.QuestionType
@@ -15,15 +18,15 @@ class ChatRepositoryImpl @Inject constructor(private val chatApi: ChatApi) :
     ChatRepository {
 
 
-    override suspend fun getRoomList(
-        questionType: QuestionType,
-        questionState: QuestionState
-    ): Flow<BaseResult<List<ChatRoomVO>, String>> {
+    override suspend fun getRoomList(): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
-            val result = chatApi.getRoomList(questionType, questionState)
+            val result = chatApi.getRoomList()
 
             if (result.isSuccessful && result.body()?.success == true) {
-                emit(BaseResult.Success(result.body()?.data?.map { it.asDomain() }!!))
+                val data = result.body()?.data!!
+                val chatRoomListVO = data.asDomain()
+                emit(BaseResult.Success(chatRoomListVO))
+
             } else {
                 emit(BaseResult.Error("Error"))
             }

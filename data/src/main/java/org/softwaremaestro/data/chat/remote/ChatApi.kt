@@ -1,6 +1,7 @@
 package org.softwaremaestro.data.chat.remote
 
 import org.softwaremaestro.data.chat.model.ChatRoomDto
+import org.softwaremaestro.data.chat.model.ChatRoomListDto
 import org.softwaremaestro.data.classroom.model.TutoringInfoDto
 import org.softwaremaestro.data.common.utils.WrappedResponse
 import org.softwaremaestro.domain.chat.entity.QuestionState
@@ -12,10 +13,7 @@ import retrofit2.http.Query
 
 interface ChatApi {
 
-    @GET("/chat/roomlist")
-    suspend fun getRoomList(
-        @Query("type") questionType: QuestionType,
-        @Query("state") questionState: QuestionState
-    ): Response<WrappedResponse<List<ChatRoomDto>>>
+    @GET("/chatting/list")
+    suspend fun getRoomList(): Response<WrappedResponse<ChatRoomListDto>>
 
 }

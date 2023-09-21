@@ -3,38 +3,43 @@ package org.softwaremaestro.data.chat.model
 import com.google.gson.annotations.SerializedName
 
 data class ChatRoomListDto(
-    @SerializedName("normalQuestion") val normalQuestionList: List<ChatRoomDto>,
-    @SerializedName("reservedQuestion") val reservedQuestionList: List<ChatRoomDto>
+    @SerializedName("normalProposed") val normalProposed: List<ChatRoomDto>,
+    @SerializedName("normalReserved") val normalReserved: List<ChatRoomDto>,
+    @SerializedName("selectedProposed") val selectedProposed: List<ChatRoomDto>,
+    @SerializedName("selectedReserved") val selectedReserved: List<ChatRoomDto>,
 )
+
 
 data class ChatRoomDto(
-    @SerializedName("id") val tutoringId: String,
-    @SerializedName("studentInfo") val studentInfo: StudentInfoDto,
-    @SerializedName("roomType") val roomType: Int,
-    @SerializedName("teacherInfo") val teacherInfo: TeacherInfoDto,
-    @SerializedName("questionInfo") val questionInfo: QuestionInfoDto
-)
-
-data class StudentInfoDto(
-    @SerializedName("id") val id: String,
-    @SerializedName("name") val name: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String,
-)
-
-data class TeacherInfoDto(
-    @SerializedName("id") val id: String,
-    @SerializedName("name") val name: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String,
-)
-
-data class QuestionInfoDto(
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val tutoringId: String?,
+    @SerializedName("roomImage") val roomImage: String,
+    @SerializedName("questionState") val questionState: String?,
+    @SerializedName("opponentId") val opponentId: String?,
     @SerializedName("title") val title: String,
-    @SerializedName("content") val content: String,
-    @SerializedName("imageUrl") val imageUrl: String,
-    @SerializedName("category") val category: String,
-    @SerializedName("createdAt") val createdAt: String,
-    @SerializedName("updatedAt") val updatedAt: String,
-    @SerializedName("isAnswered") val isAnswered: Boolean,
-    @SerializedName("isDeleted") val isDeleted: Boolean,
+    @SerializedName("isSelect") val isSelect: Boolean?,
+    @SerializedName("questionId") val questionId: String?,
+    @SerializedName("schoolSubject") val schoolSubject: String?,
+    @SerializedName("schoolLevel") val schoolLevel: String?,
+    @SerializedName("messages") val messages: List<MessageDto>?,
+    @SerializedName("teachers") val teachers: List<ChatRoomDto>?,
+    @SerializedName("isTeacherRoom") val isTeacherRoom: Boolean?,
 )
+
+data class MessageDto(
+    @SerializedName("sender") val sender: String,
+    @SerializedName("format") val format: String,
+    @SerializedName("body") val body: MessageBodyDto,
+    @SerializedName("createdAt") val time: String,
+    @SerializedName("isMyMsg") val isMyMsg: Boolean,
+)
+
+
+data class MessageBodyDto(
+    @SerializedName("text") val text: String?,
+    @SerializedName("image") val imageUrl: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("startDateTime") val startDateTime: String?,
+    @SerializedName("questionId") val questionId: String?,
+
+    )
+

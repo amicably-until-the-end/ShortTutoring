@@ -4,18 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import org.softwaremaestro.domain.chat.entity.MessageBodyVO
+import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.chat_page.item.ChatMsg
 import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
 
-class MessageListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items: List<ChatMsg> = emptyList()
+    private var items: List<MessageVO> = emptyList()
 
 
     override fun onCreateViewHolder(
@@ -53,12 +55,17 @@ class MessageListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return items[position].type
+        return when (items[position].bodyVO) {
+            is MessageBodyVO.Text -> TYPE_TEXT
+            is MessageBodyVO.ProblemImage -> TYPE_QUESTION
+            is MessageBodyVO.AppointRequest -> TYPE_BUTTONS
+            else -> TYPE_TEXT
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder.setIsRecyclable(false)
-        when (items[position].type) {
+        when (holder.itemViewType) {
             TYPE_BUTTONS -> {
                 (holder as ButtonsViewHolder).onBind(items[position])
             }
@@ -77,31 +84,74 @@ class MessageListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.size
     }
 
-    fun setItem(items: List<ChatMsg>) {
+    fun setItem(items: List<MessageVO>) {
         this.items = items
     }
 
     inner class TextViewHolder(private val binding: ItemChatTextBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: ChatMsg) {
+        fun onBind(item: MessageVO) {
             binding.apply {
-                if (!item.myMsg) {
+                if (item.isMyMsg) {
+                    //set colors
+                    containerBody.backgroundTintList =
+                        root.context.getColorStateList(R.color.primary_blue)
+                    tvText.setTextColor(root.context.getColor(R.color.white))
+                    //set position to right
+                    ConstraintSet().apply {
+                        clone(containerRoot)
+                        connect(
+                            containerBody.id,
+                            ConstraintSet.RIGHT,
+                            containerRoot.id,
+                            ConstraintSet.RIGHT
+                        )
+                        clear(containerBody.id, ConstraintSet.LEFT)
+                        applyTo(containerRoot)
+                    }
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            tvTime.id,
+                            ConstraintSet.RIGHT,
+                            containerBody.id,
+                            ConstraintSet.LEFT
+                        )
+                        clear(tvTime.id, ConstraintSet.LEFT)
+                        applyTo(root)
+                    }
+                } else {
                     //set colors
                     containerBody.backgroundTintList = root.context.getColorStateList(R.color.white)
                     tvText.setTextColor(root.context.getColor(R.color.black))
                     //set position to left
-                    containerBody.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToLeft = root.id
-                        rightToRight = ConstraintLayout.LayoutParams.UNSET
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            containerBody.id,
+                            ConstraintSet.LEFT,
+                            root.id,
+                            ConstraintSet.LEFT
+                        )
+                        clear(containerBody.id, ConstraintSet.RIGHT)
+                        applyTo(root)
                     }
-                    tvTime.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToRight = containerBody.id
-                        rightToLeft = ConstraintLayout.LayoutParams.UNSET
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            tvTime.id,
+                            ConstraintSet.LEFT,
+                            containerBody.id,
+                            ConstraintSet.RIGHT
+                        )
+                        clear(tvTime.id, ConstraintSet.RIGHT)
+                        applyTo(root)
                     }
                 }
-                tvText.text = item.message
-                tvTime.text = item.time
+                var body = item.bodyVO as MessageBodyVO.Text
+                tvText.text = body.text ?: ""
+                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${item.time.minute}"
             }
         }
     }
@@ -109,34 +159,70 @@ class MessageListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class ButtonsViewHolder(private val binding: ItemChatButtonsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: ChatMsg) {
+        fun onBind(item: MessageVO) {
             binding.apply {
-                if (!item.myMsg) {
-                    //set colors
-                    containerBody.backgroundTintList = root.context.getColorStateList(R.color.white)
-                    tvText.setTextColor(root.context.getColor(R.color.black))
+                if (item.isMyMsg) {
+                    ConstraintSet().apply {
+                        clone(containerRoot)
+                        connect(
+                            containerBody.id,
+                            ConstraintSet.RIGHT,
+                            containerRoot.id,
+                            ConstraintSet.RIGHT
+                        )
+                        clear(containerBody.id, ConstraintSet.LEFT)
+                        applyTo(containerRoot)
+                    }
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            tvTime.id,
+                            ConstraintSet.RIGHT,
+                            containerBody.id,
+                            ConstraintSet.LEFT
+                        )
+                        clear(tvTime.id, ConstraintSet.LEFT)
+                        applyTo(root)
+                    }
+                } else {
                     //set position to left
-                    containerBody.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToLeft = root.id
-                        rightToRight = ConstraintLayout.LayoutParams.UNSET
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            containerBody.id,
+                            ConstraintSet.LEFT,
+                            root.id,
+                            ConstraintSet.LEFT
+                        )
+                        clear(containerBody.id, ConstraintSet.RIGHT)
+                        applyTo(root)
                     }
-                    tvTime.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToRight = containerBody.id
-                        rightToLeft = ConstraintLayout.LayoutParams.UNSET
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            tvTime.id,
+                            ConstraintSet.LEFT,
+                            containerBody.id,
+                            ConstraintSet.RIGHT
+                        )
+                        clear(tvTime.id, ConstraintSet.RIGHT)
+                        applyTo(root)
                     }
-                }
-                tvText.text = item.message
-                tvTime.text = item.time
+                    when (item.bodyVO) {
+                        is MessageBodyVO.AppointRequest -> {
+                            var body = item.bodyVO as MessageBodyVO.AppointRequest
+                            var time = body.startDateTime
+                            tvText.text =
+                                "안녕하세요 선생님!\n ${time?.month}월 ${time?.dayOfMonth}일 ${time?.hour}시 ${time?.minute}분에\n 수업 가능하신가요?"
+                            btn1.visibility = Button.VISIBLE
+                            btn2.visibility = Button.VISIBLE
+                            btn3.visibility = Button.GONE
+                            btn1.text = "예"
+                            btn2.text = "아니오"
 
-                val buttons = listOf<Button>(
-                    btn1, btn2, btn3
-                )
+                        }
 
-                for (i in 0 until item.buttonNumber) {
-                    buttons[i].visibility = Button.VISIBLE
-                    buttons[i].text = item.buttonString?.get(i)
-                    buttons[i].setOnClickListener {
-                        //TODO: 리스너 구현
+                        else -> {}
                     }
                 }
             }
@@ -146,24 +232,70 @@ class MessageListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class QuestionViewHolder(private val binding: ItemChatQuestionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: ChatMsg) {
+        fun onBind(item: MessageVO) {
             binding.apply {
-                if (!item.myMsg) {
+                if (item.isMyMsg) {
                     //set position to left
-                    containerBody.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToLeft = root.id
-                        rightToRight = ConstraintLayout.LayoutParams.UNSET
+                    //set position to right
+                    ConstraintSet().apply {
+                        clone(containerRoot)
+                        connect(
+                            containerBody.id,
+                            ConstraintSet.RIGHT,
+                            containerRoot.id,
+                            ConstraintSet.RIGHT
+                        )
+                        clear(containerBody.id, ConstraintSet.LEFT)
+                        applyTo(containerRoot)
                     }
-                    tvTime.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToRight = containerBody.id
-                        rightToLeft = ConstraintLayout.LayoutParams.UNSET
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            tvTime.id,
+                            ConstraintSet.RIGHT,
+                            containerBody.id,
+                            ConstraintSet.LEFT
+                        )
+                        clear(tvTime.id, ConstraintSet.LEFT)
+                        applyTo(root)
+                    }
+                } else {
+                    //set position to left
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            containerBody.id,
+                            ConstraintSet.LEFT,
+                            root.id,
+                            ConstraintSet.LEFT
+                        )
+                        clear(containerBody.id, ConstraintSet.RIGHT)
+                        applyTo(root)
+                    }
+                    ConstraintSet().apply {
+                        clone(root)
+                        connect(
+                            tvTime.id,
+                            ConstraintSet.LEFT,
+                            containerBody.id,
+                            ConstraintSet.RIGHT
+                        )
+                        clear(tvTime.id, ConstraintSet.RIGHT)
+                        applyTo(root)
                     }
                 }
-                tvTime.text = item.time
-                tvDesciption.text = item.questionDesc
-                Glide.with(root.context).load(item.questionImageUrl)
-                    .centerCrop()
-                    .into(ivImage)
+                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${item.time.minute}"
+                when (item.bodyVO) {
+                    is MessageBodyVO.ProblemImage -> {
+                        var body = item.bodyVO as MessageBodyVO.ProblemImage
+                        tvDesciption.text = body.description
+                        Glide.with(root.context).load(body.imageUrl)
+                            .centerCrop()
+                            .into(ivImage)
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
