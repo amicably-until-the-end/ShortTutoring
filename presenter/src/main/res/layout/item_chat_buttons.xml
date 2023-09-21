@@ -11,39 +11,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:text="오후 13:05"
+        android:fontFamily="@font/pretendard_regular"
         android:textColor="@color/sub_text_grey"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/container_body" />
+        app:layout_constraintRight_toLeftOf="@id/container_body"
+        tools:text="오후 13:05" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/container_body"
-        android:layout_width="220dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_radius_15"
         android:backgroundTint="@color/primary_blue"
-        android:orientation="vertical"
-        android:paddingHorizontal="11dp"
-        android:paddingVertical="13dp"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="12dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <TextView
             android:id="@+id/tv_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="버튼 뷰"
+            android:fontFamily="@font/pretendard_medium"
+            android:maxWidth="250dp"
             android:textColor="@color/white"
             android:textSize="13sp"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="안녕하세요 선생님!\n아래의 시간 중에 수업 가능한 시간이 있으신가요?" />
 
         <LinearLayout
             android:id="@+id/container_buttons"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -52,35 +53,49 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_height="32dp"
                 android:background="@drawable/bg_radius_4"
                 android:backgroundTint="@color/background_grey"
+                android:fontFamily="@font/pretendard_medium"
+                android:gravity="center"
                 android:padding="8dp"
-                android:text="버튼"
-                android:visibility="gone" />
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:visibility="visible"
+                tools:text="버튼" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_radius_4"
                 android:backgroundTint="@color/background_grey"
+                android:fontFamily="@font/pretendard_medium"
+                android:gravity="center"
                 android:padding="8dp"
-                android:text="버튼"
-                android:visibility="gone" />
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:visibility="visible"
+                tools:text="버튼" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_radius_4"
                 android:backgroundTint="@color/background_grey"
+                android:fontFamily="@font/pretendard_medium"
+                android:gravity="center"
                 android:padding="8dp"
-                android:text="버튼"
-                android:visibility="gone" />
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:visibility="gone"
+                tools:text="버튼" />
+
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

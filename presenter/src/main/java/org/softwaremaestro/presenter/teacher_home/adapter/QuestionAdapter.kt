@@ -12,7 +12,7 @@ import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
 private const val EMPTY_STRING = "-"
 
 class QuestionAdapter(
-    private val onClick: (QuestionGetResponseVO) -> Unit,
+    private val onItemClickListener: (QuestionGetResponseVO) -> Unit,
 ) : ListAdapter<QuestionGetResponseVO, QuestionAdapter.ViewHolder>(QuestionDiffUtil) {
 
     // 신청하기 버튼의 색을 결정하기 위해 선택된 질문 id를 저장한다
@@ -56,7 +56,7 @@ class QuestionAdapter(
 
                 root.setOnClickListener {
                     if (item.id != null && item.images != null) {
-                        onClick(item)
+                        onItemClickListener(item)
                     }
                 }
             }
