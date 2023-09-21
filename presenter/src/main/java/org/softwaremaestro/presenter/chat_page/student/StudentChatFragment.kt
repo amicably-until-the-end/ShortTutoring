@@ -80,7 +80,7 @@ class StudentChatFragment : ChatFragment() {
             text = "강의실 입장하기"
             setEnabledAndChangeColor(true)
             setOnClickListener {
-                //강의실 입장하기
+                enterRoom()
             }
         }
     }

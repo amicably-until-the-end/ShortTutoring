@@ -134,7 +134,7 @@ class ClassroomFragment : Fragment() {
         setRedoButton()
         setUndoButton()
         setUpFinishButton()
-        uploadProblemImg()
+        //uploadProblemImg()
     }
 
     private fun setVoiceFunctions() {
@@ -395,6 +395,11 @@ class ClassroomFragment : Fragment() {
             whiteBoardRoom?.insertImage(imageInfo)
             isProblemImgUploaded = true
         }
+    }
+
+    companion object {
+        const val RTC_TEACHER_UID = 1
+        const val RTC_STUDENT_UID = 2
     }
 
 }

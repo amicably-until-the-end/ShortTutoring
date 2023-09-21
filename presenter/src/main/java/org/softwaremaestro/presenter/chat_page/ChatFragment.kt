@@ -1,11 +1,13 @@
 package org.softwaremaestro.presenter.chat_page
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
@@ -14,14 +16,20 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
+import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
 import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
+import org.softwaremaestro.presenter.classroom.ClassroomActivity
+import org.softwaremaestro.presenter.classroom.ClassroomFragment
+import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
+import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.widget.LoadingDialog
 
 
 @AndroidEntryPoint
@@ -43,6 +51,7 @@ abstract class ChatFragment : Fragment() {
 
     protected var currentChatRoom: ChatRoomVO? = null
 
+    lateinit var loadingDialog: LoadingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +72,14 @@ abstract class ChatFragment : Fragment() {
         getRoomList()
         setSendMessageButton()
 
+
         return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadingDialog = LoadingDialog(requireContext())
 
     }
 
@@ -101,6 +117,50 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun observeTutoringInfo() {
+        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
+
+            when (it) {
+                is UIState.Loading -> {
+                    loadingDialog.show()
+                }
+
+                is UIState.Success -> {
+                    Log.d("tutoring", it._data.toString())
+                    loadingDialog.dismiss()
+                    if (!it._data?.whiteBoardAppId.isNullOrEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "강의실에 입장합니다. ${it._data?.whiteBoardAppId}",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        moveToClassRoom(it._data!!)
+                    } else {
+                        Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                is UIState.Failure -> {
+                    loadingDialog.dismiss()
+                    Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            }
+        }
+    }
+
+    fun enterRoom() {
+        if (currentChatRoom?.questionId == null) {
+            Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        chatViewModel.getClassRoomInfo(currentChatRoom?.questionId!!)
+        observeTutoringInfo()
     }
 
     private fun refreshReservedRoomList() {
@@ -322,6 +382,30 @@ abstract class ChatFragment : Fragment() {
         binding.containerOfferingTeacher.visibility = View.GONE
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerTutoringList.id
+        }
+    }
+
+    private fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
+        val intent = Intent(requireContext(), ClassroomActivity::class.java)
+        tutoringInfoVO.let {
+            val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
+                it.whiteBoardAppId!!,
+                it.whiteBoardUUID!!,
+                it.whiteBoardToken!!,
+                "1"
+            )
+            val voiceRoomInfo = SerializedVoiceRoomInfo(
+                appId = it.RTCAppId!!,
+                token = if (isTeacher()) (it.teacherRTCToken) else (it.studentRTCToken),
+                channelId = it.id,
+                uid = if (isTeacher()) (ClassroomFragment.RTC_TEACHER_UID) else (ClassroomFragment.RTC_STUDENT_UID)
+            )
+            // 교실 액티비티로 이동한다
+            intent.apply {
+                putExtra("whiteBoardInfo", whiteBoardRoomInfo)
+                putExtra("voiceRoomInfo", voiceRoomInfo)
+            }
+            startActivity(intent)
         }
     }
 
