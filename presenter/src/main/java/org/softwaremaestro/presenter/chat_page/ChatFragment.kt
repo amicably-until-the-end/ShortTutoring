@@ -138,6 +138,7 @@ abstract class ChatFragment : Fragment() {
                         )
                             .show()
                         moveToClassRoom(it._data!!)
+                        chatViewModel._tutoringInfo.value = UIState.Empty
                     } else {
                         Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
                             .show()
@@ -148,6 +149,10 @@ abstract class ChatFragment : Fragment() {
                     loadingDialog.dismiss()
                     Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                         .show()
+                }
+
+                else -> {
+
                 }
 
             }
