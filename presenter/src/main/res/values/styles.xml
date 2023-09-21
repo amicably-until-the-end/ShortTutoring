@@ -153,4 +153,26 @@
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="backgroundTint">@color/black</item>
     </style>
+
+    <style name="PretandardTextView" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/app_font</item>
+    </style>
+
+    <style name="PretandardButton" parent="@android:style/Widget.DeviceDefault.Button">
+        <item name="android:fontFamily">@font/app_font</item>
+    </style>
+
+    <style name="PretandardEditText" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/app_font</item>
+    </style>
+
+    <style name="PretandardRadioButton" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/app_font</item>
+    </style>
+
+    <style name="PretandardCheckBox" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/app_font</item>
+    </style>
+
+
 </resources>
