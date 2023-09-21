@@ -154,12 +154,7 @@ class MessageListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         leftToLeft = root.id
                         rightToRight = ConstraintLayout.LayoutParams.UNSET
                     }
-                    tvTime.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        leftToRight = containerBody.id
-                        rightToLeft = ConstraintLayout.LayoutParams.UNSET
-                    }
                 }
-                tvTime.text = item.time
                 tvDesciption.text = item.questionDesc
                 Glide.with(root.context).load(item.questionImageUrl)
                     .centerCrop()
