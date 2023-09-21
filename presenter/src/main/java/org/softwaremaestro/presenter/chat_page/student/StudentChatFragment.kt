@@ -37,7 +37,7 @@ class StudentChatFragment : ChatFragment() {
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         if (chatRoomVO.isSelect) {
-            //지정 질문 이면
+            //TODO : 지정 질문 이면
         } else {
             refreshNormalQuestionState(chatRoomVO)
         }
@@ -75,15 +75,6 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-    private fun enableClassRoomButton() {
-        binding.btnChatRoomRight.apply {
-            text = "강의실 입장하기"
-            setEnabledAndChangeColor(true)
-            setOnClickListener {
-                enterRoom()
-            }
-        }
-    }
 
     private fun enableChooseTeacherButton() {
         binding.btnChatRoomRight.apply {

@@ -29,6 +29,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 
 
@@ -115,6 +116,16 @@ abstract class ChatFragment : Fragment() {
 
                     else -> {}
                 }
+            }
+        }
+    }
+
+    fun enableClassRoomButton() {
+        binding.btnChatRoomRight.apply {
+            text = "강의실 입장하기"
+            setEnabledAndChangeColor(true)
+            setOnClickListener {
+                enterRoom()
             }
         }
     }
