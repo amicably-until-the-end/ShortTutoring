@@ -1,10 +1,7 @@
 package org.softwaremaestro.presenter.student_home
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -13,7 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityStudentHomeBinding
-import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
 
 @AndroidEntryPoint
 class StudentHomeActivity : AppCompatActivity() {

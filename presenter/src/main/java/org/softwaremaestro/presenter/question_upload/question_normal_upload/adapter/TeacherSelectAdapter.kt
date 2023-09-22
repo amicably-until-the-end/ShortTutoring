@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.question_upload.adapter
+package org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,13 +17,13 @@ class TeacherSelectAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TeacherSelectAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemTeacherSelectableBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TeacherSelectAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 

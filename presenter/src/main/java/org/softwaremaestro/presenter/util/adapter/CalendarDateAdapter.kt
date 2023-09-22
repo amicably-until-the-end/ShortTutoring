@@ -164,7 +164,7 @@ class CalendarDateAdapter(
             binding.root.isEnabled = LocalDate.now() <= item
 
             binding.tvDate.setTextColor(
-                if (item.monthValue == monthShown)
+                if (item.monthValue == monthShown && item >= LocalDate.now())
                     binding.root.context.getColor(R.color.black)
                 else
                     Color.parseColor("#FFCFD1D8")

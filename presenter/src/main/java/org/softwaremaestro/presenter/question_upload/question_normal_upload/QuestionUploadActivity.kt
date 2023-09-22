@@ -1,24 +1,16 @@
-package org.softwaremaestro.presenter.question_upload
+package org.softwaremaestro.presenter.question_upload.question_normal_upload
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityQuestionUploadBinding
 
 @AndroidEntryPoint

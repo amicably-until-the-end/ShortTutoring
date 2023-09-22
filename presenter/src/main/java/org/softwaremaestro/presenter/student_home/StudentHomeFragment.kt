@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,15 +22,16 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
-import org.softwaremaestro.presenter.question_reserve.QuestionReserveActivity
-import org.softwaremaestro.presenter.question_upload.QuestionFormFragment
-import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
-import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
+import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 import org.softwaremaestro.presenter.util.Util.toPx
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
@@ -53,7 +55,7 @@ class StudentHomeFragment : Fragment() {
 
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
-    private lateinit var teacherAdapter: TeacherAdapter
+    private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var dialogTeacherProfile: BottomSheetDialog
 
     override fun onCreateView(
@@ -104,7 +106,11 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherRecyclerView() {
 
-        teacherAdapter = TeacherAdapter {
+        binding.containerMoreTeacher.setOnClickListener {
+            startActivity(Intent(requireActivity(), TeacherSearchActivity::class.java))
+        }
+
+        teacherAdapter = TeacherSimpleAdapter {
             dialogTeacherProfile.show()
         }
 
@@ -133,7 +139,14 @@ class StudentHomeFragment : Fragment() {
             }
 
             findViewById<LinearLayout>(R.id.container_reserve).setOnClickListener {
-                startActivity(Intent(requireActivity(), QuestionReserveActivity::class.java))
+                startActivityForResult(
+                    Intent(
+                        requireActivity(),
+                        QuestionReserveActivity::class.java
+                    ), QUESTION_UPLOAD_RESULT
+                )
+
+                dialogTeacherProfile.dismiss()
             }
         }
         dialogTeacherProfile = BottomSheetDialog(requireContext()).apply {
@@ -280,9 +293,9 @@ class StudentHomeFragment : Fragment() {
             when (requestCode) {
                 QUESTION_UPLOAD_RESULT -> {
                     val questionId =
-                        data?.getStringExtra(QuestionFormFragment.QUESTION_UPLOAD_RESULT)
+                        data?.getStringExtra(QuestionNormalFormFragment.QUESTION_UPLOAD_RESULT)
                     (activity as StudentHomeActivity).apply {
-
+                        Log.d("hhcc", "move to chat tab")
                         moveToChatTab()
                     }
                 }
@@ -291,6 +304,6 @@ class StudentHomeFragment : Fragment() {
     }
 
     companion object {
-        val QUESTION_UPLOAD_RESULT = 1001
+        private val QUESTION_UPLOAD_RESULT = 1001
     }
 }
