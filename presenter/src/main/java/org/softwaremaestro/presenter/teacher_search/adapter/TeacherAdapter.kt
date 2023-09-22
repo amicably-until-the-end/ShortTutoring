@@ -1,11 +1,11 @@
-package org.softwaremaestro.presenter.student_home.adapter
+package org.softwaremaestro.presenter.teacher_search.adapter
 
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
-import org.softwaremaestro.presenter.databinding.ItemTeacherSimpleBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import java.lang.Integer.min
 
 class TeacherAdapter(
@@ -20,9 +20,14 @@ class TeacherAdapter(
         parent: ViewGroup,
         viewType: Int
     ): TeacherAdapter.ViewHolder {
-        val view =
-            ItemTeacherSimpleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(view)
+
+        val binding = ItemTeacherBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding)
+
     }
 
     override fun onBindViewHolder(holder: TeacherAdapter.ViewHolder, position: Int) {
@@ -38,18 +43,18 @@ class TeacherAdapter(
         this.items = items
     }
 
-    inner class ViewHolder(private val binding: ItemTeacherSimpleBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: TeacherVO) {
 
             with(binding) {
-                ivProfile.setImageURI(Uri.parse(item.profileUrl))
+                ivTeacherImg.setImageURI(Uri.parse(item.profileUrl))
                 tvTeacherName.text = item.nickname
                 tvTeacherUniv.text = item.univ
                 tvTeacherBio.text = item.bio
-                tvRating.text = item.rating.toString()
-                tvFollowCnt.text = item.pickCount.toString()
+                tvTeacherRating.text = item.rating.toString()
+                btnFollow.text = "찜한 학생 ${item.pickCount}"
             }
 
             itemView.setOnClickListener {

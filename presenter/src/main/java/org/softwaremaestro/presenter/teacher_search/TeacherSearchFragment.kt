@@ -12,8 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeFragmentDirections
-import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
+import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.teacher_search.viewmodel.MyProfileViewModel
 
@@ -41,7 +41,7 @@ class TeacherSearchFragment : Fragment() {
         myProfileViewModel.getMyProfile()
 
         setFollowingRecyclerView()
-        setBestTeacherRecyclerView()
+        setTeacherRecommendRecyclerView()
 
         setItemToTeacherAdapter()
 
@@ -67,11 +67,11 @@ class TeacherSearchFragment : Fragment() {
         }
     }
 
-    private fun setBestTeacherRecyclerView() {
+    private fun setTeacherRecommendRecyclerView() {
 
         teacherAdapter = TeacherAdapter {}
 
-        binding.rvBestTeacher.apply {
+        binding.rvTeacherRecommend.apply {
             adapter = teacherAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)

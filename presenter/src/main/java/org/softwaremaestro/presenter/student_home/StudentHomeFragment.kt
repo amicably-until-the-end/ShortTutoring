@@ -26,8 +26,8 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.Ques
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
-import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
+import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
@@ -54,7 +54,7 @@ class StudentHomeFragment : Fragment() {
 
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
-    private lateinit var teacherAdapter: TeacherAdapter
+    private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var dialogTeacherProfile: BottomSheetDialog
 
     override fun onCreateView(
@@ -105,7 +105,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherRecyclerView() {
 
-        teacherAdapter = TeacherAdapter {
+        teacherAdapter = TeacherSimpleAdapter {
             dialogTeacherProfile.show()
         }
 
