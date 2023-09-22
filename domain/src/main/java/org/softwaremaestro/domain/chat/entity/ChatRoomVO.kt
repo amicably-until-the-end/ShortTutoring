@@ -20,11 +20,11 @@ sealed class NormalProposedRoomVO {
 data class ChatRoomVO(
     val id: String?,
     val roomType: RoomType,
-    val roomImage: String,
+    val roomImage: String?,
     val questionState: QuestionState,
     val questionId: String?,
     val opponentId: String?,
-    val title: String,
+    val title: String?,
     val schoolSubject: String?,
     val schoolLevel: String?,
     val messages: List<MessageVO>?,
