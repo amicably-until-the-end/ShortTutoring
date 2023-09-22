@@ -10,7 +10,7 @@ import java.lang.Integer.min
 
 class TeacherSimpleAdapter(
     private val itemCountLimit: Int? = null,
-    private val onItemClickListener: (String) -> Unit
+    private val onItemClickListener: (TeacherVO) -> Unit
 ) :
     RecyclerView.Adapter<TeacherSimpleAdapter.ViewHolder>() {
 
@@ -58,7 +58,7 @@ class TeacherSimpleAdapter(
             }
 
             itemView.setOnClickListener {
-                item.teacherId?.let { onItemClickListener(it) }
+                onItemClickListener(item)
             }
         }
     }

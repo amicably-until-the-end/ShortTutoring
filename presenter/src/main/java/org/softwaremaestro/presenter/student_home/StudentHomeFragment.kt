@@ -2,20 +2,14 @@ package org.softwaremaestro.presenter.student_home
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.lecture_get.entity.LectureVO
@@ -31,19 +25,6 @@ import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
-import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
-import org.softwaremaestro.presenter.util.Util.toPx
-
-private const val GRIDLAYOUT_SPAN_COUNT = 2
-private const val GRIDLAYOUT_SPICING = 8
-
-private const val SUBJECT = "수학1"
-private const val MAJOR_SECTION_1 = "다항식"
-private const val MAJOR_SECTION_2 = "나머지정리"
-private const val MAJOR_SECTION_3 = "방정식과 부등식"
-private const val PROBLEM_NUMBER_1 = 57
-private const val PROBLEM_NUMBER_2 = 33
-private const val PROBLEM_NUMBER_3 = 41
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -56,7 +37,7 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
-    private lateinit var dialogTeacherProfile: BottomSheetDialog
+    private lateinit var dialogTeacherProfile: TeacherProfileDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +48,7 @@ class StudentHomeFragment : Fragment() {
 
         myProfileViewModel.getMyProfile()
 
-        initDialogTeacherProfile()
+        initTeacherProfileDialog()
 
         setQuestionButton()
         setTeacherFollowingRecyclerView()
@@ -86,14 +67,40 @@ class StudentHomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun initTeacherProfileDialog() {
+        dialogTeacherProfile = TeacherProfileDialog(
+            onFollowBtnClicked = {},
+            onReserveBtnClicked = {
+                startActivityForResult(
+                    Intent(
+                        requireActivity(),
+                        QuestionReserveActivity::class.java
+                    ), QUESTION_UPLOAD_RESULT
+                )
+
+                dialogTeacherProfile.dismiss()
+            }
+        )
+    }
+
     private fun setOthersQuestionRecyclerView() {
         return
     }
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
-            val dialog = TeacherProfileDialog(it)
-            dialog.show(parentFragmentManager, "teacherProfile")
+            val teacherVO = TeacherVO(
+                profileUrl = it.profileImage,
+                nickname = it.name,
+                teacherId = it.id,
+                bio = it.bio,
+                pickCount = -1,
+                univ = "${it.schoolName} ${it.schoolDepartment}",
+                rating = -1.0f
+            )
+
+            dialogTeacherProfile.item = teacherVO
+            dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
         binding.rvTeacherFollowing.apply {
@@ -106,12 +113,9 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherRecyclerView() {
 
-        binding.containerMoreTeacher.setOnClickListener {
-            startActivity(Intent(requireActivity(), TeacherSearchActivity::class.java))
-        }
-
-        teacherAdapter = TeacherSimpleAdapter {
-            dialogTeacherProfile.show()
+        teacherAdapter = TeacherSimpleAdapter { teacherVO ->
+            dialogTeacherProfile.item = teacherVO
+            dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
         binding.rvTeacher.apply {
@@ -129,28 +133,6 @@ class StudentHomeFragment : Fragment() {
             adapter = lectureAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
-    }
-
-    private fun initDialogTeacherProfile() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_teacher_profile, null).apply {
-            findViewById<Button>(R.id.btn_follow).setOnClickListener {
-
-            }
-
-            findViewById<LinearLayout>(R.id.container_reserve).setOnClickListener {
-                startActivityForResult(
-                    Intent(
-                        requireActivity(),
-                        QuestionReserveActivity::class.java
-                    ), QUESTION_UPLOAD_RESULT
-                )
-
-                dialogTeacherProfile.dismiss()
-            }
-        }
-        dialogTeacherProfile = BottomSheetDialog(requireContext()).apply {
-            setContentView(dialogView)
         }
     }
 
@@ -264,28 +246,6 @@ class StudentHomeFragment : Fragment() {
         lectureAdapter.setItem(lectures)
     }
 
-    private fun RecyclerView.setSpacing(dp: Int) {
-        this.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                position: Int,
-                parent: RecyclerView
-            ) {
-                super.getItemOffsets(outRect, position, parent)
-                when (position % GRIDLAYOUT_SPAN_COUNT) {
-                    // 그리드 레이아웃의 맨 왼쪽 뷰
-                    0 -> outRect.right = toPx(dp, requireContext())
-                    // 그리드 레이아웃의 맨 오른쪽 뷰
-                    GRIDLAYOUT_SPAN_COUNT - 1 -> outRect.left = toPx(dp, requireContext())
-                    else -> {
-                        outRect.left = toPx(dp, requireContext())
-                        outRect.right = toPx(dp, requireContext())
-                    }
-                }
-            }
-        })
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -295,7 +255,6 @@ class StudentHomeFragment : Fragment() {
                     val questionId =
                         data?.getStringExtra(QuestionNormalFormFragment.QUESTION_UPLOAD_RESULT)
                     (activity as StudentHomeActivity).apply {
-                        Log.d("hhcc", "move to chat tab")
                         moveToChatTab()
                     }
                 }

@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.student_home.widget
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +7,18 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
-import org.softwaremaestro.presenter.chat_page.adapter.TeacherSelectAdapter
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
 
 @AndroidEntryPoint
-class TeacherProfileDialog(private val teacherVO: FollowingGetResponseVO) :
+class TeacherProfileDialog(
+    private val onFollowBtnClicked: () -> Unit,
+    private val onReserveBtnClicked: () -> Unit,
+) :
     BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogTeacherProfileBinding
-
-    private lateinit var teacherSelectAdapter: TeacherSelectAdapter
+    lateinit var item: TeacherVO
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,30 +26,34 @@ class TeacherProfileDialog(private val teacherVO: FollowingGetResponseVO) :
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogTeacherProfileBinding.inflate(layoutInflater)
-
-        setContentsRecyclerView()
-        setTeacherInfo()
-
         return binding.root
     }
 
-    private fun setTeacherInfo() {
-        Glide.with(binding.root.context).load(teacherVO.profileImage).centerCrop()
-            .into(binding.ivTeacherImg)
-        binding.tvTeacherName.text = teacherVO.name
-        binding.tvTeacherUniv.text = "undefined undefined"
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setFollowBtn()
+        setReserveBtn()
+        bind()
     }
 
-    private fun setContentsRecyclerView() {
-        //TODO: set contents recyclerview
+    private fun bind() {
+        with(binding) {
+            Glide.with(root.context).load(item.profileUrl).centerCrop()
+                .into(ivTeacherImg)
+            tvTeacherName.text = item.nickname
+            tvTeacherUniv.text = item.univ
+            tvTeacherBio.text = item.bio
+            tvTeacherRating.text = item.rating.toString()
+            btnFollow.text = "찜한 학생 ${item.pickCount}"
+            // Todo: 예약 질문 갯수
+        }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        val dialog = super.onCreateDialog(savedInstanceState)
-
-
-        return dialog
+    private fun setFollowBtn() {
+        binding.btnFollow.setOnClickListener { onFollowBtnClicked() }
     }
 
+    private fun setReserveBtn() {
+        binding.containerReserve.setOnClickListener { onReserveBtnClicked() }
+    }
 }
