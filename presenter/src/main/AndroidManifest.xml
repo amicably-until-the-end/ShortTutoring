@@ -3,10 +3,12 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application android:usesCleartextTraffic="true">
+        <activity
+            android:name=".teacher_search.TeacherSearchActivity"
+            android:exported="false" />
         <activity
             android:name=".teacher_my_page.SettingTimeAndCostActivity"
             android:exported="false" />

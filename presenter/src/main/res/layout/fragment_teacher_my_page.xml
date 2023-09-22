@@ -282,7 +282,7 @@
                                 android:id="@+id/iv_right_arrow"
                                 android:layout_width="4dp"
                                 android:layout_height="8dp"
-                                android:background="@drawable/ic_right_arrow" />
+                                android:background="@drawable/ic_arrow_right" />
 
                         </LinearLayout>
 
@@ -496,7 +496,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -534,7 +534,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -590,7 +590,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -628,7 +628,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -666,7 +666,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -722,7 +722,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -760,7 +760,7 @@
                     <ImageView
                         android:layout_width="4dp"
                         android:layout_height="8dp"
-                        android:background="@drawable/ic_right_arrow"
+                        android:background="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

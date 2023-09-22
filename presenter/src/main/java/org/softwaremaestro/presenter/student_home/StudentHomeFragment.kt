@@ -31,6 +31,7 @@ import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 import org.softwaremaestro.presenter.util.Util.toPx
 
 private const val GRIDLAYOUT_SPAN_COUNT = 2
@@ -104,6 +105,10 @@ class StudentHomeFragment : Fragment() {
 
 
     private fun setTeacherRecyclerView() {
+
+        binding.containerMoreTeacher.setOnClickListener {
+            startActivity(Intent(requireActivity(), TeacherSearchActivity::class.java))
+        }
 
         teacherAdapter = TeacherSimpleAdapter {
             dialogTeacherProfile.show()
