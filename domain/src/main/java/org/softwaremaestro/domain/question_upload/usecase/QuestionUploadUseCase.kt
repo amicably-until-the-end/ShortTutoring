@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 
 class QuestionUploadUseCase @Inject constructor(private val repository: QuestionUploadRepository) {
+
     suspend fun execute(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>> =
         repository.uploadQuestion(questionUploadVO)
 }

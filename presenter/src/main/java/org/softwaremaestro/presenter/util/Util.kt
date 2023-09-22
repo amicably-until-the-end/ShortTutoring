@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Service
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.util.Base64
 import android.util.DisplayMetrics
@@ -127,6 +128,11 @@ fun Button.setEnabledAndChangeColor(enabled: Boolean) {
         setBackgroundResource(R.drawable.bg_radius_5_grey)
         setTextColor(resources.getColor(R.color.black, null))
     }
+}
+
+fun String.toBitmap(): Bitmap {
+    val encodeByteArr = java.util.Base64.getDecoder().decode(this);
+    return BitmapFactory.decodeByteArray(encodeByteArr, 0, encodeByteArr.size)
 }
 
 fun Bitmap.toBase64(): String {

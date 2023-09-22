@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +22,9 @@ import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
-import org.softwaremaestro.presenter.question_reserve.QuestionReserveActivity
-import org.softwaremaestro.presenter.question_upload.QuestionFormFragment
-import org.softwaremaestro.presenter.question_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
+import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
@@ -133,7 +134,14 @@ class StudentHomeFragment : Fragment() {
             }
 
             findViewById<LinearLayout>(R.id.container_reserve).setOnClickListener {
-                startActivity(Intent(requireActivity(), QuestionReserveActivity::class.java))
+                startActivityForResult(
+                    Intent(
+                        requireActivity(),
+                        QuestionReserveActivity::class.java
+                    ), QUESTION_UPLOAD_RESULT
+                )
+
+                dialogTeacherProfile.dismiss()
             }
         }
         dialogTeacherProfile = BottomSheetDialog(requireContext()).apply {
@@ -280,9 +288,9 @@ class StudentHomeFragment : Fragment() {
             when (requestCode) {
                 QUESTION_UPLOAD_RESULT -> {
                     val questionId =
-                        data?.getStringExtra(QuestionFormFragment.QUESTION_UPLOAD_RESULT)
+                        data?.getStringExtra(QuestionNormalFormFragment.QUESTION_UPLOAD_RESULT)
                     (activity as StudentHomeActivity).apply {
-
+                        Log.d("hhcc", "move to chat tab")
                         moveToChatTab()
                     }
                 }
@@ -291,6 +299,6 @@ class StudentHomeFragment : Fragment() {
     }
 
     companion object {
-        val QUESTION_UPLOAD_RESULT = 1001
+        private val QUESTION_UPLOAD_RESULT = 1001
     }
 }

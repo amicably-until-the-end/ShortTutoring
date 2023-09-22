@@ -7,5 +7,5 @@ data class QuestionUploadVO(
     var schoolSubject: String,
     var hopeImmediate: Boolean,
     var hopeTutoringTime: List<String>,
-    var mainImageIndex: Int,
+    var mainImageIndex: Int
 )

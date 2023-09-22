@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.question_upload.viewmodel
+package org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
@@ -26,11 +26,11 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
         MutableLiveData();
     val questionUploadState: LiveData<UIState<QuestionUploadResultVO>> get() = _questionUploadState
 
-    val _description: MutableLiveData<String?> = MutableLiveData();
-    val _school: MutableLiveData<String?> = MutableLiveData();
-    val _subject: MutableLiveData<String?> = MutableLiveData();
-    val _difficulty: MutableLiveData<String?> = MutableLiveData();
-    val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData();
+    val _description: MutableLiveData<String?> = MutableLiveData()
+    val _school: MutableLiveData<String?> = MutableLiveData()
+    val _subject: MutableLiveData<String?> = MutableLiveData()
+    val _difficulty: MutableLiveData<String?> = MutableLiveData()
+    val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData()
 
 
     val description: LiveData<String?> get() = _description

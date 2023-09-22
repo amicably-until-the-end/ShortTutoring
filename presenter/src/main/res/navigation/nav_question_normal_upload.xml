@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/question_nav"
+    app:startDestination="@id/questionCameraFragment">
+
+    <fragment
+        android:id="@+id/questionNormalFormFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment"
+        android:label="질문 올리기"
+        tools:layout="@layout/fragment_question_normal_form">
+        <action
+            android:id="@+id/action_questionNormalFormFragment_to_questionCameraFragment"
+            app:destination="@id/questionCameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionCameraFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionCameraFragment"
+        android:label="QuestionCameraFragment"
+        tools:layout="@layout/fragment_question_camera">
+        <action
+            android:id="@+id/action_questionCameraFragment_to_questionNormalFormFragment"
+            app:destination="@id/questionNormalFormFragment"
+            app:popUpTo="@id/questionCameraFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

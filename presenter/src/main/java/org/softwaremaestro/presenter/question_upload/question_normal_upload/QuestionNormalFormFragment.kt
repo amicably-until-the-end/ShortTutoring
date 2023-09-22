@@ -1,15 +1,13 @@
-package org.softwaremaestro.presenter.question_upload
+package org.softwaremaestro.presenter.question_upload.question_normal_upload
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,24 +18,24 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.widget.LoadingDialog
-import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
+import org.softwaremaestro.presenter.databinding.FragmentQuestionNormalFormBinding
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.FormImageAdapter
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.TimeSelectAdapter
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.util.UIState
-import org.softwaremaestro.presenter.databinding.FragmentQuestionFormBinding
-import org.softwaremaestro.presenter.question_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
-import org.softwaremaestro.presenter.question_upload.adapter.FormImageAdapter
-import org.softwaremaestro.presenter.question_upload.adapter.TimeSelectAdapter
+import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.text.SimpleDateFormat
 
 
 @AndroidEntryPoint
-class QuestionFormFragment : Fragment() {
+class QuestionNormalFormFragment : Fragment() {
 
     private lateinit var loadingDialog: LoadingDialog
 
-    lateinit var binding: FragmentQuestionFormBinding
+    lateinit var binding: FragmentQuestionNormalFormBinding
     private val viewModel: QuestionUploadViewModel by activityViewModels()
 
 
@@ -55,7 +53,7 @@ class QuestionFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentQuestionFormBinding.inflate(layoutInflater)
+        binding = FragmentQuestionNormalFormBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -70,10 +68,6 @@ class QuestionFormFragment : Fragment() {
         setDesiredTimeRecyclerView()
         checkAndEnableSubjectBtn()
         setSubmitButton()
-
-        binding.tvLetsQuestionDesc.setOnClickListener {
-            findNavController().navigate(R.id.action_questionFormFragment_to_daySelectFragment)
-        }
         setFields()
     }
 
@@ -239,7 +233,7 @@ class QuestionFormFragment : Fragment() {
     }
 
     private fun navigateToCamera() {
-        findNavController().navigate(R.id.action_questionFormFragment_to_questionCameraFragment)
+        findNavController().navigate(R.id.action_questionNormalFormFragment_to_questionCameraFragment)
     }
 
     /**

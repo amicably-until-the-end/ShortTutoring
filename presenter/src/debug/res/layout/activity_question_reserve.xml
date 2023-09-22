@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".question_reserve.QuestionReserveActivity">
+    tools:context=".question_upload.question_selected_upload.QuestionReserveActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"
@@ -13,5 +13,5 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:navGraph="@navigation/nav_question_reserve" />
+        app:navGraph="@navigation/nav_question_selected_upload" />
 </androidx.constraintlayout.widget.ConstraintLayout>

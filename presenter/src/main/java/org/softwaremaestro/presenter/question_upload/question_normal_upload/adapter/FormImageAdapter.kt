@@ -1,6 +1,5 @@
-package org.softwaremaestro.presenter.question_upload.adapter
+package org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter
 
-import android.content.DialogInterface.OnClickListener
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,13 +11,13 @@ class FormImageAdapter(private val onClick: () -> Unit) :
 
     private var items: List<Bitmap> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormImageAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             ItemQuestionFormImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FormImageAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position < items.size) {
             holder.onBind(items[position])
         } else {

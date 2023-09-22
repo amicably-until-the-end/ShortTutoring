@@ -23,10 +23,10 @@
             android:name=".classroom.ClassroomActivity"
             android:exported="false" />
         <activity
-            android:name=".question_reserve.QuestionReserveActivity"
+            android:name=".question_upload.question_selected_upload.QuestionReserveActivity"
             android:exported="false" />
         <activity
-            android:name=".question_upload.QuestionUploadActivity"
+            android:name=".question_upload.question_normal_upload.QuestionUploadActivity"
             android:exported="false"
             android:noHistory="true" />
         <activity

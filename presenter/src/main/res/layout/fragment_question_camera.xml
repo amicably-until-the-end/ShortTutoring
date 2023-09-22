@@ -24,7 +24,7 @@
             android:layout_height="match_parent">
 
 
-            <org.softwaremaestro.presenter.question_upload.widget.CameraTextureView
+            <org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.CameraTextureView
                 android:id="@+id/textureView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

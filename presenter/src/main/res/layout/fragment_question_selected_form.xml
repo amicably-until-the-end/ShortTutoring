@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".question_upload.QuestionFormFragment">
+    tools:context=".question_upload.question_selected_upload.QuestionSelectedFormFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_toolbar"
@@ -169,62 +169,6 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
                 </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:paddingHorizontal="70dp">
-
-
-                <TextView
-                    android:id="@+id/tv_question_time_desc"
-                    style="@style/section_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="희망하는 수업 시간을 알려주세요"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/btn_answer_now"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_question_time_desc"
-                    app:layout_constraintLeft_toRightOf="@id/tv_question_time_desc"
-                    app:layout_constraintTop_toTopOf="@id/tv_question_time_desc">
-
-                    <ToggleButton
-                        android:id="@+id/toggle_answer_now"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_marginLeft="22dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/selector_check_toggle"
-                        android:textOff=""
-                        android:textOn="" />
-
-
-                    <TextView
-                        style="@style/sub_text_grey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="바로 답변 받고 싶어요" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_desired_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_question_time_desc" />
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
