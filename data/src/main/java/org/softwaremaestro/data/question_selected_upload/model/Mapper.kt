@@ -6,14 +6,14 @@ object Mapper {
     fun questionSelectedUploadVOAsDto(questionSelectedUploadVO: QuestionSelectedUploadVO): QuestionSelectedUploadReqDto {
         return with(questionSelectedUploadVO) {
             QuestionSelectedUploadReqDto(
-                schoolLevel,
-                description,
-                schoolSubject,
-                mainImageIndex,
-                images,
-                requestTutoringStartTime,
-                requestTutoringEndTime,
-                requestTeacherId
+                description = description,
+                schoolLevel = schoolLevel,
+                schoolSubject = schoolSubject,
+                mainImageIndex = mainImageIndex,
+                images = images,
+                requestTutoringStartTime = requestTutoringStartTime,
+                requestTutoringEndTime = requestTutoringEndTime,
+                requestTeacherId = requestTeacherId
             )
         }
     }
