@@ -2,7 +2,6 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
@@ -168,47 +166,6 @@ class TeacherHomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        val onOfferBtnClickListener: (String, String) -> Unit =
-            { questionId: String, imageUrl: String ->
-
-                // 먼저 제안했던 질문이 있다면 철회한다
-                questionAdapter.selectedQuestionId?.let {
-                    offerRemoveViewModel.removeOffer(it)
-
-                    val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
-                        it.hashCode().toLong()
-                    ) as QuestionAdapter.ViewHolder
-
-                    //selectedViewHolder.setActiveOnOfferButton(false)
-                }
-
-                // 이전에 제안했던 질문을 다시 클릭하면
-                if (questionAdapter.selectedQuestionId == questionId) {
-                    questionAdapter.selectedQuestionId = null
-
-                    waitingSnackbar.dismiss()
-                }
-                // 이전에 제안했던 질문이 아닌 질문을 클릭하면
-                else {
-                    questionAdapter.selectedQuestionId = questionId
-
-                    waitingSnackbar.show()
-                }
-
-                questionAdapter.selectedQuestionId?.let {
-                    offerTeacher(it)
-
-                    val selectedViewHolder = binding.rvQuestion.findViewHolderForItemId(
-                        it.hashCode().toLong()
-                    ) as QuestionAdapter.ViewHolder
-
-                    //selectedViewHolder.setActiveOnOfferButton(true)
-
-                    checkViewModel.selectedQuestionImgUrl = imageUrl
-                }
-
-            }
-
         questionAdapter =
             QuestionAdapter(onQuestionClickListener).apply {
                 setHasStableIds(true)
@@ -219,14 +176,6 @@ class TeacherHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
-    }
-
-    private fun offerTeacher(requestId: String) {
-        answerViewModel.uploadAnswer(
-            AnswerUploadVO(
-                requestId
-            )
-        )
     }
 
     private fun initReviewRecyclerView() {
