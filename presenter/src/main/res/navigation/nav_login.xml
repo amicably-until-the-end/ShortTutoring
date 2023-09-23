@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/registerRoleFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/loginFrament"
+        android:id="@+id/loginFragment"
         android:name="org.softwaremaestro.presenter.login.LoginFragment"
         android:label="로그인"
         tools:layout="@layout/fragment_login">
@@ -42,7 +42,7 @@
         tools:layout="@layout/fragment_register_teacher_info">
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_loginFragment"
-            app:destination="@id/loginFrament"
+            app:destination="@id/loginFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_registerTeacherInfoFragment_to_univAuthFragment"
@@ -64,8 +64,8 @@
         tools:layout="@layout/fragment_complete_student_profile">
         <action
             android:id="@+id/action_completeStudentProfileFragment_to_loginFrament"
-            app:destination="@id/loginFrament"
-            app:popUpTo="@id/loginFrament"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -75,8 +75,8 @@
         tools:layout="@layout/fragment_complete_teacher_profile">
         <action
             android:id="@+id/action_completeTeacherProfileFragment_to_loginFrament"
-            app:destination="@id/loginFrament"
-            app:popUpTo="@id/loginFrament"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

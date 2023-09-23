@@ -129,6 +129,7 @@
                         android:focusableInTouchMode="false"
                         android:fontFamily="@font/pretendard_bold"
                         android:hint="학생 닉네임"
+                        android:maxLength="10"
                         android:textColor="@color/black"
                         android:textColorHint="@color/sub_text_grey"
                         android:textSize="22sp" />
@@ -229,6 +230,7 @@
             android:hint="학생 닉네임"
             android:imeOptions="actionDone"
             android:inputType="textNoSuggestions"
+            android:maxLength="10"
             android:paddingLeft="15dp"
             android:textColor="@color/black"
             android:textColorHint="@color/sub_text_grey"

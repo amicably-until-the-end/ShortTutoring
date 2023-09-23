@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentUnivAuthBinding
@@ -21,6 +23,7 @@ class UnivAuthFragment : Fragment() {
 
     private lateinit var binding: FragmentUnivAuthBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
+    private lateinit var univAndMails: HashMap<String, HashMap<String, String>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,15 +36,66 @@ class UnivAuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initUnivAndMails()
+        setEtUnivMailHeader()
+        setEtUnivMailBody()
         setSendMailButton()
         setEtAuthCode()
         setNextButton()
-        setObserver()
+        observe()
+    }
+
+    private fun setEtUnivMailHeader() {
+        binding.etUnivMailHeader.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.btnSendMail.setEnabledAndChangeColor(!p0.isNullOrEmpty() && !binding.etUnivMailBody.text.isNullOrEmpty())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+    }
+
+    private fun initUnivAndMails() {
+        val assetsManager = resources.assets
+        try {
+            val inputStream = assetsManager.open("univAndMails.json")
+            val reader = inputStream.bufferedReader()
+            val gson = Gson()
+            // Define the type of the outermost structure
+            val type =
+                object : TypeToken<HashMap<String, HashMap<String, String>>>() {}.type
+            // Parse the JSON string and populate mathSubjects
+            univAndMails = gson.fromJson(reader, type)
+        } catch (e: Exception) {
+            return
+        }
+    }
+
+    private fun setEtUnivMailBody() {
+        viewModel.schoolName.value.let { schoolName ->
+            if (schoolName in univAndMails.keys) {
+                binding.etUnivMailBody.setText(univAndMails[schoolName]!!["메일"])
+            } else {
+                binding.etUnivMailBody.isEnabled = true
+            }
+        }
+
+        binding.etUnivMailBody.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.btnSendMail.setEnabledAndChangeColor(!p0.isNullOrEmpty() && !binding.etUnivMailHeader.text.isNullOrEmpty())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
     private fun setSendMailButton() {
         binding.btnSendMail.setOnClickListener {
-            viewModel.sendVerificationMail(binding.etUnivMail.text.toString())
+            viewModel.sendVerificationMail("${binding.etUnivMailHeader.text}@${binding.etUnivMailBody.text}")
         }
     }
 
@@ -55,7 +109,7 @@ class UnivAuthFragment : Fragment() {
             override fun afterTextChanged(p0: Editable?) {
                 try {
                     viewModel.checkEmailCode(
-                        binding.etUnivMail.text.toString(),
+                        "${binding.etUnivMailHeader.text}@${binding.etUnivMailBody.text}",
                         binding.etAuthCode.text.toString().toInt()
                     )
                 } catch (e: Exception) {
@@ -71,7 +125,7 @@ class UnivAuthFragment : Fragment() {
         }
     }
 
-    private fun setObserver() {
+    private fun observe() {
         observeSendMailResult()
         observeCheckEmailResult()
     }
@@ -80,9 +134,8 @@ class UnivAuthFragment : Fragment() {
         viewModel.sendEmailResult.observe(viewLifecycleOwner) {
             if (it) {
                 binding.btnSendMail.setEnabledAndChangeColor(false)
-                binding.etUnivMail.isFocusable = false
             } else {
-                Toast.makeText(requireContext(), "올바른 학교 메일을 선택해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "올바른 학교 메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -91,11 +144,13 @@ class UnivAuthFragment : Fragment() {
         viewModel.checkEmailResult.observe(viewLifecycleOwner) {
 
             binding.btnNext.setEnabledAndChangeColor(it)
-            Toast.makeText(
-                requireContext(),
-                if (it) "인증번호가 일치합니다." else "인증번호가 일치하지 않습니다.",
-                Toast.LENGTH_SHORT
-            ).show()
+            if (it) {
+                Toast.makeText(
+                    requireContext(),
+                    "인증번호가 일치합니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

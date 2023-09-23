@@ -119,16 +119,21 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_profile_student_name"
+                    <EditText
+                        android:id="@+id/et_profile_teacher_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/sub_text_grey"
-                        android:textSize="20sp"
-                        tools:text="선생님 닉네임" />
+                        android:hint="선생님 닉네임"
+                        android:maxLength="10"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/sub_text_grey"
+                        android:textSize="20sp" />
 
-                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                    <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
                         android:layout_marginLeft="6dp"
@@ -139,9 +144,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:fontFamily="@font/pretendard_bold"
+                        android:text="5.0"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="5.0" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -155,15 +160,20 @@
                     android:textSize="13sp"
                     tools:text="서울대학교 의예과" />
 
-                <TextView
-                    android:id="@+id/tv_profile_teacher_bio"
+                <EditText
+                    android:id="@+id/et_profile_teacher_bio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:background="@color/transparent"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/pretendard_medium"
+                    android:maxWidth="200dp"
+                    android:maxLength="30"
+                    android:text="모든 학생들이 깨달음을 얻을 수 있도록!"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
-                    tools:text="모든 학생들이 깨달음을 얻을 수 있도록!" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -240,13 +250,18 @@
         app:layout_constraintTop_toBottomOf="@id/tv_teacher_name">
 
         <EditText
-            android:id="@+id/et_student_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:background="@null"
+            android:id="@+id/et_teacher_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:fontFamily="@font/pretendard_medium"
             android:hint="선생님 닉네임"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:maxLength="10"
+            android:paddingLeft="15dp"
             android:textColor="@color/black"
             android:textColorHint="@color/sub_text_grey"
             android:textSize="14sp" />
@@ -279,11 +294,12 @@
 
         <EditText
             android:id="@+id/et_teacher_bio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@null"
             android:fontFamily="@font/pretendard_medium"
+            android:maxLength="30"
+            android:paddingLeft="15dp"
             android:text="모든 학생들이 깨달음을 얻을 수 있도록!"
             android:textColor="@color/black"
             android:textColorHint="@color/sub_text_grey"

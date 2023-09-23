@@ -21,7 +21,7 @@ class UnivGetService() {
 
     private val service = retrofit.create(UnivGetApi::class.java)
 
-    suspend fun getUniv(schoolName: String = ""): Flow<BaseResult<List<String>, String>> {
+    suspend fun getUnivs(schoolName: String): Flow<BaseResult<List<String>, String>> {
         return flow {
             val response = service.getUniv(
                 apiKey = "083d9b778ff00aed07750b3306fa7d37",

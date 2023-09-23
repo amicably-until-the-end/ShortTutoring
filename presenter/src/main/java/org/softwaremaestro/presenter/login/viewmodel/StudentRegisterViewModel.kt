@@ -43,11 +43,11 @@ class StudentRegisterViewModel @Inject constructor(
     init {
         with(_schoolLevelAndGradeProper) {
             addSource(_schoolLevel) {
-                postValue(_schoolLevel.value != null && _schoolGrade.value != null)
+                postValue(!_schoolLevel.value.isNullOrEmpty() && _schoolGrade.value != null)
             }
 
             addSource(_schoolGrade) {
-                postValue(_schoolLevel.value != null && _schoolGrade.value != null)
+                postValue(!_schoolLevel.value.isNullOrEmpty() && _schoolGrade.value != null)
             }
         }
     }
