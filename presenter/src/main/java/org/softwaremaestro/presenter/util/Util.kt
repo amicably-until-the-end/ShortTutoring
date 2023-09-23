@@ -126,7 +126,7 @@ fun Button.setEnabledAndChangeColor(enabled: Boolean) {
     } else {
         this.isEnabled = false
         setBackgroundResource(R.drawable.bg_radius_5_grey)
-        setTextColor(resources.getColor(R.color.black, null))
+        setTextColor(resources.getColor(R.color.sub_text_grey, null))
     }
 }
 

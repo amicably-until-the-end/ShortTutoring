@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
+import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
+import org.softwaremaestro.presenter.login.univGet.UnivGetService
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -26,7 +32,6 @@ class RegisterTeacherInfoFragment : Fragment() {
     private lateinit var binding: FragmentRegisterTeacherInfoBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,6 +44,20 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val service = UnivGetService()
+        lifecycleScope.launch {
+            service.getUniv("한양")
+                .catch {
+                    Log.d("hhcc", it.message.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> Log.d("hhcc", result.data.toString())
+                        is BaseResult.Error -> Log.d("hhcc", result.rawResponse)
+                    }
+                }
+        }
 
         // 필드를 클릭하면 해당 필드에 값을 입력하는 페이지로 이동한다
         setOnClickListener()

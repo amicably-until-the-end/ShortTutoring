@@ -120,14 +120,18 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_profile_student_name"
+                    <EditText
+                        android:id="@+id/et_profile_student_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/sub_text_grey"
-                        android:textSize="22sp"
-                        tools:text="학생 닉네임" />
+                        android:hint="학생 닉네임"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/sub_text_grey"
+                        android:textSize="22sp" />
                 </LinearLayout>
 
                 <TextView
@@ -216,12 +220,16 @@
 
         <EditText
             android:id="@+id/et_student_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@null"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:fontFamily="@font/pretendard_medium"
             android:hint="학생 닉네임"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:paddingLeft="15dp"
             android:textColor="@color/black"
             android:textColorHint="@color/sub_text_grey"
             android:textSize="14sp" />
@@ -234,6 +242,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:background="@drawable/bg_radius_10_background_grey"
+        android:enabled="false"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:padding="16dp"

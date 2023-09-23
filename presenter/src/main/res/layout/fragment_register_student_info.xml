@@ -82,13 +82,15 @@
     </RadioGroup>
 
     <LinearLayout
+        android:id="@+id/container_school_grade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rg_school_level">
+        app:layout_constraintTop_toBottomOf="@id/rg_school_level"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tv_grade"

@@ -1,15 +1,19 @@
 package org.softwaremaestro.presenter.login.viewmodel
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.common.BaseResult.Error
+import org.softwaremaestro.domain.common.BaseResult.Success
 import org.softwaremaestro.domain.login.entity.StudentRegisterVO
 import org.softwaremaestro.domain.login.usecase.StudentRegisterUseCase
+import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,31 +22,74 @@ class StudentRegisterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    var grade: Int = 1 //1: 1학년, 2:2학년, 3:3학년
-    var school: String = "중학교"
+    private val _schoolLevel = MutableLiveData<String>()
+    val schoolLevel: LiveData<String> get() = _schoolLevel
 
-    private val _registerSuccess: MutableLiveData<Boolean> = MutableLiveData()
-    val registerSuccess: MutableLiveData<Boolean> get() = _registerSuccess
+    private val _schoolGrade = MutableLiveData<Int>()
+    val schoolGrade: LiveData<Int> get() = _schoolGrade
+
+    private val _schoolLevelAndGradeProper = MediatorLiveData<Boolean>()
+    val schoolLevelAndGradeProper: MediatorLiveData<Boolean> get() = _schoolLevelAndGradeProper
+
+    private val _name = MutableLiveData<String>()
+    val name: LiveData<String> get() = _name
+
+    private val _bio = MutableLiveData<String>("student-bio")
+    val bio: LiveData<String> get() = _bio
+
+    private val _studentSignupState = MutableLiveData<UIState<String>>()
+    val studentSignupState: LiveData<UIState<String>> get() = _studentSignupState
+
+    init {
+        with(_schoolLevelAndGradeProper) {
+            addSource(_schoolLevel) {
+                postValue(_schoolLevel.value != null && _schoolGrade.value != null)
+            }
+
+            addSource(_schoolGrade) {
+                postValue(_schoolLevel.value != null && _schoolGrade.value != null)
+            }
+        }
+    }
 
     fun registerStudent() {
         viewModelScope.launch {
-
-            studentRegisterUseCase.execute(StudentRegisterVO(school, grade))
-                .catch { exception ->
-                    _registerSuccess.postValue(false)
+            studentRegisterUseCase.execute(
+                StudentRegisterVO(
+                    name = name.value!!,
+                    bio = bio.value!!,
+                    schoolLevel = schoolLevel.value!!,
+                    schoolGrade = schoolGrade.value!!
+                )
+            )
+                .onStart {
+                    _studentSignupState.value = UIState.Loading
+                }
+                .catch {
+                    _studentSignupState.value = UIState.Failure
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> {
-                            _registerSuccess.postValue(true)
-                        }
-
-                        is BaseResult.Error -> {
-                            _registerSuccess.postValue(false)
-                        }
+                        is Success -> _studentSignupState.value = UIState.Success(result.data)
+                        is Error -> _studentSignupState.value = UIState.Failure
                     }
                 }
         }
     }
 
+    fun setName(name: String) {
+        _name.value = name
+    }
+
+    fun setBio(bio: String) {
+        _bio.value = bio
+    }
+
+    fun setSchoolLevel(schoolLevel: String) {
+        _schoolLevel.value = schoolLevel
+    }
+
+    fun setSchoolGrade(schoolGrade: Int) {
+        _schoolGrade.value = schoolGrade
+    }
 }

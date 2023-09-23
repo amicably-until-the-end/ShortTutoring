@@ -46,10 +46,12 @@ class TeacherRegisterViewModel @Inject constructor(
         viewModelScope.launch {
             teacherRegisterUseCase.execute(
                 TeacherRegisterVO(
-                    admissonYear.value,
-                    college.value,
-                    univ.value,
-                    major.value
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    1
                 )
             ).catch { exception ->
                 _registerResult.postValue(false)
