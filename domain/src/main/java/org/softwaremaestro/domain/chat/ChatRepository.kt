@@ -9,5 +9,5 @@ import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.common.BaseResult
 
 interface ChatRepository {
-    suspend fun getRoomList(): Flow<BaseResult<ChatRoomListVO, String>>
+    suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>>
 }

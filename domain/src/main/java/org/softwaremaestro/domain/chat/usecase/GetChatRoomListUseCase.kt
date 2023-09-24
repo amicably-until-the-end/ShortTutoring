@@ -10,6 +10,6 @@ import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
 class GetChatRoomListUseCase @Inject constructor(private val repository: ChatRepository) {
-    suspend fun execute(): Flow<BaseResult<ChatRoomListVO, String>> =
-        repository.getRoomList()
+    suspend fun execute(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>> =
+        repository.getRoomList(isTeacher)
 }

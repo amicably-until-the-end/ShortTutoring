@@ -56,9 +56,9 @@ class ChatViewModel @Inject constructor(
         get() = _tutoringInfo
 
 
-    fun getChatRoomList() {
+    fun getChatRoomList(isTeacher: Boolean) {
         viewModelScope.launch {
-            getChatRoomListUseCase.execute()
+            getChatRoomListUseCase.execute(isTeacher)
                 .onStart { _reservedNormalChatRoomList.value = UIState.Loading }
                 .catch { exception ->
                     _reservedNormalChatRoomList.value = UIState.Failure

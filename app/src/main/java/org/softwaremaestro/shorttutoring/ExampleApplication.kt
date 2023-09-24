@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.softwaremaestro.data.chat.database.ChatDatabase
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
-import org.softwaremaestro.data.chat.entity.ChatRoomType
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -35,14 +34,7 @@ class ExampleApplication : Application() {
 
         db = ChatDatabase.getInstance(this)!!
         CoroutineScope(Dispatchers.IO).launch {
-            db.chatRoomDao().insert(
-                ChatRoomEntity(
-                    "2",
-                    "가짜 채팅방",
-                    LocalDateTime.now(),
-                    ChatRoomType.PROPOSED_NORMAL
-                )
-            )
+            
             var a = db.chatRoomDao().getAll()
             Log.d("rooom", a.toString())
         }

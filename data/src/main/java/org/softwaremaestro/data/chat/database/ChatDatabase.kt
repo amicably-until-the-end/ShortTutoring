@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.softwaremaestro.data.chat.dao.ChatRoomDao
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
-import org.softwaremaestro.data.common.utils.Converter
+import org.softwaremaestro.data.chat.entity.Converter
 
 
 @Database(

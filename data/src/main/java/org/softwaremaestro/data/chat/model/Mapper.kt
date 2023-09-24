@@ -1,6 +1,7 @@
 package org.softwaremaestro.data.chat.model
 
 import android.util.Log
+import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
@@ -71,6 +72,24 @@ class Mapper {
         )
     }
 
+    fun asDomain(chatRoomEntity: ChatRoomEntity): ChatRoomVO {
+        chatRoomEntity.apply {
+            return ChatRoomVO(
+                id = id,
+                title = title,
+                schoolLevel = "fff",
+                schoolSubject = "fff",
+                roomType = RoomType.TEACHER,
+                roomImage = image,
+                questionId = "fff",
+                isSelect = true,
+                questionState =
+                if (status == ChatRoomEntity.PROPOSED_NORMAL || status == ChatRoomEntity.PROPOSED_SELECT)
+                    QuestionState.PROPOSED else QuestionState.RESERVED,
+            )
+        }
+    }
+
     companion object {
         fun ISOParser(text: String): LocalDateTime {
             val format: DateTimeFormatter =
@@ -94,5 +113,9 @@ fun ChatRoomListDto.asDomain(): ChatRoomListVO {
 }
 
 fun MessageDto.asDomain(): MessageVO {
+    return Mapper().asDomain(this)
+}
+
+fun ChatRoomEntity.asDomain(): ChatRoomVO {
     return Mapper().asDomain(this)
 }

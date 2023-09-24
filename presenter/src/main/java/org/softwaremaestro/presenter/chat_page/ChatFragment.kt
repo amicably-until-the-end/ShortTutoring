@@ -92,7 +92,7 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun getRoomList() {
-        chatViewModel.getChatRoomList()
+        chatViewModel.getChatRoomList(isTeacher())
     }
 
     private fun refreshProposedRoomList() {
