@@ -34,12 +34,9 @@ class Mapper {
                 questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
                 opponentId = opponentId,
                 title = title,
-                schoolSubject = schoolSubject,
-                schoolLevel = schoolLevel,
                 messages = messages?.map { it.asDomain() },
                 roomImage = roomImage,
-                roomType = if (isTeacherRoom == true) RoomType.TEACHER else RoomType.QUESTION,
-                teachers = teachers?.map { it.asDomain() },
+                roomType = if (opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 isSelect = isSelect ?: false,
                 questionId = questionId,
             )

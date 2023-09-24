@@ -36,7 +36,8 @@ class ChatRepositoryImpl @Inject constructor(
 
             val groups: MutableList<ChatRoomVO> = mutableListOf()
             if (!isTeacher) {
-                proposedNormal.groupBy { it.questionId }.forEach {
+                //학생이면 그룹화
+                proposedNormal.groupBy { it.questionId }.forEach { group ->
                     val questionRoom = ChatRoomVO(
                         roomType = RoomType.QUESTION,
                         roomImage = "questionImage",
@@ -46,7 +47,7 @@ class ChatRepositoryImpl @Inject constructor(
                         isSelect = false,
                         questionId = "questionId",
                         questionState = QuestionState.PROPOSED,
-                        teachers = it.value,
+                        teachers = group.value.mapNotNull { if (it.opponentId != null) it else null }
                     )
                     groups.add(questionRoom)
                 }
@@ -79,6 +80,7 @@ class ChatRepositoryImpl @Inject constructor(
         return flow {
             updateRoomStatus()
             var result = getRoomFromDB(isTeacher)
+            Log.d("ChatRepositoryImpl", result.toString())
             if (result == null) {
                 emit(BaseResult.Error("error"))
             } else {

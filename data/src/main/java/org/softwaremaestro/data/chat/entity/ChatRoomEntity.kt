@@ -16,6 +16,7 @@ data class ChatRoomEntity(
     var startDateTime: LocalDateTime,
     var status: Int,
     var image: String,
+    var opponentId: String?,
 )
 
 @Entity

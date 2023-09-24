@@ -64,6 +64,7 @@ class Mapper {
             image = dto.roomImage,
             status = 1,
             startDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")),
+            opponentId = dto.opponentId,
         )
     }
 }
