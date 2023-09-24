@@ -11,7 +11,7 @@ data class ChatRoomListDto(
 
 
 data class ChatRoomDto(
-    @SerializedName("id") val tutoringId: String?,
+    @SerializedName("id") val id: String?,
     @SerializedName("roomImage") val roomImage: String,
     @SerializedName("questionState") val questionState: String?,
     @SerializedName("opponentId") val opponentId: String?,

@@ -4,6 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.chat.database.ChatDatabase
+import org.softwaremaestro.data.chat.entity.asEntity
 import org.softwaremaestro.data.chat.model.ChatRoomListDto
 import org.softwaremaestro.data.chat.model.asDomain as DTOToVO
 import org.softwaremaestro.data.chat.entity.asDomain as EntityToVO
@@ -22,58 +23,68 @@ class ChatRepositoryImpl @Inject constructor(
     ChatRepository {
 
 
-    private fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO {
-        var proposedNormal =
-            chatDatabase.chatRoomDao().getProposedNormalChatRoom().map { it.EntityToVO() }
-        var proposedSelect =
-            chatDatabase.chatRoomDao().getProposedSelectChatRoom().map { it.EntityToVO() }
-        var reservedNormal =
-            chatDatabase.chatRoomDao().getReservedNormalChatRoom().map { it.EntityToVO() }
-        var reservedSelect =
-            chatDatabase.chatRoomDao().getReservedSelectChatRoom().map { it.EntityToVO() }
+    private fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO? {
+        try {
+            var proposedNormal =
+                chatDatabase.chatRoomDao().getProposedNormalChatRoom().map { it.EntityToVO() }
+            var proposedSelect =
+                chatDatabase.chatRoomDao().getProposedSelectChatRoom().map { it.EntityToVO() }
+            var reservedNormal =
+                chatDatabase.chatRoomDao().getReservedNormalChatRoom().map { it.EntityToVO() }
+            var reservedSelect =
+                chatDatabase.chatRoomDao().getReservedSelectChatRoom().map { it.EntityToVO() }
 
-        val groups: MutableList<ChatRoomVO> = mutableListOf()
-        if (!isTeacher) {
-            proposedNormal.groupBy { it.questionId }.forEach {
-                val questionRoom = ChatRoomVO(
-                    roomType = RoomType.QUESTION,
-                    roomImage = "questionImage",
-                    title = "questionTitle",
-                    schoolLevel = "schoolLevel",
-                    schoolSubject = "schoolSubject",
-                    isSelect = false,
-                    questionId = "questionId",
-                    questionState = QuestionState.PROPOSED,
-                    teachers = it.value,
-                )
-                groups.add(questionRoom)
+            val groups: MutableList<ChatRoomVO> = mutableListOf()
+            if (!isTeacher) {
+                proposedNormal.groupBy { it.questionId }.forEach {
+                    val questionRoom = ChatRoomVO(
+                        roomType = RoomType.QUESTION,
+                        roomImage = "questionImage",
+                        title = "questionTitle",
+                        schoolLevel = "schoolLevel",
+                        schoolSubject = "schoolSubject",
+                        isSelect = false,
+                        questionId = "questionId",
+                        questionState = QuestionState.PROPOSED,
+                        teachers = it.value,
+                    )
+                    groups.add(questionRoom)
+                }
+            }
+            return ChatRoomListVO(
+                if (isTeacher) proposedNormal else groups,
+                proposedSelect,
+                reservedNormal, reservedSelect,
+            )
+        } catch (e: Exception) {
+            Log.d("ChatRepositoryImpl", e.toString())
+            return null;
+        }
+
+    }
+
+    private suspend fun updateRoomStatus() {
+        val result = chatApi.getRoomList()
+
+        if (result.isSuccessful && result.body()?.success == true) {
+            val data = result.body()?.data!!
+            data.map {
+                chatDatabase.chatRoomDao().insert(it.asEntity())
             }
         }
-        return ChatRoomListVO(
-            if (isTeacher) proposedNormal else groups,
-            proposedSelect,
-            reservedNormal, reservedSelect,
-        )
     }
 
 
     override suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
-            emit(BaseResult.Success(getRoomFromDB(isTeacher)))
-            /*
-            val result = chatApi.getRoomList()
-
-
-            if (result.isSuccessful && result.body()?.success == true) {
-                val data = result.body()?.data!!
-                val chatRoomListVO = data.DTOToVO()
-                emit(BaseResult.Success(chatRoomListVO))
-
+            updateRoomStatus()
+            var result = getRoomFromDB(isTeacher)
+            if (result == null) {
+                emit(BaseResult.Error("error"))
             } else {
-                emit(BaseResult.Error("Error"))
+                emit(BaseResult.Success(result))
             }
 
-             */
         }
     }
 }

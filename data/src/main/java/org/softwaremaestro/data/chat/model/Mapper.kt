@@ -30,7 +30,7 @@ class Mapper {
     fun asDomain(chatRoomDto: ChatRoomDto): ChatRoomVO {
         chatRoomDto.apply {
             return ChatRoomVO(
-                id = tutoringId,
+                id = id,
                 questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
                 opponentId = opponentId,
                 title = title,

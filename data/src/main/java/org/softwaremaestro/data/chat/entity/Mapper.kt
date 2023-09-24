@@ -1,9 +1,12 @@
 package org.softwaremaestro.data.chat.entity
 
+import org.softwaremaestro.data.chat.model.ChatRoomDto
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class Mapper {
 
@@ -53,6 +56,16 @@ class Mapper {
             )
         }
     }
+
+    fun asEntity(dto: ChatRoomDto): ChatRoomEntity {
+        return ChatRoomEntity(
+            id = dto.id!!,
+            title = dto.title,
+            image = dto.roomImage,
+            status = 1,
+            startDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")),
+        )
+    }
 }
 
 fun ChatRoomEntity.asDomain(): ChatRoomVO {
@@ -65,4 +78,8 @@ fun MessageEntity.asDomain(): MessageVO {
 
 fun ChatRoomWithMessages.asDomain(): ChatRoomVO {
     return Mapper().asDomain(this)
+}
+
+fun ChatRoomDto.asEntity(): ChatRoomEntity {
+    return Mapper().asEntity(this)
 }

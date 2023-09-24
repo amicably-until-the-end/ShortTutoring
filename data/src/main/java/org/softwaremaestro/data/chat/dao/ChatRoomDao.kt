@@ -18,8 +18,9 @@ interface ChatRoomDao {
     @Query("DELETE FROM ChatRoomEntity")
     fun deleteAll()
 
-    @Insert
+    @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
     fun insert(chatRoomEntity: ChatRoomEntity)
+
 
     @Query("SELECT * FROM ChatRoomEntity")
     fun getChatRoomWithMessages(): List<ChatRoomEntity>
