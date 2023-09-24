@@ -8,21 +8,21 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.IO
 import io.socket.client.Socket
-
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-
+import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
-import org.softwaremaestro.domain.chat.entity.QuestionType
+import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,6 +65,17 @@ class ChatViewModel @Inject constructor(
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
+                    val dummyData = ChatRoomListVO(
+                        normalProposed = mutableListOf<ChatRoomVO>().apply {
+                            add(getDummyImage(0))
+                            repeat(3) {
+                                add(getDummyText(it))
+                            }
+                        },
+                        normalReserved = listOf(),
+                        selectedProposed = listOf(),
+                        selectedReserved = listOf()
+                    )
                     when (result) {
                         is BaseResult.Success -> {
                             _reservedNormalChatRoomList.value =
@@ -72,7 +83,7 @@ class ChatViewModel @Inject constructor(
                             _reservedSelectedChatRoomList.value =
                                 UIState.Success(result.data.selectedReserved)
                             _proposedNormalChatRoomList.value =
-                                UIState.Success(result.data.normalProposed)
+                                UIState.Success(dummyData.normalProposed)
                             _proposedSelectedChatRoomList.value =
                                 UIState.Success(result.data.selectedProposed)
                         }
@@ -81,6 +92,57 @@ class ChatViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    private fun getDummyImage(i: Int): ChatRoomVO {
+        return ChatRoomVO(
+            id = "id",
+            roomType = RoomType.TEACHER,
+            roomImage = "",
+            questionState = QuestionState.PROPOSED,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀${i}",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.ProblemImage(
+                        "https://ibb.co/w7xj4kP",
+                        "설명${i}"
+                    ),
+                    sender = "sender",
+                    isMyMsg = false
+                )
+            ),
+            teachers = null,
+            isSelect = false
+        )
+    }
+
+    private fun getDummyText(i: Int): ChatRoomVO {
+        return ChatRoomVO(
+            id = "id",
+            roomType = RoomType.TEACHER,
+            roomImage = "",
+            questionState = QuestionState.PROPOSED,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀${i}",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.Text("질문${i}"),
+                    sender = "sender",
+                    isMyMsg = true
+                )
+            ),
+            teachers = null,
+            isSelect = false
+        )
     }
 
     fun getClassRoomInfo(questionId: String) {

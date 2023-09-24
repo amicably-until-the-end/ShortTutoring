@@ -274,9 +274,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingHorizontal="30dp">
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp">
 
             <TextView
                 android:id="@+id/tv_chat_room_title"
@@ -295,10 +296,10 @@
                 android:id="@+id/btn_chat_room_right"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:background="@drawable/bg_radius_15"
+                android:background="@drawable/bg_radius_100"
                 android:backgroundTint="@color/primary_blue"
                 android:gravity="center"
-                android:paddingHorizontal="8dp"
+                android:paddingHorizontal="12dp"
                 android:text="강의실 입장하기"
                 android:textColor="@color/white"
                 android:textSize="14sp"
