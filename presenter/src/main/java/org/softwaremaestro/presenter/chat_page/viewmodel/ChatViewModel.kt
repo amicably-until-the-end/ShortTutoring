@@ -22,6 +22,7 @@ import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.nowInKorea
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -78,9 +79,7 @@ class ChatViewModel @Inject constructor(
                                 }
                             },
                             selectedProposed = mutableListOf<ChatRoomVO>().apply {
-                                repeat(3) {
-                                    add(getDummy(RoomType.TEACHER, QuestionState.PROPOSED, true))
-                                }
+                                add(getSelectedProposedDummy())
                             },
                             selectedReserved = mutableListOf<ChatRoomVO>().apply {
                                 repeat(3) {
@@ -206,6 +205,31 @@ class ChatViewModel @Inject constructor(
                 listOf(teacher, teacher, teacher)
             } else null,
             isSelect = isSelected
+        )
+    }
+
+    private fun getSelectedProposedDummy(): ChatRoomVO {
+
+        return ChatRoomVO(
+            id = "id",
+            roomType = RoomType.TEACHER,
+            roomImage = "",
+            questionState = QuestionState.PROPOSED,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.AppointRequest(nowInKorea()),
+                    sender = "sender",
+                    isMyMsg = false
+                )
+            ),
+            teachers = null,
+            isSelect = true
         )
     }
 }

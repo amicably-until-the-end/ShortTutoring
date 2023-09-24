@@ -37,20 +37,25 @@ class StudentChatFragment : ChatFragment() {
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         if (chatRoomVO.isSelect) {
-            //TODO : 지정 질문 이면
-        } else {
-            refreshNormalQuestionState(chatRoomVO)
-        }
-    }
+            when (chatRoomVO.questionState) {
+                QuestionState.PROPOSED -> {
+                    setNotiVisible(false)
+                    setChatRoomBtnsVisible(false)
+                }
 
-    private fun refreshNormalQuestionState(chatRoomVO: ChatRoomVO) {
-        when (chatRoomVO.questionState) {
-            QuestionState.PROPOSED -> {
-                enableChatRoomBtn()
+                else -> {
+                    disableChatRoomBtn()
+                }
             }
+        } else {
+            when (chatRoomVO.questionState) {
+                QuestionState.PROPOSED -> {
+                    enableChatRoomBtn()
+                }
 
-            else -> {
-                disableChatRoomBtn()
+                else -> {
+                    disableChatRoomBtn()
+                }
             }
         }
     }

@@ -22,6 +22,7 @@ import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
+import org.softwaremaestro.presenter.chat_page.widget.AnsweringTeacherSelectDialog
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
@@ -30,6 +31,7 @@ import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 
 
@@ -344,7 +346,18 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun setChatMsgRecyclerView() {
-        messageListAdapter = MessageListAdapter()
+        messageListAdapter = MessageListAdapter(
+            onBtn1Click = {
+                val dialog = AnsweringTeacherSelectDialog(currentChatRoom?.id!!)
+                dialog.show(parentFragmentManager, "dialog")
+            },
+            onBtn2Click = {
+                DetailAlertDialog("질문을 삭제할까요?", "작성한 질문 내용이 사라집니다") {}.show(
+                    parentFragmentManager,
+                    "detailAlertDialog"
+                )
+            }
+        )
         binding.rvMsgs.apply {
             adapter = messageListAdapter
             layoutManager =
