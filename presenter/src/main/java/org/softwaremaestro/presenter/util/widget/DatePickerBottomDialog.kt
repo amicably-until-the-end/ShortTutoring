@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.softwaremaestro.presenter.databinding.DialogTimePickerBinding
+import org.softwaremaestro.presenter.databinding.DialogDatePickerBinding
 import org.softwaremaestro.presenter.util.nowInKorea
+import java.time.LocalDate
 
-class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)) :
+class DatePickerBottomDialog(private val onReturnClick: ((LocalDate) -> Unit)) :
     BottomSheetDialogFragment() {
 
-    private lateinit var binding: DialogTimePickerBinding
+    private lateinit var binding: DialogDatePickerBinding
 
     private var title: String? = null
     private var btnText: String? = null
@@ -23,7 +24,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DialogTimePickerBinding.inflate(layoutInflater)
+        binding = DialogDatePickerBinding.inflate(layoutInflater)
 
         setDialogTitle()
         setDialogBtnText()
@@ -42,8 +43,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
 
     private fun setDefaultTime() {
         with(nowInKorea()) {
-            binding.timePicker.hour = hour
-            binding.timePicker.minute = minute
+            binding.dpStart.init(year, monthValue - 1, dayOfMonth, null)
         }
     }
 
@@ -59,9 +59,9 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
 
     private fun setReturnButton() {
         binding.btnReturn.setOnClickListener {
-            val hour = binding.timePicker.hour
-            val minute = binding.timePicker.minute
-            onReturnClick(SpecificTime(hour, minute))
+            with(binding.dpStart) {
+                onReturnClick(LocalDate.of(year, month, dayOfMonth))
+            }
             dismiss()
         }
     }
@@ -74,15 +74,5 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
 
         return dialog
     }
-
-    inner class SpecificTime(
-        val hour: Int,
-        val minute: Int
-    ) {
-        override fun toString(): String {
-            return "${hour}시 ${minute}분"
-        }
-    }
-
 }
 

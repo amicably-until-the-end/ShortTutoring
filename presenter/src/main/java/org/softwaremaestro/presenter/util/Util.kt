@@ -17,6 +17,8 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 object Util {
     fun toPx(dp: Int, context: Context): Int {
@@ -155,6 +157,8 @@ fun hideKeyboardAndRemoveFocus(view: View) {
     imm.hideSoftInputFromWindow(view.windowToken, 0)
     view.clearFocus()
 }
+
+fun nowInKorea() = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 
 fun RecyclerView.getVerticalSpaceDecoration(
     space: Int,

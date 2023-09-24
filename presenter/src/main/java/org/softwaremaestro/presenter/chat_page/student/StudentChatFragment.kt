@@ -19,7 +19,6 @@ import java.time.LocalDateTime
 @AndroidEntryPoint
 class StudentChatFragment : ChatFragment() {
 
-
     private val studentViewModel: StudentChatViewModel by viewModels()
 
     override fun onCreateView(
@@ -27,8 +26,9 @@ class StudentChatFragment : ChatFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        val view = super.onCreateView(inflater, container, savedInstanceState)
         setObserver()
+        return view
     }
 
     override fun isTeacher(): Boolean {
@@ -46,11 +46,11 @@ class StudentChatFragment : ChatFragment() {
     private fun refreshNormalQuestionState(chatRoomVO: ChatRoomVO) {
         when (chatRoomVO.questionState) {
             QuestionState.PROPOSED -> {
-                enableChooseTeacherButton()
+                enableChatRoomBtn()
             }
 
             else -> {
-                enableClassRoomButton()
+                disableChatRoomBtn()
             }
         }
     }
@@ -68,7 +68,9 @@ class StudentChatFragment : ChatFragment() {
                 }
 
                 is UIState.Success -> {
-                    enableClassRoomButton()
+                    enableChatRoomBtn()
+
+                    // Todo: 다른 선생님에게 거절 문자하기
 
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
                     getRoomList()
@@ -84,7 +86,7 @@ class StudentChatFragment : ChatFragment() {
     }
 
 
-    private fun enableChooseTeacherButton() {
+    override fun enableChatRoomBtn() {
         setNotiVisible(false)
         binding.btnChatRoomRight.apply {
             visibility = View.VISIBLE
@@ -108,17 +110,6 @@ class StudentChatFragment : ChatFragment() {
                 // Todo: 추후에 한번 더 확인 받는 방식으로 변경할 수 있음
             }
         }
-    }
-
-    override fun enableClassRoomButton() {
-        setNotiVisible(true)
-        binding.btnChatRoomRight.apply {
-            visibility = View.INVISIBLE
-        }
-
-        // 공지 띄우고 공지에서 강의실로 이동하기 버튼을 누르는 방식으로 추후에 변경
-//        binding.btnChatRoomRight.visibility = View.INVISIBLE
-//        enterRoom()
     }
 
     override fun setChatNoti() {

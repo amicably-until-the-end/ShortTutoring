@@ -121,9 +121,14 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    abstract fun enableClassRoomButton()
+    abstract fun enableChatRoomBtn()
 
-    fun observeTutoringInfo() {
+    protected fun disableChatRoomBtn() {
+        setNotiVisible(true)
+        setChatRoomBtnsVisible(false)
+    }
+
+    private fun observeTutoringInfo() {
         chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
 
             when (it) {
@@ -298,7 +303,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun resetMsgTab() {
         setNotiVisible(false)
-        setChatRoomRightBtnVisible(false)
+        setChatRoomBtnsVisible(false)
         messageListAdapter.setItem(emptyList())
         messageListAdapter.notifyDataSetChanged()
         binding.tvChatRoomTitle.text = ""
@@ -460,11 +465,20 @@ abstract class ChatFragment : Fragment() {
             clearRecyclersSelectedView(caller)
         }
 
-    private fun setChatRoomRightBtnVisible(b: Boolean) {
+    protected fun setChatRoomRightBtnVisible(b: Boolean) {
         binding.btnChatRoomRight.visibility = if (b) View.VISIBLE else View.INVISIBLE
     }
 
-    fun setNotiVisible(b: Boolean) {
+    protected fun setChatRoomBtnsVisible(b: Boolean) {
+        listOf(
+            binding.btnChatRoomRight,
+            binding.btnChatRoomLeft
+        ).forEach {
+            it.visibility = if (b) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    protected fun setNotiVisible(b: Boolean) {
         binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
     }
 }
