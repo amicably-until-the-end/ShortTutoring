@@ -84,7 +84,7 @@ class Mapper {
                 questionId = "fff",
                 isSelect = true,
                 questionState =
-                if (status == ChatRoomEntity.PROPOSED_NORMAL || status == ChatRoomEntity.PROPOSED_SELECT)
+                if (status == 1 || status == 2)
                     QuestionState.PROPOSED else QuestionState.RESERVED,
             )
         }

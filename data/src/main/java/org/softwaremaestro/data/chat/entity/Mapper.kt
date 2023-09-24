@@ -19,7 +19,7 @@ class Mapper {
                 questionId = "fff",
                 isSelect = true,
                 questionState =
-                if (status == ChatRoomEntity.PROPOSED_NORMAL || status == ChatRoomEntity.PROPOSED_SELECT)
+                if (status == 1 || status == 2)
                     QuestionState.PROPOSED else QuestionState.RESERVED,
             )
         }
@@ -47,7 +47,7 @@ class Mapper {
                 questionId = "fff",
                 isSelect = true,
                 questionState =
-                if (chatRoomEntity.status == ChatRoomEntity.PROPOSED_NORMAL || chatRoomEntity.status == ChatRoomEntity.PROPOSED_SELECT)
+                if (chatRoomEntity.status == 1 || chatRoomEntity.status == 2)
                     QuestionState.PROPOSED else QuestionState.RESERVED,
                 messages = messages.map { it.asDomain() }
             )

@@ -16,14 +16,7 @@ data class ChatRoomEntity(
     var startDateTime: LocalDateTime,
     var status: Int,
     var image: String,
-) {
-    companion object {
-        const val PROPOSED_NORMAL = 0
-        const val PROPOSED_SELECT = 1
-        const val RESERVED_NORMAL = 2
-        const val RESERVED_SELECT = 3
-    }
-}
+)
 
 @Entity
 data class ChatRoomWithMessages(
@@ -34,3 +27,10 @@ data class ChatRoomWithMessages(
     )
     val messages: List<MessageEntity>
 )
+
+enum class ChatRoomType(val type: Int) {
+    PROPOSED_NORMAL(type = 0),
+    PROPOSED_SELECT(type = 1),
+    RESERVED_NORMAL(type = 2),
+    RESERVED_SELECT(type = 3),
+}
