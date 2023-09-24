@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
-import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
+import java.time.LocalDateTime
 
 
 interface QuestionUploadRepository {
@@ -14,6 +14,6 @@ interface QuestionUploadRepository {
     suspend fun getTeacherList(questionId: String): Flow<BaseResult<List<TeacherVO>, String>>
 
     suspend fun pickTeacher(
-        chattingId: String, questionId: String
+        time: LocalDateTime, chattingId: String, questionId: String
     ): Flow<BaseResult<TeacherPickResVO, String>>
 }

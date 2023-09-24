@@ -57,7 +57,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_apply_icon_list"
-                    android:layout_width="match_parent"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
@@ -284,13 +284,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="undefined"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="undefined" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_chat_room_right"
@@ -300,73 +300,91 @@
                 android:backgroundTint="@color/primary_blue"
                 android:gravity="center"
                 android:paddingHorizontal="12dp"
-                android:text="강의실 입장하기"
+                android:text="선택하기"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container_messages"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_msgs"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_messages"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:clipToPadding="false"
-                android:fadingEdge="none"
-                android:paddingHorizontal="20dp"
-                android:paddingTop="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:layout_editor_absoluteX="55dp">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_msgs"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:clipToPadding="false"
+                    android:fadingEdge="none"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_input_box"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_radius_20_white"
-                    android:minHeight="40dp"
-                    android:paddingVertical="4dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="4dp">
+                    android:padding="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layout_editor_absoluteX="55dp">
 
-                    <EditText
-                        android:id="@+id/et_message"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:hint="메시지를 입력하세요"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container_input_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_radius_20_white"
+                        android:minHeight="40dp"
+                        android:paddingVertical="4dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="4dp">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_send_message"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@drawable/ic_send_message"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <EditText
+                            android:id="@+id/et_message"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:hint="메시지를 입력하세요"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/btn_send_message"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_send_message"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/ic_send_message"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <org.softwaremaestro.presenter.util.widget.ChatNoti
+                android:id="@+id/cn_noti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider

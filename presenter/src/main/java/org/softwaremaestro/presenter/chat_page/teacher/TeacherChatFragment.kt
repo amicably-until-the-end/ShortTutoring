@@ -1,12 +1,10 @@
 package org.softwaremaestro.presenter.chat_page.teacher
 
-import android.widget.Toast
+import android.view.View
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
-import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
-import org.softwaremaestro.presenter.util.widget.SimpleDatePicker
 
 
 class TeacherChatFragment : ChatFragment() {
@@ -35,7 +33,7 @@ class TeacherChatFragment : ChatFragment() {
             //일반 질문 일때
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    //일반 질문 일 때는 별 다른거 없을 듯
+                    //일반 질문일 때는 별 다른거 없을 듯
                 }
 
                 QuestionState.RESERVED -> {
@@ -59,5 +57,29 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
+    override fun enableClassRoomButton() {
+        binding.btnChatRoomRight.apply {
+            visibility = View.VISIBLE
+            setEnabledAndChangeColor(true)
+            setOnClickListener {
+                enterRoom()
+            }
+        }
+    }
 
+    override fun setChatNoti() {
+        binding.cnNoti.apply {
+            // Todo: 추후에 시간 변경하기
+            setTvNotiMain("학생과의 수업이 7월 77일 7시에 진행됩니다")
+            setTvNotiSub("수업을 시작하면 학생이 강의실에 입장할 수 있어요")
+            setBtnNegativeText("일정 변경하기")
+            setBtnPositiveText("강의실 입장하기")
+            setOnClickListenerToBtnNegative {
+                visibility = View.GONE
+            }
+            setOnClickListenerToBtnPositive {
+                enterRoom()
+            }
+        }
+    }
 }

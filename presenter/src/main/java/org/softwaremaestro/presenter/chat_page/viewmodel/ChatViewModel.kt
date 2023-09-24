@@ -64,17 +64,30 @@ class ChatViewModel @Inject constructor(
                     _reservedNormalChatRoomList.value = UIState.Failure
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
-                .collect { result ->
-                    val dummyData = ChatRoomListVO(
-                        normalProposed = mutableListOf<ChatRoomVO>().apply {
-                            add(getDummyImage(0))
-                            repeat(3) {
-                                add(getDummyText(it))
+                .collect { resulttt ->
+                    val result = BaseResult.Success(
+                        ChatRoomListVO(
+                            normalProposed = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.QUESTION, QuestionState.PROPOSED, false))
+                                }
+                            },
+                            normalReserved = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.TEACHER, QuestionState.RESERVED, false))
+                                }
+                            },
+                            selectedProposed = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.TEACHER, QuestionState.PROPOSED, true))
+                                }
+                            },
+                            selectedReserved = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.TEACHER, QuestionState.RESERVED, true))
+                                }
                             }
-                        },
-                        normalReserved = listOf(),
-                        selectedProposed = listOf(),
-                        selectedReserved = listOf()
+                        )
                     )
                     when (result) {
                         is BaseResult.Success -> {
@@ -83,66 +96,16 @@ class ChatViewModel @Inject constructor(
                             _reservedSelectedChatRoomList.value =
                                 UIState.Success(result.data.selectedReserved)
                             _proposedNormalChatRoomList.value =
-                                UIState.Success(dummyData.normalProposed)
+                                UIState.Success(result.data.normalProposed)
                             _proposedSelectedChatRoomList.value =
                                 UIState.Success(result.data.selectedProposed)
                         }
 
-                        is BaseResult.Error -> _reservedNormalChatRoomList.value = UIState.Failure
+                        is BaseResult.Error<*> -> _reservedNormalChatRoomList.value =
+                            UIState.Failure
                     }
                 }
         }
-    }
-
-    private fun getDummyImage(i: Int): ChatRoomVO {
-        return ChatRoomVO(
-            id = "id",
-            roomType = RoomType.TEACHER,
-            roomImage = "",
-            questionState = QuestionState.PROPOSED,
-            questionId = "questionId",
-            opponentId = "opponentId",
-            title = "타이틀${i}",
-            schoolSubject = "미적분",
-            schoolLevel = "고등학교",
-            messages = listOf(
-                MessageVO(
-                    time = LocalDateTime.now(),
-                    bodyVO = MessageBodyVO.ProblemImage(
-                        "https://ibb.co/w7xj4kP",
-                        "설명${i}"
-                    ),
-                    sender = "sender",
-                    isMyMsg = false
-                )
-            ),
-            teachers = null,
-            isSelect = false
-        )
-    }
-
-    private fun getDummyText(i: Int): ChatRoomVO {
-        return ChatRoomVO(
-            id = "id",
-            roomType = RoomType.TEACHER,
-            roomImage = "",
-            questionState = QuestionState.PROPOSED,
-            questionId = "questionId",
-            opponentId = "opponentId",
-            title = "타이틀${i}",
-            schoolSubject = "미적분",
-            schoolLevel = "고등학교",
-            messages = listOf(
-                MessageVO(
-                    time = LocalDateTime.now(),
-                    bodyVO = MessageBodyVO.Text("질문${i}"),
-                    sender = "sender",
-                    isMyMsg = true
-                )
-            ),
-            teachers = null,
-            isSelect = false
-        )
     }
 
     fun getClassRoomInfo(questionId: String) {
@@ -198,4 +161,51 @@ class ChatViewModel @Inject constructor(
         socket?.disconnect()
     }
 
+    private fun getDummy(type: RoomType, state: QuestionState, isSelected: Boolean): ChatRoomVO {
+        val teacher = ChatRoomVO(
+            id = "id",
+            roomType = RoomType.TEACHER,
+            roomImage = "",
+            questionState = QuestionState.PROPOSED,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.Text("질문"),
+                    sender = "sender",
+                    isMyMsg = true
+                )
+            ),
+            teachers = null,
+            isSelect = false
+        )
+
+        return ChatRoomVO(
+            id = "id",
+            roomType = type,
+            roomImage = "",
+            questionState = state,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.Text("질문"),
+                    sender = "sender",
+                    isMyMsg = true
+                )
+            ),
+            teachers = if (type == RoomType.QUESTION && state == QuestionState.PROPOSED && !isSelected) {
+                listOf(teacher, teacher, teacher)
+            } else null,
+            isSelect = isSelected
+        )
+    }
 }

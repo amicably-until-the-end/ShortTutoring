@@ -6,10 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomIconBinding
+import org.softwaremaestro.presenter.util.Util
 
 class ChatRoomIconListAdapter(
     private val onQuestionClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit
@@ -50,6 +49,7 @@ class ChatRoomIconListAdapter(
         if (caller == null) {
             selectedView?.let {
                 it.strokeColor = it.context.getColor(R.color.background_grey)
+                it.setBackgroundColor(it.context.getColor(R.color.white))
                 selectedView = null
             }
         }
@@ -77,11 +77,13 @@ class ChatRoomIconListAdapter(
                     cvContainer.strokeWidth = Util.toPx(1, binding.root.context)
                     cvContainer.strokeColor =
                         binding.root.context.getColor(R.color.primary_blue)
+                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
                     selectedView = cvContainer
                 }
 
                 if (position == selectedPosition) {
                     cvContainer.strokeColor = binding.root.context.getColor(R.color.primary_blue)
+                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
                     selectedView = cvContainer
                 }
                 Glide.with(binding.root.context)

@@ -16,6 +16,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     private lateinit var binding: DialogTimePickerBinding
 
     private var title: String? = null
+    private var btnText: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +26,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         binding = DialogTimePickerBinding.inflate(layoutInflater)
 
         setDialogTitle()
+        setDialogBtnText()
         setReturnButton()
         setDefaultTime()
         return binding.root
@@ -32,6 +34,10 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
 
     fun setTitle(title: String) {
         this.title = title
+    }
+
+    fun setBtnText(btnText: String) {
+        this.btnText = btnText
     }
 
     private fun setDefaultTime() {
@@ -44,6 +50,11 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     private fun setDialogTitle() {
         if (title != null)
             binding.tvTitle.text = title
+    }
+
+    private fun setDialogBtnText() {
+        if (btnText != null)
+            binding.btnReturn.text = btnText
     }
 
     private fun setReturnButton() {

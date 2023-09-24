@@ -3,13 +3,13 @@ package org.softwaremaestro.presenter.chat_page
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,10 +18,9 @@ import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
-import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.ClassroomFragment
@@ -29,7 +28,8 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 import org.softwaremaestro.presenter.util.UIState
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
+import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 
 
@@ -72,11 +72,12 @@ abstract class ChatFragment : Fragment() {
         makeAdapterList()
         getRoomList()
         setSendMessageButton()
-
+        setChatNoti()
 
         return binding.root
-
     }
+
+    abstract fun setChatNoti()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,7 +92,7 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    private fun getRoomList() {
+    protected fun getRoomList() {
         chatViewModel.getChatRoomList()
     }
 
@@ -120,15 +121,7 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    fun enableClassRoomButton() {
-        binding.btnChatRoomRight.apply {
-            text = "강의실 입장하기"
-            setEnabledAndChangeColor(true)
-            setOnClickListener {
-                enterRoom()
-            }
-        }
-    }
+    abstract fun enableClassRoomButton()
 
     fun observeTutoringInfo() {
         chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
@@ -274,12 +267,12 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun setQuestionTypeSelectToggle() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
             clearRecyclersSelectedView(null)
+            resetMsgTab()
 
             when (checkId) {
                 R.id.rb_normal_question -> {
@@ -301,6 +294,16 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun resetMsgTab() {
+        setNotiVisible(false)
+        setChatRoomRightBtnVisible(false)
+        messageListAdapter.setItem(emptyList())
+        messageListAdapter.notifyDataSetChanged()
+        binding.tvChatRoomTitle.text = ""
+        binding.etMessage.setText("")
+        hideKeyboardAndRemoveFocus(binding.etMessage)
     }
 
     abstract fun onChatRoomStateChange(chatRoomVO: ChatRoomVO)
@@ -399,6 +402,7 @@ abstract class ChatFragment : Fragment() {
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerTutoringList.id
         }
+        resetMsgTab()
     }
 
     private fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
@@ -456,5 +460,11 @@ abstract class ChatFragment : Fragment() {
             clearRecyclersSelectedView(caller)
         }
 
+    private fun setChatRoomRightBtnVisible(b: Boolean) {
+        binding.btnChatRoomRight.visibility = if (b) View.VISIBLE else View.INVISIBLE
+    }
 
+    fun setNotiVisible(b: Boolean) {
+        binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
+    }
 }
