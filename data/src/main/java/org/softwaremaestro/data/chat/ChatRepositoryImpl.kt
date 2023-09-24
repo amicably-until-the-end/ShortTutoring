@@ -17,11 +17,10 @@ import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
-    private val chatApi: ChatApi
+    private val chatApi: ChatApi, private val chatDatabase: ChatDatabase
 ) :
     ChatRepository {
 
-    /*
 
     private fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO {
         var proposedNormal =
@@ -57,11 +56,13 @@ class ChatRepositoryImpl @Inject constructor(
         )
     }
 
-     */
 
     override suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
+            emit(BaseResult.Success(getRoomFromDB(isTeacher)))
+            /*
             val result = chatApi.getRoomList()
+
 
             if (result.isSuccessful && result.body()?.success == true) {
                 val data = result.body()?.data!!
@@ -71,6 +72,8 @@ class ChatRepositoryImpl @Inject constructor(
             } else {
                 emit(BaseResult.Error("Error"))
             }
+
+             */
         }
     }
 }

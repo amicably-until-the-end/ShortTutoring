@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -57,27 +58,31 @@ class ChatViewModel @Inject constructor(
 
 
     fun getChatRoomList(isTeacher: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getChatRoomListUseCase.execute(isTeacher)
-                .onStart { _reservedNormalChatRoomList.value = UIState.Loading }
+                .onStart { _reservedNormalChatRoomList.postValue(UIState.Loading) }
                 .catch { exception ->
-                    _reservedNormalChatRoomList.value = UIState.Failure
+                    _reservedNormalChatRoomList.postValue(UIState.Failure)
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            _reservedNormalChatRoomList.value =
+                            _reservedNormalChatRoomList.postValue(
                                 UIState.Success(result.data.normalReserved)
-                            _reservedSelectedChatRoomList.value =
+                            )
+                            _reservedSelectedChatRoomList.postValue(
                                 UIState.Success(result.data.selectedReserved)
-                            _proposedNormalChatRoomList.value =
+                            )
+                            _proposedNormalChatRoomList.postValue(
                                 UIState.Success(result.data.normalProposed)
-                            _proposedSelectedChatRoomList.value =
+                            )
+                            _proposedSelectedChatRoomList.postValue(
                                 UIState.Success(result.data.selectedProposed)
+                            )
                         }
 
-                        is BaseResult.Error -> _reservedNormalChatRoomList.value = UIState.Failure
+                        is BaseResult.Error -> _reservedNormalChatRoomList.postValue(UIState.Failure)
                     }
                 }
         }

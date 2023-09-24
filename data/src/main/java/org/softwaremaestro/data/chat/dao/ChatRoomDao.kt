@@ -23,4 +23,18 @@ interface ChatRoomDao {
 
     @Query("SELECT * FROM ChatRoomEntity")
     fun getChatRoomWithMessages(): List<ChatRoomEntity>
+
+    @Query("SELECT * FROM ChatRoomEntity WHERE status = 0")
+    fun getProposedSelectChatRoom(): List<ChatRoomWithMessages>
+
+    @Query("SELECT * FROM ChatRoomEntity WHERE status = 1")
+    fun getProposedNormalChatRoom(): List<ChatRoomWithMessages>
+
+    @Query("SELECT * FROM ChatRoomEntity WHERE status = 2")
+    fun getReservedSelectChatRoom(): List<ChatRoomWithMessages>
+
+    @Query("SELECT * FROM ChatRoomEntity WHERE status = 3")
+    fun getReservedNormalChatRoom(): List<ChatRoomWithMessages>
+
+
 }

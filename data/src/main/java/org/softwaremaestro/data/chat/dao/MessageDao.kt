@@ -8,7 +8,6 @@ import org.softwaremaestro.data.chat.entity.MessageEntity
 
 @Dao
 interface MessageDao {
-
     @Insert
     fun insert(messageEntity: MessageEntity)
 }

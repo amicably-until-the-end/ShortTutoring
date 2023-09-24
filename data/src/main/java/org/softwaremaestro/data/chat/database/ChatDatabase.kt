@@ -8,10 +8,11 @@ import androidx.room.TypeConverters
 import org.softwaremaestro.data.chat.dao.ChatRoomDao
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.data.chat.entity.Converter
+import org.softwaremaestro.data.chat.entity.MessageEntity
 
 
 @Database(
-    entities = [ChatRoomEntity::class],
+    entities = [ChatRoomEntity::class, MessageEntity::class],
     version = 1,
     exportSchema = false
 )
