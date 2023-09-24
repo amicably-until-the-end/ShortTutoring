@@ -66,4 +66,9 @@ dependencies {
 
     //JWT Util
     implementation 'com.auth0.android:jwtdecode:2.0.2'
+
+
+    // Room
+    implementation "androidx.room:room-runtime:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
 }
