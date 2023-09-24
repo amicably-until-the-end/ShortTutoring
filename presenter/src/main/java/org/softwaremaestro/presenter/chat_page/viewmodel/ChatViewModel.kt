@@ -56,7 +56,6 @@ class ChatViewModel @Inject constructor(
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
         get() = _tutoringInfo
 
-
     fun getChatRoomList() {
         viewModelScope.launch {
             getChatRoomListUseCase.execute()
@@ -220,16 +219,22 @@ class ChatViewModel @Inject constructor(
             title = "타이틀",
             schoolSubject = "미적분",
             schoolLevel = "고등학교",
-            messages = listOf(
-                MessageVO(
-                    time = LocalDateTime.now(),
-                    bodyVO = MessageBodyVO.AppointRequest(nowInKorea()),
-                    sender = "sender",
-                    isMyMsg = false
-                )
-            ),
+            messages = mutableListOf<MessageVO>().apply {
+                add(getMessageDummy(MessageBodyVO.ProblemImage("", "설명")))
+                add(getMessageDummy(MessageBodyVO.Text("안녕하세요, 선생님!")))
+                add(getMessageDummy(MessageBodyVO.AppointRequest(nowInKorea())))
+            },
             teachers = null,
             isSelect = true
+        )
+    }
+
+    private fun getMessageDummy(body: MessageBodyVO): MessageVO {
+        return MessageVO(
+            time = nowInKorea(),
+            bodyVO = body,
+            sender = null,
+            isMyMsg = false
         )
     }
 }
