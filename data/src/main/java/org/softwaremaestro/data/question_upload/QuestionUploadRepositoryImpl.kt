@@ -62,7 +62,7 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
 
     override suspend fun pickTeacher(
         chattingId: String, questionId: String
-    ): Flow<BaseResult<TeacherPickResVO, String>> {
+    ): Flow<BaseResult<String, String>> {
         return flow {
             val response =
                 questionUploadApi.pickTeacher(
@@ -74,11 +74,11 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
 
             val body = response.body()
             if (response.isSuccessful && body?.success == true) {
-                val tutoringInfo = body.data
+                //val result = body.data
 
-                val teacherPickResVO = tutoringInfo?.asDomain()!!
+                //val teacherPickResVO = tutoringInfo?.asDomain()!!
 
-                emit(BaseResult.Success(teacherPickResVO))
+                emit(BaseResult.Success("success"))
             } else {
                 emit(BaseResult.Error("error"))
             }

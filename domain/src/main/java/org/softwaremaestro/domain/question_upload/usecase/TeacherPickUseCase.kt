@@ -11,7 +11,7 @@ class TeacherPickUseCase @Inject constructor(private val questionUploadRepositor
     suspend fun execute(
         chattingId: String,
         questionId: String
-    ): Flow<BaseResult<TeacherPickResVO, String>> {
+    ): Flow<BaseResult<String, String>> {
         return questionUploadRepository.pickTeacher(chattingId, questionId)
     }
 }

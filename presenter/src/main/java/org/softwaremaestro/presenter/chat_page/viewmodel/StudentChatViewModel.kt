@@ -32,26 +32,26 @@ class StudentChatViewModel @Inject constructor(
 
     private var socket: Socket? = null
 
-    private val pickTeacherResult = MutableLiveData<UIState<Boolean>>()
-    val pickTeacherResultState: LiveData<UIState<Boolean>> get() = pickTeacherResult
+    private val _pickTeacherResult = MutableLiveData<UIState<Boolean>>()
+    val pickTeacherResult: LiveData<UIState<Boolean>> get() = _pickTeacherResult
 
 
     fun pickTeacher(chattingId: String, questionId: String) {
         viewModelScope.launch {
             teacherPickUseCase.execute(chattingId, questionId)
-                .onStart { pickTeacherResult.value = UIState.Loading }
+                .onStart { _pickTeacherResult.value = UIState.Loading }
                 .catch { exception ->
-                    pickTeacherResult.value = UIState.Failure
+                    _pickTeacherResult.value = UIState.Failure
                     Log.e(this@StudentChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            pickTeacherResult.value = UIState.Success(true)
+                            _pickTeacherResult.value = UIState.Success(true)
                         }
 
                         is BaseResult.Error -> {
-                            pickTeacherResult.value = UIState.Failure
+                            _pickTeacherResult.value = UIState.Failure
                         }
                     }
                 }

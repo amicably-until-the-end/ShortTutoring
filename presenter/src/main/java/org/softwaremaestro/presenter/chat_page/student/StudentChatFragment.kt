@@ -21,7 +21,7 @@ class StudentChatFragment : ChatFragment() {
 
 
     private val studentViewModel: StudentChatViewModel by viewModels()
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObserver()
@@ -52,7 +52,7 @@ class StudentChatFragment : ChatFragment() {
     }
 
     private fun setObserver() {
-        studentViewModel.pickTeacherResultState.observe(viewLifecycleOwner) {
+        studentViewModel.pickTeacherResult.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
                     //로딩
@@ -60,6 +60,7 @@ class StudentChatFragment : ChatFragment() {
 
                 is UIState.Success -> {
                     enableClassRoomButton()
+                    Toast.makeText(requireContext(), "선생님 선택 성공", Toast.LENGTH_SHORT).show()
                 }
 
                 is UIState.Failure -> {

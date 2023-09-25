@@ -27,7 +27,7 @@ interface QuestionUploadApi {
     suspend fun pickTeacher(
         @Path("questionId") questionId: String,
         @Body pickTeacherReqDto: PickTeacherReqDto
-    ): Response<WrappedResponse<PickTeacherResDto>>
+    ): Response<WrappedResponse<Unit>>
 
 
 }
