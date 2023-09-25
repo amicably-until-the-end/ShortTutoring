@@ -19,12 +19,9 @@ import java.time.LocalDateTime
 data class MessageEntity(
     @PrimaryKey var id: String,
     var roomId: String,
+    var body: String,
     var format: String,
-    var image: String,
-    var description: String,
-    var startDateTime: LocalDateTime,
     var isRead: Boolean = false,
+    var sendAt: LocalDateTime,
     var isMyMsg: Boolean,
-    var createdAt: LocalDateTime,
-    var questionId: String,
 )

@@ -21,7 +21,6 @@ import javax.inject.Inject
 class ExampleApplication : Application() {
 
     private lateinit var db: ChatDatabase
-    private lateinit var socket: Socket
 
     @Inject
     lateinit var socketManager: SocketManager
@@ -48,6 +47,11 @@ class ExampleApplication : Application() {
 
     private fun initSocket() {
         socketManager.init()
+    }
+
+    override fun onTerminate() {
+        socketManager.close()
+        super.onTerminate()
     }
 
 

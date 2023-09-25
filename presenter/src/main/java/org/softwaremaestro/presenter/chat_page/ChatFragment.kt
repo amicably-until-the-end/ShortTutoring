@@ -103,7 +103,8 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun observeSocket() {
-        socketManager.mSocket.on("msg") {
+        socketManager.getSocket().on("msg") {
+            Log.d("socket", it[0].toString())
             activity?.runOnUiThread {
                 Toast.makeText(requireContext(), "메시지 도착${it[0]}", Toast.LENGTH_SHORT).show()
             }

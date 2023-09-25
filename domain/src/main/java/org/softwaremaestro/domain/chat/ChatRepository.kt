@@ -10,5 +10,10 @@ import org.softwaremaestro.domain.common.BaseResult
 
 interface ChatRepository {
     suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>>
-    suspend fun insertMessage(message: String)
+    suspend fun insertMessage(
+        roomId: String,
+        body: String,
+        format: String,
+        isMyMsg: Boolean
+    )
 }

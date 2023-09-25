@@ -31,7 +31,7 @@ class Mapper {
     fun asDomain(messageEntity: MessageEntity): MessageVO {
         messageEntity.apply {
             return MessageVO(
-                time = createdAt,
+                time = sendAt,
                 bodyVO = null,
                 isMyMsg = isMyMsg,
             )

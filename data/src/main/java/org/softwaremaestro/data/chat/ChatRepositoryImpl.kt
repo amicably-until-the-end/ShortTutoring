@@ -4,6 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.chat.database.ChatDatabase
+import org.softwaremaestro.data.chat.entity.MessageEntity
 import org.softwaremaestro.data.chat.entity.asEntity
 import org.softwaremaestro.data.chat.model.ChatRoomListDto
 import org.softwaremaestro.data.chat.model.asDomain as DTOToVO
@@ -93,7 +94,27 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertMessage(message: String) {
-        //TODO("Not yet implemented")
+    override suspend fun insertMessage(
+        roomId: String,
+        body: String,
+        format: String,
+        isMyMsg: Boolean
+    ) {
+        try {
+            chatDatabase.messageDao().insert(
+                MessageEntity(
+                    id = "id",
+                    roomId = roomId,
+                    body = body,
+                    format = format,
+                    isRead = isMyMsg,
+                    sendAt = java.time.LocalDateTime.now(),
+                    isMyMsg = isMyMsg
+                )
+            )
+
+        } catch (e: Exception) {
+            Log.d("ChatRepositoryImpl", e.toString())
+        }
     }
 }
