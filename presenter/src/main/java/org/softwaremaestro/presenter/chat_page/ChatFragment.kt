@@ -28,6 +28,9 @@ import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.teacher_home.DESCRIPTION
+import org.softwaremaestro.presenter.teacher_home.IMAGE
+import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -372,6 +375,19 @@ abstract class ChatFragment : Fragment() {
                     parentFragmentManager,
                     "detailAlertDialog"
                 )
+            },
+            onImageClick = { body ->
+                val intent = Intent(requireActivity(), QuestionImageActivity::class.java).apply {
+                    putStringArrayListExtra(
+                        IMAGE, arrayListOf(
+                            "https://i.pravatar.cc/150?img=3",
+                            "https://i.pravatar.cc/150?img=4"
+                        )
+                    )
+                    putExtra(SUBJECT, "과목")
+                    putExtra(DESCRIPTION, body.description)
+                }
+                startActivity(intent)
             }
         )
         binding.rvMsgs.apply {

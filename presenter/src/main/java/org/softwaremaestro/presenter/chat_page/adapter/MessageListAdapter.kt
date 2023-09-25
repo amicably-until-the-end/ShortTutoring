@@ -15,7 +15,8 @@ import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
 
 class MessageListAdapter(
     private val onBtn1Click: () -> Unit,
-    private val onBtn2Click: () -> Unit
+    private val onBtn2Click: () -> Unit,
+    private val onImageClick: (MessageBodyVO.ProblemImage) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<MessageVO> = emptyList()
@@ -53,8 +54,6 @@ class MessageListAdapter(
             }
         }
     }
-
-    // 사진 클릭하면 이동
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position].bodyVO) {
@@ -310,6 +309,9 @@ class MessageListAdapter(
                         Glide.with(root.context).load(body.imageUrl)
                             .centerCrop()
                             .into(ivImage)
+                        root.setOnClickListener {
+                            onImageClick(body)
+                        }
                     }
 
                     else -> {}
