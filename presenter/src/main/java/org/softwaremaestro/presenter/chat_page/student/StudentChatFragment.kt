@@ -27,7 +27,7 @@ class StudentChatFragment : ChatFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        setObserver()
+        observePickTeacherResultState()
         return view
     }
 
@@ -60,7 +60,7 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-    private fun setObserver() {
+    private fun observePickTeacherResultState() {
         studentViewModel.pickTeacherResultState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
@@ -73,7 +73,7 @@ class StudentChatFragment : ChatFragment() {
                 }
 
                 is UIState.Success -> {
-                    enableChatRoomBtn()
+                    disableChatRoomBtn()
 
                     // Todo: 다른 선생님에게 거절 문자하기
 

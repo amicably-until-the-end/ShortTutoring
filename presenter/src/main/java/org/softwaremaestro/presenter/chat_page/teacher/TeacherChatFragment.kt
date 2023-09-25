@@ -10,6 +10,7 @@ import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.TeacherChatViewModel
+import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.widget.DatePickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
@@ -29,9 +30,14 @@ class TeacherChatFragment : ChatFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        observeTutoringTimeAndDurationProper()
+        observe()
         initDialog()
         return view
+    }
+
+    private fun observe() {
+        observeTutoringTimeAndDurationProper()
+        observePickStudentResult()
     }
 
     private fun initDialog() {
@@ -115,8 +121,40 @@ class TeacherChatFragment : ChatFragment() {
     }
 
     private fun observeTutoringTimeAndDurationProper() {
-        teacherViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) {
-            if (it) teacherViewModel.pickStudent()
+        teacherViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
+            if (proper) {
+                currentChatRoom?.let {
+                    teacherViewModel.pickStudent(it.questionId!!)
+                }
+            }
+        }
+    }
+
+    private fun observePickStudentResult() {
+        teacherViewModel.pickStudentResult.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Loading -> {
+                    //로딩
+                    with(binding.btnChatRoomRight) {
+                        setBackgroundResource(R.drawable.bg_radius_100_background_grey)
+                        isEnabled = false
+                        setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                    }
+                }
+
+                is UIState.Success -> {
+                    disableChatRoomBtn()
+
+                    // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
+                    getRoomList()
+                }
+
+                is UIState.Failure -> {
+                    //선생님 선택 실패
+                }
+
+                else -> {}
+            }
         }
     }
 

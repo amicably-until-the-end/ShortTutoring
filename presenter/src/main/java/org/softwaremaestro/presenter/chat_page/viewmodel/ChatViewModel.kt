@@ -64,7 +64,7 @@ class ChatViewModel @Inject constructor(
                     _reservedNormalChatRoomList.value = UIState.Failure
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
-                .collect { result ->
+                .collect { resultttt ->
                     val result = BaseResult.Success(
                         ChatRoomListVO(
                             normalProposed = mutableListOf<ChatRoomVO>().apply {
