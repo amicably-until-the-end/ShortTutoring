@@ -45,14 +45,15 @@ class Mapper {
                 title = chatRoomEntity.title,
                 schoolLevel = "fff",
                 schoolSubject = "fff",
-                roomType = RoomType.TEACHER,
+                roomType = if (chatRoomEntity.opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 roomImage = chatRoomEntity.image,
                 questionId = "fff",
                 isSelect = true,
                 questionState =
                 if (chatRoomEntity.status == 1 || chatRoomEntity.status == 2)
                     QuestionState.PROPOSED else QuestionState.RESERVED,
-                messages = messages.map { it.asDomain() }
+                messages = messages.map { it.asDomain() },
+                opponentId = chatRoomEntity.opponentId,
             )
         }
     }

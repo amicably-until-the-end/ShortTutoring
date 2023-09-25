@@ -34,6 +34,8 @@ class ChatRepositoryImpl @Inject constructor(
             var reservedSelect =
                 chatDatabase.chatRoomDao().getReservedSelectChatRoom().map { it.EntityToVO() }
 
+            Log.d("chat", "일반 ${proposedNormal.toString()}")
+
             val groups: MutableList<ChatRoomVO> = mutableListOf()
             if (!isTeacher) {
                 //학생이면 그룹화
@@ -51,6 +53,7 @@ class ChatRepositoryImpl @Inject constructor(
                     )
                     groups.add(questionRoom)
                 }
+                Log.d("group", groups.toString())
             }
             return ChatRoomListVO(
                 if (isTeacher) proposedNormal else groups,
