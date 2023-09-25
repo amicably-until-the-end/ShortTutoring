@@ -1,5 +1,6 @@
 package org.softwaremaestro.domain.chat.entity
 
+import kotlinx.serialization.Serializable
 import java.awt.TrayIcon
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -46,16 +47,20 @@ data class MessageVO(
     val isMyMsg: Boolean,
 )
 
+
 sealed class MessageBodyVO {
+    @Serializable
     data class ProblemImage(
         val imageUrl: String?,
         val description: String?,
     ) : MessageBodyVO()
 
+    @Serializable
     data class AppointRequest(
-        val startDateTime: LocalDateTime?,
+        val startDateTime: String?,
     ) : MessageBodyVO()
 
+    @Serializable
     data class Text(
         val text: String?,
     ) : MessageBodyVO()

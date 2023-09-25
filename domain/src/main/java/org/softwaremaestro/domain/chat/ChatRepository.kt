@@ -14,6 +14,7 @@ interface ChatRepository {
         roomId: String,
         body: String,
         format: String,
+        sendAt: String,
         isMyMsg: Boolean
     )
 }

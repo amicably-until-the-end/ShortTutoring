@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.notify
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
@@ -103,10 +104,10 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun observeSocket() {
-        socketManager.getSocket().on("msg") {
-            Log.d("socket", it[0].toString())
+        socketManager.getSocket().on("message") {
+            chatViewModel.getChatRoomList(isTeacher())
             activity?.runOnUiThread {
-                Toast.makeText(requireContext(), "메시지 도착${it[0]}", Toast.LENGTH_SHORT).show()
+                binding.rvMsgs.adapter?.notifyDataSetChanged()
             }
         }
     }

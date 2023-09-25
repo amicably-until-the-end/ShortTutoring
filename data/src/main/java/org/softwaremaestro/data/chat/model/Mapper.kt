@@ -34,7 +34,7 @@ class Mapper {
                 questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
                 opponentId = opponentId,
                 title = title,
-                messages = messages?.map { it.asDomain() },
+                messages = listOf(),
                 roomImage = roomImage,
                 roomType = if (opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 isSelect = isSelect ?: false,
@@ -54,8 +54,7 @@ class Mapper {
             )
 
             "appoint-request" -> {
-                var dateTime = ISOParser(messageDto.body.startDateTime!!)
-                MessageBodyVO.AppointRequest(dateTime)
+                MessageBodyVO.AppointRequest(messageDto.body.startDateTime)
             }
 
             else -> MessageBodyVO.Text(messageDto.body.text)

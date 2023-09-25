@@ -35,7 +35,7 @@ class ChatRepositoryImpl @Inject constructor(
             var reservedSelect =
                 chatDatabase.chatRoomDao().getReservedSelectChatRoom().map { it.EntityToVO() }
 
-            Log.d("chat", "일반 ${proposedNormal.toString()}")
+            Log.d("ChatRepositoryImpl chat", "일반 ${proposedNormal.toString()}")
 
             val groups: MutableList<ChatRoomVO> = mutableListOf()
             if (!isTeacher) {
@@ -54,7 +54,7 @@ class ChatRepositoryImpl @Inject constructor(
                     )
                     groups.add(questionRoom)
                 }
-                Log.d("group", groups.toString())
+                Log.d("ChatRepositoryImpl group", groups.toString())
             }
             return ChatRoomListVO(
                 if (isTeacher) proposedNormal else groups,
@@ -71,6 +71,7 @@ class ChatRepositoryImpl @Inject constructor(
     private suspend fun updateRoomStatus() {
         val result = chatApi.getRoomList()
 
+        Log.d("ChatRepositoryImpl  update", result.toString())
         if (result.isSuccessful && result.body()?.success == true) {
             val data = result.body()?.data!!
             data.map {
@@ -82,7 +83,7 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
-            updateRoomStatus()
+            //updateRoomStatus()
             var result = getRoomFromDB(isTeacher)
             Log.d("ChatRepositoryImpl", result.toString())
             if (result == null) {
@@ -98,12 +99,13 @@ class ChatRepositoryImpl @Inject constructor(
         roomId: String,
         body: String,
         format: String,
+        sendAt: String,
         isMyMsg: Boolean
     ) {
         try {
             chatDatabase.messageDao().insert(
                 MessageEntity(
-                    id = "id",
+                    id = roomId + sendAt,
                     roomId = roomId,
                     body = body,
                     format = format,

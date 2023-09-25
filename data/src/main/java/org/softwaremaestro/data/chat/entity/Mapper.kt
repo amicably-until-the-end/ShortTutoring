@@ -1,7 +1,9 @@
 package org.softwaremaestro.data.chat.entity
 
+import com.google.gson.Gson
 import org.softwaremaestro.data.chat.model.ChatRoomDto
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
@@ -30,9 +32,21 @@ class Mapper {
 
     fun asDomain(messageEntity: MessageEntity): MessageVO {
         messageEntity.apply {
+            val bodyVO: MessageBodyVO;
+            val gson = Gson()
+            when (format) {
+                "text" -> bodyVO = gson.fromJson(body, MessageBodyVO.Text::class.java)
+                "problem-image" -> bodyVO =
+                    gson.fromJson(body, MessageBodyVO.ProblemImage::class.java)
+
+                "appoint-request" -> bodyVO =
+                    gson.fromJson(body, MessageBodyVO.AppointRequest::class.java)
+
+                else -> bodyVO = MessageBodyVO.Text(body)
+            }
             return MessageVO(
                 time = sendAt,
-                bodyVO = null,
+                bodyVO = bodyVO,
                 isMyMsg = isMyMsg,
             )
         }

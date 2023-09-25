@@ -12,6 +12,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
+import java.time.LocalDateTime
 
 class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -209,7 +210,7 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     when (item.bodyVO) {
                         is MessageBodyVO.AppointRequest -> {
                             var body = item.bodyVO as MessageBodyVO.AppointRequest
-                            var time = body.startDateTime
+                            var time = LocalDateTime.parse(body.startDateTime)
                             tvText.text =
                                 "안녕하세요 선생님!\n ${time?.month}월 ${time?.dayOfMonth}일 ${time?.hour}시 ${time?.minute}분에\n 수업 가능하신가요?"
                             btn1.visibility = Button.VISIBLE
