@@ -99,26 +99,24 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun refreshProposedRoomList() {
-        if (binding.rbNormalQuestion.isChecked) {
-            chatViewModel.proposedNormalChatRoomList.value?.let {
-                when (chatViewModel.proposedNormalChatRoomList.value) {
-                    is UIState.Success -> {
-                        setProposedSectionItems(it._data!!)
+
+        (if (binding.rbNormalQuestion.isChecked)
+            chatViewModel.proposedNormalChatRoomList.value
+        else
+            chatViewModel.proposedSelectedChatRoomList.value)?.let {
+            when (it) {
+                is UIState.Success -> {
+                    it._data!!.let { chatRooms ->
+                        if (chatRooms.isNotEmpty()) {
+                            setProposedSectionItems(it._data)
+                            binding.cvQuestionProposedEmpty.visibility = View.INVISIBLE
+                        } else {
+                            binding.cvQuestionProposedEmpty.visibility = View.VISIBLE
+                        }
                     }
-
-                    else -> {}
                 }
-            }
 
-        } else {
-            chatViewModel.proposedSelectedChatRoomList.value?.let {
-                when (chatViewModel.proposedSelectedChatRoomList.value) {
-                    is UIState.Success -> {
-                        setProposedSectionItems(it._data!!)
-                    }
-
-                    else -> {}
-                }
+                else -> {}
             }
         }
     }
@@ -180,26 +178,44 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun refreshReservedRoomList() {
-        if (binding.rbNormalQuestion.isChecked) {
-            chatViewModel.reservedNormalChatRoomList.value?.let {
-                when (chatViewModel.reservedNormalChatRoomList.value) {
-                    is UIState.Success -> {
-                        setReservedSectionItems(it._data!!)
-                    }
 
-                    else -> {}
+        (if (binding.rbNormalQuestion.isChecked)
+            chatViewModel.proposedNormalChatRoomList.value
+        else
+            chatViewModel.proposedSelectedChatRoomList.value)?.let {
+            when (it) {
+                is UIState.Success -> {
+                    it._data!!.let { chatRooms ->
+                        if (chatRooms.isNotEmpty()) {
+                            setProposedSectionItems(it._data)
+                            binding.cvQuestionProposedEmpty.visibility = View.INVISIBLE
+                        } else {
+                            binding.cvQuestionProposedEmpty.visibility = View.VISIBLE
+                        }
+                    }
                 }
+
+                else -> {}
             }
+        }
 
-        } else {
-            chatViewModel.reservedSelectedChatRoomList.value?.let {
-                when (chatViewModel.reservedSelectedChatRoomList.value) {
-                    is UIState.Success -> {
-                        setReservedSectionItems(it._data!!)
+        (if (binding.rbNormalQuestion.isChecked)
+            chatViewModel.reservedNormalChatRoomList.value
+        else
+            chatViewModel.reservedNormalChatRoomList.value).let {
+            when (it!!) {
+                is UIState.Success -> {
+                    it._data!!.let { chatRooms ->
+                        if (chatRooms.isNotEmpty()) {
+                            setReservedSectionItems(chatRooms)
+                            binding.cvQuestionReservedEmpty.visibility = View.INVISIBLE
+                        } else {
+                            binding.cvQuestionReservedEmpty.visibility = View.VISIBLE
+                        }
                     }
-
-                    else -> {}
                 }
+
+                else -> {}
             }
         }
     }

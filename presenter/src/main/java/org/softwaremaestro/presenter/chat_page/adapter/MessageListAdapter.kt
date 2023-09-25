@@ -54,7 +54,6 @@ class MessageListAdapter(
         }
     }
 
-    // 질문 없을 때 뷰 만들기
     // 사진 클릭하면 이동
 
     override fun getItemViewType(position: Int): Int {
