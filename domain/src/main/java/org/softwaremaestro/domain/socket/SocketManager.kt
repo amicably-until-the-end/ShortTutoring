@@ -25,7 +25,8 @@ class SocketManager @Inject constructor(
 
         CoroutineScope(DispatchersIO).launch {
             try {
-                var header = mapOf("Authorization" to listOf("${userRepository.getToken()}"))
+                var header =
+                    mapOf("Authorization" to listOf("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsImF1dGhJZCI6bnVsbCwidXNlcklkIjoic3ktc3R1ZGVudC1pZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjk1NjM0ODcwLCJleHAiOjE2OTU3MjEyNzB9.Xpo-unj27SwTnfnCUJIPc_BTeK5SPlS8LlDihjv6v6c"))
                 println("socket header: $header")
                 var options = IO.Options().apply {
                     extraHeaders = header
