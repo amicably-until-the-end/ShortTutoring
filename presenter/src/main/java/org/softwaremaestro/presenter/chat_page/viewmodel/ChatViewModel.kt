@@ -111,24 +111,8 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    private fun initSocket(questionId: String) {
-        try {
-            socket = IO.socket("http://10.0.2.2:3000")
-            Log.d("socket", "init socket ${socket?.id()}")
-            socket?.connect()
-            socket?.apply {
-                on(Socket.EVENT_CONNECT) {
-                    Log.d("socket", "connect")
-                    emit("join", questionId)
-                }
-                on("msg") { args ->
-                    val msg = args[0] as String
-                    Log.d("socket", "receive message ${msg}")
-                }
-            }
-        } catch (e: Exception) {
-            Log.d("socket", e.message.toString())
-        }
+    private fun initSocket(questionId: String, socket: Socket) {
+        this.socket = socket
     }
 
     fun sendMessage(string: String) {

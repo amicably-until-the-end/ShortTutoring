@@ -77,4 +77,5 @@ dependencies {
     // Paging 3.0
     api 'androidx.paging:paging-compose:1.0.0-alpha15'
 
+
 }

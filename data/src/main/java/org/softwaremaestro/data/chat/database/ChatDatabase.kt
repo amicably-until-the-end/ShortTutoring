@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.softwaremaestro.data.chat.dao.ChatRoomDao
+import org.softwaremaestro.data.chat.dao.MessageDao
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.data.chat.entity.Converter
 import org.softwaremaestro.data.chat.entity.MessageEntity
@@ -19,6 +20,7 @@ import org.softwaremaestro.data.chat.entity.MessageEntity
 @TypeConverters(Converter::class)
 abstract class ChatDatabase : RoomDatabase() {
     abstract fun chatRoomDao(): ChatRoomDao
+    abstract fun messageDao(): MessageDao
 
     companion object {
         private var instance: ChatDatabase? = null

@@ -92,4 +92,8 @@ class ChatRepositoryImpl @Inject constructor(
 
         }
     }
+
+    override suspend fun insertMessage(message: String) {
+        //TODO("Not yet implemented")
+    }
 }

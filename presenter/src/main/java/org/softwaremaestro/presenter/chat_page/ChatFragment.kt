@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
@@ -31,6 +32,7 @@ import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -54,6 +56,9 @@ abstract class ChatFragment : Fragment() {
 
     lateinit var loadingDialog: LoadingDialog
 
+    @Inject
+    lateinit var socketManager: SocketManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,11 +77,13 @@ abstract class ChatFragment : Fragment() {
         makeAdapterList()
         getRoomList()
         setSendMessageButton()
+        observeSocket()
 
 
         return binding.root
 
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,6 +100,14 @@ abstract class ChatFragment : Fragment() {
 
     private fun getRoomList() {
         chatViewModel.getChatRoomList(isTeacher())
+    }
+
+    private fun observeSocket() {
+        socketManager.mSocket.on("msg") {
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(), "메시지 도착${it[0]}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun refreshProposedRoomList() {
