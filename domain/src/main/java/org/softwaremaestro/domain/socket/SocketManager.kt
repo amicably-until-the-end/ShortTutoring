@@ -26,10 +26,10 @@ class SocketManager @Inject constructor(
         CoroutineScope(DispatchersIO).launch {
             try {
                 var header =
-                    mapOf("Authorization" to listOf("Bearer ${userRepository.getToken()}"))
+                    mapOf("Authorization" to "Bearer ${userRepository.getToken()}")
                 println("socket header: $header")
                 var options = IO.Options().apply {
-                    extraHeaders = header
+                    header = header
                     transports = arrayOf(WebSocket.NAME)
                 }
                 mSocket = IO.socket(uri, options)
