@@ -3,13 +3,13 @@ package org.softwaremaestro.presenter.chat_page
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,18 +18,23 @@ import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
-import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
+import org.softwaremaestro.presenter.chat_page.widget.AnsweringTeacherSelectDialog
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.teacher_home.DESCRIPTION
+import org.softwaremaestro.presenter.teacher_home.IMAGE
+import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
+import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 
 
@@ -42,10 +47,6 @@ abstract class ChatFragment : Fragment() {
     private lateinit var messageListAdapter: MessageListAdapter
     private lateinit var offeringTeacherAdapter: ChatRoomListAdapter
     private lateinit var proposedIconAdapter: ChatRoomIconListAdapter
-
-    private var selectedTutoringIndex: Int? = null
-    private var selectedTeacher: Int? = null
-
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     private val chatViewModel: ChatViewModel by activityViewModels();
@@ -72,11 +73,12 @@ abstract class ChatFragment : Fragment() {
         makeAdapterList()
         getRoomList()
         setSendMessageButton()
-
+        setChatNoti()
 
         return binding.root
-
     }
+
+    abstract fun setChatNoti()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,46 +93,41 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    private fun getRoomList() {
+    protected fun getRoomList() {
         chatViewModel.getChatRoomList()
     }
 
     private fun refreshProposedRoomList() {
-        if (binding.rbNormalQuestion.isChecked) {
-            chatViewModel.proposedNormalChatRoomList.value?.let {
-                when (chatViewModel.proposedNormalChatRoomList.value) {
-                    is UIState.Success -> {
-                        setProposedSectionItems(it._data!!)
+
+        (if (binding.rbNormalQuestion.isChecked)
+            chatViewModel.proposedNormalChatRoomList.value
+        else
+            chatViewModel.proposedSelectedChatRoomList.value)?.let {
+            when (it) {
+                is UIState.Success -> {
+                    it._data!!.let { chatRooms ->
+                        if (chatRooms.isNotEmpty()) {
+                            setProposedSectionItems(it._data)
+                            binding.cvQuestionProposedEmpty.visibility = View.INVISIBLE
+                        } else {
+                            binding.cvQuestionProposedEmpty.visibility = View.VISIBLE
+                        }
                     }
-
-                    else -> {}
                 }
-            }
 
-        } else {
-            chatViewModel.proposedSelectedChatRoomList.value?.let {
-                when (chatViewModel.proposedSelectedChatRoomList.value) {
-                    is UIState.Success -> {
-                        setProposedSectionItems(it._data!!)
-                    }
-
-                    else -> {}
-                }
+                else -> {}
             }
         }
     }
 
-    fun enableClassRoomButton() {
-        binding.btnChatRoomRight.apply {
-            text = "강의실 입장하기"
-            setEnabledAndChangeColor(true)
-            setOnClickListener {
-                enterRoom()
-            }
-        }
+    abstract fun enableChatRoomBtn()
+
+    protected fun disableChatRoomBtn() {
+        setNotiVisible(true)
+        setChatRoomBtnsVisible(false)
     }
 
-    fun observeTutoringInfo() {
+    private fun observeTutoringInfo() {
         chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
 
             when (it) {
@@ -180,26 +177,44 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun refreshReservedRoomList() {
-        if (binding.rbNormalQuestion.isChecked) {
-            chatViewModel.reservedNormalChatRoomList.value?.let {
-                when (chatViewModel.reservedNormalChatRoomList.value) {
-                    is UIState.Success -> {
-                        setReservedSectionItems(it._data!!)
-                    }
 
-                    else -> {}
+        (if (binding.rbNormalQuestion.isChecked)
+            chatViewModel.proposedNormalChatRoomList.value
+        else
+            chatViewModel.proposedSelectedChatRoomList.value)?.let {
+            when (it) {
+                is UIState.Success -> {
+                    it._data!!.let { chatRooms ->
+                        if (chatRooms.isNotEmpty()) {
+                            setProposedSectionItems(it._data)
+                            binding.cvQuestionProposedEmpty.visibility = View.INVISIBLE
+                        } else {
+                            binding.cvQuestionProposedEmpty.visibility = View.VISIBLE
+                        }
+                    }
                 }
+
+                else -> {}
             }
+        }
 
-        } else {
-            chatViewModel.reservedSelectedChatRoomList.value?.let {
-                when (chatViewModel.reservedSelectedChatRoomList.value) {
-                    is UIState.Success -> {
-                        setReservedSectionItems(it._data!!)
+        (if (binding.rbNormalQuestion.isChecked)
+            chatViewModel.reservedNormalChatRoomList.value
+        else
+            chatViewModel.reservedNormalChatRoomList.value).let {
+            when (it!!) {
+                is UIState.Success -> {
+                    it._data!!.let { chatRooms ->
+                        if (chatRooms.isNotEmpty()) {
+                            setReservedSectionItems(chatRooms)
+                            binding.cvQuestionReservedEmpty.visibility = View.INVISIBLE
+                        } else {
+                            binding.cvQuestionReservedEmpty.visibility = View.VISIBLE
+                        }
                     }
-
-                    else -> {}
                 }
+
+                else -> {}
             }
         }
     }
@@ -274,12 +289,12 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun setQuestionTypeSelectToggle() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
             clearRecyclersSelectedView(null)
+            resetMsgTab()
 
             when (checkId) {
                 R.id.rb_normal_question -> {
@@ -301,6 +316,16 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun resetMsgTab() {
+        setNotiVisible(false)
+        setChatRoomBtnsVisible(false)
+        messageListAdapter.setItem(emptyList())
+        messageListAdapter.notifyDataSetChanged()
+        binding.tvChatRoomTitle.text = ""
+        binding.etMessage.setText("")
+        hideKeyboardAndRemoveFocus(binding.etMessage)
     }
 
     abstract fun onChatRoomStateChange(chatRoomVO: ChatRoomVO)
@@ -336,7 +361,31 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun setChatMsgRecyclerView() {
-        messageListAdapter = MessageListAdapter()
+        messageListAdapter = MessageListAdapter(
+            onBtn1Click = {
+                val dialog = AnsweringTeacherSelectDialog(currentChatRoom?.id!!)
+                dialog.show(parentFragmentManager, "dialog")
+            },
+            onBtn2Click = {
+                DetailAlertDialog("질문을 삭제할까요?", "작성한 질문 내용이 사라집니다") {}.show(
+                    parentFragmentManager,
+                    "detailAlertDialog"
+                )
+            },
+            onImageClick = { body ->
+                val intent = Intent(requireActivity(), QuestionImageActivity::class.java).apply {
+                    putStringArrayListExtra(
+                        IMAGE, arrayListOf(
+                            "https://i.pravatar.cc/150?img=3",
+                            "https://i.pravatar.cc/150?img=4"
+                        )
+                    )
+                    putExtra(SUBJECT, "과목")
+                    putExtra(DESCRIPTION, body.description)
+                }
+                startActivity(intent)
+            }
+        )
         binding.rvMsgs.apply {
             adapter = messageListAdapter
             layoutManager =
@@ -399,6 +448,7 @@ abstract class ChatFragment : Fragment() {
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerTutoringList.id
         }
+        resetMsgTab()
     }
 
     private fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
@@ -456,5 +506,20 @@ abstract class ChatFragment : Fragment() {
             clearRecyclersSelectedView(caller)
         }
 
+    protected fun setChatRoomRightBtnVisible(b: Boolean) {
+        binding.btnChatRoomRight.visibility = if (b) View.VISIBLE else View.INVISIBLE
+    }
 
+    protected fun setChatRoomBtnsVisible(b: Boolean) {
+        listOf(
+            binding.btnChatRoomRight,
+            binding.btnChatRoomLeft
+        ).forEach {
+            it.visibility = if (b) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    protected fun setNotiVisible(b: Boolean) {
+        binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
+    }
 }

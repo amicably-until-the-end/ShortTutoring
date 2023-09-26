@@ -13,10 +13,13 @@ import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
 
-class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageListAdapter(
+    private val onBtn1Click: () -> Unit,
+    private val onBtn2Click: () -> Unit,
+    private val onImageClick: (MessageBodyVO.ProblemImage) -> Unit,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<MessageVO> = emptyList()
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -183,6 +186,10 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         applyTo(root)
                     }
                 } else {
+                    //set color
+                    containerBody.backgroundTintList = root.context.getColorStateList(R.color.white)
+                    tvText.setTextColor(root.context.getColor(R.color.black))
+
                     //set position to left
                     ConstraintSet().apply {
                         clone(root)
@@ -209,15 +216,22 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     when (item.bodyVO) {
                         is MessageBodyVO.AppointRequest -> {
                             var body = item.bodyVO as MessageBodyVO.AppointRequest
-                            var time = body.startDateTime
+                            var time = body.startDateTime!!
                             tvText.text =
-                                "안녕하세요 선생님!\n ${time?.month}월 ${time?.dayOfMonth}일 ${time?.hour}시 ${time?.minute}분에\n 수업 가능하신가요?"
+                                "안녕하세요 선생님! ${time.monthValue - 1}월 ${time?.dayOfMonth}일 ${time?.hour}시 ${time?.minute}분에 수업 가능하신가요?"
                             btn1.visibility = Button.VISIBLE
                             btn2.visibility = Button.VISIBLE
                             btn3.visibility = Button.GONE
-                            btn1.text = "예"
-                            btn2.text = "아니오"
+                            btn1.text = "다른 선생님께 질문하기"
+                            btn2.text = "질문 삭제하기"
 
+                            btn1.setOnClickListener {
+                                onBtn1Click()
+                            }
+
+                            btn2.setOnClickListener {
+                                onBtn2Click()
+                            }
                         }
 
                         else -> {}
@@ -295,6 +309,9 @@ class MessageListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         Glide.with(root.context).load(body.imageUrl)
                             .centerCrop()
                             .into(ivImage)
+                        root.setOnClickListener {
+                            onImageClick(body)
+                        }
                     }
 
                     else -> {}

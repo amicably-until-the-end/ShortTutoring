@@ -8,21 +8,22 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.IO
 import io.socket.client.Socket
-
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-
+import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
-import org.softwaremaestro.domain.chat.entity.QuestionType
+import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.nowInKorea
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,7 +56,6 @@ class ChatViewModel @Inject constructor(
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
         get() = _tutoringInfo
 
-
     fun getChatRoomList() {
         viewModelScope.launch {
             getChatRoomListUseCase.execute()
@@ -64,7 +64,29 @@ class ChatViewModel @Inject constructor(
                     _reservedNormalChatRoomList.value = UIState.Failure
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
-                .collect { result ->
+                .collect { resultttt ->
+                    val result = BaseResult.Success(
+                        ChatRoomListVO(
+                            normalProposed = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.QUESTION, QuestionState.PROPOSED, false))
+                                }
+                            },
+                            normalReserved = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.TEACHER, QuestionState.RESERVED, false))
+                                }
+                            },
+                            selectedProposed = mutableListOf<ChatRoomVO>().apply {
+                                add(getSelectedProposedDummy())
+                            },
+                            selectedReserved = mutableListOf<ChatRoomVO>().apply {
+                                repeat(3) {
+                                    add(getDummy(RoomType.TEACHER, QuestionState.RESERVED, true))
+                                }
+                            }
+                        )
+                    )
                     when (result) {
                         is BaseResult.Success -> {
                             _reservedNormalChatRoomList.value =
@@ -77,7 +99,8 @@ class ChatViewModel @Inject constructor(
                                 UIState.Success(result.data.selectedProposed)
                         }
 
-                        is BaseResult.Error -> _reservedNormalChatRoomList.value = UIState.Failure
+                        is BaseResult.Error<*> -> _reservedNormalChatRoomList.value =
+                            UIState.Failure
                     }
                 }
         }
@@ -136,4 +159,82 @@ class ChatViewModel @Inject constructor(
         socket?.disconnect()
     }
 
+    private fun getDummy(type: RoomType, state: QuestionState, isSelected: Boolean): ChatRoomVO {
+        val teacher = ChatRoomVO(
+            id = "id",
+            roomType = RoomType.TEACHER,
+            roomImage = "",
+            questionState = QuestionState.PROPOSED,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.Text("질문"),
+                    sender = "sender",
+                    isMyMsg = true
+                )
+            ),
+            teachers = null,
+            isSelect = false
+        )
+
+        return ChatRoomVO(
+            id = "id",
+            roomType = type,
+            roomImage = "",
+            questionState = state,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = listOf(
+                MessageVO(
+                    time = LocalDateTime.now(),
+                    bodyVO = MessageBodyVO.Text("질문"),
+                    sender = "sender",
+                    isMyMsg = true
+                )
+            ),
+            teachers = if (type == RoomType.QUESTION && state == QuestionState.PROPOSED && !isSelected) {
+                listOf(teacher, teacher, teacher)
+            } else null,
+            isSelect = isSelected
+        )
+    }
+
+    private fun getSelectedProposedDummy(): ChatRoomVO {
+
+        return ChatRoomVO(
+            id = "id",
+            roomType = RoomType.TEACHER,
+            roomImage = "",
+            questionState = QuestionState.PROPOSED,
+            questionId = "questionId",
+            opponentId = "opponentId",
+            title = "타이틀",
+            schoolSubject = "미적분",
+            schoolLevel = "고등학교",
+            messages = mutableListOf<MessageVO>().apply {
+                add(getMessageDummy(MessageBodyVO.ProblemImage("", "설명")))
+                add(getMessageDummy(MessageBodyVO.Text("안녕하세요, 선생님!")))
+                add(getMessageDummy(MessageBodyVO.AppointRequest(nowInKorea())))
+            },
+            teachers = null,
+            isSelect = true
+        )
+    }
+
+    private fun getMessageDummy(body: MessageBodyVO): MessageVO {
+        return MessageVO(
+            time = nowInKorea(),
+            bodyVO = body,
+            sender = null,
+            isMyMsg = false
+        )
+    }
 }

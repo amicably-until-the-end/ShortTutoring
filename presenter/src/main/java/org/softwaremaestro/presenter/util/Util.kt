@@ -17,6 +17,8 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 object Util {
     fun toPx(dp: Int, context: Context): Int {
@@ -30,7 +32,7 @@ object Util {
     }
 
     fun getBottomSheetDialogDefaultHeight(activity: Activity): Int {
-        return getWindowHeight(activity) * 80 / 100
+        return getWindowHeight(activity) * 60 / 100
         // 기기 높이 대비 비율 설정 부분!!
         // 위 수치는 기기 높이 대비 80%로 다이얼로그 높이를 설정
     }
@@ -155,6 +157,8 @@ fun hideKeyboardAndRemoveFocus(view: View) {
     imm.hideSoftInputFromWindow(view.windowToken, 0)
     view.clearFocus()
 }
+
+fun nowInKorea() = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 
 fun RecyclerView.getVerticalSpaceDecoration(
     space: Int,
