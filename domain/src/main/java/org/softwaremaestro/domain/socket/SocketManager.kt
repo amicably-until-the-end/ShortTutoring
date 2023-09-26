@@ -26,10 +26,10 @@ class SocketManager @Inject constructor(
         CoroutineScope(DispatchersIO).launch {
             try {
                 var header =
-                    mapOf("Authorization" to "Bearer ${userRepository.getToken()}")
+                    mapOf("Authorization" to listOf("Bearer ${userRepository.getToken()}"))
                 println("socket header: $header")
                 var options = IO.Options().apply {
-                    header = header
+                    extraHeaders = header
                     transports = arrayOf(WebSocket.NAME)
                 }
                 mSocket = IO.socket(uri, options)
@@ -81,6 +81,8 @@ class SocketManager @Inject constructor(
 
     companion object {
         private const val uri = "http://shorttutoring-493721324.ap-northeast-2.elb.amazonaws.com/"
+
+        //private const val uri = "http://10.0.2.2:3000/"
         lateinit var mSocket: Socket
     }
 }
