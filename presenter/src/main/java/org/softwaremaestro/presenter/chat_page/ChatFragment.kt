@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +36,7 @@ import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import javax.inject.Inject
@@ -57,7 +57,7 @@ abstract class ChatFragment : Fragment() {
 
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
-    private val chatViewModel: ChatViewModel by activityViewModels();
+    protected val chatViewModel: ChatViewModel by activityViewModels();
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -84,11 +84,15 @@ abstract class ChatFragment : Fragment() {
         makeAdapterList()
         getRoomList()
         setSendMessageButton()
+        observeMessages()
+        observeSocket()
 
 
         return binding.root
 
     }
+
+    abstract fun setChatNoti()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -166,15 +170,11 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    abstract fun enableChatRoomBtn()
 
-    fun enableClassRoomButton() {
-        binding.btnChatRoomRight.apply {
-            text = "강의실 입장하기"
-            setEnabledAndChangeColor(true)
-            setOnClickListener {
-                enterRoom()
-            }
-        }
+    protected fun disableChatRoomBtn() {
+        setNotiVisible(true)
+        setChatRoomBtnsVisible(false)
     }
 
     private fun observeTutoringInfo() {
@@ -252,6 +252,7 @@ abstract class ChatFragment : Fragment() {
     }
 
     abstract fun isTeacher(): Boolean
+
 
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {

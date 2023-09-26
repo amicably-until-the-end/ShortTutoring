@@ -12,7 +12,7 @@ class TeacherPickUseCase @Inject constructor(private val questionUploadRepositor
         time: LocalDateTime,
         chattingId: String,
         questionId: String
-    ): Flow<BaseResult<TeacherPickResVO, String>> {
+    ): Flow<BaseResult<String, String>> {
         return questionUploadRepository.pickTeacher(time, chattingId, questionId)
     }
 }
