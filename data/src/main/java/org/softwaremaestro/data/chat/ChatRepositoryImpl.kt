@@ -13,6 +13,7 @@ import org.softwaremaestro.data.chat.remote.ChatApi
 import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.common.BaseResult
@@ -83,7 +84,7 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
-            //updateRoomStatus()
+            updateRoomStatus()
             var result = getRoomFromDB(isTeacher)
             Log.d("ChatRepositoryImpl", result.toString())
             if (result == null) {
@@ -95,6 +96,18 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getMessages(chatRoomId: String): Flow<BaseResult<List<MessageVO>, String>> {
+        return flow {
+            var result = chatDatabase.messageDao().getMessages()
+            Log.d("ChatRepositoryImpl", "chatroomId $chatRoomId $result")
+            if (result == null) {
+                emit(BaseResult.Error("error"))
+            } else {
+                emit(BaseResult.Success(result.map { it.EntityToVO() }))
+            }
+        }
+    }
+
     override suspend fun insertMessage(
         roomId: String,
         body: String,
@@ -103,6 +116,7 @@ class ChatRepositoryImpl @Inject constructor(
         isMyMsg: Boolean
     ) {
         try {
+            Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
             chatDatabase.messageDao().insert(
                 MessageEntity(
                     id = roomId + sendAt,

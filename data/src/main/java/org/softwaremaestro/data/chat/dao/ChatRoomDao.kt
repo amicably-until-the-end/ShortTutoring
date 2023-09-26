@@ -3,6 +3,7 @@ package org.softwaremaestro.data.chat.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.data.chat.entity.ChatRoomWithMessages
 
@@ -18,7 +19,7 @@ interface ChatRoomDao {
     @Query("DELETE FROM ChatRoomEntity")
     fun deleteAll()
 
-    @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
+    @Update()
     fun insert(chatRoomEntity: ChatRoomEntity)
 
 

@@ -43,6 +43,7 @@ class Mapper {
         }
     }
 
+    /*
     fun asDomain(messageDto: MessageDto): MessageVO {
         Log.d("chat", messageDto.toString())
 
@@ -66,7 +67,7 @@ class Mapper {
             sender = messageDto.sender,
             isMyMsg = messageDto.isMyMsg,
         )
-    }
+    }*/
 
     fun asDomain(chatRoomEntity: ChatRoomEntity): ChatRoomVO {
         chatRoomEntity.apply {
@@ -108,9 +109,10 @@ fun ChatRoomListDto.asDomain(): ChatRoomListVO {
     return Mapper().asDomain(this)
 }
 
+/*
 fun MessageDto.asDomain(): MessageVO {
     return Mapper().asDomain(this)
-}
+}*/
 
 fun ChatRoomEntity.asDomain(): ChatRoomVO {
     return Mapper().asDomain(this)

@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -14,26 +16,36 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import org.json.JSONObject
 
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.QuestionType
+import org.softwaremaestro.domain.chat.usecase.GetChatMessagesUseCase
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
+import org.softwaremaestro.domain.chat.usecase.InsertMessageUseCase
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.util.UIState
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
+    private val getChatMessagesUseCase: GetChatMessagesUseCase,
+    private val insertMessageUseCase: InsertMessageUseCase
 ) :
     ViewModel() {
 
-    private var socket: Socket? = null
+    @Inject
+    lateinit var socketManager: SocketManager
 
 
     private val _reservedNormalChatRoomList = MutableLiveData<UIState<List<ChatRoomVO>>>()
@@ -52,9 +64,16 @@ class ChatViewModel @Inject constructor(
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
 
+
+    private val _messages = MutableLiveData<UIState<List<MessageVO>>>()
+    val messages: LiveData<UIState<List<MessageVO>>>
+        get() = _messages
+
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
         get() = _tutoringInfo
+
+    val gson = Gson()
 
 
     fun getChatRoomList(isTeacher: Boolean) {
@@ -111,18 +130,61 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    private fun initSocket(questionId: String, socket: Socket) {
-        this.socket = socket
+    fun getMessages(chattingId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            getChatMessagesUseCase.execute(chattingId)
+                .onStart {
+                    _messages.postValue(UIState.Loading)
+                }
+                .catch { exception ->
+                    _messages.postValue(UIState.Failure)
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
+                }
+                .collect { result ->
+                    Log.d(
+                        "ChatViewModel getMessages",
+                        "chattindId $chattingId ${result.toString()}"
+                    )
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _messages.postValue(UIState.Success(result.data))
+                        }
+
+                        is BaseResult.Error -> _messages.postValue(UIState.Failure)
+                    }
+                }
+        }
     }
 
-    fun sendMessage(string: String) {
-        socket?.emit("msg", string)
-        Log.d("socket", "send message")
+    fun sendMessage(body: String, receiverId: String, chattingId: String) {
+        var jsonBody = gson.toJson(MessageBody(body))
+        var payload = JSONObject(gson.toJson(Message("text", jsonBody, receiverId, chattingId)))
+        socketManager.getSocket().emit("message", payload)
+        Log.d("ChatViewModel", "send ${payload}")
+        viewModelScope.launch(Dispatchers.IO) {
+            insertMessageUseCase.execute(
+                chattingId,
+                gson.toJson(MessageBody(body)),
+                "text",
+                LocalDateTime.now().toString(),
+                true
+            )
+            getMessages(chattingId)
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        socket?.disconnect()
-    }
+    @Serializable
+    data class Message(
+        val format: String,
+        val body: String,
+        val receiverId: String,
+        val chattingId: String
+    )
+
+    @Serializable
+    data class MessageBody(
+        val text: String
+    )
 
 }

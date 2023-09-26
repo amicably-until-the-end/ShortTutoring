@@ -79,6 +79,7 @@ abstract class ChatFragment : Fragment() {
         getRoomList()
         setSendMessageButton()
         observeSocket()
+        observeMessages()
 
 
         return binding.root
@@ -95,7 +96,8 @@ abstract class ChatFragment : Fragment() {
 
     private fun setSendMessageButton() {
         binding.btnSendMessage.setOnClickListener {
-            chatViewModel.sendMessage(binding.etMessage.text.toString())
+            sendMessage()
+            binding.etMessage.setText("")
         }
     }
 
@@ -104,11 +106,20 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun observeSocket() {
+        //viewmodel로 뺄 수 도 있겠다.
         socketManager.getSocket().on("message") {
             chatViewModel.getChatRoomList(isTeacher())
-            activity?.runOnUiThread {
-                binding.rvMsgs.adapter?.notifyDataSetChanged()
-            }
+            currentChatRoom?.let { chatViewModel.getMessages(it.id!!) }
+        }
+    }
+
+    private fun sendMessage() {
+        currentChatRoom?.let {
+            chatViewModel.sendMessage(
+                binding.etMessage.text.toString(),
+                chattingId = it.id!!,
+                receiverId = it.opponentId!!
+            )
         }
     }
 
@@ -136,6 +147,22 @@ abstract class ChatFragment : Fragment() {
             }
         }
     }
+
+    private fun observeMessages() {
+        chatViewModel.messages.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    setMessageListItems(it._data!!)
+                }
+
+                else -> {
+
+                }
+
+            }
+        }
+    }
+
 
     fun enableClassRoomButton() {
         binding.btnChatRoomRight.apply {
@@ -467,8 +494,9 @@ abstract class ChatFragment : Fragment() {
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             currentChatRoom = chatRoom
-            setMessageListItems(chatRoom.messages ?: emptyList())
             onChatRoomStateChange(chatRoom)
+            Log.d("mymymy", chatRoom.toString())
+            chatViewModel.getMessages(chatRoom.id!!)
             binding.tvChatRoomTitle.text = chatRoom.title
             clearRecyclersSelectedView(caller)
         }
