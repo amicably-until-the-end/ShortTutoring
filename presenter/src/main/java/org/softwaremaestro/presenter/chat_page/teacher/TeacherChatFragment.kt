@@ -146,7 +146,7 @@ class TeacherChatFragment : ChatFragment() {
                     disableChatRoomBtn()
 
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
-                    getRoomList()
+                    chatViewModel.getChatRoomList(isTeacher())
                 }
 
                 is UIState.Failure -> {

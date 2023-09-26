@@ -12,6 +12,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
+import java.time.LocalDateTime
 
 class MessageListAdapter(
     private val onBtn1Click: () -> Unit,
@@ -216,9 +217,9 @@ class MessageListAdapter(
                     when (item.bodyVO) {
                         is MessageBodyVO.AppointRequest -> {
                             var body = item.bodyVO as MessageBodyVO.AppointRequest
-                            var time = body.startDateTime!!
+                            var time = LocalDateTime.parse(body.startDateTime)!!
                             tvText.text =
-                                "안녕하세요 선생님! ${time.monthValue - 1}월 ${time?.dayOfMonth}일 ${time?.hour}시 ${time?.minute}분에 수업 가능하신가요?"
+                                "안녕하세요 선생님! ${time.monthValue}월 ${time?.dayOfMonth}일 ${time?.hour}시 ${time?.minute}분에 수업 가능하신가요?"
                             btn1.visibility = Button.VISIBLE
                             btn2.visibility = Button.VISIBLE
                             btn3.visibility = Button.GONE
