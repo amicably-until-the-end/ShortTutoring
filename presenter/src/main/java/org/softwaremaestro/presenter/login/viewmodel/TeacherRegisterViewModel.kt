@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.login.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,11 +10,15 @@ import com.univcert.api.UnivCert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.common.BaseResult.Error
+import org.softwaremaestro.domain.common.BaseResult.Success
 import org.softwaremaestro.domain.login.entity.TeacherRegisterVO
 import org.softwaremaestro.domain.login.usecase.TeacherRegisterUseCase
 import org.softwaremaestro.presenter.BuildConfig
+import org.softwaremaestro.presenter.login.univGet.UnivGetService
+import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,16 +27,23 @@ class TeacherRegisterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    val _admissonYear: MutableLiveData<String> = MutableLiveData()
-    val _college: MutableLiveData<String> = MutableLiveData()
+    val _schoolName: MutableLiveData<String> = MutableLiveData()
+    val schoolName: LiveData<String> get() = _schoolName
+
+    val _schoolNameSuggestions = MutableLiveData<List<String>>()
+    val schoolNameSuggestions: LiveData<List<String>> get() = _schoolNameSuggestions
+
     val _major: MutableLiveData<String> = MutableLiveData()
-    val _univ: MutableLiveData<String> = MutableLiveData()
-
-    val admissonYear: LiveData<String> get() = _admissonYear
-    val college: LiveData<String> get() = _college
     val major: LiveData<String> get() = _major
-    val univ: LiveData<String> get() = _univ
 
+    val _name: MutableLiveData<String> = MutableLiveData()
+    val name: LiveData<String> get() = _name
+
+    val _bio: MutableLiveData<String> = MutableLiveData()
+    val bio: LiveData<String> get() = _bio
+
+    val _schoolNameAndMajorProper = MediatorLiveData<Boolean>()
+    val schoolNameAndMajorProper: MediatorLiveData<Boolean> get() = _schoolNameAndMajorProper
 
     private val _sendEmailResult: MutableLiveData<Boolean> = MutableLiveData()
     val sendEmailResult: LiveData<Boolean> get() = _sendEmailResult
@@ -39,30 +51,71 @@ class TeacherRegisterViewModel @Inject constructor(
     private val _checkEmailResult: MutableLiveData<Boolean> = MutableLiveData()
     val checkEmailResult: LiveData<Boolean> get() = _checkEmailResult
 
-    private val _registerResult: MutableLiveData<Boolean> = MutableLiveData()
-    val registerResult: LiveData<Boolean> get() = _registerResult
+    private val _teacherSignupState = MutableLiveData<UIState<String>>()
+    val teacherSignupState: LiveData<UIState<String>> get() = _teacherSignupState
+
+    private val _teacherNameAndBioProper = MediatorLiveData<Boolean>()
+    val teacherNameAndBioProper: MediatorLiveData<Boolean> get() = _teacherNameAndBioProper
+
+    private val service = UnivGetService()
+
+    init {
+        with(_schoolNameAndMajorProper) {
+            addSource(_schoolName) {
+                postValue(!_schoolName.value.isNullOrEmpty() && !_major.value.isNullOrEmpty())
+            }
+
+            addSource(_major) {
+                postValue(!_schoolName.value.isNullOrEmpty() && !_major.value.isNullOrEmpty())
+            }
+        }
+
+        with(_teacherNameAndBioProper) {
+            addSource(_name) {
+                postValue(!_name.value.isNullOrEmpty() && !_bio.value.isNullOrEmpty())
+            }
+
+            addSource(_bio) {
+                postValue(!_name.value.isNullOrEmpty() && !_bio.value.isNullOrEmpty())
+            }
+        }
+    }
+
+    fun suggestSchoolNames(schoolName: String) {
+        viewModelScope.launch {
+            service.getUnivs(schoolName)
+                .collect { result ->
+                    _schoolNameSuggestions.value =
+                        when (result) {
+                            is Success -> result.data.distinct()
+                            is Error -> emptyList()
+                        }
+                }
+        }
+    }
 
     fun registerTeacher() {
         viewModelScope.launch {
             teacherRegisterUseCase.execute(
                 TeacherRegisterVO(
-                    admissonYear.value,
-                    college.value,
-                    univ.value,
-                    major.value
+                    bio = bio.value!!,
+                    name = name.value!!,
+                    schoolName = schoolName.value!!,
+                    "",
+                    schoolDepartment = major.value!!,
+                    -1
                 )
-            ).catch { exception ->
-                _registerResult.postValue(false)
-            }
+            )
+                .onStart {
+                    _teacherSignupState.value = UIState.Loading
+                }
+                .catch {
+                    _teacherSignupState.value = UIState.Failure
+                }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> {
-                            _registerResult.postValue(true)
-                        }
-
-                        is BaseResult.Error -> {
-                            _registerResult.postValue(false)
-                        }
+                        is Success -> _teacherSignupState.value = UIState.Success(result.data)
+                        is Error -> _teacherSignupState.value = UIState.Failure
                     }
                 }
 
@@ -74,7 +127,7 @@ class TeacherRegisterViewModel @Inject constructor(
             val sendResult = UnivCert.certify(
                 BuildConfig.UNIVCERT_API_KEY,
                 emailAddress,
-                univ.value,
+                schoolName.value,
                 false,
             )
             Log.d("email", sendResult.toString())
@@ -91,7 +144,7 @@ class TeacherRegisterViewModel @Inject constructor(
             val checkResult = UnivCert.certifyCode(
                 BuildConfig.UNIVCERT_API_KEY,
                 email,
-                univ.value,
+                schoolName.value,
                 code
             )
             if (checkResult["success"] == true) {

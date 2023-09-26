@@ -13,10 +13,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
-import org.softwaremaestro.presenter.util.Util
-import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.adapter.TeacherSelectAdapter
 import org.softwaremaestro.presenter.databinding.DialogTeacherSelectBinding
+import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
+import kotlin.math.min
 
 @AndroidEntryPoint
 class AnsweringTeacherSelectDialog(questionId: String) :
@@ -61,7 +62,10 @@ class AnsweringTeacherSelectDialog(questionId: String) :
             bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as View
         val behavior = BottomSheetBehavior.from(bottomSheet)
         val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = Util.getBottomSheetDialogDefaultHeight(activity as Activity)
+        layoutParams.height = min(
+            Util.getBottomSheetDialogDefaultHeight(activity as Activity),
+            layoutParams.height
+        )
         bottomSheet?.layoutParams = layoutParams
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }

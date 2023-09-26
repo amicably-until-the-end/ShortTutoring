@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,18 +21,23 @@ import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
-import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
+import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
 import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
+import org.softwaremaestro.presenter.chat_page.widget.AnsweringTeacherSelectDialog
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.teacher_home.DESCRIPTION
+import org.softwaremaestro.presenter.teacher_home.IMAGE
+import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
+import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import javax.inject.Inject
 
@@ -78,14 +84,11 @@ abstract class ChatFragment : Fragment() {
         makeAdapterList()
         getRoomList()
         setSendMessageButton()
-        observeSocket()
-        observeMessages()
 
 
         return binding.root
 
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -174,7 +177,7 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    fun observeTutoringInfo() {
+    private fun observeTutoringInfo() {
         chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
 
             when (it) {
@@ -347,6 +350,16 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    private fun resetMsgTab() {
+        setNotiVisible(false)
+        setChatRoomBtnsVisible(false)
+        messageListAdapter.setItem(emptyList())
+        messageListAdapter.notifyDataSetChanged()
+        binding.tvChatRoomTitle.text = ""
+        binding.etMessage.setText("")
+        hideKeyboardAndRemoveFocus(binding.etMessage)
+    }
+
     abstract fun onChatRoomStateChange(chatRoomVO: ChatRoomVO)
 
     private fun setReservedSectionItems(list: List<ChatRoomVO>) {
@@ -380,7 +393,31 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun setChatMsgRecyclerView() {
-        messageListAdapter = MessageListAdapter()
+        messageListAdapter = MessageListAdapter(
+            onBtn1Click = {
+                val dialog = AnsweringTeacherSelectDialog(currentChatRoom?.id!!)
+                dialog.show(parentFragmentManager, "dialog")
+            },
+            onBtn2Click = {
+                DetailAlertDialog("질문을 삭제할까요?", "작성한 질문 내용이 사라집니다") {}.show(
+                    parentFragmentManager,
+                    "detailAlertDialog"
+                )
+            },
+            onImageClick = { body ->
+                val intent = Intent(requireActivity(), QuestionImageActivity::class.java).apply {
+                    putStringArrayListExtra(
+                        IMAGE, arrayListOf(
+                            "https://i.pravatar.cc/150?img=3",
+                            "https://i.pravatar.cc/150?img=4"
+                        )
+                    )
+                    putExtra(SUBJECT, "과목")
+                    putExtra(DESCRIPTION, body.description)
+                }
+                startActivity(intent)
+            }
+        )
         binding.rvMsgs.apply {
             adapter = messageListAdapter
             layoutManager =
@@ -443,6 +480,7 @@ abstract class ChatFragment : Fragment() {
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerTutoringList.id
         }
+        resetMsgTab()
     }
 
     private fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
@@ -501,5 +539,20 @@ abstract class ChatFragment : Fragment() {
             clearRecyclersSelectedView(caller)
         }
 
+    protected fun setChatRoomRightBtnVisible(b: Boolean) {
+        binding.btnChatRoomRight.visibility = if (b) View.VISIBLE else View.INVISIBLE
+    }
 
+    protected fun setChatRoomBtnsVisible(b: Boolean) {
+        listOf(
+            binding.btnChatRoomRight,
+            binding.btnChatRoomLeft
+        ).forEach {
+            it.visibility = if (b) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    protected fun setNotiVisible(b: Boolean) {
+        binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
+    }
 }

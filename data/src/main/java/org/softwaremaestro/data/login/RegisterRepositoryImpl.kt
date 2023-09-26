@@ -1,6 +1,5 @@
 package org.softwaremaestro.data.login
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.common.utils.SavedToken
@@ -24,12 +23,12 @@ class RegisterRepositoryImpl @Inject constructor(
             val token = savedToken.getTokenInfo()
             val response = registerApi.registerStudent(
                 StudentRegisterReqDto(
-                    "testBio",
-                    "testName",
-                    token.token!!,
-                    token.vendor!!,
-                    studentRegisterVO.school,
-                    studentRegisterVO.grade,
+                    bio = studentRegisterVO.bio,
+                    name = studentRegisterVO.name,
+                    accessToken = token.token!!,
+                    vendor = token.vendor!!,
+                    schoolLevel = studentRegisterVO.schoolLevel,
+                    schoolGrade = studentRegisterVO.schoolGrade,
                 )
             )
             if (response.isSuccessful && response.body()?.success == true) {
@@ -49,14 +48,14 @@ class RegisterRepositoryImpl @Inject constructor(
             val token = savedToken.getTokenInfo()
             val response = registerApi.registerTeacher(
                 TeacherRegisterReqDto(
-                    "testBio",
-                    "testName",
+                    teacherRegisterVO.bio,
+                    teacherRegisterVO.name,
                     token.token!!,
                     token.vendor!!,
-                    teacherRegisterVO.univ ?: "undefined",
-                    teacherRegisterVO.colledge ?: "undefined",
-                    teacherRegisterVO.major ?: "undefined",
-                    1
+                    teacherRegisterVO.schoolName,
+                    teacherRegisterVO.schoolDivision,
+                    teacherRegisterVO.schoolDepartment,
+                    teacherRegisterVO.schoolGrade
                 )
             )
             val body = response.body()!!

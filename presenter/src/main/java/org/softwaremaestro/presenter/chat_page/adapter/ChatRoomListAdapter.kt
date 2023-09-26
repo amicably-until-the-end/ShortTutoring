@@ -6,11 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomBinding
+import org.softwaremaestro.presenter.util.Util
 
 class ChatRoomListAdapter(
     private val onQuestionClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit,
@@ -51,6 +50,7 @@ class ChatRoomListAdapter(
     fun clearSelectedItem(caller: RecyclerView.Adapter<*>?) {
         if (caller !== this@ChatRoomListAdapter) {
             selectedView?.strokeColor = selectedView?.context?.getColor(R.color.background_grey)!!
+            selectedView?.setBackgroundColor(selectedView?.context?.getColor(R.color.transparent)!!)
             selectedView = null
         }
     }
@@ -81,6 +81,7 @@ class ChatRoomListAdapter(
                             clearSelectedItem(null)
                             cvContainer.strokeColor =
                                 binding.root.context.getColor(R.color.primary_blue)
+                            cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
                             selectedView = cvContainer
                         }
 

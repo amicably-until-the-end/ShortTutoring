@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.ItemAnsweringTeacherSelectBinding
+import org.softwaremaestro.presenter.databinding.ItemTeacherSelectableBinding
 
 class TeacherSelectAdapter(
     private var items: List<TeacherVO>,
@@ -15,7 +14,7 @@ class TeacherSelectAdapter(
 ) :
     RecyclerView.Adapter<TeacherSelectAdapter.ViewHolder>() {
 
-    private var selectedView: ItemAnsweringTeacherSelectBinding? = null
+    private var selectedView: ItemTeacherSelectableBinding? = null
 
 
     override fun onCreateViewHolder(
@@ -23,7 +22,7 @@ class TeacherSelectAdapter(
         viewType: Int
     ): TeacherSelectAdapter.ViewHolder {
         val view =
-            ItemAnsweringTeacherSelectBinding.inflate(
+            ItemTeacherSelectableBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -43,22 +42,28 @@ class TeacherSelectAdapter(
         this.items = items
     }
 
-    private fun setSelectedView(currentSelect: ItemAnsweringTeacherSelectBinding) {
-        selectedView?.cvRoot?.strokeColor =
-            selectedView?.root?.context?.getColor(R.color.background_grey)!!
-        selectedView?.btnSelect?.visibility = View.GONE
-        currentSelect.cvRoot.strokeColor = currentSelect.root.context.getColor(R.color.primary_blue)
-        currentSelect.btnSelect.visibility = View.VISIBLE
+    private fun setSelectedView(currentSelect: ItemTeacherSelectableBinding) {
+        selectedView?.apply {
+            cvInfoBox.strokeColor = root.context.getColor(R.color.background_grey)
+            btnSelect.visibility = View.GONE
+//            containerReviewAndClip.visibility = View.GONE
+        }
+
+        currentSelect.apply {
+            cvInfoBox.strokeColor = root.context.getColor(R.color.primary_blue)
+            btnSelect.visibility = View.VISIBLE
+//            containerReviewAndClip.visibility = View.VISIBLE
+        }
 
         selectedView = currentSelect
     }
 
-    inner class ViewHolder(private val binding: ItemAnsweringTeacherSelectBinding) :
+    inner class ViewHolder(private val binding: ItemTeacherSelectableBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: TeacherVO) {
-            binding.apply {
-                tvLikes.text = "♥ ${item.likes ?: 0}"
+            with(binding) {
+                tvFollowCnt.text = item.likes?.toString() ?: EMPTY_STRING
                 tvTeacherName.text = item.teacherId ?: EMPTY_STRING
                 tvTeacherUniv.text = item.school ?: EMPTY_STRING
                 if (selectedView == null) {
@@ -68,7 +73,6 @@ class TeacherSelectAdapter(
                     setSelectedView(binding)
                 }
             }
-
         }
     }
 

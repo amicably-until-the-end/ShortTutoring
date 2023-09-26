@@ -13,18 +13,19 @@ import io.socket.client.Socket
 import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.json.JSONObject
 
+import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.usecase.GetChatMessagesUseCase
+import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.chat.usecase.InsertMessageUseCase
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO

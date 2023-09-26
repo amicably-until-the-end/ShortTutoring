@@ -1,10 +1,8 @@
 package org.softwaremaestro.data.question_upload
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
-import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.model.asDomain
 import org.softwaremaestro.data.question_upload.model.asDto
 import org.softwaremaestro.data.question_upload.remote.QuestionUploadApi
@@ -12,9 +10,9 @@ import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
-import org.softwaremaestro.domain.question_upload.entity.TeacherPickReqVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 private const val EMPTY_STRING = "undefined"
@@ -61,8 +59,8 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
     }
 
     override suspend fun pickTeacher(
-        chattingId: String, questionId: String
-    ): Flow<BaseResult<String, String>> {
+        time: LocalDateTime, chattingId: String, questionId: String
+    ): Flow<BaseResult<TeacherPickResVO, String>> {
         return flow {
             val response =
                 questionUploadApi.pickTeacher(
@@ -74,11 +72,11 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
 
             val body = response.body()
             if (response.isSuccessful && body?.success == true) {
-                //val result = body.data
+                val tutoringInfo = body.data
 
-                //val teacherPickResVO = tutoringInfo?.asDomain()!!
+                val teacherPickResVO = tutoringInfo?.asDomain()!!
 
-                emit(BaseResult.Success("success"))
+                emit(BaseResult.Success(teacherPickResVO))
             } else {
                 emit(BaseResult.Error("error"))
             }

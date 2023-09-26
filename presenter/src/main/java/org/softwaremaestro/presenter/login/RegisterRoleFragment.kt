@@ -27,16 +27,29 @@ class RegisterRoleFragment : Fragment() {
 
         binding = FragmentRegisterRoleBinding.inflate(inflater, container, false)
 
+        setTvStudent()
+        setTvTeacher()
+        setBtnNext()
+        setBtnToolbarBack()
+
+        return binding.root
+    }
+
+    private fun setTvStudent() {
         binding.tvStudent.setOnClickListener {
             binding.btnNext.setEnabledAndChangeColor(true)
             selectedRole = 0
         }
+    }
 
+    private fun setTvTeacher() {
         binding.tvTeacher.setOnClickListener {
             binding.btnNext.setEnabledAndChangeColor(true)
             selectedRole = 1
         }
+    }
 
+    private fun setBtnNext() {
         binding.btnNext.setOnClickListener {
             when (selectedRole) {
                 0 -> R.id.action_registerRoleFragment_to_registerStudentInfoFragment
@@ -46,11 +59,11 @@ class RegisterRoleFragment : Fragment() {
                 findNavController().navigate(dest)
             }
         }
+    }
+
+    private fun setBtnToolbarBack() {
         binding.btnToolbarBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        return binding.root
     }
-
 }

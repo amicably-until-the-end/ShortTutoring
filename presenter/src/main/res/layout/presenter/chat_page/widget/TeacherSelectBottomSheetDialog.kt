@@ -8,6 +8,4 @@ class TeacherSelectBottomSheetDialog(private val context: Context, private val q
     BottomSheetDialog(context) {
 
     private lateinit var binding: DialogTeacherSelectBinding
-
-
 }

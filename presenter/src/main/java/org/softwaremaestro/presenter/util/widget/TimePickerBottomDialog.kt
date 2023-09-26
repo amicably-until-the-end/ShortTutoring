@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogTimePickerBinding
-import java.text.SimpleDateFormat
+import org.softwaremaestro.presenter.util.nowInKorea
 
 class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)) :
     BottomSheetDialogFragment() {
@@ -16,6 +16,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     private lateinit var binding: DialogTimePickerBinding
 
     private var title: String? = null
+    private var btnText: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +26,7 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         binding = DialogTimePickerBinding.inflate(layoutInflater)
 
         setDialogTitle()
+        setDialogBtnText()
         setReturnButton()
         setDefaultTime()
         return binding.root
@@ -34,16 +36,25 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         this.title = title
     }
 
-    private fun setDefaultTime() {
-        var currentTime = System.currentTimeMillis()
-        binding.timePicker.hour = SimpleDateFormat("HH").format(currentTime).toInt()
-        binding.timePicker.minute = SimpleDateFormat("mm").format(currentTime).toInt()
+    fun setBtnText(btnText: String) {
+        this.btnText = btnText
+    }
 
+    private fun setDefaultTime() {
+        with(nowInKorea()) {
+            binding.timePicker.hour = hour
+            binding.timePicker.minute = minute
+        }
     }
 
     private fun setDialogTitle() {
         if (title != null)
             binding.tvTitle.text = title
+    }
+
+    private fun setDialogBtnText() {
+        if (btnText != null)
+            binding.btnReturn.text = btnText
     }
 
     private fun setReturnButton() {

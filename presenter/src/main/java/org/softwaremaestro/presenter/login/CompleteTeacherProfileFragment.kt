@@ -1,15 +1,22 @@
 package org.softwaremaestro.presenter.login
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteTeacherProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
+import org.softwaremaestro.presenter.util.widget.LoadingDialog
 
 class CompleteTeacherProfileFragment : Fragment() {
 
@@ -27,29 +34,113 @@ class CompleteTeacherProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setEtProfileTeacherName()
+        setTvProfileTeacherUniv()
+        setEtProfileTeacherBio()
+        setEtTeacherName()
+        setEtTeacherBio()
+        setBtnToolbarBack()
         setBtnComplete()
+        observe()
+    }
 
-        observeRegisterResult()
+    private fun setEtProfileTeacherName() {
+        binding.etProfileTeacherName.setOnClickListener {
+            showKeyboardAndRequestFocus(binding.etTeacherName)
+        }
+    }
+
+    private fun setTvProfileTeacherUniv() {
+        binding.tvProfileTeacherUniv.text = viewModel.schoolName.value
+    }
+
+    private fun setEtProfileTeacherBio() {
+        binding.etProfileTeacherBio.setOnClickListener {
+            showKeyboardAndRequestFocus(binding.etTeacherBio)
+        }
+    }
+
+    private fun setBtnToolbarBack() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun setEtTeacherName() {
+        binding.etTeacherName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel._name.value = p0.toString()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+    }
+
+    private fun setEtTeacherBio() {
+        binding.etTeacherBio.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel._bio.value = p0.toString()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
     private fun setBtnComplete() {
-
         binding.btnComplete.setOnClickListener {
             viewModel.registerTeacher()
         }
     }
 
-    private fun observeRegisterResult() {
+    private fun observe() {
+        observeName()
+        observeBio()
+        observeTeacherNameAndBioProper()
+        observeSignupState()
+    }
 
-        viewModel.registerResult.observe(viewLifecycleOwner) { isTeacherRegistered ->
+    private fun observeName() {
+        viewModel.name.observe(viewLifecycleOwner) {
+            binding.etProfileTeacherName.setText(it)
+        }
+    }
 
-            // Todo : 추후에 수정
-            findNavController().navigate(R.id.action_completeTeacherProfileFragment_to_loginFrament)
+    private fun observeBio() {
+        viewModel.bio.observe(viewLifecycleOwner) {
+            binding.etProfileTeacherBio.setText(it)
+        }
+    }
 
-            if (isTeacherRegistered) {
+    private fun observeTeacherNameAndBioProper() {
+        viewModel.teacherNameAndBioProper.observe(viewLifecycleOwner) {
+            binding.btnComplete.setEnabledAndChangeColor(it)
+        }
+    }
 
-            } else {
+    private fun observeSignupState() {
+        val loadingDialog = LoadingDialog(requireContext())
+        viewModel.teacherSignupState.observe(viewLifecycleOwner) {
 
+            when (it) {
+                is UIState.Loading -> {
+                    loadingDialog.show()
+                    binding.btnComplete.setEnabledAndChangeColor(false)
+                }
+
+                is UIState.Success -> {
+                    loadingDialog.dismiss()
+                    findNavController().navigate(R.id.action_completeStudentProfileFragment_to_loginFrament)
+                }
+
+                else -> {
+                    loadingDialog.dismiss()
+                    binding.btnComplete.setEnabledAndChangeColor(true)
+                    Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

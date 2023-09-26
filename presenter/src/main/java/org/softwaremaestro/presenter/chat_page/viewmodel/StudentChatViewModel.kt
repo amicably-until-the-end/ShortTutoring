@@ -6,22 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.socket.client.IO
 import io.socket.client.Socket
-
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-
-import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.MessageVO
-import org.softwaremaestro.domain.chat.entity.QuestionState
-import org.softwaremaestro.domain.chat.entity.QuestionType
-import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.usecase.TeacherPickUseCase
 import org.softwaremaestro.presenter.util.UIState
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,26 +24,26 @@ class StudentChatViewModel @Inject constructor(
 
     private var socket: Socket? = null
 
-    private val _pickTeacherResult = MutableLiveData<UIState<Boolean>>()
-    val pickTeacherResult: LiveData<UIState<Boolean>> get() = _pickTeacherResult
+    private val pickTeacherResult = MutableLiveData<UIState<Boolean>>()
+    val pickTeacherResultState: LiveData<UIState<Boolean>> get() = pickTeacherResult
 
 
-    fun pickTeacher(chattingId: String, questionId: String) {
+    fun pickTeacher(time: LocalDateTime, chattingId: String, questionId: String) {
         viewModelScope.launch {
-            teacherPickUseCase.execute(chattingId, questionId)
-                .onStart { _pickTeacherResult.value = UIState.Loading }
+            teacherPickUseCase.execute(time, chattingId, questionId)
+                .onStart { pickTeacherResult.value = UIState.Loading }
                 .catch { exception ->
-                    _pickTeacherResult.value = UIState.Failure
+                    pickTeacherResult.value = UIState.Failure
                     Log.e(this@StudentChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            _pickTeacherResult.value = UIState.Success(true)
+                            pickTeacherResult.value = UIState.Success(true)
                         }
 
                         is BaseResult.Error -> {
-                            _pickTeacherResult.value = UIState.Failure
+                            pickTeacherResult.value = UIState.Failure
                         }
                     }
                 }

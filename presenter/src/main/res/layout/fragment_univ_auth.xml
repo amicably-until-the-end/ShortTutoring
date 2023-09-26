@@ -17,7 +17,7 @@
 
         <TextView
             style="@style/ToolBarTitle"
-            android:text="질문 올리기" />
+            android:text="회원가입" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -111,14 +111,14 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/et_univ_mail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:id="@+id/et_univ_mail_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/pretendard_medium"
                 android:hint="학교 메일 입력"
                 android:imeOptions="actionDone"
+                android:paddingLeft="15dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/sub_text_grey"
                 android:textSize="14sp" />
@@ -141,15 +141,17 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+            <EditText
+                android:id="@+id/et_univ_mail_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@null"
+                android:enabled="false"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="skku.edu"
+                android:paddingLeft="15dp"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="skku.edu" />
 
         </LinearLayout>
 
@@ -159,6 +161,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="28dp"
             android:background="@color/background_grey"
+            android:enabled="false"
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:paddingHorizontal="36dp"
@@ -195,13 +198,13 @@
 
         <EditText
             android:id="@+id/et_auth_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@null"
             android:fontFamily="@font/pretendard_medium"
             android:hint="인증번호 입력"
             android:imeOptions="actionDone"
+            android:paddingLeft="15dp"
             android:textColor="@color/black"
             android:textColorHint="@color/sub_text_grey"
             android:textSize="14sp" />
@@ -215,6 +218,7 @@
         android:layout_margin="30dp"
         android:layout_marginBottom="28dp"
         android:background="@drawable/bg_radius_10_background_grey"
+        android:enabled="false"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:padding="16dp"
