@@ -1,9 +1,12 @@
 package org.softwaremaestro.data.chat
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.softwaremaestro.data.chat.database.ChatDatabase
 import org.softwaremaestro.data.chat.remote.ChatApi
 import org.softwaremaestro.data.classroom.remote.ClassRoomApi
 import org.softwaremaestro.data.common.module.NetworkModule
@@ -27,7 +30,13 @@ class ChatModule {
 
     @Singleton
     @Provides
-    fun provideChatRepository(chatApi: ChatApi): ChatRepository {
-        return ChatRepositoryImpl(chatApi)
+    fun provideChatRepository(chatApi: ChatApi, chatDatabase: ChatDatabase): ChatRepository {
+        return ChatRepositoryImpl(chatApi, chatDatabase)
+    }
+
+    @Singleton
+    @Provides
+    fun provideChatDatabase(@ApplicationContext context: Context): ChatDatabase {
+        return ChatDatabase.getInstance(context)!!
     }
 }

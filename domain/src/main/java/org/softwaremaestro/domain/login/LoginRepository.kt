@@ -14,4 +14,6 @@ interface LoginRepository {
 
 
     fun getUserInfo(): Flow<BaseResult<UserVO, String>>
+
+    fun getToken(): String
 }

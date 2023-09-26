@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.chat_page
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.notify
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
@@ -36,6 +39,7 @@ import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -47,6 +51,10 @@ abstract class ChatFragment : Fragment() {
     private lateinit var messageListAdapter: MessageListAdapter
     private lateinit var offeringTeacherAdapter: ChatRoomListAdapter
     private lateinit var proposedIconAdapter: ChatRoomIconListAdapter
+
+    private var selectedTutoringIndex: Int? = null
+    private var selectedTeacher: Int? = null
+
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     private val chatViewModel: ChatViewModel by activityViewModels();
@@ -54,6 +62,9 @@ abstract class ChatFragment : Fragment() {
     protected var currentChatRoom: ChatRoomVO? = null
 
     lateinit var loadingDialog: LoadingDialog
+
+    @Inject
+    lateinit var socketManager: SocketManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,12 +84,11 @@ abstract class ChatFragment : Fragment() {
         makeAdapterList()
         getRoomList()
         setSendMessageButton()
-        setChatNoti()
+
 
         return binding.root
-    }
 
-    abstract fun setChatNoti()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,42 +99,82 @@ abstract class ChatFragment : Fragment() {
 
     private fun setSendMessageButton() {
         binding.btnSendMessage.setOnClickListener {
-            chatViewModel.sendMessage(binding.etMessage.text.toString())
+            sendMessage()
+            binding.etMessage.setText("")
         }
     }
 
-    protected fun getRoomList() {
-        chatViewModel.getChatRoomList()
+    private fun getRoomList() {
+        chatViewModel.getChatRoomList(isTeacher())
+    }
+
+    private fun observeSocket() {
+        //viewmodel로 뺄 수 도 있겠다.
+        socketManager.getSocket().on("message") {
+            chatViewModel.getChatRoomList(isTeacher())
+            currentChatRoom?.let { chatViewModel.getMessages(it.id!!) }
+        }
+    }
+
+    private fun sendMessage() {
+        currentChatRoom?.let {
+            chatViewModel.sendMessage(
+                binding.etMessage.text.toString(),
+                chattingId = it.id!!,
+                receiverId = it.opponentId!!
+            )
+        }
     }
 
     private fun refreshProposedRoomList() {
-
-        (if (binding.rbNormalQuestion.isChecked)
-            chatViewModel.proposedNormalChatRoomList.value
-        else
-            chatViewModel.proposedSelectedChatRoomList.value)?.let {
-            when (it) {
-                is UIState.Success -> {
-                    it._data!!.let { chatRooms ->
-                        if (chatRooms.isNotEmpty()) {
-                            setProposedSectionItems(it._data)
-                            binding.cvQuestionProposedEmpty.visibility = View.INVISIBLE
-                        } else {
-                            binding.cvQuestionProposedEmpty.visibility = View.VISIBLE
-                        }
+        if (binding.rbNormalQuestion.isChecked) {
+            chatViewModel.proposedNormalChatRoomList.value?.let {
+                when (chatViewModel.proposedNormalChatRoomList.value) {
+                    is UIState.Success -> {
+                        setProposedSectionItems(it._data!!)
                     }
-                }
 
-                else -> {}
+                    else -> {}
+                }
+            }
+
+        } else {
+            chatViewModel.proposedSelectedChatRoomList.value?.let {
+                when (chatViewModel.proposedSelectedChatRoomList.value) {
+                    is UIState.Success -> {
+                        setProposedSectionItems(it._data!!)
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
 
-    abstract fun enableChatRoomBtn()
+    private fun observeMessages() {
+        chatViewModel.messages.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    setMessageListItems(it._data!!)
+                }
 
-    protected fun disableChatRoomBtn() {
-        setNotiVisible(true)
-        setChatRoomBtnsVisible(false)
+                else -> {
+
+                }
+
+            }
+        }
+    }
+
+
+    fun enableClassRoomButton() {
+        binding.btnChatRoomRight.apply {
+            text = "강의실 입장하기"
+            setEnabledAndChangeColor(true)
+            setOnClickListener {
+                enterRoom()
+            }
+        }
     }
 
     private fun observeTutoringInfo() {
@@ -177,44 +227,26 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun refreshReservedRoomList() {
-
-        (if (binding.rbNormalQuestion.isChecked)
-            chatViewModel.proposedNormalChatRoomList.value
-        else
-            chatViewModel.proposedSelectedChatRoomList.value)?.let {
-            when (it) {
-                is UIState.Success -> {
-                    it._data!!.let { chatRooms ->
-                        if (chatRooms.isNotEmpty()) {
-                            setProposedSectionItems(it._data)
-                            binding.cvQuestionProposedEmpty.visibility = View.INVISIBLE
-                        } else {
-                            binding.cvQuestionProposedEmpty.visibility = View.VISIBLE
-                        }
+        if (binding.rbNormalQuestion.isChecked) {
+            chatViewModel.reservedNormalChatRoomList.value?.let {
+                when (chatViewModel.reservedNormalChatRoomList.value) {
+                    is UIState.Success -> {
+                        setReservedSectionItems(it._data!!)
                     }
-                }
 
-                else -> {}
+                    else -> {}
+                }
             }
-        }
 
-        (if (binding.rbNormalQuestion.isChecked)
-            chatViewModel.reservedNormalChatRoomList.value
-        else
-            chatViewModel.reservedNormalChatRoomList.value).let {
-            when (it!!) {
-                is UIState.Success -> {
-                    it._data!!.let { chatRooms ->
-                        if (chatRooms.isNotEmpty()) {
-                            setReservedSectionItems(chatRooms)
-                            binding.cvQuestionReservedEmpty.visibility = View.INVISIBLE
-                        } else {
-                            binding.cvQuestionReservedEmpty.visibility = View.VISIBLE
-                        }
+        } else {
+            chatViewModel.reservedSelectedChatRoomList.value?.let {
+                when (chatViewModel.reservedSelectedChatRoomList.value) {
+                    is UIState.Success -> {
+                        setReservedSectionItems(it._data!!)
                     }
-                }
 
-                else -> {}
+                    else -> {}
+                }
             }
         }
     }
@@ -289,12 +321,12 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private fun setQuestionTypeSelectToggle() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
             clearRecyclersSelectedView(null)
-            resetMsgTab()
 
             when (checkId) {
                 R.id.rb_normal_question -> {
@@ -500,8 +532,9 @@ abstract class ChatFragment : Fragment() {
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             currentChatRoom = chatRoom
-            setMessageListItems(chatRoom.messages ?: emptyList())
             onChatRoomStateChange(chatRoom)
+            Log.d("mymymy", chatRoom.toString())
+            chatViewModel.getMessages(chatRoom.id!!)
             binding.tvChatRoomTitle.text = chatRoom.title
             clearRecyclersSelectedView(caller)
         }

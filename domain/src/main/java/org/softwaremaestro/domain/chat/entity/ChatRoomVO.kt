@@ -1,5 +1,6 @@
 package org.softwaremaestro.domain.chat.entity
 
+import kotlinx.serialization.Serializable
 import java.awt.TrayIcon
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -11,30 +12,20 @@ data class ChatRoomListVO(
     val selectedReserved: List<ChatRoomVO>,
 )
 
-sealed class NormalProposedRoomVO {
-    data class QuestionRoomVO(val value: NormalQuestionRoomVO) : NormalProposedRoomVO()
-    data class TeacherRoomVO(val value: ChatRoomVO) : NormalProposedRoomVO()
-}
-
 
 data class ChatRoomVO(
-    val id: String?,
+    val id: String? = null,
     val roomType: RoomType,
     val roomImage: String?,
     val questionState: QuestionState,
     val questionId: String?,
-    val opponentId: String?,
+    val opponentId: String? = null,
     val title: String?,
-    val schoolSubject: String?,
-    val schoolLevel: String?,
-    val messages: List<MessageVO>?,
-    val teachers: List<ChatRoomVO>?,
+    val schoolSubject: String? = null,
+    val schoolLevel: String? = null,
+    val messages: List<MessageVO>? = null,
+    var teachers: List<ChatRoomVO>? = null,
     val isSelect: Boolean,
-)
-
-data class NormalQuestionRoomVO(
-    val teachers: List<ChatRoomVO>,
-    val students: List<ChatRoomVO>,
 )
 
 data class StudentInfoVO(
@@ -52,20 +43,24 @@ data class TeacherInfoVO(
 data class MessageVO(
     val time: LocalDateTime,
     val bodyVO: MessageBodyVO?,
-    val sender: String?,
+    val sender: String? = null,
     val isMyMsg: Boolean,
 )
 
+
 sealed class MessageBodyVO {
+    @Serializable
     data class ProblemImage(
         val imageUrl: String?,
         val description: String?,
     ) : MessageBodyVO()
 
+    @Serializable
     data class AppointRequest(
-        val startDateTime: LocalDateTime?,
+        val startDateTime: String?,
     ) : MessageBodyVO()
 
+    @Serializable
     data class Text(
         val text: String?,
     ) : MessageBodyVO()

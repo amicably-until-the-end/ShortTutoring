@@ -89,5 +89,9 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getToken(): String {
+        return prefs.getJWT()
+    }
+
 
 }

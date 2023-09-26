@@ -5,24 +5,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.coroutines.Dispatchers
+
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import org.json.JSONObject
+
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
+import org.softwaremaestro.domain.chat.entity.QuestionType
+import org.softwaremaestro.domain.chat.usecase.GetChatMessagesUseCase
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
+import org.softwaremaestro.domain.chat.usecase.InsertMessageUseCase
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.util.UIState
-import org.softwaremaestro.presenter.util.nowInKorea
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -30,10 +40,13 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
+    private val getChatMessagesUseCase: GetChatMessagesUseCase,
+    private val insertMessageUseCase: InsertMessageUseCase
 ) :
     ViewModel() {
 
-    private var socket: Socket? = null
+    @Inject
+    lateinit var socketManager: SocketManager
 
 
     private val _reservedNormalChatRoomList = MutableLiveData<UIState<List<ChatRoomVO>>>()
@@ -52,55 +65,44 @@ class ChatViewModel @Inject constructor(
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
 
+
+    private val _messages = MutableLiveData<UIState<List<MessageVO>>>()
+    val messages: LiveData<UIState<List<MessageVO>>>
+        get() = _messages
+
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
         get() = _tutoringInfo
 
-    fun getChatRoomList() {
-        viewModelScope.launch {
-            getChatRoomListUseCase.execute()
-                .onStart { _reservedNormalChatRoomList.value = UIState.Loading }
+    val gson = Gson()
+
+
+    fun getChatRoomList(isTeacher: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getChatRoomListUseCase.execute(isTeacher)
+                .onStart { _reservedNormalChatRoomList.postValue(UIState.Loading) }
                 .catch { exception ->
-                    _reservedNormalChatRoomList.value = UIState.Failure
+                    _reservedNormalChatRoomList.postValue(UIState.Failure)
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
-                .collect { resultttt ->
-                    val result = BaseResult.Success(
-                        ChatRoomListVO(
-                            normalProposed = mutableListOf<ChatRoomVO>().apply {
-                                repeat(3) {
-                                    add(getDummy(RoomType.QUESTION, QuestionState.PROPOSED, false))
-                                }
-                            },
-                            normalReserved = mutableListOf<ChatRoomVO>().apply {
-                                repeat(3) {
-                                    add(getDummy(RoomType.TEACHER, QuestionState.RESERVED, false))
-                                }
-                            },
-                            selectedProposed = mutableListOf<ChatRoomVO>().apply {
-                                add(getSelectedProposedDummy())
-                            },
-                            selectedReserved = mutableListOf<ChatRoomVO>().apply {
-                                repeat(3) {
-                                    add(getDummy(RoomType.TEACHER, QuestionState.RESERVED, true))
-                                }
-                            }
-                        )
-                    )
+                .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            _reservedNormalChatRoomList.value =
+                            _reservedNormalChatRoomList.postValue(
                                 UIState.Success(result.data.normalReserved)
-                            _reservedSelectedChatRoomList.value =
+                            )
+                            _reservedSelectedChatRoomList.postValue(
                                 UIState.Success(result.data.selectedReserved)
-                            _proposedNormalChatRoomList.value =
+                            )
+                            _proposedNormalChatRoomList.postValue(
                                 UIState.Success(result.data.normalProposed)
-                            _proposedSelectedChatRoomList.value =
+                            )
+                            _proposedSelectedChatRoomList.postValue(
                                 UIState.Success(result.data.selectedProposed)
+                            )
                         }
 
-                        is BaseResult.Error<*> -> _reservedNormalChatRoomList.value =
-                            UIState.Failure
+                        is BaseResult.Error -> _reservedNormalChatRoomList.postValue(UIState.Failure)
                     }
                 }
         }
@@ -129,112 +131,61 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    private fun initSocket(questionId: String) {
-        try {
-            socket = IO.socket("http://10.0.2.2:3000")
-            Log.d("socket", "init socket ${socket?.id()}")
-            socket?.connect()
-            socket?.apply {
-                on(Socket.EVENT_CONNECT) {
-                    Log.d("socket", "connect")
-                    emit("join", questionId)
+    fun getMessages(chattingId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            getChatMessagesUseCase.execute(chattingId)
+                .onStart {
+                    _messages.postValue(UIState.Loading)
                 }
-                on("msg") { args ->
-                    val msg = args[0] as String
-                    Log.d("socket", "receive message ${msg}")
+                .catch { exception ->
+                    _messages.postValue(UIState.Failure)
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
-            }
-        } catch (e: Exception) {
-            Log.d("socket", e.message.toString())
+                .collect { result ->
+                    Log.d(
+                        "ChatViewModel getMessages",
+                        "chattindId $chattingId ${result.toString()}"
+                    )
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _messages.postValue(UIState.Success(result.data))
+                        }
+
+                        is BaseResult.Error -> _messages.postValue(UIState.Failure)
+                    }
+                }
         }
     }
 
-    fun sendMessage(string: String) {
-        socket?.emit("msg", string)
-        Log.d("socket", "send message")
+    fun sendMessage(body: String, receiverId: String, chattingId: String) {
+        var jsonBody = gson.toJson(MessageBody(body))
+        var payload = JSONObject(gson.toJson(Message("text", jsonBody, receiverId, chattingId)))
+        socketManager.getSocket().emit("message", payload)
+        Log.d("ChatViewModel", "send ${payload}")
+        viewModelScope.launch(Dispatchers.IO) {
+            insertMessageUseCase.execute(
+                chattingId,
+                gson.toJson(MessageBody(body)),
+                "text",
+                LocalDateTime.now().toString(),
+                true
+            )
+            getMessages(chattingId)
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        socket?.disconnect()
-    }
+    @Serializable
+    data class Message(
+        val format: String,
+        val body: String,
+        val receiverId: String,
+        val chattingId: String
+    )
 
-    private fun getDummy(type: RoomType, state: QuestionState, isSelected: Boolean): ChatRoomVO {
-        val teacher = ChatRoomVO(
-            id = "id",
-            roomType = RoomType.TEACHER,
-            roomImage = "",
-            questionState = QuestionState.PROPOSED,
-            questionId = "questionId",
-            opponentId = "opponentId",
-            title = "타이틀",
-            schoolSubject = "미적분",
-            schoolLevel = "고등학교",
-            messages = listOf(
-                MessageVO(
-                    time = LocalDateTime.now(),
-                    bodyVO = MessageBodyVO.Text("질문"),
-                    sender = "sender",
-                    isMyMsg = true
-                )
-            ),
-            teachers = null,
-            isSelect = false
-        )
+    @Serializable
+    data class MessageBody(
+        val text: String
+    )
 
-        return ChatRoomVO(
-            id = "id",
-            roomType = type,
-            roomImage = "",
-            questionState = state,
-            questionId = "questionId",
-            opponentId = "opponentId",
-            title = "타이틀",
-            schoolSubject = "미적분",
-            schoolLevel = "고등학교",
-            messages = listOf(
-                MessageVO(
-                    time = LocalDateTime.now(),
-                    bodyVO = MessageBodyVO.Text("질문"),
-                    sender = "sender",
-                    isMyMsg = true
-                )
-            ),
-            teachers = if (type == RoomType.QUESTION && state == QuestionState.PROPOSED && !isSelected) {
-                listOf(teacher, teacher, teacher)
-            } else null,
-            isSelect = isSelected
-        )
-    }
-
-    private fun getSelectedProposedDummy(): ChatRoomVO {
-
-        return ChatRoomVO(
-            id = "id",
-            roomType = RoomType.TEACHER,
-            roomImage = "",
-            questionState = QuestionState.PROPOSED,
-            questionId = "questionId",
-            opponentId = "opponentId",
-            title = "타이틀",
-            schoolSubject = "미적분",
-            schoolLevel = "고등학교",
-            messages = mutableListOf<MessageVO>().apply {
-                add(getMessageDummy(MessageBodyVO.ProblemImage("", "설명")))
-                add(getMessageDummy(MessageBodyVO.Text("안녕하세요, 선생님!")))
-                add(getMessageDummy(MessageBodyVO.AppointRequest(nowInKorea())))
-            },
-            teachers = null,
-            isSelect = true
-        )
-    }
-
-    private fun getMessageDummy(body: MessageBodyVO): MessageVO {
-        return MessageVO(
-            time = nowInKorea(),
-            bodyVO = body,
-            sender = null,
-            isMyMsg = false
-        )
-    }
 }

@@ -34,10 +34,10 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     }
 
     private fun getJWT(role: String?): String? {
-        return if (role.isNullOrEmpty())
+        return if (true)
             prefs.getJWT()
         else if (true) {
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsInVzZXJJZCI6InRlc3Qtc3R1ZGVudC1pZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjkxMTMyODk3LCJleHAiOjE3MjI2OTA0OTd9.VwHlj3s8ZbruX4dQpPrvnTV93_LRVt_7YGMGP7emNuM"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsImF1dGhJZCI6bnVsbCwidXNlcklkIjoic3ktc3R1ZGVudC1pZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjk1NjM0ODcwLCJleHAiOjE2OTU3MjEyNzB9.Xpo-unj27SwTnfnCUJIPc_BTeK5SPlS8LlDihjv6v6c"
         } else {
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsInVzZXJJZCI6InRlc3QtdGVhY2hlci1pZCIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNjkxMTMyOTg3LCJleHAiOjE3MjI2OTA1ODd9.G1eeoixa12BW62OxRVZlgpSrWLzYVNgHPayyzJLJnaY"
         }

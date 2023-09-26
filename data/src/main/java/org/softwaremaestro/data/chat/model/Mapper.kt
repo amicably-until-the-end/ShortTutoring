@@ -1,6 +1,7 @@
 package org.softwaremaestro.data.chat.model
 
 import android.util.Log
+import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
@@ -29,22 +30,20 @@ class Mapper {
     fun asDomain(chatRoomDto: ChatRoomDto): ChatRoomVO {
         chatRoomDto.apply {
             return ChatRoomVO(
-                id = tutoringId,
+                id = id,
                 questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
                 opponentId = opponentId,
                 title = title,
-                schoolSubject = schoolSubject,
-                schoolLevel = schoolLevel,
-                messages = messages?.map { it.asDomain() },
+                messages = listOf(),
                 roomImage = roomImage,
-                roomType = if (isTeacherRoom == true) RoomType.TEACHER else RoomType.QUESTION,
-                teachers = teachers?.map { it.asDomain() },
+                roomType = if (opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 isSelect = isSelect ?: false,
                 questionId = questionId,
             )
         }
     }
 
+    /*
     fun asDomain(messageDto: MessageDto): MessageVO {
         Log.d("chat", messageDto.toString())
 
@@ -56,8 +55,7 @@ class Mapper {
             )
 
             "appoint-request" -> {
-                var dateTime = ISOParser(messageDto.body.startDateTime!!)
-                MessageBodyVO.AppointRequest(dateTime)
+                MessageBodyVO.AppointRequest(messageDto.body.startDateTime)
             }
 
             else -> MessageBodyVO.Text(messageDto.body.text)
@@ -69,6 +67,24 @@ class Mapper {
             sender = messageDto.sender,
             isMyMsg = messageDto.isMyMsg,
         )
+    }*/
+
+    fun asDomain(chatRoomEntity: ChatRoomEntity): ChatRoomVO {
+        chatRoomEntity.apply {
+            return ChatRoomVO(
+                id = id,
+                title = title,
+                schoolLevel = "fff",
+                schoolSubject = "fff",
+                roomType = RoomType.TEACHER,
+                roomImage = image,
+                questionId = "fff",
+                isSelect = true,
+                questionState =
+                if (status == 1 || status == 2)
+                    QuestionState.PROPOSED else QuestionState.RESERVED,
+            )
+        }
     }
 
     companion object {
@@ -93,6 +109,11 @@ fun ChatRoomListDto.asDomain(): ChatRoomListVO {
     return Mapper().asDomain(this)
 }
 
+/*
 fun MessageDto.asDomain(): MessageVO {
+    return Mapper().asDomain(this)
+}*/
+
+fun ChatRoomEntity.asDomain(): ChatRoomVO {
     return Mapper().asDomain(this)
 }

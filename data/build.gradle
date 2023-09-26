@@ -66,4 +66,16 @@ dependencies {
 
     //JWT Util
     implementation 'com.auth0.android:jwtdecode:2.0.2'
+
+
+    //ROOM
+    api "androidx.room:room-runtime:2.4.2"
+    kapt "androidx.room:room-compiler:2.4.2"
+    api "androidx.room:room-ktx:2.4.2"
+    api "androidx.room:room-paging:2.4.2"
+
+    // Paging 3.0
+    api 'androidx.paging:paging-compose:1.0.0-alpha15'
+
+
 }
