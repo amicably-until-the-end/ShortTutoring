@@ -37,8 +37,14 @@ class StudentRegisterViewModel @Inject constructor(
     private val _bio = MutableLiveData<String>("student-bio")
     val bio: LiveData<String> get() = _bio
 
+    val _image: MutableLiveData<String> = MutableLiveData()
+    val image: LiveData<String> get() = _image
+
     private val _studentSignupState = MutableLiveData<UIState<String>>()
     val studentSignupState: LiveData<UIState<String>> get() = _studentSignupState
+
+    private val _studentNameAndImageProper = MediatorLiveData<Boolean>()
+    val studentNameAndImageProper: MediatorLiveData<Boolean> get() = _studentNameAndImageProper
 
     init {
         with(_schoolLevelAndGradeProper) {
@@ -48,6 +54,20 @@ class StudentRegisterViewModel @Inject constructor(
 
             addSource(_schoolGrade) {
                 postValue(!_schoolLevel.value.isNullOrEmpty() && _schoolGrade.value != null)
+            }
+        }
+
+        with(_studentNameAndImageProper) {
+            addSource(_name) {
+                postValue(
+                    !_name.value.isNullOrEmpty() && !_image.value.isNullOrEmpty()
+                )
+            }
+
+            addSource(_image) {
+                postValue(
+                    !_name.value.isNullOrEmpty() && !_image.value.isNullOrEmpty()
+                )
             }
         }
     }
