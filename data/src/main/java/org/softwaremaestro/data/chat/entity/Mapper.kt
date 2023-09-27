@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.chat.entity
 
+import android.util.Log
 import com.google.gson.Gson
 import org.softwaremaestro.data.chat.model.ChatRoomDto
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
@@ -62,6 +63,7 @@ class Mapper {
 
     fun asDomain(chatRoomWithMessages: ChatRoomWithMessages): ChatRoomVO {
         chatRoomWithMessages.apply {
+            Log.d("chatRoomWithMessages Mapper ", this.toString())
             return ChatRoomVO(
                 id = chatRoomEntity.id,
                 title = chatRoomEntity.title,
@@ -101,8 +103,8 @@ class Mapper {
                 }
             }
         return ChatRoomEntity(
-            id = dto.id!!,
-            title = dto.title,
+            id = dto.id ?: dto.questionId ?: "undefined",
+            title = dto.title!!,
             image = dto.roomImage,
             status = status,
             startDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")),

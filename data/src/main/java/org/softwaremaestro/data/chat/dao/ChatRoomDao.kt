@@ -5,9 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
-import org.softwaremaestro.data.chat.entity.ChatRoomType
 import org.softwaremaestro.data.chat.entity.ChatRoomWithMessages
-import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 
 @Dao
 interface ChatRoomDao {
@@ -24,14 +22,17 @@ interface ChatRoomDao {
     @Query("SELECT EXISTS(SELECT * FROM ChatRoomEntity WHERE id = :roomId)")
     fun isIdExist(roomId: String): Boolean
 
-    @Insert()
+    @Insert(onConflict = androidx.room.OnConflictStrategy.IGNORE)
     fun insert(chatRoomEntity: ChatRoomEntity)
 
     @Update
     fun update(chatRoomEntity: ChatRoomEntity)
 
     @Query("SELECT * FROM ChatRoomEntity")
-    fun getChatRoomWithMessages(): List<ChatRoomWithMessages>
+    fun getChatRoomsWithMessages(): List<ChatRoomWithMessages>
+
+    @Query("SELECT * FROM ChatRoomEntity WHERE id = :chattingId")
+    fun getChatRoomWithMessages(chattingId: String): ChatRoomWithMessages
 
     @Query("SELECT * FROM ChatRoomEntity WHERE status = :type")
     fun getChatRoomByGroupType(type: Int): List<ChatRoomWithMessages>

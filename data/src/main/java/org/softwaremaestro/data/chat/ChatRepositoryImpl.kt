@@ -8,27 +8,27 @@ import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.data.chat.entity.ChatRoomType
 import org.softwaremaestro.data.chat.entity.MessageEntity
 import org.softwaremaestro.data.chat.entity.asEntity
-import org.softwaremaestro.data.chat.model.ChatRoomListDto
-import org.softwaremaestro.data.chat.model.asDomain as DTOToVO
 import org.softwaremaestro.data.chat.entity.asDomain as EntityToVO
 import org.softwaremaestro.data.chat.remote.ChatApi
+import org.softwaremaestro.data.question_get.remote.QuestionGetApi
 import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
-import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
-    private val chatApi: ChatApi, private val chatDatabase: ChatDatabase
+    private val chatApi: ChatApi,
+    private val chatDatabase: ChatDatabase,
+    private val questionApi: QuestionGetApi,
 ) :
     ChatRepository {
 
 
-    private fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO? {
+    private suspend fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO? {
         try {
             var proposedNormal =
                 chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.PROPOSED_NORMAL.type)
@@ -49,19 +49,23 @@ class ChatRepositoryImpl @Inject constructor(
             if (!isTeacher) {
                 //학생이면 그룹화
                 proposedNormal.groupBy { it.questionId }.forEach { group ->
-                    val questionRoom = ChatRoomVO(
-                        roomType = RoomType.QUESTION,
-                        roomImage = group.value[0].roomImage,
-                        title = group.value[0].description,
-                        schoolLevel = group.value[0].schoolLevel,
-                        schoolSubject = group.value[0].schoolSubject,
-                        isSelect = false,
-                        questionId = group.value[0].questionId,
-                        questionState = QuestionState.PROPOSED,
-                        description = group.value[0].description,
-                        teachers = group.value.mapNotNull { if (it.opponentId != null) it else null }
-                    )
-                    groups.add(questionRoom)
+                    val questionInfo = questionApi.getQuestionInfo(group.key!!).body()?.data
+                    Log.d("ChatRepositoryImpl info", questionInfo.toString())
+                    questionInfo?.let {
+                        val questionRoom = ChatRoomVO(
+                            roomType = RoomType.QUESTION,
+                            roomImage = questionInfo.problemDto?.mainImage,
+                            title = questionInfo.problemDto?.description,
+                            schoolLevel = questionInfo.problemDto?.schoolLevel,
+                            schoolSubject = questionInfo.problemDto?.schoolSubject,
+                            isSelect = false,
+                            questionId = group.key,
+                            questionState = QuestionState.PROPOSED,
+                            description = group.value[0].description,
+                            teachers = group.value.filter { it.opponentId != null },
+                        )
+                        groups.add(questionRoom)
+                    }
                 }
                 Log.d("ChatRepositoryImpl group", groups.toString())
             }
@@ -109,18 +113,17 @@ class ChatRepositoryImpl @Inject constructor(
             } else {
                 emit(BaseResult.Success(result))
             }
-
         }
     }
 
     override suspend fun getMessages(chatRoomId: String): Flow<BaseResult<List<MessageVO>, String>> {
         return flow {
-            var result = chatDatabase.messageDao().getMessages()
+            var result = chatDatabase.chatRoomDao().getChatRoomWithMessages(chatRoomId)
             Log.d("ChatRepositoryImpl", "chatroomId $chatRoomId $result")
             if (result == null) {
                 emit(BaseResult.Error("error"))
             } else {
-                emit(BaseResult.Success(result.map { it.EntityToVO() }))
+                emit(BaseResult.Success(result.messages.map { it.EntityToVO() }))
             }
         }
     }
@@ -135,8 +138,12 @@ class ChatRepositoryImpl @Inject constructor(
         try {
             Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
             if (!chatDatabase.chatRoomDao().isIdExist(roomId)) {
-                var result = chatApi.getRoom(roomId).body()?.data?.asEntity()
-                result?.let { chatDatabase.chatRoomDao().insert(it) }
+                var result = chatApi.getRoom(roomId)
+                Log.d(
+                    "ChatRepositoryImpl",
+                    "insert data entity ${result.body()}"
+                )
+                result.body()?.data?.let { chatDatabase.chatRoomDao().insert(it.asEntity()) }
             }
             chatDatabase.messageDao().insert(
                 MessageEntity(
@@ -151,7 +158,7 @@ class ChatRepositoryImpl @Inject constructor(
             )
 
         } catch (e: Exception) {
-            Log.d("ChatRepositoryImpl", e.toString())
+            Log.d("ChatRepositoryImpl insertMessage", e.toString())
         }
     }
 }
