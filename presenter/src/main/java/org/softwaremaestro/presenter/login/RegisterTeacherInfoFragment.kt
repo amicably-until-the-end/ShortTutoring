@@ -114,7 +114,7 @@ class RegisterTeacherInfoFragment : Fragment() {
     }
 
     private fun observeSchoolNameAndMajorProper() {
-        viewModel._schoolNameAndMajorProper.observe(viewLifecycleOwner) { proper ->
+        viewModel.schoolNameAndMajorProper.observe(viewLifecycleOwner) { proper ->
             binding.btnNext.setEnabledAndChangeColor(proper)
         }
     }

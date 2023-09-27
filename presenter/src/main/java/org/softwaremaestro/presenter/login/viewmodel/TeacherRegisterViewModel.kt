@@ -39,8 +39,11 @@ class TeacherRegisterViewModel @Inject constructor(
     val _name: MutableLiveData<String> = MutableLiveData()
     val name: LiveData<String> get() = _name
 
-    val _bio: MutableLiveData<String> = MutableLiveData()
+    val _bio: MutableLiveData<String> = MutableLiveData("모든 학생이 깨달음을 얻을 수 있도록!")
     val bio: LiveData<String> get() = _bio
+
+    val _image: MutableLiveData<String> = MutableLiveData()
+    val image: LiveData<String> get() = _image
 
     val _schoolNameAndMajorProper = MediatorLiveData<Boolean>()
     val schoolNameAndMajorProper: MediatorLiveData<Boolean> get() = _schoolNameAndMajorProper
@@ -54,29 +57,51 @@ class TeacherRegisterViewModel @Inject constructor(
     private val _teacherSignupState = MutableLiveData<UIState<String>>()
     val teacherSignupState: LiveData<UIState<String>> get() = _teacherSignupState
 
-    private val _teacherNameAndBioProper = MediatorLiveData<Boolean>()
-    val teacherNameAndBioProper: MediatorLiveData<Boolean> get() = _teacherNameAndBioProper
+    private val _teacherInputProper = MediatorLiveData<Boolean>()
+    val teacherInputProper: MediatorLiveData<Boolean> get() = _teacherInputProper
 
     private val service = UnivGetService()
 
     init {
         with(_schoolNameAndMajorProper) {
             addSource(_schoolName) {
-                postValue(!_schoolName.value.isNullOrEmpty() && !_major.value.isNullOrEmpty())
+                postValue(
+                    !_schoolName.value.isNullOrEmpty() &&
+                            !_major.value.isNullOrEmpty()
+                )
             }
 
             addSource(_major) {
-                postValue(!_schoolName.value.isNullOrEmpty() && !_major.value.isNullOrEmpty())
+                postValue(
+                    !_schoolName.value.isNullOrEmpty() &&
+                            !_major.value.isNullOrEmpty()
+                )
             }
         }
 
-        with(_teacherNameAndBioProper) {
+        with(_teacherInputProper) {
             addSource(_name) {
-                postValue(!_name.value.isNullOrEmpty() && !_bio.value.isNullOrEmpty())
+                postValue(
+                    !_name.value.isNullOrEmpty() &&
+                            !_bio.value.isNullOrEmpty() &&
+                            !_image.value.isNullOrEmpty()
+                )
             }
 
             addSource(_bio) {
-                postValue(!_name.value.isNullOrEmpty() && !_bio.value.isNullOrEmpty())
+                postValue(
+                    !_name.value.isNullOrEmpty() &&
+                            !_bio.value.isNullOrEmpty() &&
+                            !_image.value.isNullOrEmpty()
+                )
+            }
+
+            addSource(_image) {
+                postValue(
+                    !_name.value.isNullOrEmpty() &&
+                            !_bio.value.isNullOrEmpty() &&
+                            !_image.value.isNullOrEmpty()
+                )
             }
         }
     }
