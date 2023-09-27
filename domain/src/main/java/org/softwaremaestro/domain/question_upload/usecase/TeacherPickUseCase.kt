@@ -9,10 +9,11 @@ import javax.inject.Inject
 
 class TeacherPickUseCase @Inject constructor(private val questionUploadRepository: QuestionUploadRepository) {
     suspend fun execute(
-        time: LocalDateTime,
+        startTime: LocalDateTime,
+        endTime: LocalDateTime,
         chattingId: String,
         questionId: String
     ): Flow<BaseResult<String, String>> {
-        return questionUploadRepository.pickTeacher(time, chattingId, questionId)
+        return questionUploadRepository.pickTeacher(startTime, endTime, chattingId, questionId)
     }
 }

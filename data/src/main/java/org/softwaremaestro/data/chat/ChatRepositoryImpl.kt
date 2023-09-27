@@ -43,7 +43,8 @@ class ChatRepositoryImpl @Inject constructor(
                 chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.RESERVED_SELECT.type)
                     .map { it.EntityToVO() }
 
-            Log.d("ChatRepositoryImpl chat", "일반 ${proposedNormal}")
+
+            Log.d("ChatRepositoryImpl chat", "일반 ${proposedNormal} 예약 ${reservedNormal}")
 
             val groups: MutableList<ChatRoomVO> = mutableListOf()
             if (!isTeacher) {
@@ -71,8 +72,7 @@ class ChatRepositoryImpl @Inject constructor(
             }
             return ChatRoomListVO(
                 if (isTeacher) proposedNormal else groups,
-                proposedSelect,
-                reservedNormal, reservedSelect,
+                reservedNormal, proposedSelect, reservedSelect
             )
         } catch (e: Exception) {
             Log.d("ChatRepositoryImpl", e.toString())
