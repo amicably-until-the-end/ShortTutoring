@@ -258,13 +258,23 @@ abstract class ChatFragment : Fragment() {
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
+
         }
         chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
             if (!isTeacher()) {
                 // 학생일 경우에만 왼쪽 아이콘 뷰 갱신
                 setProposedIconItems(it._data ?: emptyList())
+                proposedIconAdapter.selectedQuestionId?.let {
+                    chatViewModel.proposedNormalChatRoomList.value?._data?.find { room ->
+                        room.questionId == it
+                    }?.let { room ->
+                        setOfferingTeacherListItems(room.teachers ?: emptyList())
+                        offeringTeacherAdapter.notifyDataSetChanged()
+                    }
+                }
             }
+
         }
         chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
@@ -319,7 +329,7 @@ abstract class ChatFragment : Fragment() {
                 }
 
                 is ChatRoomIconListAdapter -> {
-                    it.setSelectedQuestionId(null)
+                    it.changeSelectedQuestionId(null)
                 }
             }
         }
@@ -529,7 +539,7 @@ abstract class ChatFragment : Fragment() {
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             clearRecyclersSelectedView(null)
-            proposedIconAdapter.setSelectedQuestionId(questionId)
+            proposedIconAdapter.changeSelectedQuestionId(questionId)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
