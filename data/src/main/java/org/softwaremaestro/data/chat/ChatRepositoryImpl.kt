@@ -4,6 +4,8 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.chat.database.ChatDatabase
+import org.softwaremaestro.data.chat.entity.ChatRoomEntity
+import org.softwaremaestro.data.chat.entity.ChatRoomType
 import org.softwaremaestro.data.chat.entity.MessageEntity
 import org.softwaremaestro.data.chat.entity.asEntity
 import org.softwaremaestro.data.chat.model.ChatRoomListDto
@@ -15,6 +17,7 @@ import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
+import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
@@ -28,15 +31,19 @@ class ChatRepositoryImpl @Inject constructor(
     private fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO? {
         try {
             var proposedNormal =
-                chatDatabase.chatRoomDao().getProposedNormalChatRoom().map { it.EntityToVO() }
+                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.PROPOSED_NORMAL.type)
+                    .map { it.EntityToVO() }
             var proposedSelect =
-                chatDatabase.chatRoomDao().getProposedSelectChatRoom().map { it.EntityToVO() }
+                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.PROPOSED_SELECT.type)
+                    .map { it.EntityToVO() }
             var reservedNormal =
-                chatDatabase.chatRoomDao().getReservedNormalChatRoom().map { it.EntityToVO() }
+                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.RESERVED_NORMAL.type)
+                    .map { it.EntityToVO() }
             var reservedSelect =
-                chatDatabase.chatRoomDao().getReservedSelectChatRoom().map { it.EntityToVO() }
+                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.RESERVED_SELECT.type)
+                    .map { it.EntityToVO() }
 
-            Log.d("ChatRepositoryImpl chat", "일반 ${proposedNormal.toString()}")
+            Log.d("ChatRepositoryImpl chat", "일반 ${proposedNormal}")
 
             val groups: MutableList<ChatRoomVO> = mutableListOf()
             if (!isTeacher) {
@@ -44,13 +51,14 @@ class ChatRepositoryImpl @Inject constructor(
                 proposedNormal.groupBy { it.questionId }.forEach { group ->
                     val questionRoom = ChatRoomVO(
                         roomType = RoomType.QUESTION,
-                        roomImage = "questionImage",
-                        title = "questionTitle",
-                        schoolLevel = "schoolLevel",
-                        schoolSubject = "schoolSubject",
+                        roomImage = group.value[0].roomImage,
+                        title = group.value[0].description,
+                        schoolLevel = group.value[0].schoolLevel,
+                        schoolSubject = group.value[0].schoolSubject,
                         isSelect = false,
-                        questionId = "questionId",
+                        questionId = group.value[0].questionId,
                         questionState = QuestionState.PROPOSED,
+                        description = group.value[0].description,
                         teachers = group.value.mapNotNull { if (it.opponentId != null) it else null }
                     )
                     groups.add(questionRoom)
@@ -72,13 +80,22 @@ class ChatRepositoryImpl @Inject constructor(
     private suspend fun updateRoomStatus() {
         val result = chatApi.getRoomList()
 
-        Log.d("ChatRepositoryImpl  update", result.toString())
+        Log.d("ChatRepositoryImpl  update", result.body().toString())
         if (result.isSuccessful && result.body()?.success == true) {
             val data = result.body()?.data!!
             data.map {
-                chatDatabase.chatRoomDao().insert(it.asEntity())
+                insertOrUpdateRoom(it.asEntity())
             }
         }
+    }
+
+    private fun insertOrUpdateRoom(room: ChatRoomEntity) {
+        if (chatDatabase.chatRoomDao().isIdExist(room.id)) {
+            chatDatabase.chatRoomDao().update(room)
+        } else {
+            chatDatabase.chatRoomDao().insert(room)
+        }
+
     }
 
 
@@ -117,6 +134,10 @@ class ChatRepositoryImpl @Inject constructor(
     ) {
         try {
             Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
+            if (!chatDatabase.chatRoomDao().isIdExist(roomId)) {
+                var result = chatApi.getRoom(roomId).body()?.data?.asEntity()
+                result?.let { chatDatabase.chatRoomDao().insert(it) }
+            }
             chatDatabase.messageDao().insert(
                 MessageEntity(
                     id = roomId + sendAt,

@@ -39,6 +39,7 @@ class Mapper {
                 roomType = if (opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 isSelect = isSelect ?: false,
                 questionId = questionId,
+                description = questionInfo?.problem?.description ?: "",
             )
         }
     }
@@ -74,12 +75,14 @@ class Mapper {
             return ChatRoomVO(
                 id = id,
                 title = title,
-                schoolLevel = "fff",
-                schoolSubject = "fff",
+                schoolLevel = schoolLevel,
+                schoolSubject = schoolSubject,
                 roomType = RoomType.TEACHER,
                 roomImage = image,
-                questionId = "fff",
+                questionId = questionId,
                 isSelect = true,
+                description = description ?: "undefined",
+                startDateTime = startDateTime,
                 questionState =
                 if (status == 1 || status == 2)
                     QuestionState.PROPOSED else QuestionState.RESERVED,
