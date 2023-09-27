@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.login
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,12 +17,16 @@ import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
+import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+
 
 class CompleteTeacherProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteTeacherProfileBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
+    private lateinit var dialog: ProfileImageSelectBottomDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +40,7 @@ class CompleteTeacherProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setEtProfileTeacherName()
+        setBtnEditTeacherImage()
         setTvProfileTeacherUniv()
         setEtProfileTeacherBio()
         setEtTeacherName()
@@ -42,6 +48,23 @@ class CompleteTeacherProfileFragment : Fragment() {
         setBtnToolbarBack()
         setBtnComplete()
         observe()
+    }
+
+    private fun setBtnEditTeacherImage() {
+        binding.containerTeacherImg.setOnClickListener {
+            dialog = ProfileImageSelectBottomDialog(
+                onImageChanged = { image ->
+                    binding.ivTeacherImg.setBackgroundResource(image)
+                },
+                onSelect = { image ->
+                    viewModel._image.value = BitmapFactory.decodeResource(
+                        resources, image
+                    ).toBase64()
+                    dialog.dismiss()
+                },
+            )
+            dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
+        }
     }
 
     private fun setEtProfileTeacherName() {
@@ -99,7 +122,7 @@ class CompleteTeacherProfileFragment : Fragment() {
     private fun observe() {
         observeName()
         observeBio()
-        observeTeacherNameAndBioProper()
+        observeInputProper()
         observeSignupState()
     }
 
@@ -115,8 +138,8 @@ class CompleteTeacherProfileFragment : Fragment() {
         }
     }
 
-    private fun observeTeacherNameAndBioProper() {
-        viewModel.teacherNameAndBioProper.observe(viewLifecycleOwner) {
+    private fun observeInputProper() {
+        viewModel.teacherInputProper.observe(viewLifecycleOwner) {
             binding.btnComplete.setEnabledAndChangeColor(it)
         }
     }

@@ -7,6 +7,9 @@
 
     <application android:usesCleartextTraffic="true">
         <activity
+            android:name=".util.widget.ProfileImageSelectBottomDialog"
+            android:exported="false" />
+        <activity
             android:name=".chat_page.QuestionImageActivity"
             android:exported="false" />
         <activity
@@ -40,6 +43,7 @@
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
