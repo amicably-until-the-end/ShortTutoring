@@ -12,6 +12,7 @@ import org.softwaremaestro.data.classroom.remote.ClassRoomApi
 import org.softwaremaestro.data.common.module.NetworkModule
 import org.softwaremaestro.data.my_profile_get.MyProfileGetRepositoryImpl
 import org.softwaremaestro.data.my_profile_get.remote.MyProfileGetApi
+import org.softwaremaestro.data.question_get.remote.QuestionGetApi
 import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.classroom.ClassRoomRepository
 import org.softwaremaestro.domain.my_profile_get.MyProfileGetRepository
@@ -30,8 +31,12 @@ class ChatModule {
 
     @Singleton
     @Provides
-    fun provideChatRepository(chatApi: ChatApi, chatDatabase: ChatDatabase): ChatRepository {
-        return ChatRepositoryImpl(chatApi, chatDatabase)
+    fun provideChatRepository(
+        chatApi: ChatApi,
+        chatDatabase: ChatDatabase,
+        questionGetApi: QuestionGetApi
+    ): ChatRepository {
+        return ChatRepositoryImpl(chatApi, chatDatabase, questionGetApi)
     }
 
     @Singleton

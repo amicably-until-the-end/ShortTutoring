@@ -17,6 +17,11 @@ data class ChatRoomEntity(
     var status: Int,
     var image: String,
     var opponentId: String?,
+    var questionId: String?,
+    var schoolSubject: String?,
+    var schoolLevel: String?,
+    var isSelect: Boolean,
+    var description: String?,
 )
 
 @Entity

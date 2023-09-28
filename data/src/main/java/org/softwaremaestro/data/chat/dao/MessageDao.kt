@@ -14,4 +14,6 @@ interface MessageDao {
 
     @Query("SELECT * FROM MessageEntity")
     fun getMessages(): List<MessageEntity>
+
+
 }

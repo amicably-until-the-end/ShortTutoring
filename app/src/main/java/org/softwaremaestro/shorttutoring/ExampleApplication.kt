@@ -29,6 +29,7 @@ class ExampleApplication : Application() {
         KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
         initDataBase()
         initSocket()
+        clearDataBase()
     }
 
 

@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.chat_page.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomBinding
 import org.softwaremaestro.presenter.util.Util
 
 class ChatRoomListAdapter(
-    private val onQuestionClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit,
+    private val onQuestionClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit,
     private val onTeacherClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit
 ) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>() {
@@ -64,7 +65,7 @@ class ChatRoomListAdapter(
                     RoomType.QUESTION -> {
                         root.setOnClickListener {
                             onQuestionClick(
-                                item.teachers ?: emptyList(), position,
+                                item.teachers ?: emptyList(), item.questionId ?: "",
                                 this@ChatRoomListAdapter
                             )
                         }
@@ -78,6 +79,7 @@ class ChatRoomListAdapter(
                                 item,
                                 this@ChatRoomListAdapter
                             )
+                            Log.d("ChatRoomListAdapter", "teacher click ${item}")
                             clearSelectedItem(null)
                             cvContainer.strokeColor =
                                 binding.root.context.getColor(R.color.primary_blue)

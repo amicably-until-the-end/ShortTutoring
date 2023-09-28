@@ -121,11 +121,12 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun sendMessage() {
+        if (binding.etMessage.text.isNullOrEmpty()) return
         currentChatRoom?.let {
             chatViewModel.sendMessage(
                 binding.etMessage.text.toString(),
                 chattingId = it.id!!,
-                receiverId = it.opponentId!!
+                receiverId = it.opponentId!!,
             )
         }
     }
@@ -318,7 +319,7 @@ abstract class ChatFragment : Fragment() {
                 }
 
                 is ChatRoomIconListAdapter -> {
-                    it.clearSelectedView(caller)
+                    it.setSelectedQuestionId(null)
                 }
             }
         }
@@ -523,12 +524,12 @@ abstract class ChatFragment : Fragment() {
     }
 
 
-    private val onQuestionRoomClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit =
-        { teacherList, position, caller ->
+    private val onQuestionRoomClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit =
+        { teacherList, questionId, caller ->
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             clearRecyclersSelectedView(null)
-            proposedIconAdapter.setSelectedPosition(position)
+            proposedIconAdapter.setSelectedQuestionId(questionId)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
