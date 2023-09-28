@@ -34,13 +34,7 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     }
 
     private fun getJWT(role: String?): String? {
-        return if (true)
-            prefs.getJWT()
-        else if (true) {
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsImF1dGhJZCI6bnVsbCwidXNlcklkIjoic3ktc3R1ZGVudC1pZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNjk1NjM0ODcwLCJleHAiOjE2OTU3MjEyNzB9.Xpo-unj27SwTnfnCUJIPc_BTeK5SPlS8LlDihjv6v6c"
-        } else {
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsInVzZXJJZCI6InRlc3QtdGVhY2hlci1pZCIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNjkxMTMyOTg3LCJleHAiOjE3MjI2OTA1ODd9.G1eeoixa12BW62OxRVZlgpSrWLzYVNgHPayyzJLJnaY"
-        }
+        return prefs.getJWT()
     }
 }
 

@@ -166,8 +166,8 @@ class StudentHomeFragment : Fragment() {
                     "d",
                     "d",
                     1,
-                    "d",
-                    "f"
+                    -1,
+                    -1
                 )
             )
             add(
@@ -181,8 +181,8 @@ class StudentHomeFragment : Fragment() {
                     "d",
                     "d",
                     1,
-                    "d",
-                    "f"
+                    -1,
+                    -1
                 )
             )
         }

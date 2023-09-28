@@ -4,9 +4,9 @@ import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
 
 private const val EMPTY_STRING = "-"
 
-object FollowersGetResponseMapper {
-    fun asDomain(follwersGetResponseDto: FollowingGetResponseDto): FollowingGetResponseVO {
-        with(follwersGetResponseDto) {
+object FollowingGetResponseMapper {
+    fun asDomain(followingGetResponseDto: FollowingGetResponseDto): FollowingGetResponseVO {
+        with(followingGetResponseDto) {
             return FollowingGetResponseVO(
                 id,
                 name,
@@ -25,5 +25,5 @@ object FollowersGetResponseMapper {
 }
 
 fun FollowingGetResponseDto.asDomain(): FollowingGetResponseVO {
-    return FollowersGetResponseMapper.asDomain(this)
+    return FollowingGetResponseMapper.asDomain(this)
 }

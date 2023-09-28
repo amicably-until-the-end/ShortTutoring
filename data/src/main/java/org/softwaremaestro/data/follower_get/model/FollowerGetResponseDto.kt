@@ -1,8 +1,8 @@
-package org.softwaremaestro.data.following_get.model
+package org.softwaremaestro.data.follower_get.model
 
 import com.google.gson.annotations.SerializedName
 
-data class FollowingGetResponseDto(
+data class FollowerGetResponseDto(
     @SerializedName("id") val id: String?,
     @SerializedName("name") val name: String?,
     @SerializedName("bio") val bio: String?,

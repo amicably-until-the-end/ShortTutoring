@@ -158,17 +158,35 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tv_teacher_univ"
+                            <LinearLayout
+                                android:id="@+id/container_teacher_univ"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:fontFamily="@font/pretendard_medium"
-                                android:textColor="@color/primary_blue"
-                                android:textSize="13sp"
                                 app:layout_constraintLeft_toLeftOf="@id/tv_teacher_name"
-                                app:layout_constraintTop_toBottomOf="@id/tv_teacher_name"
-                                tools:text="서울대학교 수의예과" />
+                                app:layout_constraintTop_toBottomOf="@id/tv_teacher_name">
+
+                                <TextView
+                                    android:id="@+id/tv_teacher_univ"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:fontFamily="@font/pretendard_medium"
+                                    android:textColor="@color/primary_blue"
+                                    android:textSize="13sp"
+                                    tools:text="서울대학교" />
+
+                                <TextView
+                                    android:id="@+id/tv_teacher_major"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="4dp"
+                                    android:fontFamily="@font/pretendard_medium"
+                                    android:textColor="@color/primary_blue"
+                                    android:textSize="13sp"
+                                    tools:text="수의예과" />
+
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/tv_teacher_bio"
@@ -179,7 +197,7 @@
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 app:layout_constraintLeft_toLeftOf="@id/tv_teacher_name"
-                                app:layout_constraintTop_toBottomOf="@id/tv_teacher_univ"
+                                app:layout_constraintTop_toBottomOf="@id/container_teacher_univ"
                                 tools:text="모든 학생들이 깨달음을 얻을 수 있도록!" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -190,6 +208,7 @@
                             android:layout_height="40dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/bg_radius_5_grad_blue"
+                            android:enabled="false"
                             android:fontFamily="@font/pretendard_medium"
                             android:gravity="center"
                             android:text="찜한 학생 0명"

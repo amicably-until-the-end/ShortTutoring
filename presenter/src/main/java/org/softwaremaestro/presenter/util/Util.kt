@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.util.Base64
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -42,6 +43,10 @@ object Util {
         val displayMetrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
+    }
+
+    fun logError(clazz: Class<*>, message: String) {
+        Log.e(clazz.name, message)
     }
 }
 
