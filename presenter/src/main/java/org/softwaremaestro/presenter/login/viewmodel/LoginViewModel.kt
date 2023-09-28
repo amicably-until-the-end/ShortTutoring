@@ -11,12 +11,14 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.entity.UserVO
 import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
 import org.softwaremaestro.domain.login.usecase.LoginUseCase
 import org.softwaremaestro.domain.login.usecase.SaveKakaoJWTUseCase
+import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,8 +29,8 @@ class LoginViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _savedToken: MutableLiveData<String> = MutableLiveData()
-    val savedToken: LiveData<String> get() = _savedToken
+    private val _saveRole: MutableLiveData<UIState<String>> = MutableLiveData()
+    val saveRole: LiveData<UIState<String>> get() = _saveRole
 
     private val _userRole: MutableLiveData<String> = MutableLiveData()
     val userRole: LiveData<String> get() = _userRole
@@ -90,18 +92,17 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun getSaveToken() {
+    fun getSavedToken() {
         viewModelScope.launch {
             autoLoginUseCase.execute()
                 .catch {
-                    //Auto Login Fail
+                    _saveRole.postValue(UIState.Failure)
                 }
+                .onStart { _saveRole.postValue(UIState.Loading) }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _savedToken.postValue(result.data)
-                        else -> {
-
-                        }
+                        is BaseResult.Success -> _saveRole.postValue(UIState.Success(result.data))
+                        else -> _saveRole.postValue(UIState.Failure)
                     }
                 }
         }
