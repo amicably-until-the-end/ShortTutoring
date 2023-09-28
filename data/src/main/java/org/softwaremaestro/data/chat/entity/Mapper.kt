@@ -23,7 +23,7 @@ class Mapper {
                 roomType = RoomType.TEACHER,
                 roomImage = image,
                 questionId = questionId,
-                isSelect = true,
+                isSelect = isSelect,
                 startDateTime = startDateTime,
                 description = description ?: "undefined",
                 questionState =
@@ -72,7 +72,7 @@ class Mapper {
                 roomType = if (chatRoomEntity.opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 roomImage = chatRoomEntity.image,
                 questionId = chatRoomEntity.questionId,
-                isSelect = true,
+                isSelect = chatRoomEntity.isSelect,
                 questionState =
                 if (chatRoomEntity.status == ChatRoomType.PROPOSED_NORMAL.type ||
                     chatRoomEntity.status == ChatRoomType.PROPOSED_SELECT.type
@@ -102,6 +102,8 @@ class Mapper {
                     }
                 }
             }
+        Log.d("ChatRoomDto", "to entity Mapper${dto} ${status}")
+
         return ChatRoomEntity(
             id = dto.id ?: dto.questionId ?: "undefined",
             title = dto.title!!,

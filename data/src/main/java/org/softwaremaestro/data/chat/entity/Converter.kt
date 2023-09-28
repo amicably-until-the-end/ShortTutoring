@@ -11,6 +11,6 @@ class Converter {
 
     @TypeConverter
     fun fromLocalDateTime(date: LocalDateTime?): String? {
-        return date?.toString()
+        return date?.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME)
     }
 }

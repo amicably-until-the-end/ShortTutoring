@@ -20,7 +20,7 @@ class ChatRoomIconListAdapter(
 
     private var selectedView: MaterialCardView? = null
 
-    private var selectedQuestionId: String? = null
+    var selectedQuestionId: String? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -46,7 +46,7 @@ class ChatRoomIconListAdapter(
         this.items = items
     }
 
-    fun setSelectedQuestionId(questionId: String?) {
+    fun changeSelectedQuestionId(questionId: String?) {
         selectedQuestionId = questionId
         notifyDataSetChanged()
     }

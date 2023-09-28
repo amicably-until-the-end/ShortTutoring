@@ -178,45 +178,7 @@ abstract class ChatFragment : Fragment() {
         setChatRoomBtnsVisible(false)
     }
 
-    private fun observeTutoringInfo() {
-        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
-
-            when (it) {
-                is UIState.Loading -> {
-                    loadingDialog.show()
-                }
-
-                is UIState.Success -> {
-                    Log.d("tutoring", it._data.toString())
-                    loadingDialog.dismiss()
-                    if (!it._data?.whiteBoardAppId.isNullOrEmpty()) {
-                        Toast.makeText(
-                            requireContext(),
-                            "강의실에 입장합니다. ${it._data?.whiteBoardAppId}",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        moveToClassRoom(it._data!!)
-                        chatViewModel._tutoringInfo.value = UIState.Empty
-                    } else {
-                        Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-                is UIState.Failure -> {
-                    loadingDialog.dismiss()
-                    Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                else -> {
-
-                }
-
-            }
-        }
-    }
+    abstract fun observeTutoringInfo()
 
     fun enterRoom() {
         if (currentChatRoom?.questionId == null) {
@@ -258,12 +220,21 @@ abstract class ChatFragment : Fragment() {
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
+
         }
         chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
             if (!isTeacher()) {
                 // 학생일 경우에만 왼쪽 아이콘 뷰 갱신
                 setProposedIconItems(it._data ?: emptyList())
+                proposedIconAdapter.selectedQuestionId?.let {
+                    chatViewModel.proposedNormalChatRoomList.value?._data?.find { room ->
+                        room.questionId == it
+                    }?.let { room ->
+                        setOfferingTeacherListItems(room.teachers ?: emptyList())
+                        offeringTeacherAdapter.notifyDataSetChanged()
+                    }
+                }
             }
         }
         chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
@@ -319,7 +290,7 @@ abstract class ChatFragment : Fragment() {
                 }
 
                 is ChatRoomIconListAdapter -> {
-                    it.setSelectedQuestionId(null)
+                    it.changeSelectedQuestionId(null)
                 }
             }
         }
@@ -485,7 +456,7 @@ abstract class ChatFragment : Fragment() {
         resetMsgTab()
     }
 
-    private fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
+    protected fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
         val intent = Intent(requireContext(), ClassroomActivity::class.java)
         tutoringInfoVO.let {
             val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
@@ -529,16 +500,16 @@ abstract class ChatFragment : Fragment() {
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             clearRecyclersSelectedView(null)
-            proposedIconAdapter.setSelectedQuestionId(questionId)
+            proposedIconAdapter.changeSelectedQuestionId(questionId)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             currentChatRoom = chatRoom
             onChatRoomStateChange(chatRoom)
-            Log.d("mymymy", chatRoom.toString())
             chatViewModel.getMessages(chatRoom.id!!)
             binding.tvChatRoomTitle.text = chatRoom.title
             clearRecyclersSelectedView(caller)
+            Log.d("chat", "currentChatRoom: $currentChatRoom")
         }
 
     protected fun setChatRoomRightBtnVisible(b: Boolean) {

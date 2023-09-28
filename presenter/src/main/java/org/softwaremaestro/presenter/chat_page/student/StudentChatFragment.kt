@@ -1,9 +1,11 @@
 package org.softwaremaestro.presenter.chat_page.student
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
@@ -12,6 +14,8 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.StudentChatViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.widget.DatePickerBottomDialog
+import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.time.LocalDateTime
 
@@ -20,6 +24,10 @@ import java.time.LocalDateTime
 class StudentChatFragment : ChatFragment() {
 
     private val studentViewModel: StudentChatViewModel by viewModels()
+    private lateinit var datePickerDialog: DatePickerBottomDialog
+    private lateinit var timePickerDialog: TimePickerBottomDialog
+    private lateinit var numberPickerDialog: NumberPickerBottomDialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +36,8 @@ class StudentChatFragment : ChatFragment() {
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         observePickTeacherResultState()
+        observeTutoringTimeAndDurationProper()
+        initDialog()
         return view
     }
 
@@ -39,24 +49,78 @@ class StudentChatFragment : ChatFragment() {
         if (chatRoomVO.isSelect) {
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    setNotiVisible(false)
-                    setChatRoomBtnsVisible(false)
+                    onProposedSelectQuestionSelect()
                 }
 
                 else -> {
-                    disableChatRoomBtn()
+                    onReservedRoomSelect()
                 }
             }
         } else {
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    enableChatRoomBtn()
+                    onProposedNormalQuestionSelect()
                 }
 
                 else -> {
-                    disableChatRoomBtn()
+                    onReservedRoomSelect()
                 }
             }
+        }
+    }
+
+    private fun onProposedSelectQuestionSelect() {
+        hideLeftButton()
+        hideRightButton()
+    }
+
+    private fun hideLeftButton() {
+        binding.btnChatRoomLeft.visibility = View.GONE
+    }
+
+    private fun hideRightButton() {
+        binding.btnChatRoomRight.visibility = View.GONE
+    }
+
+    override fun observeTutoringInfo() {
+        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
+
+            when (it) {
+                is UIState.Loading -> {
+                    loadingDialog.show()
+                }
+
+                is UIState.Success -> {
+                    Log.d("tutoring", it._data.toString())
+                    loadingDialog.dismiss()
+                    if (!it._data?.whiteBoardAppId.isNullOrEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "강의실에 입장합니다. ${it._data?.whiteBoardAppId}",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        moveToClassRoom(it._data!!)
+                        chatViewModel._tutoringInfo.value = UIState.Empty
+                    } else {
+                        Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                is UIState.Failure -> {
+                    loadingDialog.dismiss()
+                    Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {
+
+                }
+
+            }
+            chatViewModel._tutoringInfo.value = UIState.Empty
+            //액티비티 종료되어 돌아오는 경우에 대비해서 초기화
         }
     }
 
@@ -90,31 +154,111 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-
-    override fun enableChatRoomBtn() {
+    private fun onProposedNormalQuestionSelect() {
         setNotiVisible(false)
+        enablePickTeacherButton()
+    }
+
+    private fun onReservedRoomSelect() {
+        setNotiVisible(false)
+        enableEnterClassroomBtn()
+        observeTutoringInfo()
+    }
+
+    private fun enableEnterClassroomBtn() {
+        binding.btnChatRoomRight.apply {
+            visibility = View.VISIBLE
+            text = "강의실 입장하기"
+            setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
+            isEnabled = true
+            setTextColor(resources.getColor(R.color.white, null))
+            setOnClickListener {
+                currentChatRoom?.let {
+                    chatViewModel.getClassRoomInfo(it.id!!)
+                }
+            }
+        }
+    }
+
+    private fun initDatePickerDialog() {
+        datePickerDialog = DatePickerBottomDialog { date ->
+            with(date) {
+                studentViewModel.setTutoringTime(
+                    LocalDateTime.now()
+                        .withYear(year)
+                        .withMonth(monthValue)
+                        .withDayOfMonth(dayOfMonth)
+                )
+            }
+            timePickerDialog.show(parentFragmentManager, "datePicker")
+        }.apply {
+            setTitle("수업 날짜를 선택해주세요")
+            setBtnText("선택하기")
+        }
+    }
+
+    private fun enablePickTeacherButton() {
+
         binding.btnChatRoomRight.apply {
             visibility = View.VISIBLE
             setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
             isEnabled = true
             setTextColor(resources.getColor(R.color.white, null))
             setOnClickListener {
-                val dialog = TimePickerBottomDialog { time ->
-                    studentViewModel.pickTeacher(
-                        LocalDateTime.now().withHour(time.hour).withMinute(time.minute),
-                        currentChatRoom?.id ?: "",
-                        currentChatRoom?.questionId ?: "",
-                    )
-                }
-                    .apply {
-                        setTitle("선생님과 수업을 진행할 시간을 입력해주세요")
-                        setBtnText("입력하기")
-                    }
-                dialog.show(parentFragmentManager, "timePicker")
-
-                // Todo: 추후에 한번 더 확인 받는 방식으로 변경할 수 있음
+                datePickerDialog.show(parentFragmentManager, "datePicker")
             }
         }
+    }
+
+    private fun initDialog() {
+        initDatePickerDialog()
+        initTimePickerDialog()
+        initNumberPickerDialog()
+    }
+
+    private fun initTimePickerDialog() {
+        timePickerDialog = TimePickerBottomDialog { time ->
+            studentViewModel.setTutoringTime(
+                with(studentViewModel.tutoringTime.value!!) {
+                    java.time.LocalDateTime.of(
+                        year,
+                        monthValue,
+                        dayOfMonth,
+                        time.hour,
+                        time.minute
+                    )
+                }
+            )
+            numberPickerDialog.show(parentFragmentManager, "numberPicker")
+        }.apply {
+            setTitle("수업 시작 시간을 선택해주세요")
+            setBtnText("선택하기")
+        }
+    }
+
+    private fun initNumberPickerDialog() {
+        numberPickerDialog = NumberPickerBottomDialog { number ->
+            studentViewModel.setTutoringDuration(number)
+        }.apply {
+            setTitle("수업을 몇 분간 진행할까요?")
+            setBtnText("입력하기")
+        }
+    }
+
+    private fun observeTutoringTimeAndDurationProper() {
+        studentViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
+            if (proper) {
+                currentChatRoom?.let {
+                    studentViewModel.pickTeacher(it.id!!, it.questionId!!)
+                }
+                studentViewModel.setTutoringTime(null)
+                studentViewModel.setTutoringDuration(null)
+            }
+        }
+    }
+
+    override fun enableChatRoomBtn() {
+        return
     }
 
     override fun setChatNoti() {
