@@ -27,26 +27,4 @@
         <item name="editTextStyle">@style/PretendardEditText</item>
         <item name="radioButtonStyle">@style/PretendardRadioButton</item>
     </style>
-
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
-        <item name="postSplashScreenTheme">@style/Theme.ShortTutoring</item>
-    </style>
-
-    <style name="Theme.Splash" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="android:windowSplashScreenBackground" tools:targetApi="S">@color/white
-        </item>
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@drawable/logo
-        </item>
-        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="S">
-            @color/transparent
-        </item>
-        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="S">
-            3
-        </item>
-        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="S">
-            @drawable/logo
-        </item>
-    </style>
 </resources>

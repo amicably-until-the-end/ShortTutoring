@@ -92,7 +92,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun getSavedToken() {
+    fun autoLogin() {
         viewModelScope.launch {
             autoLoginUseCase.execute()
                 .catch {
