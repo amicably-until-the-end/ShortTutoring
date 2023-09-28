@@ -8,9 +8,11 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StudentHomeActivity : AppCompatActivity() {
@@ -18,11 +20,19 @@ class StudentHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStudentHomeBinding
     private lateinit var navController: NavController
 
+    @Inject
+    lateinit var socketManager: SocketManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStudentHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpBottomNavigationBar()
+        initSocket()
+    }
+
+    private fun initSocket() {
+        socketManager.init()
     }
 
     /**
