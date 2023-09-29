@@ -4,17 +4,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.common.utils.toStringWithTimeZone
 import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
-import org.softwaremaestro.data.question_upload.model.asDomain
 import org.softwaremaestro.data.question_upload.model.asDto
-import org.softwaremaestro.data.user_follow.remote.QuestionUploadApi
+import org.softwaremaestro.data.question_upload.remote.QuestionUploadApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
-import org.softwaremaestro.domain.question_upload.entity.TeacherPickResVO
 import org.softwaremaestro.domain.question_upload.entity.TeacherVO
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 private const val EMPTY_STRING = "undefined"
@@ -42,13 +39,13 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
             val response = questionUploadApi.getTeacherList(questionId)
             val body = response.body()
             if (response.isSuccessful && body?.success == true) {
-                val data = body?.data
+                val data = body.data
                 val teacherDtoList = data?.teacherList!!
                 val teacherList = teacherDtoList.map { teacher ->
                     TeacherVO(
-                        name = teacher.name ?: EMPTY_STRING,
-                        school = "서울대학교" ?: EMPTY_STRING, // Todo
-                        likes = 23 ?: 0, // Todo
+                        name = teacher.name,
+                        school = "서울대학교", // Todo
+                        likes = 23, // Todo
                         imageUrl = EMPTY_STRING,
                         teacherId = teacher.id
                     )

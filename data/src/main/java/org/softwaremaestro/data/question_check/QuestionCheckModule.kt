@@ -6,10 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.softwaremaestro.data.common.module.NetworkModule
 import org.softwaremaestro.data.question_check.remote.QuestionCheckApi
-import org.softwaremaestro.data.question_upload.QuestionUploadRepositoryImpl
-import org.softwaremaestro.data.user_follow.remote.QuestionUploadApi
 import org.softwaremaestro.domain.question_check.QuestionCheckRepository
-import org.softwaremaestro.domain.question_upload.QuestionUploadRepository
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

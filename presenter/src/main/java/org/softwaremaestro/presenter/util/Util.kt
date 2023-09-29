@@ -23,13 +23,13 @@ import java.time.ZoneId
 
 object Util {
     fun toPx(dp: Int, context: Context): Int {
-        val metrics = context.resources.displayMetrics;
+        val metrics = context.resources.displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), metrics).toInt()
     }
 
     fun toDp(px: Int, context: Context): Int {
         val metrics = context.resources.displayMetrics
-        return px / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
     fun getBottomSheetDialogDefaultHeight(activity: Activity): Int {
@@ -138,7 +138,7 @@ fun Button.setEnabledAndChangeColor(enabled: Boolean) {
 }
 
 fun String.toBitmap(): Bitmap {
-    val encodeByteArr = java.util.Base64.getDecoder().decode(this);
+    val encodeByteArr = java.util.Base64.getDecoder().decode(this)
     return BitmapFactory.decodeByteArray(encodeByteArr, 0, encodeByteArr.size)
 }
 
@@ -147,6 +147,22 @@ fun Bitmap.toBase64(): String {
     this.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
     val data = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
     return "data:image/png;base64,$data"
+}
+
+/**
+ * LocalDateTime을 한국어로 변환 ex: 1월 1일 1시 1분
+ */
+fun LocalDateTime.toKoreanString(): String {
+    return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시 ${
+        if (this.minute != 0) this.minute else ""
+    }"
+}
+
+/**
+ * LocalDateTime을 시간만 한국어로 변환 ex: 12:05
+ */
+fun LocalDateTime.toClockString(): String {
+    return "${this.hour}:${String.format("%02d", this.minute)}분"
 }
 
 fun showKeyboardAndRequestFocus(view: View) {

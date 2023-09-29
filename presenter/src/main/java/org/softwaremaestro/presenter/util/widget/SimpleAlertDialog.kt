@@ -11,22 +11,22 @@ class SimpleAlertDialog : DialogFragment() {
 
     private lateinit var binding: DialogSimpleAlertBinding
 
+    var title: String? = null
+    var description: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DialogSimpleAlertBinding.inflate(layoutInflater)
+        binding.tvTitle.text = title
+        binding.tvDesciption.text = description
+        binding.btnConfirm.setOnClickListener {
+            dismiss()
+        }
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return binding.root
-    }
-
-    fun setTitle(title: String) {
-        binding.tvTitle.text = title
-    }
-
-    fun setDescription(description: String) {
-        binding.tvDesciption.text = description
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

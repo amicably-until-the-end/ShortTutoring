@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.chat_page.teacher
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import org.softwaremaestro.presenter.chat_page.viewmodel.TeacherChatViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.widget.DatePickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.time.LocalDateTime
 
@@ -106,28 +106,23 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
-    override fun observeTutoringInfo() {
-        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
+    override fun observeClassroomInfo() {
+        chatViewModel.classroomInfo.observe(viewLifecycleOwner) {
 
             when (it) {
+                is UIState.Empty -> return@observe
                 is UIState.Loading -> {
                     loadingDialog.show()
                 }
 
                 is UIState.Success -> {
-                    Log.d("tutoring", it._data.toString())
                     loadingDialog.dismiss()
-                    if (!it._data?.whiteBoardAppId.isNullOrEmpty()) {
-                        Toast.makeText(
-                            requireContext(),
-                            "강의실에 입장합니다. ${it._data?.whiteBoardAppId}",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        moveToClassRoom(it._data!!)
-                        chatViewModel._tutoringInfo.value = UIState.Empty
+                    if (!it._data?.boardAppId.isNullOrEmpty()) {
+                        SimpleConfirmDialog {
+                            moveToClassRoom(it._data!!)
+                        }.show(parentFragmentManager, "enterClassroomDialog")
                     } else {
-                        Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                             .show()
                     }
                 }

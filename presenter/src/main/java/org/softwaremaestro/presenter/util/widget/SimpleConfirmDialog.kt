@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import org.softwaremaestro.presenter.databinding.DialogDetailAlertBinding
 
-class SimpleYesOrNoDialog(
-    private val title: String? = "알림",
-    private val description: String? = "정말로 진행할까요?",
+class SimpleConfirmDialog(
     private val onConfirmClick: () -> Unit
 ) : DialogFragment() {
 
     private lateinit var binding: DialogDetailAlertBinding
+
+    var title: String? = null
+    var description: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,15 +24,16 @@ class SimpleYesOrNoDialog(
     ): View {
         binding = DialogDetailAlertBinding.inflate(layoutInflater)
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        title?.let { binding.tvTitle.text = it }
+        description?.let { binding.tvDesciption.text = description }
+        binding.btnConfirm.setOnClickListener {
+            onConfirmClick()
+            dismiss()
+        }
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
         return binding.root
-    }
-
-    fun setTitle(title: String) {
-        binding.tvTitle.text = title
-    }
-
-    fun setDescription(description: String) {
-        binding.tvDesciption.text = description
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

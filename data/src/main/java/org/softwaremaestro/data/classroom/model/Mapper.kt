@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.classroom.model
 
+import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 
 class Mapper {
@@ -10,20 +11,31 @@ class Mapper {
                 teacherId = teacherId,
                 studentId = studentId,
                 status = status,
-                matchedAt = matchedAt,
-                endedAt = endedAt,
-                whiteBoardAppId = whiteBoardAppId,
-                whiteBoardToken = whiteBoardToken,
-                whiteBoardUUID = whiteBoardUUID,
-                RTCAppId = RTCAppId,
-                studentRTCToken = studentRTCToken,
-                teacherRTCToken = teacherRTCToken,
+                reservedEnd = reservedEnd,
+                reservedStart = reservedStart,
             )
 
+        }
+    }
+
+    fun asDomain(classroomInfoDto: ClassroomInfoDto, questionId: String): ClassroomInfoVO {
+        classroomInfoDto.apply {
+            return ClassroomInfoVO(
+                boardAppId = id,
+                boardUUID = studentId,
+                boardToken = status,
+                rtcToken = teacherId,
+                rtcChannel = questionId,
+                rtcAppId = rtcAppId,
+            )
         }
     }
 }
 
 fun TutoringInfoDto.asDomain(): TutoringInfoVO {
     return Mapper().asDomain(this)
+}
+
+fun ClassroomInfoDto.asDomain(questionId: String): ClassroomInfoVO {
+    return Mapper().asDomain(this, questionId)
 }

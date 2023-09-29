@@ -6,11 +6,6 @@ data class TutoringInfoVO(
     val studentId: String,
     val status: String? = null,
     val matchedAt: String? = null,
-    val endedAt: String? = null,
-    val whiteBoardAppId: String,
-    val whiteBoardToken: String,
-    val whiteBoardUUID: String,
-    val RTCAppId: String,
-    val studentRTCToken: String,
-    val teacherRTCToken: String,
+    val reservedStart: String? = null,
+    val reservedEnd: String? = null,
 )

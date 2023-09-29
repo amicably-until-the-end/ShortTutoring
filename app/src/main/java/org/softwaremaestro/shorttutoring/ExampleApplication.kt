@@ -17,7 +17,7 @@ class ExampleApplication : Application() {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
         initDataBase()
-        clearDataBase()
+        //clearDataBase()
     }
 
 

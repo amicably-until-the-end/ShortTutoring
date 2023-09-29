@@ -4,7 +4,6 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.engineio.client.transports.WebSocket
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO as DispatchersIO
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -12,6 +11,7 @@ import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.login.LoginRepository
 import org.softwaremaestro.domain.socket.vo.MessageFormat
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers.IO as DispatchersIO
 
 
 class SocketManager @Inject constructor(
@@ -19,9 +19,9 @@ class SocketManager @Inject constructor(
     private val userRepository: LoginRepository,
 ) {
 
-
     fun init() {
-        println("socket init")
+        if (mSocket != null) return // 이미 초기화 되어있으면 return
+        println("socket  init")
 
         CoroutineScope(DispatchersIO).launch {
             try {
@@ -34,7 +34,7 @@ class SocketManager @Inject constructor(
                 }
                 mSocket = IO.socket(uri, options)
                 onMessageReceive()
-                mSocket.connect()
+                mSocket?.connect() ?: println("socket connect fail")
             } catch (e: Exception) {
                 println("socket ${e.message}")
             }
@@ -43,19 +43,22 @@ class SocketManager @Inject constructor(
     }
 
     fun close() {
-        mSocket.disconnect()
-        mSocket.close()
+        mSocket?.disconnect()
+        mSocket?.close()
     }
 
     fun getSocket(): Socket {
-        return mSocket
+        return mSocket!!
+    }
+
+    fun addOnMessageReceiveListener(listener: (String) -> Unit) {
+        messageAppendListener.add(listener)
     }
 
 
     private fun onMessageReceive() {
-        mSocket.on("message") { args ->
+        mSocket?.on("message") { args ->
             CoroutineScope(DispatchersIO).launch {
-                println("socket message: ${args[0]}")
                 try {
                     val message = Json.decodeFromString<MessageFormat>(args[0].toString())
 
@@ -66,15 +69,19 @@ class SocketManager @Inject constructor(
                         message.message.createdAt,
                         false,
                     )
+                    messageAppendListener.forEach {
+                        println("socket message append listener $messageAppendListener")
+                        it(message.chattingId)
+                    }
                 } catch (e: Exception) {
                     println("socket message error: ${e.message}")
                 }
             }
         }
-        mSocket.on("connect") {
+        mSocket?.on("connect") {
             println("socket connect")
         }
-        mSocket.on("disconnect") {
+        mSocket?.on("disconnect") {
             println("socket disconnect ${it}")
         }
     }
@@ -83,6 +90,8 @@ class SocketManager @Inject constructor(
         private const val uri = "http://shorttutoring-493721324.ap-northeast-2.elb.amazonaws.com/"
 
         //private const val uri = "http://10.0.2.2:3000/"
-        lateinit var mSocket: Socket
+
+        var mSocket: Socket? = null
+        private val messageAppendListener: MutableList<(String) -> Unit> = mutableListOf()
     }
 }

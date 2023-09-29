@@ -39,7 +39,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
-import org.softwaremaestro.presenter.util.widget.SimpleYesOrNoDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 
 
 @AndroidEntryPoint
@@ -349,9 +349,12 @@ class ClassroomFragment : Fragment() {
 
     private fun setUpFinishButton() {
         binding.btnToolbarBack.setOnClickListener {
-            val dialogLectureEnd = SimpleYesOrNoDialog("수업을 종료할까요?", "과외 영상이 자동으로 저장됩니다") {
+            val dialogLectureEnd = SimpleConfirmDialog {
                 viewModel.finishClass(voiceInfo.channelId)
                 activity?.finish()
+            }.apply {
+                title = "수업을 종료할까요?"
+                description = "과외 영상이 자동으로 저장됩니다"
             }
             dialogLectureEnd.show(requireActivity().supportFragmentManager, "lectureEnd")
         }

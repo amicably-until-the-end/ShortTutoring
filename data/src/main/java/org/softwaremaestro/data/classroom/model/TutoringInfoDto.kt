@@ -12,14 +12,6 @@ data class TutoringInfoDto(
     @SerializedName("studentId") val studentId: String,
     @SerializedName("status") val status: String,
     @SerializedName("teacherId") val teacherId: String,
-    @SerializedName("endedAt") val endedAt: String,
-    @SerializedName("RTCAppId") val RTCAppId: String,
-    @SerializedName("startedAt") val startedAt: String,
-    @SerializedName("whiteBoardUUID") val whiteBoardUUID: String,
-    @SerializedName("whiteBoardToken") val whiteBoardToken: String,
-    @SerializedName("whiteBoardAppId") val whiteBoardAppId: String,
-    @SerializedName("matchedAt") val matchedAt: String,
-    @SerializedName("teacherRTCToken") val teacherRTCToken: String,
-    @SerializedName("studentRTCToken") val studentRTCToken: String,
-
-    )
+    @SerializedName("reservedStart") val reservedStart: String,
+    @SerializedName("reservedEnd") val reservedEnd: String,
+)
