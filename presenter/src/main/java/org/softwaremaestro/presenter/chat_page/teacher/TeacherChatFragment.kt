@@ -106,7 +106,7 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
-    override fun observeClassroomInfo() {
+    fun observeClassroomInfo() {
         chatViewModel.classroomInfo.observe(viewLifecycleOwner) {
 
             when (it) {
@@ -143,7 +143,7 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
-    override fun setChatNoti() {
+    fun setChatNoti() {
         binding.cnNoti.apply {
             // Todo: 추후에 시간 변경하기
             setTvNotiMain("학생과의 수업이 7월 77일 7시에 진행됩니다")

@@ -154,7 +154,7 @@ fun Bitmap.toBase64(): String {
  */
 fun LocalDateTime.toKoreanString(): String {
     return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시 ${
-        if (this.minute != 0) this.minute else ""
+        if (this.minute != 0) "${minute}분" else ""
     }"
 }
 

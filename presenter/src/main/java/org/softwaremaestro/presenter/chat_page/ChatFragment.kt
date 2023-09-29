@@ -91,8 +91,6 @@ abstract class ChatFragment : Fragment() {
 
     }
 
-    abstract fun setChatNoti()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = LoadingDialog(requireContext())
@@ -178,28 +176,12 @@ abstract class ChatFragment : Fragment() {
         setChatRoomBtnsVisible(false)
     }
 
-    abstract fun observeClassroomInfo()
-
     fun getClassRoomInfo() {
         if (currentChatRoom?.questionId == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
             return
         }
         chatViewModel.getClassroomInfo(currentChatRoom?.questionId!!)
-    }
-
-    fun observeTutoringInfo() {
-        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
-            when (it) {
-                is UIState.Success -> {
-                    //TODO : set noti contents
-                }
-
-                else -> {
-
-                }
-            }
-        }
     }
 
 
@@ -545,7 +527,6 @@ abstract class ChatFragment : Fragment() {
     }
 
     protected fun setNotiVisible(b: Boolean) {
-        if (b) setChatNoti()
         binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
     }
 }

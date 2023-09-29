@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.classroom.model
 
+import org.softwaremaestro.data.common.utils.parseToLocalDateTime
 import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 
@@ -11,8 +12,8 @@ class Mapper {
                 teacherId = teacherId,
                 studentId = studentId,
                 status = status,
-                reservedEnd = reservedEnd,
-                reservedStart = reservedStart,
+                reservedEnd = reservedEnd.parseToLocalDateTime(),
+                reservedStart = reservedStart.parseToLocalDateTime(),
             )
 
         }
