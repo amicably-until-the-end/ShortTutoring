@@ -1,4 +1,4 @@
-package org.softwaremaestro.domain.following_get.entity
+package org.softwaremaestro.domain.follow.entity
 
 data class FollowingGetResponseVO(
     val id: String?,

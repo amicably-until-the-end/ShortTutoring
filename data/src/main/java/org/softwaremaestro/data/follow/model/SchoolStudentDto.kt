@@ -1,8 +1,8 @@
-package org.softwaremaestro.data.follower_get.model
+package org.softwaremaestro.data.follow.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SchoolDto(
+data class SchoolStudentDto(
     @SerializedName("level") val level: String?,
     @SerializedName("grade") val grade: Int?
 )

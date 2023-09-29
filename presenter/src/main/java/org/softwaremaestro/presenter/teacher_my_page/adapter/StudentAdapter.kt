@@ -4,7 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.domain.follower_get.entity.FollowerGetResponseVO
+import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemStudentBinding
 
 class StudentAdapter() : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follower_get.entity.FollowerGetResponseVO
+import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
 import org.softwaremaestro.presenter.databinding.ActivityFollowerBinding
 import org.softwaremaestro.presenter.teacher_my_page.adapter.StudentAdapter
 

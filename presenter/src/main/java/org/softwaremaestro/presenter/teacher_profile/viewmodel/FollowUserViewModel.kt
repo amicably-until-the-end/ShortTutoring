@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.user_follow.usecase.UserFollowUseCase
-import org.softwaremaestro.domain.user_follow.usecase.UserUnfollowUseCase
+import org.softwaremaestro.domain.follow.usecase.UserFollowUseCase
+import org.softwaremaestro.domain.follow.usecase.UserUnfollowUseCase
 import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
