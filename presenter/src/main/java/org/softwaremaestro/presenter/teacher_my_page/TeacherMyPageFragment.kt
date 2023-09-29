@@ -22,9 +22,6 @@ import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
-private const val RATING = 4.8334f
-private const val NUM_OF_CLIP = 15
-
 @AndroidEntryPoint
 class TeacherMyPageFragment : Fragment() {
 
@@ -68,15 +65,6 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun observe() {
         observeProfile()
-        observeImage()
-    }
-
-    private fun observeImage() {
-        profileViewModel.image.observe(viewLifecycleOwner) {
-            Glide.with(requireContext()).load(it)
-                .centerCrop()
-                .into(binding.ivTeacherImg)
-        }
     }
 
     private fun setBtnEditTeacherImg() {
@@ -88,8 +76,7 @@ class TeacherMyPageFragment : Fragment() {
                 onSelect = { res ->
                     val image = BitmapFactory.decodeResource(resources, res).toBase64()
                     profileViewModel.setImage(image)
-                    // Todo: 추후에 수정하기
-                    profileViewModel.updateProfile()
+//                    profileViewModel.updateProfile()
 
                     dialog.dismiss()
                 },
