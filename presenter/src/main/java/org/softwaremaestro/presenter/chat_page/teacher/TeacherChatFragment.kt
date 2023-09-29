@@ -163,7 +163,7 @@ class TeacherChatFragment : ChatFragment() {
         teacherViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
                 currentChatRoom?.let {
-                    teacherViewModel.pickStudent(it.questionId!!)
+                    teacherViewModel.pickStudent(it.questionId!!, it.id!!)
                 }
             }
         }
