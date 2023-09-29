@@ -31,10 +31,10 @@ class SplashActivity : AppCompatActivity() {
         loginViewModel.saveRole.observe(this) {
             when (it) {
                 is UIState.Success -> {
-                    if (it._data == "student") {
-                        goToStudentHomeActivity()
-                    } else if (it._data == "teacher") {
+                    if (it._data == "teacher") {
                         goToTeacherHomeActivity()
+                    } else if (it._data == "student") {
+                        goToStudentHomeActivity()
                     } else {
                         // TODO : 선생님 , 학생 말고 다른 사용자 있을 경우. EX 관리자.
                         goToLoginActivity()
