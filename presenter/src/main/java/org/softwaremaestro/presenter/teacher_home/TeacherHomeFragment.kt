@@ -30,7 +30,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
-import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
+import org.softwaremaestro.presenter.util.widget.SimpleYesOrNoDialog
 import java.text.DecimalFormat
 
 // TODO: 추후 수정
@@ -65,7 +65,7 @@ class TeacherHomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
         return binding.root
@@ -77,7 +77,7 @@ class TeacherHomeFragment : Fragment() {
         // 평가 뷰 보려고 만든 코드
         // 언제든지 지워도 됨
         binding.btnQuestion.setOnClickListener {
-            val dialogLectureEnd = DetailAlertDialog("수업을 종료할까요?", "과외 영상이 자동으로 저장됩니다") {
+            val dialogLectureEnd = SimpleYesOrNoDialog("수업을 종료할까요?", "과외 영상이 자동으로 저장됩니다") {
                 val dialogRating = RatingDialog()
                 dialogRating.show(requireActivity().supportFragmentManager, "rating dialog")
             }

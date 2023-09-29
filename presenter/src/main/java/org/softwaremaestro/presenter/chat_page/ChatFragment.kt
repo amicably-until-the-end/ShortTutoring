@@ -3,18 +3,17 @@ package org.softwaremaestro.presenter.chat_page
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.notify
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
@@ -36,9 +35,8 @@ import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
-import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.SimpleYesOrNoDialog
 import javax.inject.Inject
 
 
@@ -57,7 +55,7 @@ abstract class ChatFragment : Fragment() {
 
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
-    protected val chatViewModel: ChatViewModel by activityViewModels();
+    protected val chatViewModel: ChatViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -180,7 +178,7 @@ abstract class ChatFragment : Fragment() {
 
     abstract fun observeTutoringInfo()
 
-    fun enterRoom() {
+    fun getClassRoomInfo() {
         if (currentChatRoom?.questionId == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
             return
@@ -372,7 +370,7 @@ abstract class ChatFragment : Fragment() {
                 dialog.show(parentFragmentManager, "dialog")
             },
             onBtn2Click = {
-                DetailAlertDialog("질문을 삭제할까요?", "작성한 질문 내용이 사라집니다") {}.show(
+                SimpleYesOrNoDialog("질문을 삭제할까요?", "작성한 질문 내용이 사라집니다") {}.show(
                     parentFragmentManager,
                     "detailAlertDialog"
                 )
@@ -460,13 +458,13 @@ abstract class ChatFragment : Fragment() {
         val intent = Intent(requireContext(), ClassroomActivity::class.java)
         tutoringInfoVO.let {
             val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
-                it.whiteBoardAppId!!,
-                it.whiteBoardUUID!!,
-                it.whiteBoardToken!!,
+                it.whiteBoardAppId,
+                it.whiteBoardUUID,
+                it.whiteBoardToken,
                 "1"
             )
             val voiceRoomInfo = SerializedVoiceRoomInfo(
-                appId = it.RTCAppId!!,
+                appId = it.RTCAppId,
                 token = if (isTeacher()) (it.teacherRTCToken) else (it.studentRTCToken),
                 channelId = it.id,
                 uid = if (isTeacher()) (ClassroomFragment.RTC_TEACHER_UID) else (ClassroomFragment.RTC_STUDENT_UID)

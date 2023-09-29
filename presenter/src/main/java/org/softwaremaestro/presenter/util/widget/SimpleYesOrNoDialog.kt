@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import org.softwaremaestro.presenter.databinding.DialogDetailAlertBinding
 
-class DetailAlertDialog(
-    private val title: String,
-    private val description: String,
+class SimpleYesOrNoDialog(
+    private val title: String? = "알림",
+    private val description: String? = "정말로 진행할까요?",
     private val onConfirmClick: () -> Unit
 ) : DialogFragment() {
 
@@ -19,10 +19,18 @@ class DetailAlertDialog(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogDetailAlertBinding.inflate(layoutInflater)
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return binding.root
+    }
+
+    fun setTitle(title: String) {
+        binding.tvTitle.text = title
+    }
+
+    fun setDescription(description: String) {
+        binding.tvDesciption.text = description
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

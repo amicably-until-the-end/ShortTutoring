@@ -14,8 +14,11 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.StudentChatViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.DatePickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
+import org.softwaremaestro.presenter.util.widget.SimpleYesOrNoDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.time.LocalDateTime
 
@@ -27,7 +30,8 @@ class StudentChatFragment : ChatFragment() {
     private lateinit var datePickerDialog: DatePickerBottomDialog
     private lateinit var timePickerDialog: TimePickerBottomDialog
     private lateinit var numberPickerDialog: NumberPickerBottomDialog
-
+    private lateinit var enterClassroomDialog: SimpleYesOrNoDialog
+    private lateinit var waitingTeacherDialog: SimpleAlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +73,13 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
+    private fun initWaitingTeacherDialog() {
+        waitingTeacherDialog = SimpleAlertDialog().apply {
+            setTitle("아직 수업이 시작되지 않았습니다")
+            setDescription("선생님께 문의해보세요.")
+        }
+    }
+
     private fun onProposedSelectQuestionSelect() {
         hideLeftButton()
         hideRightButton()
@@ -87,6 +98,7 @@ class StudentChatFragment : ChatFragment() {
 
             when (it) {
                 is UIState.Loading -> {
+                    binding.btnChatRoomRight.setEnabledAndChangeColor(false)
                     loadingDialog.show()
                 }
 
@@ -94,24 +106,21 @@ class StudentChatFragment : ChatFragment() {
                     Log.d("tutoring", it._data.toString())
                     loadingDialog.dismiss()
                     if (!it._data?.whiteBoardAppId.isNullOrEmpty()) {
-                        Toast.makeText(
-                            requireContext(),
-                            "강의실에 입장합니다. ${it._data?.whiteBoardAppId}",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        enterClassroomDialog = SimpleYesOrNoDialog {
+                            getClassRoomInfo()
+                        }
                         moveToClassRoom(it._data!!)
-                        chatViewModel._tutoringInfo.value = UIState.Empty
                     } else {
-                        Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
-                            .show()
+                        waitingTeacherDialog.show(parentFragmentManager, "waitingTeacherDialog")
                     }
+                    binding.btnChatRoomRight.setEnabledAndChangeColor(true)
                 }
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
                     Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                         .show()
+                    binding.btnChatRoomRight.setEnabledAndChangeColor(true)
                 }
 
                 else -> {
@@ -161,7 +170,6 @@ class StudentChatFragment : ChatFragment() {
 
     private fun onReservedRoomSelect() {
         setNotiVisible(false)
-        enableEnterClassroomBtn()
         observeTutoringInfo()
     }
 
@@ -214,13 +222,26 @@ class StudentChatFragment : ChatFragment() {
         initDatePickerDialog()
         initTimePickerDialog()
         initNumberPickerDialog()
+        initEnterClassroomDialog()
+        initWaitingTeacherDialog()
+    }
+
+
+    private fun initEnterClassroomDialog() {
+        enterClassroomDialog = SimpleYesOrNoDialog()
+        {
+            getClassRoomInfo()
+        }.apply {
+            setTitle("강의실에 입장합니다")
+            setDescription("강의실에 들어가면 바로 수업이 시작됩니다. 수업 가능한 환경을 준비해주세요.")
+        }
     }
 
     private fun initTimePickerDialog() {
         timePickerDialog = TimePickerBottomDialog { time ->
             studentViewModel.setTutoringTime(
                 with(studentViewModel.tutoringTime.value!!) {
-                    java.time.LocalDateTime.of(
+                    LocalDateTime.of(
                         year,
                         monthValue,
                         dayOfMonth,
@@ -272,7 +293,7 @@ class StudentChatFragment : ChatFragment() {
                 visibility = View.GONE
             }
             setOnClickListenerToBtnPositive {
-                enterRoom()
+                getClassRoomInfo()
             }
         }
     }

@@ -159,7 +159,7 @@ class TeacherChatFragment : ChatFragment() {
                 visibility = View.GONE
             }
             setOnClickListenerToBtnPositive {
-                enterRoom()
+                getClassRoomInfo()
             }
         }
     }
