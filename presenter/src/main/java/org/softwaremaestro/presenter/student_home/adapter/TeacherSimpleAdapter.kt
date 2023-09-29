@@ -1,9 +1,9 @@
 package org.softwaremaestro.presenter.student_home.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherSimpleBinding
 import java.lang.Integer.min
@@ -49,7 +49,10 @@ class TeacherSimpleAdapter(
         fun onBind(item: TeacherVO) {
 
             with(binding) {
-                ivProfile.setImageURI(Uri.parse(item.profileUrl))
+
+                Glide.with(root.context).load(item.profileUrl)
+                    .centerCrop()
+                    .into(ivProfile)
                 tvTeacherName.text = item.nickname
                 tvTeacherUniv.text = item.univ
                 tvTeacherBio.text = item.bio

@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
-import org.softwaremaestro.domain.question_upload.entity.TeacherVO
+import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherFollowingBinding
 
 class TeacherFollowingAdapter(private val onItemClickListener: (FollowingGetResponseVO) -> Unit) :

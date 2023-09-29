@@ -12,6 +12,7 @@ import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
 
 @AndroidEntryPoint
 class TeacherProfileDialog(
+    private val onProfileClicked: (String) -> Unit,
     private val onFollowBtnClicked: () -> Unit,
     private val onReserveBtnClicked: () -> Unit,
 ) :
@@ -31,6 +32,8 @@ class TeacherProfileDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setProfileContainer()
         setFollowBtn()
         setReserveBtn()
         bind()
@@ -46,6 +49,12 @@ class TeacherProfileDialog(
             tvTeacherRating.text = item.rating.toString()
             btnFollow.text = "찜한 학생 ${item.pickCount}"
             // Todo: 예약 질문 갯수
+        }
+    }
+
+    private fun setProfileContainer() {
+        binding.containerContent.setOnClickListener {
+            item.teacherId?.let { onProfileClicked(it) }
         }
     }
 
