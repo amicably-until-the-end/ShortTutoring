@@ -25,6 +25,7 @@ import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -69,6 +70,18 @@ class StudentHomeFragment : Fragment() {
 
     private fun initTeacherProfileDialog() {
         dialogTeacherProfile = TeacherProfileDialog(
+            onProfileClicked = { teacherId ->
+                startActivityForResult(
+                    Intent(
+                        requireActivity(),
+                        TeacherProfileActivity::class.java
+                    ).apply {
+                        putExtra("teacher-id", teacherId)
+                    }, QUESTION_UPLOAD_RESULT
+                )
+
+                dialogTeacherProfile.dismiss()
+            },
             onFollowBtnClicked = {},
             onReserveBtnClicked = {
                 startActivityForResult(

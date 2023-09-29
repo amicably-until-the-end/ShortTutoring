@@ -180,7 +180,6 @@
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_radius_5_grad_blue"
-                    android:enabled="false"
                     android:fontFamily="@font/pretendard_medium"
                     android:gravity="center"
                     android:text="찜한 학생 0명"
