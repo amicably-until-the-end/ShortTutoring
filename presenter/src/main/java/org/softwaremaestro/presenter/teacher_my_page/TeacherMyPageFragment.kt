@@ -17,7 +17,7 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.LecturesViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
@@ -32,7 +32,7 @@ class TeacherMyPageFragment : Fragment() {
 
     private val reviewsViewModel: ReviewsViewModel by viewModels()
     private val lecturesViewModel: LecturesViewModel by viewModels()
-    private val myProfileViewModel: MyProfileViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
@@ -51,7 +51,7 @@ class TeacherMyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        myProfileViewModel.getMyProfile()
+        profileViewModel.getMyProfile()
         observe()
 
         initReviewRecyclerView()
@@ -68,23 +68,14 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun observe() {
         observeProfile()
-        observeFollower()
         observeImage()
     }
 
-    private fun observeFollower() {
-        followerViewModel.follower.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "찜한 사람 ${it.size}명"
-        }
-    }
-
     private fun observeImage() {
-        myProfileViewModel.image.observe(viewLifecycleOwner) {
+        profileViewModel.image.observe(viewLifecycleOwner) {
             Glide.with(requireContext()).load(it)
                 .centerCrop()
                 .into(binding.ivTeacherImg)
-
-            // Todo: 프로필 변경 Api 호출
         }
     }
 
@@ -96,7 +87,9 @@ class TeacherMyPageFragment : Fragment() {
                 },
                 onSelect = { res ->
                     val image = BitmapFactory.decodeResource(resources, res).toBase64()
-                    myProfileViewModel.setImage(image)
+                    profileViewModel.setImage(image)
+                    // Todo: 추후에 수정하기
+                    profileViewModel.updateProfile()
 
                     dialog.dismiss()
                 },
@@ -107,23 +100,19 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun observeProfile() {
 
-        myProfileViewModel.id.observe(viewLifecycleOwner) {
-            followerViewModel.getFollower(it)
-        }
-
-        myProfileViewModel.name.observe(viewLifecycleOwner) {
+        profileViewModel.name.observe(viewLifecycleOwner) {
             binding.tvTeacherName.text = it
         }
 
-        myProfileViewModel.bio.observe(viewLifecycleOwner) {
+        profileViewModel.bio.observe(viewLifecycleOwner) {
             binding.tvTeacherBio.text = it
         }
 
-        myProfileViewModel.univName.observe(viewLifecycleOwner) {
+        profileViewModel.univName.observe(viewLifecycleOwner) {
             binding.tvTeacherUniv.text = it
         }
 
-        myProfileViewModel.major.observe(viewLifecycleOwner) {
+        profileViewModel.major.observe(viewLifecycleOwner) {
             binding.tvTeacherMajor.text = it
         }
 
@@ -131,8 +120,12 @@ class TeacherMyPageFragment : Fragment() {
 //            binding.tvTeacherRating.text = it
 //        }
 
-        myProfileViewModel.image.observe(viewLifecycleOwner) {
+        profileViewModel.image.observe(viewLifecycleOwner) {
             Glide.with(requireContext()).load(it).circleCrop().into(binding.ivTeacherImg)
+        }
+
+        profileViewModel.followersCount.observe(viewLifecycleOwner) {
+            binding.btnFollow.text = "찜한 사람 ${it}명"
         }
     }
 

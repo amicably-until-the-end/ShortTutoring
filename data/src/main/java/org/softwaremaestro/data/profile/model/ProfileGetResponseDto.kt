@@ -1,4 +1,4 @@
-package org.softwaremaestro.data.profile_get.model
+package org.softwaremaestro.data.profile.model
 
 import com.google.gson.annotations.SerializedName
 

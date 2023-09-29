@@ -1,4 +1,4 @@
-package org.softwaremaestro.domain.my_profile_get.entity
+package org.softwaremaestro.domain.profile.entity
 
 data class MyProfileGetResponseVO(
     val following: List<String>?,

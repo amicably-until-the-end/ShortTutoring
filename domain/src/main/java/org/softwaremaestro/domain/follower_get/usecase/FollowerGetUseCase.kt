@@ -8,9 +8,7 @@ import javax.inject.Inject
 
 class FollowerGetUseCase @Inject constructor(private val followerGetRepository: FollowerGetRepository) {
 
-    suspend fun execute(
-        userId: String
-    ): Flow<BaseResult<List<FollowerGetResponseVO>, String>> {
+    suspend fun execute(userId: String): Flow<BaseResult<List<FollowerGetResponseVO>, String>> {
         return followerGetRepository.getFollower(userId)
     }
 }

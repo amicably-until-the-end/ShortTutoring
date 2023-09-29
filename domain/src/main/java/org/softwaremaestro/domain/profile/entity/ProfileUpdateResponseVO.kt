@@ -1,13 +1,14 @@
-package org.softwaremaestro.domain.profile_get.entity
+package org.softwaremaestro.domain.profile.entity
 
-data class ProfileGetResponseVO(
+data class ProfileUpdateResponseVO(
     val id: String?,
     val name: String?,
     val bio: String?,
-    val profileImage: String?,
+    val profileImageBase64: String?,
+    val profileImageFormat: String?,
     val role: String?,
-    val schoolLevel: String?,
-    val schoolGrade: Int?,
+    val level: String?,
+    val grade: Int?,
     val schoolDivision: String?,
     val schoolName: String?,
     val schoolDepartment: String?,
