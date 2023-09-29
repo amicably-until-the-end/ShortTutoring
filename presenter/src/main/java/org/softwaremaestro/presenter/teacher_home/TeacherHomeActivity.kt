@@ -7,8 +7,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityTeacherHomeBinding
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TeacherHomeActivity : AppCompatActivity() {
@@ -16,13 +18,21 @@ class TeacherHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTeacherHomeBinding
     private lateinit var navController: NavController
 
+    @Inject
+    lateinit var socketManager: SocketManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeacherHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        initSocket()
         setUpBottomNavigationBar()
     }
+
+    private fun initSocket() {
+        socketManager.init()
+    }
+
 
     /**
      * Bottom Navigation Bar 에 Navigation Component 적용

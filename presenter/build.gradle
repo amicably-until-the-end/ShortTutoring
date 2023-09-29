@@ -113,7 +113,5 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
-
-
 }
 

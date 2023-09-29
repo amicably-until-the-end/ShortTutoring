@@ -25,16 +25,13 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun autoLogin(): Flow<BaseResult<String, String>> {
         return flow {
             val savedToken: String = prefs.getJWT()
-            //token 만료되었으면 리프래시 하는 로직 추가.
+
             if (savedToken == "") {
                 emit(BaseResult.Error("No saved token"))
-                prefs.getJWT()
             } else {
-                // 토큰 유효한지 체크
-                // 유효하면 return
-                // 만료되었으면 리프레시하고 return
-                // 실패하면 return Error
-                emit(BaseResult.Success(savedToken!!))
+                loginApi.getUserInfo().body()?.data?.let {
+                    emit(BaseResult.Success(it.role))
+                } ?: emit(BaseResult.Error("Fail to get user Info"))
             }
         }
     }
@@ -66,6 +63,7 @@ class LoginRepositoryImpl @Inject constructor(
     override fun saveKakaoJWT(token: String) {
         //
     }
+
 
     override fun getUserInfo(): Flow<BaseResult<UserVO, String>> {
         return flow {

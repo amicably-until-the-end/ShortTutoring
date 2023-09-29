@@ -7,6 +7,16 @@
 
     <application android:usesCleartextTraffic="true">
         <activity
+            android:name=".login.SplashActivity"
+            android:exported="true"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".util.widget.ProfileImageSelectBottomDialog"
             android:exported="false" />
         <activity
@@ -39,14 +49,7 @@
             android:noHistory="true" />
         <activity
             android:name=".login.LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".student_home.StudentHomeActivity"
             android:exported="false" />
