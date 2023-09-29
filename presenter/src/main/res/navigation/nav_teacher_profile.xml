@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_teacher_profile"
+    app:startDestination="@id/teacherProfileFragment">
+
+    <fragment
+        android:id="@+id/teacherProfileFragment"
+        android:name="org.softwaremaestro.presenter.teacher_profile.TeacherProfileFragment"
+        android:label="fragment_teacher_profile"
+        tools:layout="@layout/fragment_teacher_profile">
+        <action
+            android:id="@+id/action_teacherProfileFragment_to_reservationFormFragment"
+            app:destination="@id/reservationFormFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reservationFormFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.question_selected_upload.ReservationFormFragment"
+        android:label="fragment_reservation_form"
+        tools:layout="@layout/fragment_reservation_form">
+        <action
+            android:id="@+id/action_reservationFormFragment_to_questionCameraFragment"
+            app:destination="@id/questionCameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentChatFragment"
+        android:name="org.softwaremaestro.presenter.chat_page.student.StudentChatFragment"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_page" />
+    <fragment
+        android:id="@+id/questionSelectedFormFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionSelectedFormFragment"
+        android:label="fragment_question_selected_form"
+        tools:layout="@layout/fragment_question_selected_form">
+        <action
+            android:id="@+id/action_questionSelectedFormFragment_to_studentChatFragment"
+            app:destination="@id/studentChatFragment"
+            app:popUpTo="@id/reservationFormFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_questionSelectedFormFragment_to_questionCameraFragment"
+            app:destination="@id/questionCameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionCameraFragment"
+        android:name="org.softwaremaestro.presenter.question_upload.QuestionCameraFragment"
+        android:label="fragment_question_camera"
+        tools:layout="@layout/fragment_question_camera">
+        <action
+            android:id="@+id/action_questionCameraFragment_to_questionSelectedFormFragment"
+            app:destination="@id/questionSelectedFormFragment" />
+    </fragment>
+</navigation>

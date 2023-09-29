@@ -9,8 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
-import org.softwaremaestro.domain.following_get.usecase.FollowingGetUseCase
+import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.follow.usecase.FollowingGetUseCase
 import javax.inject.Inject
 
 @HiltViewModel

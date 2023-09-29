@@ -32,9 +32,9 @@
         tools:layout="@layout/fragment_student_my_page" />
     <fragment
         android:id="@+id/teacherProfileFragment"
-        android:name="org.softwaremaestro.presenter.teacher_profile.TeacherProfileFragment"
+        android:name="org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity"
         android:label="fragment_teacher_profile"
-        tools:layout="@layout/fragment_teacher_profile">
+        tools:layout="@layout/activity_teacher_profile">
         <argument
             android:name="teacherId"
             app:argType="string"

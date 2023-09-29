@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.teacher_my_page
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,12 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.LecturesViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
-
-private const val RATING = 4.8334f
-private const val NUM_OF_CLIP = 15
+import org.softwaremaestro.presenter.util.toBase64
+import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
 @AndroidEntryPoint
 class TeacherMyPageFragment : Fragment() {
@@ -28,12 +29,13 @@ class TeacherMyPageFragment : Fragment() {
 
     private val reviewsViewModel: ReviewsViewModel by viewModels()
     private val lecturesViewModel: LecturesViewModel by viewModels()
-    private val myProfileViewModel: MyProfileViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+    private val followerViewModel: FollowerViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var lectureAdapter: LectureAdapter
 
-    private var following = false
+    private lateinit var dialog: ProfileImageSelectBottomDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,12 +48,13 @@ class TeacherMyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setProfile()
+        profileViewModel.getMyProfile()
+        observe()
 
         initReviewRecyclerView()
         initLectureRecyclerView()
 
-        setBtnFollow()
+        setBtnEditTeacherImg()
         setTvSettingTimeAndCost()
 
         setTvReview()
@@ -60,22 +63,56 @@ class TeacherMyPageFragment : Fragment() {
         setFollowerMenu()
     }
 
-    private fun setProfile() {
+    private fun observe() {
+        observeProfile()
+    }
 
-        myProfileViewModel.getMyProfile()
+    private fun setBtnEditTeacherImg() {
+        binding.containerTeacherImg.setOnClickListener {
+            dialog = ProfileImageSelectBottomDialog(
+                onImageChanged = { image ->
+                    binding.ivTeacherImg.setBackgroundResource(image)
+                },
+                onSelect = { res ->
+                    val image = BitmapFactory.decodeResource(resources, res).toBase64()
+                    profileViewModel.setImage(image)
+//                    profileViewModel.updateProfile()
 
-        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
-            with(binding) {
-                Glide.with(requireContext()).load(it.profileImage).circleCrop().into(ivTeacherImg)
-                tvTeacherUniv.text = "${it.schoolName} ${it.schoolDepartment}"
-                tvTeacherName.text = it.name
-                tvTeacherRating.text = "%.2f".format(RATING)
-                tvNumOfClip.text = NUM_OF_CLIP.toString()
-            }
+                    dialog.dismiss()
+                },
+            )
+            dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
+        }
+    }
+
+    private fun observeProfile() {
+
+        profileViewModel.name.observe(viewLifecycleOwner) {
+            binding.tvTeacherName.text = it
         }
 
-        myProfileViewModel.numOfFollower.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "나를 찜한 학생 $it"
+        profileViewModel.bio.observe(viewLifecycleOwner) {
+            binding.tvTeacherBio.text = it
+        }
+
+        profileViewModel.univName.observe(viewLifecycleOwner) {
+            binding.tvTeacherUniv.text = it
+        }
+
+        profileViewModel.major.observe(viewLifecycleOwner) {
+            binding.tvTeacherMajor.text = it
+        }
+
+//        myProfileViewModel.rating.observe(viewLifecycleOwner) {
+//            binding.tvTeacherRating.text = it
+//        }
+
+        profileViewModel.image.observe(viewLifecycleOwner) {
+            Glide.with(requireContext()).load(it).circleCrop().into(binding.ivTeacherImg)
+        }
+
+        profileViewModel.followersCount.observe(viewLifecycleOwner) {
+            binding.btnFollow.text = "찜한 사람 ${it}명"
         }
     }
 
@@ -122,24 +159,6 @@ class TeacherMyPageFragment : Fragment() {
         }
 
         lecturesViewModel.getLectures()
-    }
-
-    private fun setBtnFollow() {
-        binding.btnFollow.setOnClickListener {
-            toggleFollowing()
-        }
-    }
-
-    private fun toggleFollowing() {
-        following = !following
-
-        if (following) {
-            myProfileViewModel.addOne()
-            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_5_sub_text_grey)
-        } else {
-            binding.btnFollow.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
-            myProfileViewModel.minusOne()
-        }
     }
 
     private fun setTvSettingTimeAndCost() {

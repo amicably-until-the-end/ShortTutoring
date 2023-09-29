@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.following_get.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
@@ -25,6 +25,7 @@ import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -69,6 +70,18 @@ class StudentHomeFragment : Fragment() {
 
     private fun initTeacherProfileDialog() {
         dialogTeacherProfile = TeacherProfileDialog(
+            onProfileClicked = { teacherId ->
+                startActivityForResult(
+                    Intent(
+                        requireActivity(),
+                        TeacherProfileActivity::class.java
+                    ).apply {
+                        putExtra("teacher-id", teacherId)
+                    }, QUESTION_UPLOAD_RESULT
+                )
+
+                dialogTeacherProfile.dismiss()
+            },
             onFollowBtnClicked = {},
             onReserveBtnClicked = {
                 startActivityForResult(
@@ -166,8 +179,8 @@ class StudentHomeFragment : Fragment() {
                     "d",
                     "d",
                     1,
-                    "d",
-                    "f"
+                    -1,
+                    -1
                 )
             )
             add(
@@ -181,8 +194,8 @@ class StudentHomeFragment : Fragment() {
                     "d",
                     "d",
                     1,
-                    "d",
-                    "f"
+                    -1,
+                    -1
                 )
             )
         }
