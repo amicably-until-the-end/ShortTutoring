@@ -18,4 +18,7 @@ interface ChatApi {
     @GET("/chatting/list")
     suspend fun getRoomList(): Response<WrappedListResponse<ChatRoomDto>>
 
+    @GET("/chatting/{roomId}")
+    suspend fun getRoom(@Path("roomId") roomId: String): Response<WrappedResponse<ChatRoomDto>>
+
 }

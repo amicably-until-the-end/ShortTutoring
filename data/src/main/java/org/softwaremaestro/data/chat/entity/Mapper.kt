@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.chat.entity
 
+import android.util.Log
 import com.google.gson.Gson
 import org.softwaremaestro.data.chat.model.ChatRoomDto
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
@@ -17,14 +18,18 @@ class Mapper {
             return ChatRoomVO(
                 id = id,
                 title = title,
-                schoolLevel = "fff",
-                schoolSubject = "fff",
+                schoolLevel = schoolLevel,
+                schoolSubject = schoolSubject,
                 roomType = RoomType.TEACHER,
                 roomImage = image,
-                questionId = "fff",
-                isSelect = true,
+                questionId = questionId,
+                isSelect = isSelect,
+                startDateTime = startDateTime,
+                description = description ?: "undefined",
                 questionState =
-                if (status == 1 || status == 2)
+                if (status == ChatRoomType.PROPOSED_NORMAL.type ||
+                    status == ChatRoomType.PROPOSED_SELECT.type
+                )
                     QuestionState.PROPOSED else QuestionState.RESERVED,
             )
         }
@@ -58,32 +63,59 @@ class Mapper {
 
     fun asDomain(chatRoomWithMessages: ChatRoomWithMessages): ChatRoomVO {
         chatRoomWithMessages.apply {
+            Log.d("chatRoomWithMessages Mapper ", this.toString())
             return ChatRoomVO(
                 id = chatRoomEntity.id,
                 title = chatRoomEntity.title,
-                schoolLevel = "fff",
-                schoolSubject = "fff",
+                schoolLevel = chatRoomEntity.schoolLevel,
+                schoolSubject = chatRoomEntity.schoolSubject,
                 roomType = if (chatRoomEntity.opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 roomImage = chatRoomEntity.image,
-                questionId = "fff",
-                isSelect = true,
+                questionId = chatRoomEntity.questionId,
+                isSelect = chatRoomEntity.isSelect,
                 questionState =
-                if (chatRoomEntity.status == 1 || chatRoomEntity.status == 2)
+                if (chatRoomEntity.status == ChatRoomType.PROPOSED_NORMAL.type ||
+                    chatRoomEntity.status == ChatRoomType.PROPOSED_SELECT.type
+                )
                     QuestionState.PROPOSED else QuestionState.RESERVED,
                 messages = messages.map { it.asDomain() },
                 opponentId = chatRoomEntity.opponentId,
+                description = chatRoomEntity.description ?: "undefined",
             )
         }
     }
 
     fun asEntity(dto: ChatRoomDto): ChatRoomEntity {
+        var status =
+            when (dto.isSelect == true) {
+                true -> when (dto.questionState) {
+                    "pending" -> ChatRoomType.PROPOSED_SELECT.type
+                    "reserved" -> ChatRoomType.RESERVED_SELECT.type
+                    else -> ChatRoomType.PROPOSED_SELECT.type
+                }
+
+                false -> {
+                    when (dto.questionState) {
+                        "pending" -> ChatRoomType.PROPOSED_NORMAL.type
+                        "reserved" -> ChatRoomType.RESERVED_NORMAL.type
+                        else -> ChatRoomType.PROPOSED_NORMAL.type
+                    }
+                }
+            }
+        Log.d("ChatRoomDto", "to entity Mapper${dto} ${status}")
+
         return ChatRoomEntity(
-            id = dto.id!!,
-            title = dto.title,
+            id = dto.id ?: dto.questionId ?: "undefined",
+            title = dto.title!!,
             image = dto.roomImage,
-            status = 1,
+            status = status,
             startDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")),
             opponentId = dto.opponentId,
+            questionId = dto.questionId,
+            schoolLevel = dto.questionInfo?.problem?.schoolLevel ?: "undefined",
+            schoolSubject = dto.questionInfo?.problem?.schoolLevel ?: "undefined",
+            isSelect = dto.isSelect ?: false,
+            description = dto.questionInfo?.problem?.description ?: "undefined",
         )
     }
 }

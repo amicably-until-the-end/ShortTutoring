@@ -1,4 +1,4 @@
-package org.softwaremaestro.data.question_upload.remote
+package org.softwaremaestro.data.user_follow.remote
 
 import org.softwaremaestro.data.common.utils.WrappedListResponse
 import org.softwaremaestro.data.common.utils.WrappedResponse

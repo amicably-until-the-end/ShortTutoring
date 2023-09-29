@@ -70,6 +70,8 @@ class ChatViewModel @Inject constructor(
     val messages: LiveData<UIState<List<MessageVO>>>
         get() = _messages
 
+    var selectedQuestionRoom: String? = null
+
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
         get() = _tutoringInfo

@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.chat_page.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomIconBinding
 import org.softwaremaestro.presenter.util.Util
 
 class ChatRoomIconListAdapter(
-    private val onQuestionClick: (List<ChatRoomVO>, Int, RecyclerView.Adapter<*>) -> Unit
+    private val onQuestionClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit
 ) :
     RecyclerView.Adapter<ChatRoomIconListAdapter.ViewHolder>() {
 
@@ -19,7 +20,7 @@ class ChatRoomIconListAdapter(
 
     private var selectedView: MaterialCardView? = null
 
-    private var selectedPosition: Int = -1
+    var selectedQuestionId: String? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -45,18 +46,8 @@ class ChatRoomIconListAdapter(
         this.items = items
     }
 
-    fun clearSelectedView(caller: RecyclerView.Adapter<*>?) {
-        if (caller == null) {
-            selectedView?.let {
-                it.strokeColor = it.context.getColor(R.color.background_grey)
-                it.setBackgroundColor(it.context.getColor(R.color.white))
-                selectedView = null
-            }
-        }
-    }
-
-    fun setSelectedPosition(position: Int) {
-        selectedPosition = position
+    fun changeSelectedQuestionId(questionId: String?) {
+        selectedQuestionId = questionId
         notifyDataSetChanged()
     }
 
@@ -65,27 +56,33 @@ class ChatRoomIconListAdapter(
 
         fun onBind(item: ChatRoomVO, position: Int) {
             binding.apply {
-                cvImage.radius = Util.toPx(4, binding.root.context).toFloat()
                 root.setOnClickListener {
-                    clearSelectedView(null)
-                    if (position != selectedPosition) {
+                    Log.d("ChatRoomIconListAdapter", "selectedPosition $selectedQuestionId")
+                    if (item.questionId != selectedQuestionId) {
                         onQuestionClick(
-                            item.teachers ?: emptyList(), position, this@ChatRoomIconListAdapter
+                            item.teachers ?: emptyList(),
+                            item.questionId ?: "",
+                            this@ChatRoomIconListAdapter
                         )
-                        selectedPosition = position
+                        selectedQuestionId = item.questionId ?: ""
                     }
-                    cvContainer.strokeWidth = Util.toPx(1, binding.root.context)
+                    Log.d("ChatRoomIconListAdapter", "all items $items")
                     cvContainer.strokeColor =
                         binding.root.context.getColor(R.color.primary_blue)
                     cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
                     selectedView = cvContainer
-                }
-
-                if (position == selectedPosition) {
                     cvContainer.strokeColor = binding.root.context.getColor(R.color.primary_blue)
                     cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
                     selectedView = cvContainer
                 }
+                if (item.questionId == selectedQuestionId) {
+                    cvContainer.strokeColor = binding.root.context.getColor(R.color.primary_blue)
+                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
+                } else {
+                    cvContainer.strokeColor = binding.root.context.getColor(R.color.background_grey)
+                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.transparent))
+                }
+
                 Glide.with(binding.root.context)
                     .load(item.roomImage)
                     .into(ivImage)

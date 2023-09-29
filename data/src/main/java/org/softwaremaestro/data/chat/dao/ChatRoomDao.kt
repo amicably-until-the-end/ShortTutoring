@@ -19,24 +19,23 @@ interface ChatRoomDao {
     @Query("DELETE FROM ChatRoomEntity")
     fun deleteAll()
 
-    @Update()
+    @Query("SELECT EXISTS(SELECT * FROM ChatRoomEntity WHERE id = :roomId)")
+    fun isIdExist(roomId: String): Boolean
+
+    @Insert(onConflict = androidx.room.OnConflictStrategy.IGNORE)
     fun insert(chatRoomEntity: ChatRoomEntity)
 
+    @Update
+    fun update(chatRoomEntity: ChatRoomEntity)
 
     @Query("SELECT * FROM ChatRoomEntity")
-    fun getChatRoomWithMessages(): List<ChatRoomWithMessages>
+    fun getChatRoomsWithMessages(): List<ChatRoomWithMessages>
 
-    @Query("SELECT * FROM ChatRoomEntity WHERE status = 0")
-    fun getProposedSelectChatRoom(): List<ChatRoomWithMessages>
+    @Query("SELECT * FROM ChatRoomEntity WHERE id = :chattingId")
+    fun getChatRoomWithMessages(chattingId: String): ChatRoomWithMessages
 
-    @Query("SELECT * FROM ChatRoomEntity WHERE status = 1")
-    fun getProposedNormalChatRoom(): List<ChatRoomWithMessages>
-
-    @Query("SELECT * FROM ChatRoomEntity WHERE status = 2")
-    fun getReservedSelectChatRoom(): List<ChatRoomWithMessages>
-
-    @Query("SELECT * FROM ChatRoomEntity WHERE status = 3")
-    fun getReservedNormalChatRoom(): List<ChatRoomWithMessages>
+    @Query("SELECT * FROM ChatRoomEntity WHERE status = :type")
+    fun getChatRoomByGroupType(type: Int): List<ChatRoomWithMessages>
 
 
 }

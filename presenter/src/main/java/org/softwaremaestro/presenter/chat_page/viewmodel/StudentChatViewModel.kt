@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.chat_page.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,10 +28,41 @@ class StudentChatViewModel @Inject constructor(
     private val pickTeacherResult = MutableLiveData<UIState<Boolean>>()
     val pickTeacherResultState: LiveData<UIState<Boolean>> get() = pickTeacherResult
 
+    private val _tutoringTime = MutableLiveData<LocalDateTime?>()
+    val tutoringTime: LiveData<LocalDateTime?> get() = _tutoringTime
 
-    fun pickTeacher(time: LocalDateTime, chattingId: String, questionId: String) {
+    private val _tutoringDuration = MutableLiveData<Int?>()
+    val tutoringDuration: LiveData<Int?> get() = _tutoringDuration
+
+    fun setTutoringTime(time: LocalDateTime?) = _tutoringTime.postValue(time)
+
+    fun setTutoringDuration(duration: Int?) = _tutoringDuration.postValue(duration)
+
+    private val _tutoringTimeAndDurationProper = MediatorLiveData<Boolean>()
+    val tutoringTimeAndDurationProper: MediatorLiveData<Boolean> get() = _tutoringTimeAndDurationProper
+
+
+    init {
+        with(_tutoringTimeAndDurationProper) {
+            addSource(_tutoringTime) {
+                value = _tutoringTime.value != null && _tutoringDuration.value != null
+            }
+
+            addSource(_tutoringDuration) {
+                value = _tutoringTime.value != null && _tutoringDuration.value != null
+            }
+        }
+    }
+
+    fun pickTeacher(chattingId: String, questionId: String) {
+        var startTime = _tutoringTime.value
+        var endTime = _tutoringTime.value?.plusMinutes(_tutoringDuration.value!!.toLong())
+        if (startTime == null || endTime == null) {
+            pickTeacherResult.postValue(UIState.Failure)
+            return
+        }
         viewModelScope.launch {
-            teacherPickUseCase.execute(time, chattingId, questionId)
+            teacherPickUseCase.execute(startTime, endTime, chattingId, questionId)
                 .onStart { pickTeacherResult.value = UIState.Loading }
                 .catch { exception ->
                     pickTeacherResult.value = UIState.Failure

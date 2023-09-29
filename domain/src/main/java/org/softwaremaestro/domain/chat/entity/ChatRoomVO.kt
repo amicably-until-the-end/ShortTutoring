@@ -22,6 +22,8 @@ data class ChatRoomVO(
     val opponentId: String? = null,
     val title: String?,
     val schoolSubject: String? = null,
+    val startDateTime: LocalDateTime? = null,
+    val description: String,
     val schoolLevel: String? = null,
     val messages: List<MessageVO>? = null,
     var teachers: List<ChatRoomVO>? = null,
