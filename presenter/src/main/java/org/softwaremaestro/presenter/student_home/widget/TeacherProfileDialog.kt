@@ -14,7 +14,7 @@ import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
 class TeacherProfileDialog(
     private val onProfileClicked: (String) -> Unit,
     private val onFollowBtnClicked: () -> Unit,
-    private val onReserveBtnClicked: () -> Unit,
+    private val onReserveBtnClicked: (String) -> Unit,
 ) :
     BottomSheetDialogFragment() {
 
@@ -63,6 +63,8 @@ class TeacherProfileDialog(
     }
 
     private fun setReserveBtn() {
-        binding.containerReserve.setOnClickListener { onReserveBtnClicked() }
+        binding.containerReserve.setOnClickListener {
+            item.teacherId?.let { onReserveBtnClicked(it) }
+        }
     }
 }

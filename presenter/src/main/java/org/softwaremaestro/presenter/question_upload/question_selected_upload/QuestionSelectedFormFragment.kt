@@ -65,6 +65,11 @@ class QuestionSelectedFormFragment : Fragment() {
         checkAndEnableSubjectBtn()
         setSubmitButton()
         setFields()
+        setTeacherId()
+    }
+
+    private fun setTeacherId() {
+        requireActivity().intent.getStringExtra("teacher-id")?.let { viewModel.setTeacherId(it) }
     }
 
     /**
@@ -220,7 +225,7 @@ class QuestionSelectedFormFragment : Fragment() {
                         },
                         requestTutoringStartTime = viewModel.requestTutoringStartTime.value!!,
                         requestTutoringEndTime = viewModel.requestTutoringEndTime.value!!,
-                        requestTeacherId = TEACHER_ID
+                        requestTeacherId = viewModel.teacherId.value!!
                     )
                     viewModel.uploadQuestionSelected(questionSelectedUploadVO)
                 } else {

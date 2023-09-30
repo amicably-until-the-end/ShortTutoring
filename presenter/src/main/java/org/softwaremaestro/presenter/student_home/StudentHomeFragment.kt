@@ -81,12 +81,14 @@ class StudentHomeFragment : Fragment() {
                 dialogTeacherProfile.dismiss()
             },
             onFollowBtnClicked = {},
-            onReserveBtnClicked = {
+            onReserveBtnClicked = { teacherId ->
                 startActivityForResult(
                     Intent(
                         requireActivity(),
                         QuestionReserveActivity::class.java
-                    ), QUESTION_UPLOAD_RESULT
+                    ).apply {
+                        putExtra("teacher-id", teacherId)
+                    }, QUESTION_UPLOAD_RESULT
                 )
 
                 dialogTeacherProfile.dismiss()

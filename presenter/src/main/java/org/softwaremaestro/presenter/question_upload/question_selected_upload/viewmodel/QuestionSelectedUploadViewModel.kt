@@ -23,6 +23,9 @@ class QuestionSelectedUploadViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    private val _teacherId = MutableLiveData<String>()
+    val teacherId: LiveData<String> get() = _teacherId
+
     private val _questionUploadState = MutableLiveData<UIState<QuestionSelectedUploadResultVO>>()
     val questionUploadState: LiveData<UIState<QuestionSelectedUploadResultVO>> get() = _questionUploadState
 
@@ -76,6 +79,8 @@ class QuestionSelectedUploadViewModel @Inject constructor(
     fun setMainImageIndex(mainImageIndex: Int) = _mainImageIndex.postValue(mainImageIndex)
 
     fun setImages(images: List<Bitmap>) = _images.postValue(images)
+
+    fun setTeacherId(teacherId: String) = _teacherId.postValue(teacherId)
 
     fun setRequestTutoringStartTime(requestTutoringStartTime: List<String>?) =
         _requestTutoringStartTime.postValue(requestTutoringStartTime)
