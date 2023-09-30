@@ -35,7 +35,6 @@ import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
-import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import javax.inject.Inject
@@ -79,7 +78,6 @@ abstract class ChatFragment : Fragment() {
         setApplyIconRecyclerView()
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
-        setChatNoti()
         observeChatRoomList()
         makeAdapterList()
         getRoomList()
