@@ -19,7 +19,6 @@ import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
-import org.softwaremaestro.presenter.classroom.RatingDialog
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
@@ -30,7 +29,6 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
-import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import java.text.DecimalFormat
 
 // TODO: 추후 수정
@@ -65,7 +63,7 @@ class TeacherHomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
         return binding.root
@@ -73,17 +71,6 @@ class TeacherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // 평가 뷰 보려고 만든 코드
-        // 언제든지 지워도 됨
-        binding.btnQuestion.setOnClickListener {
-            val dialogLectureEnd = DetailAlertDialog("수업을 종료할까요?", "과외 영상이 자동으로 저장됩니다") {
-                val dialogRating = RatingDialog()
-                dialogRating.show(requireActivity().supportFragmentManager, "rating dialog")
-            }
-
-            dialogLectureEnd.show(requireActivity().supportFragmentManager, "lecture end dialog")
-        }
 
         myProfileViewModel.getMyProfile()
 

@@ -5,22 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import org.softwaremaestro.presenter.databinding.DialogDetailAlertBinding
+import org.softwaremaestro.presenter.databinding.DialogSimpleAlertBinding
 
-class DetailAlertDialog(
-    private val title: String,
-    private val description: String,
-    private val onConfirmClick: () -> Unit
-) : DialogFragment() {
+class SimpleAlertDialog : DialogFragment() {
 
-    private lateinit var binding: DialogDetailAlertBinding
+    private lateinit var binding: DialogSimpleAlertBinding
+
+    var title: String? = null
+    var description: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = DialogDetailAlertBinding.inflate(layoutInflater)
+    ): View {
+        binding = DialogSimpleAlertBinding.inflate(layoutInflater)
+        binding.tvTitle.text = title
+        binding.tvDesciption.text = description
+        binding.btnConfirm.setOnClickListener {
+            dismiss()
+        }
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return binding.root
     }
@@ -29,15 +33,7 @@ class DetailAlertDialog(
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnConfirm.setOnClickListener {
-            onConfirmClick()
             dismiss()
         }
-
-        binding.btnCancel.setOnClickListener {
-            dismiss()
-        }
-
-        binding.tvTitle.text = title
-        binding.tvDesciption.text = description
     }
 }
