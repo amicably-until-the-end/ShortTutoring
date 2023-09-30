@@ -7,6 +7,7 @@ import org.softwaremaestro.data.common.utils.WrappedResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AnswerUploadApi {
@@ -15,7 +16,7 @@ interface AnswerUploadApi {
         @Path("questionId") requestId: String
     ): Response<WrappedResponse<AnswerUploadResultDto>>
 
-    @GET("/tutoring/appoint/{questionId}")
+    @POST("/tutoring/appoint/{questionId}")
     suspend fun pickStudent(
         @Path("questionId") questionId: String, @Body body: StudentPickReqDto
     ): Response<WrappedResponse<StudentPickResultDto>>
