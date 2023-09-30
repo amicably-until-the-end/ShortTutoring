@@ -31,7 +31,7 @@ class TeacherSearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTeacherSearchBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -105,7 +105,7 @@ class TeacherSearchFragment : Fragment() {
                 )
             }
         }
-        teacherAdapter.setItem(teachers)
+//        teacherAdapter.setItem(teachers)
     }
 
     private fun observeFollowing() {

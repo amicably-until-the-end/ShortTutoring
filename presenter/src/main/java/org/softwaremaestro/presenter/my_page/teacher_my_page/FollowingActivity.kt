@@ -4,38 +4,40 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
-import org.softwaremaestro.presenter.databinding.ActivityFollowerBinding
-import org.softwaremaestro.presenter.my_page.adapter.StudentAdapter
+import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.presenter.databinding.ActivityFollowingBinding
+import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 
 @AndroidEntryPoint
 class FollowingActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFollowerBinding
+    private lateinit var binding: ActivityFollowingBinding
 
-    private lateinit var studentAdapter: StudentAdapter
+    private lateinit var teacherAdapter: TeacherAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFollowerBinding.inflate(layoutInflater)
+        binding = ActivityFollowingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.btnToolbarBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        setStudentRecyclerView()
+        setTeacherRecyclerView()
 
         // mock up
         addItemToStudentAdapter()
     }
 
-    private fun setStudentRecyclerView() {
+    private fun setTeacherRecyclerView() {
 
-        studentAdapter = StudentAdapter()
+        teacherAdapter = TeacherAdapter {
+            // go to teacher profile
+        }
 
-        binding.rvFollowers.apply {
-            adapter = studentAdapter
+        binding.rvFollowing.apply {
+            adapter = teacherAdapter
             layoutManager =
                 LinearLayoutManager(this@FollowingActivity, LinearLayoutManager.VERTICAL, false)
         }
@@ -43,27 +45,28 @@ class FollowingActivity : AppCompatActivity() {
 
     private fun addItemToStudentAdapter() {
 
-        studentAdapter.setItem(
-            mutableListOf<FollowerGetResponseVO>().apply {
+        teacherAdapter.setItem(
+            mutableListOf<FollowingGetResponseVO>().apply {
                 repeat(5) {
                     add(
-                        FollowerGetResponseVO(
+                        FollowingGetResponseVO(
                             "",
-                            "예비성대생",
-                            "고등학교 2학년",
+                            "강혜린쌤",
+                            "선생님 소개",
                             null,
-                            "student",
-                            "고등학교",
-                            2,
-//                            "23.08.20"
-                            -1,
-                            -1
+                            "teacher",
+                            "수학교육과",
+                            "한양대학교",
+                            "",
+                            null,
+                            0,
+                            0
                         )
                     )
                 }
             }
         )
 
-        studentAdapter.notifyDataSetChanged()
+        teacherAdapter.notifyDataSetChanged()
     }
 }

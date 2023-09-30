@@ -329,7 +329,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:text="내가 찜한 선생"
+                        android:text="내가 찜한 선생님"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"

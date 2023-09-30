@@ -3,7 +3,6 @@ package org.softwaremaestro.presenter.my_page.student_my_page
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentStudentMyPageBinding
-import org.softwaremaestro.presenter.my_page.teacher_my_page.FollowerActivity
+import org.softwaremaestro.presenter.my_page.teacher_my_page.FollowingActivity
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
@@ -48,12 +47,12 @@ class StudentMyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profileViewModel.getMyProfile()
-        Log.d("hhcc", "hc")
-        observe()
         initLectureRecyclerView()
 
         setBtnEditTeacherImg()
         setFollowingMenu()
+
+        observe()
     }
 
     private fun observe() {
@@ -133,7 +132,7 @@ class StudentMyPageFragment : Fragment() {
 
     private fun setFollowingMenu() {
         binding.containerFollowing.setOnClickListener {
-            startActivity(Intent(requireActivity(), FollowerActivity::class.java))
+            startActivity(Intent(requireActivity(), FollowingActivity::class.java))
         }
     }
 }
