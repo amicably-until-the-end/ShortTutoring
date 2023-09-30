@@ -92,6 +92,10 @@ class ChatRepositoryImpl @Inject constructor(
                 insertOrUpdateRoom(chatRoomVO)
                 if (!chatRoomVO.isSelect && chatRoomVO.status == ChatRoomType.RESERVED_NORMAL.type) {
                     chatRoomVO.questionId?.let { questionId ->
+                        Log.d(
+                            "ChatRepositoryImpl delete",
+                            " ${questionId} ${chatRoomVO.description}"
+                        )
                         chatDatabase.chatRoomDao().delete(questionId)
                     }
                 }
@@ -103,6 +107,7 @@ class ChatRepositoryImpl @Inject constructor(
         if (chatDatabase.chatRoomDao().isIdExist(room.id)) {
             chatDatabase.chatRoomDao().update(room)
         } else {
+            Log.d("ChatRepositoryImpl", "insert ${room}")
             chatDatabase.chatRoomDao().insert(room)
         }
 

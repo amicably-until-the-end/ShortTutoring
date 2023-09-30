@@ -60,6 +60,8 @@ class SocketManager @Inject constructor(
         mSocket?.on("message") { args ->
             CoroutineScope(DispatchersIO).launch {
                 try {
+                    println("socket message: ${args[0]}")
+
                     val message = Json.decodeFromString<MessageFormat>(args[0].toString())
 
                     repository.insertMessage(
@@ -69,7 +71,6 @@ class SocketManager @Inject constructor(
                         message.message.createdAt,
                         false,
                     )
-                    println("socket message: ${message}")
                     messageAppendListener?.let { it(message.chattingId) }
                 } catch (e: Exception) {
                     println("socket message error: ${e.message}")
