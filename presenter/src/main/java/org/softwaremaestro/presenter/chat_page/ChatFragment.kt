@@ -504,6 +504,8 @@ abstract class ChatFragment : Fragment() {
             setOfferingTeacherMode()
             clearRecyclersSelectedView(null)
             proposedIconAdapter.changeSelectedQuestionId(questionId)
+            setNotiVisible(false)
+            setChatRoomBtnsVisible(false)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->

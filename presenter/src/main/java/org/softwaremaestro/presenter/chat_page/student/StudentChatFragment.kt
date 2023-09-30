@@ -85,6 +85,7 @@ class StudentChatFragment : ChatFragment() {
     private fun onProposedSelectQuestionSelect() {
         hideLeftButton()
         hideRightButton()
+        setNotiVisible(false)
     }
 
     private fun hideLeftButton() {
@@ -141,15 +142,14 @@ class StudentChatFragment : ChatFragment() {
             when (it) {
                 is UIState.Loading -> {
                     //로딩
-                    with(binding.btnChatRoomRight) {
-                        setBackgroundResource(R.drawable.bg_radius_100_background_grey)
-                        isEnabled = false
-                        setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                    listOf(binding.btnChatRoomRight, binding.btnChatRoomLeft).forEach { btn ->
+                        btn.setBackgroundResource(R.drawable.bg_radius_100_background_grey)
+                        btn.isEnabled = false
+                        btn.setTextColor(resources.getColor(R.color.sub_text_grey, null))
                     }
                 }
 
                 is UIState.Success -> {
-                    disableChatRoomBtn()
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
                     chatViewModel.getChatRoomList(isTeacher())
                 }
@@ -169,7 +169,7 @@ class StudentChatFragment : ChatFragment() {
     }
 
     private fun onReservedRoomSelect() {
-        setNotiVisible(true)
+        disableChatRoomBtn()
         currentChatRoom?.questionId?.let {
             chatViewModel.getTutoringInfo(it) //예약하기 질문의 noti 세팅을 위한 과외 정보 api 호출
             observeTutoringInfo()

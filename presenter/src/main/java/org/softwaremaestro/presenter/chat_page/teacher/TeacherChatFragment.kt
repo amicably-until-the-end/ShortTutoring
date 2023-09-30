@@ -61,7 +61,7 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
                 QuestionState.RESERVED -> {
-                    disableChatRoomBtn()
+                    onReservedRoomSelect()
                 }
 
                 else -> {
@@ -71,11 +71,12 @@ class TeacherChatFragment : ChatFragment() {
             //일반 질문 일때
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    //일반 질문일 때는 별 다른거 없을 듯
+                    setChatRoomBtnsVisible(false)
+                    setNotiVisible(false)
                 }
 
                 QuestionState.RESERVED -> {
-                    disableChatRoomBtn()
+                    onReservedRoomSelect()
                 }
 
                 else -> {
@@ -174,16 +175,17 @@ class TeacherChatFragment : ChatFragment() {
             when (it) {
                 is UIState.Loading -> {
                     //로딩
-                    with(binding.btnChatRoomRight) {
-                        setBackgroundResource(R.drawable.bg_radius_100_background_grey)
-                        isEnabled = false
-                        setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                    listOf(
+                        binding.btnChatRoomRight,
+                        binding.btnChatRoomLeft
+                    ).forEach { btn ->
+                        btn.setBackgroundResource(R.drawable.bg_radius_100_background_grey)
+                        btn.isEnabled = false
+                        btn.setTextColor(resources.getColor(R.color.sub_text_grey, null))
                     }
                 }
 
                 is UIState.Success -> {
-                    disableChatRoomBtn()
-
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
                     chatViewModel.getChatRoomList(isTeacher())
                 }
@@ -232,6 +234,10 @@ class TeacherChatFragment : ChatFragment() {
             setTitle("수업 시작 시간을 선택해주세요")
             setBtnText("선택하기")
         }
+    }
+
+    private fun onReservedRoomSelect() {
+        disableChatRoomBtn()
     }
 
     private fun initNumberPickerDialog() {
