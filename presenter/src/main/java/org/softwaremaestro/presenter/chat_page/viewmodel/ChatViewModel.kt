@@ -6,29 +6,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.socket.client.IO
-import io.socket.client.Socket
 import kotlinx.coroutines.Dispatchers
-
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.json.JSONObject
-
-import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
-import org.softwaremaestro.domain.chat.entity.QuestionState
-import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.usecase.GetChatMessagesUseCase
-import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.chat.usecase.InsertMessageUseCase
+import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.domain.classroom.usecase.GetClassRoomInfoUseCase
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.socket.SocketManager
@@ -41,7 +33,8 @@ class ChatViewModel @Inject constructor(
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
-    private val insertMessageUseCase: InsertMessageUseCase
+    private val insertMessageUseCase: InsertMessageUseCase,
+    private val getClassRoomInfoUseCase: GetClassRoomInfoUseCase,
 ) :
     ViewModel() {
 
@@ -64,6 +57,10 @@ class ChatViewModel @Inject constructor(
     private val _proposedSelectedChatRoomList = MutableLiveData<UIState<List<ChatRoomVO>>>()
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
+
+    private val _classroomInfo = MutableLiveData<UIState<ClassroomInfoVO?>>()
+    val classroomInfo: LiveData<UIState<ClassroomInfoVO?>>
+        get() = _classroomInfo
 
 
     private val _messages = MutableLiveData<UIState<List<MessageVO>>>()
@@ -110,7 +107,7 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getClassRoomInfo(questionId: String) {
+    fun getTutoringInfo(questionId: String) {
         viewModelScope.launch {
             getTutoringInfoUseCase.execute(questionId)
                 .onStart {
@@ -126,11 +123,38 @@ class ChatViewModel @Inject constructor(
                             _tutoringInfo.value = UIState.Success(result.data)
                         }
 
-                        is BaseResult.Error -> UIState.Failure
+                        is BaseResult.Error -> _tutoringInfo.value = UIState.Failure
                     }
                 }
         }
 
+    }
+
+    fun getClassroomInfo(questionId: String) {
+        viewModelScope.launch {
+            getClassRoomInfoUseCase.execute(questionId)
+                .onStart {
+                    _classroomInfo.value = UIState.Loading
+                }
+                .catch { exception ->
+                    _classroomInfo.value = UIState.Failure
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _classroomInfo.value = UIState.Success(result.data)
+                        }
+
+                        is BaseResult.Error -> when (result.rawResponse) {
+                            ClassroomInfoVO.NOT_YET_START -> _classroomInfo.value =
+                                UIState.Success(null)
+
+                            else -> _classroomInfo.value = UIState.Failure
+                        }
+                    }
+                }
+        }
     }
 
     fun getMessages(chattingId: String) {
@@ -147,7 +171,7 @@ class ChatViewModel @Inject constructor(
                 .collect { result ->
                     Log.d(
                         "ChatViewModel getMessages",
-                        "chattindId $chattingId ${result.toString()}"
+                        "chattindId $chattingId $result"
                     )
                     when (result) {
                         is BaseResult.Success -> {

@@ -39,7 +39,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
-import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 
 
 @AndroidEntryPoint
@@ -52,7 +52,7 @@ class ClassroomFragment : Fragment() {
 
 
     // Agora whiteboard instance
-    lateinit var sdkConfiguration: WhiteSdkConfiguration;
+    lateinit var sdkConfiguration: WhiteSdkConfiguration
 
 
     // Agora voice instance
@@ -88,7 +88,7 @@ class ClassroomFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentClassroomBinding.inflate(layoutInflater)
         if (!checkSelfPermission()) {
@@ -96,7 +96,7 @@ class ClassroomFragment : Fragment() {
                 requireActivity(),
                 REQUESTED_PERMISSIONS,
                 PERMISSION_REQ_ID
-            );
+            )
         }
         startTimer()
         setAgora()
@@ -157,8 +157,8 @@ class ClassroomFragment : Fragment() {
                 var memberState = MemberState()
                 memberState.currentApplianceName = "pencil"
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
-                wRoom?.memberState = memberState
-                wRoom?.disableSerialization(false)
+                wRoom.memberState = memberState
+                wRoom.disableSerialization(false)
                 setWhiteBoard()
 
 
@@ -349,9 +349,12 @@ class ClassroomFragment : Fragment() {
 
     private fun setUpFinishButton() {
         binding.btnToolbarBack.setOnClickListener {
-            val dialogLectureEnd = DetailAlertDialog("수업을 종료할까요?", "과외 영상이 자동으로 저장됩니다") {
+            val dialogLectureEnd = SimpleConfirmDialog {
                 viewModel.finishClass(voiceInfo.channelId)
                 activity?.finish()
+            }.apply {
+                title = "수업을 종료할까요?"
+                description = "과외 영상이 자동으로 저장됩니다"
             }
             dialogLectureEnd.show(requireActivity().supportFragmentManager, "lectureEnd")
         }

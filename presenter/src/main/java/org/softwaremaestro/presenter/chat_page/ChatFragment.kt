@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
-import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
+import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
@@ -37,6 +37,7 @@ import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import javax.inject.Inject
 
 
@@ -55,7 +56,7 @@ abstract class ChatFragment : Fragment() {
 
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
-    protected val chatViewModel: ChatViewModel by activityViewModels();
+    protected val chatViewModel: ChatViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -87,16 +88,14 @@ abstract class ChatFragment : Fragment() {
         observeSocket()
 
 
+
         return binding.root
 
     }
 
-    abstract fun setChatNoti()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = LoadingDialog(requireContext())
-
     }
 
 
@@ -113,9 +112,11 @@ abstract class ChatFragment : Fragment() {
 
     private fun observeSocket() {
         //viewmodel로 뺄 수 도 있겠다.
-        socketManager.getSocket().on("message") {
+        socketManager.addOnMessageReceiveListener { chatRoomId ->
+            if (currentChatRoom?.id == chatRoomId) {
+                chatViewModel.getMessages(chatRoomId)
+            }
             chatViewModel.getChatRoomList(isTeacher())
-            currentChatRoom?.let { chatViewModel.getMessages(it.id!!) }
         }
     }
 
@@ -177,16 +178,14 @@ abstract class ChatFragment : Fragment() {
         setChatRoomBtnsVisible(false)
     }
 
-    abstract fun observeTutoringInfo()
-
-    fun enterRoom() {
+    fun getClassRoomInfo() {
         if (currentChatRoom?.questionId == null) {
             Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
             return
         }
-        chatViewModel.getClassRoomInfo(currentChatRoom?.questionId!!)
-        observeTutoringInfo()
+        chatViewModel.getClassroomInfo(currentChatRoom?.questionId!!)
     }
+
 
     private fun refreshReservedRoomList() {
         if (binding.rbNormalQuestion.isChecked) {
@@ -371,7 +370,12 @@ abstract class ChatFragment : Fragment() {
                 dialog.show(parentFragmentManager, "dialog")
             },
             onBtn2Click = {
-                DetailAlertDialog("질문을 삭제할까요?", "작성한 질문 내용이 사라집니다") {}.show(
+                SimpleConfirmDialog {
+                    //TODO: 질문 삭제 API 호출
+                }.apply {
+                    title = "질문을 삭제할까요?"
+                    description = "작성한 질문 내용이 사라집니다"
+                }.show(
                     parentFragmentManager,
                     "detailAlertDialog"
                 )
@@ -455,19 +459,19 @@ abstract class ChatFragment : Fragment() {
         resetMsgTab()
     }
 
-    protected fun moveToClassRoom(tutoringInfoVO: TutoringInfoVO) {
+    protected fun moveToClassRoom(classroomInfoVO: ClassroomInfoVO) {
         val intent = Intent(requireContext(), ClassroomActivity::class.java)
-        tutoringInfoVO.let {
+        classroomInfoVO.let {
             val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
-                it.whiteBoardAppId!!,
-                it.whiteBoardUUID!!,
-                it.whiteBoardToken!!,
-                "1"
+                appId = it.boardAppId,
+                uuid = it.boardUUID,
+                roomToken = it.boardToken,
+                uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}"
             )
             val voiceRoomInfo = SerializedVoiceRoomInfo(
-                appId = it.RTCAppId!!,
-                token = if (isTeacher()) (it.teacherRTCToken) else (it.studentRTCToken),
-                channelId = it.id,
+                appId = it.rtcAppId,
+                token = it.rtcToken,
+                channelId = it.rtcChannel,
                 uid = if (isTeacher()) (ClassroomFragment.RTC_TEACHER_UID) else (ClassroomFragment.RTC_STUDENT_UID)
             )
             // 교실 액티비티로 이동한다

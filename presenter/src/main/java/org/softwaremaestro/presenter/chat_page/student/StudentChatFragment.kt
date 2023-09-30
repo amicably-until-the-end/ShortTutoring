@@ -14,8 +14,12 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.StudentChatViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.util.toKoreanString
 import org.softwaremaestro.presenter.util.widget.DatePickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.time.LocalDateTime
 
@@ -27,7 +31,7 @@ class StudentChatFragment : ChatFragment() {
     private lateinit var datePickerDialog: DatePickerBottomDialog
     private lateinit var timePickerDialog: TimePickerBottomDialog
     private lateinit var numberPickerDialog: NumberPickerBottomDialog
-
+    private lateinit var waitingTeacherDialog: SimpleAlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,8 @@ class StudentChatFragment : ChatFragment() {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         observePickTeacherResultState()
         observeTutoringTimeAndDurationProper()
+        observeClassroomInfo() // 강의실 입장하기 버튼을 눌렀을 때의 결과 observe
+        observeTutoringInfo() //예약하기 질문의 noti 세팅을 위한 과외 정보 observe
         initDialog()
         return view
     }
@@ -69,6 +75,13 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
+    private fun initWaitingTeacherDialog() {
+        waitingTeacherDialog = SimpleAlertDialog().apply {
+            title = "아직 수업이 시작되지 않았습니다"
+            description = "선생님께 문의해보세요."
+        }
+    }
+
     private fun onProposedSelectQuestionSelect() {
         hideLeftButton()
         hideRightButton()
@@ -82,30 +95,29 @@ class StudentChatFragment : ChatFragment() {
         binding.btnChatRoomRight.visibility = View.GONE
     }
 
-    override fun observeTutoringInfo() {
-        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
-
+    fun observeClassroomInfo() {
+        chatViewModel.classroomInfo.observe(viewLifecycleOwner) {
             when (it) {
+                is UIState.Empty -> return@observe
                 is UIState.Loading -> {
+                    binding.btnChatRoomRight.setEnabledAndChangeColor(false)
                     loadingDialog.show()
                 }
 
                 is UIState.Success -> {
-                    Log.d("tutoring", it._data.toString())
                     loadingDialog.dismiss()
-                    if (!it._data?.whiteBoardAppId.isNullOrEmpty()) {
-                        Toast.makeText(
-                            requireContext(),
-                            "강의실에 입장합니다. ${it._data?.whiteBoardAppId}",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        moveToClassRoom(it._data!!)
-                        chatViewModel._tutoringInfo.value = UIState.Empty
+                    if (it._data != null) {
+                        SimpleConfirmDialog()
+                        {
+                            moveToClassRoom(it._data)
+                        }.apply {
+                            title = "강의실에 입장합니다"
+                            description = "강의실에 들어가면 바로 수업이 시작됩니다. 수업 가능한 환경을 준비해주세요."
+                        }.show(parentFragmentManager, "enterClassroomDialog")
                     } else {
-                        Toast.makeText(requireContext(), "아직 수업 시작 전입니다.", Toast.LENGTH_SHORT)
-                            .show()
+                        waitingTeacherDialog.show(parentFragmentManager, "waitingTeacherDialog")
                     }
+                    binding.btnChatRoomRight.setEnabledAndChangeColor(true)
                 }
 
                 is UIState.Failure -> {
@@ -138,9 +150,6 @@ class StudentChatFragment : ChatFragment() {
 
                 is UIState.Success -> {
                     disableChatRoomBtn()
-
-                    // Todo: 다른 선생님에게 거절 문자하기
-
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
                     chatViewModel.getChatRoomList(isTeacher())
                 }
@@ -161,22 +170,34 @@ class StudentChatFragment : ChatFragment() {
 
     private fun onReservedRoomSelect() {
         setNotiVisible(true)
-//        enableEnterClassroomBtn()
-        observeTutoringInfo()
+        currentChatRoom?.questionId?.let {
+            chatViewModel.getTutoringInfo(it) //예약하기 질문의 noti 세팅을 위한 과외 정보 api 호출
+            observeTutoringInfo()
+        }
     }
 
-    private fun enableEnterClassroomBtn() {
-        binding.btnChatRoomRight.apply {
-            visibility = View.VISIBLE
-            text = "강의실 입장하기"
-            setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
-            isEnabled = true
-            setTextColor(resources.getColor(R.color.white, null))
-            setOnClickListener {
-                currentChatRoom?.let {
-                    chatViewModel.getClassRoomInfo(it.id!!)
+    private fun observeTutoringInfo() {
+        chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Empty -> return@observe
+
+                is UIState.Success -> {
+                    loadingDialog.dismiss()
+                    it._data?.let { tutoringInfo ->
+                        setChatNoti(tutoringInfo.reservedStart)
+                    }
                 }
+
+                is UIState.Failure -> {
+                    loadingDialog.dismiss()
+                    setChatNoti(null)
+                    Toast.makeText(requireContext(), "예약 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {}
             }
+
         }
     }
 
@@ -190,7 +211,7 @@ class StudentChatFragment : ChatFragment() {
                         .withDayOfMonth(dayOfMonth)
                 )
             }
-            timePickerDialog.show(parentFragmentManager, "datePicker")
+            timePickerDialog.show(parentFragmentManager, "timePicker")
         }.apply {
             setTitle("수업 날짜를 선택해주세요")
             setBtnText("선택하기")
@@ -214,13 +235,14 @@ class StudentChatFragment : ChatFragment() {
         initDatePickerDialog()
         initTimePickerDialog()
         initNumberPickerDialog()
+        initWaitingTeacherDialog()
     }
 
     private fun initTimePickerDialog() {
         timePickerDialog = TimePickerBottomDialog { time ->
             studentViewModel.setTutoringTime(
                 with(studentViewModel.tutoringTime.value!!) {
-                    java.time.LocalDateTime.of(
+                    LocalDateTime.of(
                         year,
                         monthValue,
                         dayOfMonth,
@@ -261,10 +283,11 @@ class StudentChatFragment : ChatFragment() {
         return
     }
 
-    override fun setChatNoti() {
+
+    fun setChatNoti(startAt: LocalDateTime?) {
+        Log.d("setChatNoti", "setChatNoti: ${startAt} ")
         binding.cnNoti.apply {
-            // Todo: 추후에 시간 변경하기
-            setTvNotiMain("선생님과의 수업이 7월 77일 7시에 진행됩니다")
+            setTvNotiMain("선생님과의 수업이 ${startAt?.toKoreanString()}에 진행됩니다")
             setTvNotiSub("선생님이 수업을 시작하면 강의실에 입장할 수 있어요")
             setBtnNegativeText("일정 변경하기")
             setBtnPositiveText("강의실 입장하기")
@@ -272,8 +295,10 @@ class StudentChatFragment : ChatFragment() {
                 visibility = View.GONE
             }
             setOnClickListenerToBtnPositive {
-                enterRoom()
+                getClassRoomInfo()
             }
         }
+
     }
+
 }

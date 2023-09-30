@@ -1,12 +1,9 @@
-package org.softwaremaestro.data.user_follow.remote
+package org.softwaremaestro.data.question_upload.remote
 
-import org.softwaremaestro.data.common.utils.WrappedListResponse
 import org.softwaremaestro.data.common.utils.WrappedResponse
 import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
-import org.softwaremaestro.data.question_upload.model.PickTeacherResDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadResultDto
-import org.softwaremaestro.data.question_upload.model.TeacherDto
 import org.softwaremaestro.data.question_upload.model.TeacherListDto
 import retrofit2.Response
 import retrofit2.http.Body

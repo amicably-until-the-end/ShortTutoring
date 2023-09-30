@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
@@ -56,7 +54,7 @@ class StudentHomeFragment : Fragment() {
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
-        setToolBar()
+        setNofiBtn()
 
         observeFollowing()
         observeMyProfile()
@@ -140,6 +138,14 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun setNofiBtn() {
+        binding.btnToolbarNotification.setOnClickListener {
+            showNoti("제목", "본문") {
+                // when confirm clicked
+            }
+        }
+    }
+
     private fun setLectureRecyclerView() {
 
         lectureAdapter = LectureAdapter {}
@@ -160,12 +166,6 @@ class StudentHomeFragment : Fragment() {
     private fun startQuestionUploadActivity() {
         val intent = Intent(requireContext(), QuestionUploadActivity::class.java)
         startActivityForResult(intent, QUESTION_UPLOAD_RESULT)
-    }
-
-    private fun setToolBar() {
-        binding.btnToolbarNotification.setOnClickListener {
-            findNavController().navigate(R.id.action_studentHomeFragment_to_notificationFragment)
-        }
     }
 
     private fun observeFollowing() {
@@ -273,6 +273,17 @@ class StudentHomeFragment : Fragment() {
                         moveToChatTab()
                     }
                 }
+            }
+        }
+    }
+
+    fun showNoti(title: String, description: String, onConfirmClick: () -> Unit) {
+        binding.nwNoti.apply {
+            visibility = View.VISIBLE
+            setTitle(title)
+            setDescription(description)
+            setOnConfirmClick {
+                onConfirmClick()
             }
         }
     }

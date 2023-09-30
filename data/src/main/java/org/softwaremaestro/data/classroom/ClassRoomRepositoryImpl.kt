@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.classroom.model.asDomain
 import org.softwaremaestro.data.classroom.remote.ClassRoomApi
 import org.softwaremaestro.domain.classroom.ClassRoomRepository
+import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
@@ -23,14 +24,32 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
         }
     }
 
+
     override suspend fun getTutoringInfo(questionId: String): Flow<BaseResult<TutoringInfoVO, String>> {
+        return flow {
+            val result = classRoomApi.getTutoringInfo(questionId)
+
+            if (result.isSuccessful && result.body()?.success == true) {
+                emit(BaseResult.Success(result.body()?.data?.asDomain()!!))
+            } else {
+                emit(BaseResult.Error("Error"))
+            }
+        }
+    }
+
+    override suspend fun getClassroomInfo(questionId: String): Flow<BaseResult<ClassroomInfoVO, String>> {
         return flow {
             val result = classRoomApi.getClassroomInfo(questionId)
 
-            if (result.isSuccessful && result.body()?.success == true) {
-                emit(BaseResult.Success(result.body()?.data?.tutoring?.asDomain()!!))
-            } else {
+            if (!result.isSuccessful) {
                 emit(BaseResult.Error("Error"))
+                return@flow
+            }
+
+            if (result.isSuccessful && result.body()?.success == true) {
+                emit(BaseResult.Success(result.body()?.data!!.asDomain(questionId)))
+            } else {
+                emit(BaseResult.Error(ClassroomInfoVO.NOT_YET_START))
             }
         }
     }
