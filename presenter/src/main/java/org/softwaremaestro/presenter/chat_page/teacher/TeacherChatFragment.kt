@@ -167,8 +167,8 @@ class TeacherChatFragment : ChatFragment() {
     private fun observeTutoringTimeAndDurationProper() {
         teacherViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
-                currentChatRoom?.let {
-                    teacherViewModel.pickStudent(it.questionId!!)
+                currentChatRoom?.questionId?.let {
+                    teacherViewModel.pickStudent(it)
                 }
             }
         }

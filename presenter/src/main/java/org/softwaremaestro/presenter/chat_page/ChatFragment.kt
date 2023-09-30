@@ -3,18 +3,17 @@ package org.softwaremaestro.presenter.chat_page
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.notify
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
@@ -36,7 +35,6 @@ import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import javax.inject.Inject
@@ -80,6 +78,7 @@ abstract class ChatFragment : Fragment() {
         setApplyIconRecyclerView()
         setOfferingTeacherRecyclerView()
         setCloseOfferingTeacherButton()
+        setChatNoti()
         observeChatRoomList()
         makeAdapterList()
         getRoomList()

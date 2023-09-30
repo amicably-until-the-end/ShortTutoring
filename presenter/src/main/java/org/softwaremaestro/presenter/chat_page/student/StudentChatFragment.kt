@@ -160,8 +160,8 @@ class StudentChatFragment : ChatFragment() {
     }
 
     private fun onReservedRoomSelect() {
-        setNotiVisible(false)
-        enableEnterClassroomBtn()
+        setNotiVisible(true)
+//        enableEnterClassroomBtn()
         observeTutoringInfo()
     }
 
