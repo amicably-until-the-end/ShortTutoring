@@ -16,4 +16,6 @@ interface AnswerUploadRepository {
         endTime: LocalDateTime,
         chattingId: String
     ): Flow<BaseResult<StudentPickResultVO, String>>
+
+    suspend fun declineQuestion(chattingId: String): Flow<BaseResult<Boolean, String>>
 }
