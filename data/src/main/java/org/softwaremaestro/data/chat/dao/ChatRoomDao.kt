@@ -19,6 +19,9 @@ interface ChatRoomDao {
     @Query("DELETE FROM ChatRoomEntity")
     fun deleteAll()
 
+    @Query("DELETE FROM ChatRoomEntity WHERE id = :roomId")
+    fun delete(roomId: String)
+
     @Query("SELECT EXISTS(SELECT * FROM ChatRoomEntity WHERE id = :roomId)")
     fun isIdExist(roomId: String): Boolean
 

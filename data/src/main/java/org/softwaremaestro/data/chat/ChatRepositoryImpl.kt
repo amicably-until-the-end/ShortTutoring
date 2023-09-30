@@ -8,7 +8,6 @@ import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.data.chat.entity.ChatRoomType
 import org.softwaremaestro.data.chat.entity.MessageEntity
 import org.softwaremaestro.data.chat.entity.asEntity
-import org.softwaremaestro.data.chat.entity.asDomain as EntityToVO
 import org.softwaremaestro.data.chat.remote.ChatApi
 import org.softwaremaestro.data.question_get.remote.QuestionGetApi
 import org.softwaremaestro.domain.chat.ChatRepository
@@ -19,6 +18,7 @@ import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
+import org.softwaremaestro.data.chat.entity.asDomain as EntityToVO
 
 class ChatRepositoryImpl @Inject constructor(
     private val chatApi: ChatApi,
@@ -76,7 +76,7 @@ class ChatRepositoryImpl @Inject constructor(
             )
         } catch (e: Exception) {
             Log.d("ChatRepositoryImpl", e.toString())
-            return null;
+            return null
         }
 
     }
@@ -88,7 +88,13 @@ class ChatRepositoryImpl @Inject constructor(
         if (result.isSuccessful && result.body()?.success == true) {
             val data = result.body()?.data!!
             data.map {
-                insertOrUpdateRoom(it.asEntity())
+                val chatRoomVO = it.asEntity()
+                insertOrUpdateRoom(chatRoomVO)
+                if (!chatRoomVO.isSelect && chatRoomVO.status == ChatRoomType.RESERVED_NORMAL.type) {
+                    chatRoomVO.questionId?.let { questionId ->
+                        chatDatabase.chatRoomDao().delete(questionId)
+                    }
+                }
             }
         }
     }
