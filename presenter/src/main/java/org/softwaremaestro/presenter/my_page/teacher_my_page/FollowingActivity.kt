@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page
+package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
 import org.softwaremaestro.presenter.databinding.ActivityFollowerBinding
-import org.softwaremaestro.presenter.teacher_my_page.adapter.StudentAdapter
+import org.softwaremaestro.presenter.my_page.adapter.StudentAdapter
 
 @AndroidEntryPoint
-class FollowerActivity : AppCompatActivity() {
+class FollowingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFollowerBinding
 
@@ -37,7 +37,7 @@ class FollowerActivity : AppCompatActivity() {
         binding.rvFollowers.apply {
             adapter = studentAdapter
             layoutManager =
-                LinearLayoutManager(this@FollowerActivity, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(this@FollowingActivity, LinearLayoutManager.VERTICAL, false)
         }
     }
 

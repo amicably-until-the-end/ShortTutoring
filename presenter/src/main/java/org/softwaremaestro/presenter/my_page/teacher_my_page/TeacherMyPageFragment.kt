@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page
+package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -13,12 +13,12 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
+import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.FollowerViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.LecturesViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -40,7 +40,7 @@ class TeacherMyPageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTeacherMyPageBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -112,7 +112,7 @@ class TeacherMyPageFragment : Fragment() {
         }
 
         profileViewModel.followersCount.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "찜한 사람 ${it}명"
+            binding.btnFollow.text = "찜한 학생 ${it}명"
         }
     }
 
@@ -130,7 +130,10 @@ class TeacherMyPageFragment : Fragment() {
             binding.containerReviewEmpty.visibility =
                 if (it.isEmpty()) View.VISIBLE else View.GONE
 
-            reviewAdapter.setItem(it)
+            reviewAdapter.apply {
+                setItem(it)
+                notifyDataSetChanged()
+            }
             binding.tvNumOfReview.text = it.size.toString()
         }
 
@@ -154,7 +157,10 @@ class TeacherMyPageFragment : Fragment() {
             binding.containerClipEmpty.visibility =
                 if (it.isEmpty()) View.VISIBLE else View.GONE
 
-            lectureAdapter.setItem(it)
+            lectureAdapter.apply {
+                setItem(it)
+                notifyDataSetChanged()
+            }
             binding.tvNumOfClip.text = it.size.toString()
         }
 

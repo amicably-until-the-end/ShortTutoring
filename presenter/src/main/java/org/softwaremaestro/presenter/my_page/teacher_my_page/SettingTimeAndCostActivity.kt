@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page
+package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +36,7 @@ class SettingTimeAndCostActivity : AppCompatActivity() {
                     adapter = TimePickerAdapter(60)
                     layoutManager = LinearLayoutManager(
                         this@SettingTimeAndCostActivity,
-                        androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
+                        LinearLayoutManager.HORIZONTAL,
                         false
                     )
                 }
