@@ -37,9 +37,9 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
         }
     }
 
-    override suspend fun getClassroomInfo(questionId: String): Flow<BaseResult<ClassroomInfoVO, String>> {
+    override suspend fun getClassroomInfo(tutoringId: String): Flow<BaseResult<ClassroomInfoVO, String>> {
         return flow {
-            val result = classRoomApi.getClassroomInfo(questionId)
+            val result = classRoomApi.getClassroomInfo(tutoringId)
 
             if (!result.isSuccessful) {
                 emit(BaseResult.Error("Error"))
@@ -47,7 +47,7 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
             }
 
             if (result.isSuccessful && result.body()?.success == true) {
-                emit(BaseResult.Success(result.body()?.data!!.asDomain(questionId)))
+                emit(BaseResult.Success(result.body()?.data!!.asDomain(tutoringId)))
             } else {
                 emit(BaseResult.Error(ClassroomInfoVO.NOT_YET_START))
             }

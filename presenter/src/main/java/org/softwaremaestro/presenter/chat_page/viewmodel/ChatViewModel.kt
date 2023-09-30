@@ -110,9 +110,9 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getTutoringInfo(questionId: String) {
+    fun getTutoringInfo(tutoringId: String) {
         viewModelScope.launch {
-            getTutoringInfoUseCase.execute(questionId)
+            getTutoringInfoUseCase.execute(tutoringId)
                 .onStart {
                     _tutoringInfo.value = UIState.Loading
                 }

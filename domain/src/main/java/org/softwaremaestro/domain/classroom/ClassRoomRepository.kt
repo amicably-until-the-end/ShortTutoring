@@ -9,7 +9,7 @@ interface ClassRoomRepository {
     suspend fun finishClass(tutoringId: String): Flow<BaseResult<String, String>>
     suspend fun getTutoringInfo(questionId: String): Flow<BaseResult<TutoringInfoVO, String>>
 
-    suspend fun getClassroomInfo(questionId: String): Flow<BaseResult<ClassroomInfoVO, String>>
+    suspend fun getClassroomInfo(tutoringId: String): Flow<BaseResult<ClassroomInfoVO, String>>
 
     suspend fun startClassroom(tutoringId: String): Flow<BaseResult<ClassroomInfoVO, String>>
 }
