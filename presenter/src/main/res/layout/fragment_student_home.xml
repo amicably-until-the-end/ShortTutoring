@@ -1,319 +1,335 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".student_home.StudentHomeActivity"
-    tools:ignore="MissingConstraints">
+    tools:context=".student_home.StudentHomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_toolbar"
-        style="@style/ToolBar">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:layout_width="109dp"
-            android:layout_height="52dp"
-            android:src="@drawable/logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_toolbar_notification"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/baseline_notifications_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/container_coin_balance"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:background="@drawable/bg_radius_13"
-            android:backgroundTint="#eeeff1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingLeft="2dp"
-            android:paddingRight="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_toolbar"
+            style="@style/ToolBar">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginLeft="2dp"
-                android:src="@drawable/ic_coin" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="1,350"
-                android:textColor="@color/black" />
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/container_parent_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="10dp"
-                android:elevation="15dp"
-                app:cardCornerRadius="5dp"
-                app:strokeColor="#e7e8eb"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="9dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="22dp"
-                        app:cardBackgroundColor="@color/black">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="10dp"
-                            android:gravity="center"
-                            android:text="🔔 알림"
-                            android:textColor="@color/white"
-                            android:textSize="10sp" />
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="오늘 오후 14:00에 강해린 선생님과 함께 수업이 진행예정이에요." />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btn_question"
-                android:layout_width="match_parent"
+                android:layout_width="109dp"
                 android:layout_height="52dp"
-                android:layout_marginHorizontal="20dp"
-                android:background="@drawable/bg_radius_5_grad_blue">
+                android:src="@drawable/logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="15dp"
-                    android:src="@drawable/ic_camera_outline"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_circle_chevron_right"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="질문하기"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_toolbar_notification"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/baseline_notifications_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/container_my_teacher_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingVertical="30dp"
-                android:paddingLeft="20dp">
+                android:id="@+id/container_coin_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:background="@drawable/bg_radius_13"
+                android:backgroundTint="#eeeff1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp"
+                android:paddingRight="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="2dp"
+                    android:src="@drawable/ic_coin" />
 
                 <TextView
-                    android:id="@+id/tv_my_teacher_desc"
-                    style="@style/section_title"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="관심 선생님에게 질문해볼까요?"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="1,350"
                     android:textColor="@color/black" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_teacher_following"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_my_teacher_desc" />
-
-                </LinearLayout>
-
             </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/container_parent_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ecf1fb"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/section_horizontal_padding_default"
-                android:paddingTop="20dp"
-                android:paddingBottom="30dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/section_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="수학 개념, 잘 알고 있는지 확인해볼까요?" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="다른 학생들이 했던 질문을 통해 알아봐요"
-                        android:textColor="#0f4bdf"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_lecture_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/section_horizontal_padding_default"
-                android:paddingVertical="30dp">
-
-                <TextView
-                    android:id="@+id/tv_lecture_desc"
-                    style="@style/section_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:text="지난 수업을 복습해봐요"
-                    android:textColor="@color/black"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_lecture"
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:clipToPadding="false"
-                    app:layout_constraintTop_toBottomOf="@id/tv_lecture_desc" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="#eeeff1" />
-
-            <LinearLayout
-                android:id="@+id/container_best_teacher_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/section_horizontal_padding_default"
-                android:paddingTop="30dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_best_teacher_desc"
-                        style="@style/section_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="학생들이 평가한 최고의 선생님"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:elevation="15dp"
+                    app:cardCornerRadius="5dp"
+                    app:strokeColor="#e7e8eb"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
-                        android:id="@+id/container_more_teacher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="9dp">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="22dp"
+                            app:cardBackgroundColor="@color/black">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="10dp"
+                                android:gravity="center"
+                                android:text="🔔 알림"
+                                android:textColor="@color/white"
+                                android:textSize="10sp" />
+                        </com.google.android.material.card.MaterialCardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/pretendard_medium"
-                            android:text="더보기"
-                            android:textColor="@color/sub_text_grey"
-                            android:textSize="13sp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginLeft="4dp"
-                            android:src="@drawable/ic_arrow_right_more" />
-
+                            android:layout_marginLeft="10dp"
+                            android:text="오늘 오후 14:00에 강해린 선생님과 함께 수업이 진행예정이에요." />
                     </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="@drawable/bg_radius_5_grad_blue">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/ic_camera_outline"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginRight="15dp"
+                        android:src="@drawable/ic_circle_chevron_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="질문하기"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_teacher"
+
+                <LinearLayout
+                    android:id="@+id/container_my_teacher_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false" />
+                    android:orientation="vertical"
+                    android:paddingVertical="30dp"
+                    android:paddingLeft="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_my_teacher_desc"
+                        style="@style/section_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="관심 선생님에게 질문해볼까요?"
+                        android:textColor="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_teacher_following"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_teacher_desc" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ecf1fb"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="30dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/section_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="수학 개념, 잘 알고 있는지 확인해볼까요?" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="다른 학생들이 했던 질문을 통해 알아봐요"
+                            android:textColor="#0f4bdf"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/container_lecture_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                    android:paddingVertical="30dp">
+
+                    <TextView
+                        android:id="@+id/tv_lecture_desc"
+                        style="@style/section_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:text="지난 수업을 복습해봐요"
+                        android:textColor="@color/black"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_lecture"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:clipToPadding="false"
+                        app:layout_constraintTop_toBottomOf="@id/tv_lecture_desc" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="#eeeff1" />
+
+                <LinearLayout
+                    android:id="@+id/container_best_teacher_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                    android:paddingTop="30dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_best_teacher_desc"
+                            style="@style/section_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="학생들이 평가한 최고의 선생님"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/container_more_teacher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:text="더보기"
+                                android:textColor="@color/sub_text_grey"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_marginLeft="4dp"
+                                android:src="@drawable/ic_arrow_right_more" />
+
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_teacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
-</LinearLayout>
+    <org.softwaremaestro.presenter.util.widget.NotiWidget
+        android:id="@+id/nw_noti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="15dp"
+        android:visibility="gone" />
+
+
+</FrameLayout>
