@@ -52,7 +52,7 @@ class SocketManager @Inject constructor(
     }
 
     fun addOnMessageReceiveListener(listener: (String) -> Unit) {
-        messageAppendListener.add(listener)
+        messageAppendListener = listener
     }
 
 
@@ -69,10 +69,8 @@ class SocketManager @Inject constructor(
                         message.message.createdAt,
                         false,
                     )
-                    messageAppendListener.forEach {
-                        println("socket message append listener $messageAppendListener")
-                        it(message.chattingId)
-                    }
+                    println("socket message: ${message}")
+                    messageAppendListener?.let { it(message.chattingId) }
                 } catch (e: Exception) {
                     println("socket message error: ${e.message}")
                 }
@@ -92,6 +90,6 @@ class SocketManager @Inject constructor(
         //private const val uri = "http://10.0.2.2:3000/"
 
         var mSocket: Socket? = null
-        private val messageAppendListener: MutableList<(String) -> Unit> = mutableListOf()
+        private var messageAppendListener: ((String) -> Unit)? = null
     }
 }

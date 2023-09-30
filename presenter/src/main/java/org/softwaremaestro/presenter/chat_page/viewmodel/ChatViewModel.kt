@@ -71,12 +71,13 @@ class ChatViewModel @Inject constructor(
 
     var selectedQuestionRoom: String? = null
 
+    val currentChattingId: String? = null
+
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
         get() = _tutoringInfo
 
     val gson = Gson()
-
 
     fun getChatRoomList(isTeacher: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
