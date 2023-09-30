@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page
+package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -13,12 +13,12 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
+import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.FollowerViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.LecturesViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ProfileViewModel
-import org.softwaremaestro.presenter.teacher_my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -40,7 +40,7 @@ class TeacherMyPageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTeacherMyPageBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -49,22 +49,49 @@ class TeacherMyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profileViewModel.getMyProfile()
-        observe()
 
         initReviewRecyclerView()
         initLectureRecyclerView()
 
         setBtnEditTeacherImg()
         setTvSettingTimeAndCost()
-
         setTvReview()
         setTvClip()
-
         setFollowerMenu()
+
+        observe()
     }
 
     private fun observe() {
         observeProfile()
+        observeReview()
+        observeLecture()
+    }
+
+    private fun observeReview() {
+        reviewsViewModel.reviews.observe(requireActivity()) {
+            binding.containerReviewEmpty.visibility =
+                if (it.isEmpty()) View.VISIBLE else View.GONE
+
+            reviewAdapter.apply {
+                setItem(it)
+                notifyDataSetChanged()
+            }
+            binding.tvNumOfReview.text = it.size.toString()
+        }
+    }
+
+    private fun observeLecture() {
+        lecturesViewModel.lectures.observe(requireActivity()) {
+            binding.containerClipEmpty.visibility =
+                if (it.isEmpty()) View.VISIBLE else View.GONE
+
+            lectureAdapter.apply {
+                setItem(it)
+                notifyDataSetChanged()
+            }
+            binding.tvNumOfClip.text = it.size.toString()
+        }
     }
 
     private fun setBtnEditTeacherImg() {
@@ -112,7 +139,7 @@ class TeacherMyPageFragment : Fragment() {
         }
 
         profileViewModel.followersCount.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "찜한 사람 ${it}명"
+            binding.btnFollow.text = "찜한 학생 ${it}명"
         }
     }
 
@@ -124,14 +151,6 @@ class TeacherMyPageFragment : Fragment() {
             adapter = reviewAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        reviewsViewModel.reviews.observe(requireActivity()) {
-            binding.containerReviewEmpty.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.GONE
-
-            reviewAdapter.setItem(it)
-            binding.tvNumOfReview.text = it.size.toString()
         }
 
         reviewsViewModel.getReviews()
@@ -148,14 +167,6 @@ class TeacherMyPageFragment : Fragment() {
             adapter = lectureAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        lecturesViewModel.lectures.observe(requireActivity()) {
-            binding.containerClipEmpty.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.GONE
-
-            lectureAdapter.setItem(it)
-            binding.tvNumOfClip.text = it.size.toString()
         }
 
         lecturesViewModel.getLectures()

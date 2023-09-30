@@ -334,6 +334,7 @@ abstract class ChatFragment : Fragment() {
     private fun setReservedSectionItems(list: List<ChatRoomVO>) {
         binding.apply {
             tvReservedCount.text = list.size.toString()
+            cvQuestionReservedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             reservedAdapter.setItem(list)
             reservedAdapter.notifyDataSetChanged()
         }
@@ -342,6 +343,7 @@ abstract class ChatFragment : Fragment() {
     private fun setProposedSectionItems(list: List<ChatRoomVO>) {
         binding.apply {
             tvApplyCount.text = list.size.toString()
+            cvQuestionProposedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             proposedAdapter.setItem(list)
             proposedAdapter.notifyDataSetChanged()
         }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".my_page.teacher_my_page.FollowerActivity">
+    tools:context=".my_page.teacher_my_page.FollowingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_toolbar"
@@ -17,7 +17,7 @@
 
         <TextView
             style="@style/ToolBarTitle"
-            android:text="나를 찜한 학생" />
+            android:text="내가 찜한 선생님" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.divider.MaterialDivider
@@ -31,12 +31,12 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
         android:paddingHorizontal="70dp"
-        android:text="10명의 학생들이 나를 찜했어요"
+        android:text="10명의 선생님을 찜했어요"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_followers"
+        android:id="@+id/rv_following"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
