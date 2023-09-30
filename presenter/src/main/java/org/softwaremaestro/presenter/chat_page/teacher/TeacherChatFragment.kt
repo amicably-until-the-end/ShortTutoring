@@ -107,7 +107,7 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
                 else -> {
-                    
+
                 }
             }
         }
@@ -176,7 +176,7 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
             }
-            chatViewModel._tutoringInfo.value = UIState.Empty
+            chatViewModel._classroomInfo.value = UIState.Empty
             //액티비티 종료되어 돌아오는 경우에 대비해서 초기화
         }
     }

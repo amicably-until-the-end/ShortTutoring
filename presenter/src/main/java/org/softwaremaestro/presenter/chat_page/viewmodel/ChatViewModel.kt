@@ -60,7 +60,7 @@ class ChatViewModel @Inject constructor(
     val proposedSelectedChatRoomList: LiveData<UIState<List<ChatRoomVO>>>
         get() = _proposedSelectedChatRoomList
 
-    private val _classroomInfo = MutableLiveData<UIState<ClassroomInfoVO?>>()
+    val _classroomInfo = MutableLiveData<UIState<ClassroomInfoVO?>>()
     val classroomInfo: LiveData<UIState<ClassroomInfoVO?>>
         get() = _classroomInfo
 
