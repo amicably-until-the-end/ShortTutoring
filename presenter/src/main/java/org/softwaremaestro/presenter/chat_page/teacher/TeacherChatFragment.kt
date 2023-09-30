@@ -79,16 +79,17 @@ class TeacherChatFragment : ChatFragment() {
         return true
     }
 
+
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         if (chatRoomVO.isSelect) {
             // 지정 질문 이면
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    enableChatRoomBtn()
+                    onProposedSelectRoomEnter()
                 }
 
                 QuestionState.RESERVED -> {
-                    onReservedRoomSelect()
+                    onReservedRoomEnter()
                 }
 
                 else -> {
@@ -102,17 +103,18 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
                 QuestionState.RESERVED -> {
-                    onReservedRoomSelect()
+                    onReservedRoomEnter()
                 }
 
                 else -> {
+                    
                 }
             }
         }
     }
 
 
-    override fun enableChatRoomBtn() {
+    override fun enablePickStudentBtn() {
         setNotiVisible(false)
         binding.btnChatRoomRight.apply {
             visibility = View.VISIBLE
@@ -133,11 +135,15 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
-    private fun onReservedRoomSelect() {
+    private fun onProposedSelectRoomEnter() {
+        setNotiVisible(false)
+        enablePickStudentBtn()
+    }
+
+    private fun onReservedRoomEnter() {
         currentChatRoom?.questionId?.let { chatViewModel.getTutoringInfo(it) }
         setNotiVisible(true)
         binding.btnChatRoomRight.visibility = View.GONE
-        binding.btnChatRoomLeft.visibility = View.GONE
     }
 
     private fun observeClassroomInfo() {

@@ -226,6 +226,10 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    fun setMessageUI(state: UIState<List<MessageVO>>) {
+        _messages.value = UIState.Empty
+    }
+
 
     @Serializable
     data class Message(

@@ -279,7 +279,7 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-    override fun enableChatRoomBtn() {
+    override fun enablePickStudentBtn() {
         return
     }
 
