@@ -22,6 +22,7 @@ import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
 import org.softwaremaestro.domain.classroom.usecase.GetClassRoomInfoUseCase
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
+import org.softwaremaestro.domain.classroom.usecase.StartClassUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.util.UIState
@@ -35,6 +36,7 @@ class ChatViewModel @Inject constructor(
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val insertMessageUseCase: InsertMessageUseCase,
     private val getClassRoomInfoUseCase: GetClassRoomInfoUseCase,
+    private val startClassUseCase: StartClassUseCase
 ) :
     ViewModel() {
 
@@ -130,6 +132,29 @@ class ChatViewModel @Inject constructor(
 
     }
 
+    fun startClassroom(tutoringId: String) {
+        viewModelScope.launch {
+            startClassUseCase.execute(tutoringId)
+                .onStart { }
+                .catch { exception ->
+                    Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            Log.d("TeacherChatViewModel", "startClassroom: ${result.data}")
+                            _classroomInfo.value = UIState.Success(result.data)
+                        }
+
+                        is BaseResult.Error -> {
+                            Log.d("TeacherChatViewModel", "startClassroom: ${result}")
+
+                        }
+                    }
+                }
+        }
+    }
+
     fun getClassroomInfo(questionId: String) {
         viewModelScope.launch {
             getClassRoomInfoUseCase.execute(questionId)
@@ -200,6 +225,7 @@ class ChatViewModel @Inject constructor(
             getMessages(chattingId)
         }
     }
+
 
     @Serializable
     data class Message(

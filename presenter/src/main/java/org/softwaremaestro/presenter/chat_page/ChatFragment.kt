@@ -529,4 +529,5 @@ abstract class ChatFragment : Fragment() {
     protected fun setNotiVisible(b: Boolean) {
         binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
     }
+
 }

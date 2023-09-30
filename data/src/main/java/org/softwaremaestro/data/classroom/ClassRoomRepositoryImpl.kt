@@ -53,4 +53,16 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
             }
         }
     }
+
+    override suspend fun startClassroom(tutoringId: String): Flow<BaseResult<ClassroomInfoVO, String>> {
+        return flow {
+            val result = classRoomApi.startClassroom(tutoringId)
+
+            if (result.isSuccessful && result.body()?.success == true) {
+                emit(BaseResult.Success(result.body()?.data!!.asDomain(tutoringId)))
+            } else {
+                emit(BaseResult.Error("Error"))
+            }
+        }
+    }
 }

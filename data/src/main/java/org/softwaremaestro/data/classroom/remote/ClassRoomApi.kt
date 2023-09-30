@@ -17,4 +17,7 @@ interface ClassRoomApi {
 
     @GET("/tutoring/info/{questionId}")
     suspend fun getTutoringInfo(@Path("questionId") questionId: String): Response<WrappedResponse<TutoringInfoDto>>
+
+    @GET("/tutoring/start/{tutoringId}")
+    suspend fun startClassroom(@Path("tutoringId") tutoringId: String): Response<WrappedResponse<ClassroomInfoDto>>
 }

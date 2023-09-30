@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.usecase.StudentPickUseCase
+import org.softwaremaestro.domain.classroom.usecase.StartClassUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
 import java.time.LocalDateTime
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TeacherChatViewModel @Inject constructor(
-    private val studentPickUseCase: StudentPickUseCase
+    private val studentPickUseCase: StudentPickUseCase,
+    private val startClassUseCase: StartClassUseCase
 ) : ViewModel() {
 
     private val _tutoringTime = MutableLiveData<LocalDateTime>()
@@ -72,6 +74,7 @@ class TeacherChatViewModel @Inject constructor(
                 }
         }
     }
+
 
     fun setTutoringTime(time: LocalDateTime) = _tutoringTime.postValue(time)
 
