@@ -42,7 +42,6 @@ class TeacherChatFragment : ChatFragment() {
     }
 
     private fun observe() {
-        observeTutoringTimeAndDurationProper()
         observePickStudentResult()
         observeClassroomInfo()
         observeTutoringInfo()
@@ -222,20 +221,10 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
-
-    private fun observeTutoringTimeAndDurationProper() {
-        teacherViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
-            if (proper) {
-                currentChatRoom?.let {
-                    teacherViewModel.pickStudent(it.questionId!!, it.id!!)
-                }
-            }
-        }
-    }
-
     private fun observePickStudentResult() {
         teacherViewModel.pickStudentResult.observe(viewLifecycleOwner) {
             when (it) {
+                is UIState.Empty -> return@observe
                 is UIState.Loading -> {
                     //로딩
                     loadingDialog.show()
@@ -260,6 +249,8 @@ class TeacherChatFragment : ChatFragment() {
 
                 else -> {}
             }
+            teacherViewModel._pickStudentResult.value = UIState.Empty
+
         }
     }
 

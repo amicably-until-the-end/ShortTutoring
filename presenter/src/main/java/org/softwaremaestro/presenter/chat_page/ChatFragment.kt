@@ -114,7 +114,6 @@ abstract class ChatFragment : Fragment() {
         chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
             it?.let {
                 enterChatRoom(it)
-                onChatRoomStateChange(it)
             }
         }
     }
@@ -134,7 +133,6 @@ abstract class ChatFragment : Fragment() {
                 chatViewModel.getMessages(chatRoomId)
             }
             chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
-            currentChatRoom?.let { onChatRoomStateChange(it) }
         }
     }
 

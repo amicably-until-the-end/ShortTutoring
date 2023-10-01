@@ -33,7 +33,7 @@ class TeacherChatViewModel @Inject constructor(
     private val _tutoringTimeAndDurationProper = MediatorLiveData<Boolean>()
     val tutoringTimeAndDurationProper: MediatorLiveData<Boolean> get() = _tutoringTimeAndDurationProper
 
-    private val _pickStudentResult = MutableLiveData<UIState<Boolean>>()
+    val _pickStudentResult = MutableLiveData<UIState<Boolean>>()
     val pickStudentResult: LiveData<UIState<Boolean>> get() = _pickStudentResult
 
     fun pickStudent(questionId: String, chattingId: String) {
