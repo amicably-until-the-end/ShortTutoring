@@ -6,7 +6,7 @@ import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
-class GetClassRoomInfoUseCase @Inject constructor(private val repository: ClassRoomRepository) {
+class StartClassUseCase @Inject constructor(private val repository: ClassRoomRepository) {
     suspend fun execute(tutoringId: String): Flow<BaseResult<ClassroomInfoVO, String>> =
-        repository.getClassroomInfo(tutoringId)
+        repository.startClassroom(tutoringId)
 }

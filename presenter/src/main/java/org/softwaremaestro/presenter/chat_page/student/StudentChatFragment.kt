@@ -84,6 +84,7 @@ class StudentChatFragment : ChatFragment() {
 
     private fun onProposedSelectQuestionSelect() {
         hideLeftButton()
+        setNotiVisible(false)
         hideRightButton()
     }
 
@@ -131,7 +132,9 @@ class StudentChatFragment : ChatFragment() {
                 }
 
             }
-            chatViewModel._tutoringInfo.value = UIState.Empty
+            chatViewModel._classroomInfo.value = UIState.Empty
+
+
             //액티비티 종료되어 돌아오는 경우에 대비해서 초기화
         }
     }
@@ -184,20 +187,19 @@ class StudentChatFragment : ChatFragment() {
                 is UIState.Success -> {
                     loadingDialog.dismiss()
                     it._data?.let { tutoringInfo ->
-                        setChatNoti(tutoringInfo.reservedStart)
+                        setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
                     }
                 }
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
-                    setChatNoti(null)
+                    setChatNoti(null, null)
                     Toast.makeText(requireContext(), "예약 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                         .show()
                 }
 
                 else -> {}
             }
-
         }
     }
 
@@ -279,12 +281,12 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-    override fun enableChatRoomBtn() {
+    override fun enablePickStudentBtn() {
         return
     }
 
 
-    fun setChatNoti(startAt: LocalDateTime?) {
+    fun setChatNoti(startAt: LocalDateTime?, tutoringId: String?) {
         Log.d("setChatNoti", "setChatNoti: ${startAt} ")
         binding.cnNoti.apply {
             setTvNotiMain("선생님과의 수업이 ${startAt?.toKoreanString()}에 진행됩니다")
@@ -295,7 +297,7 @@ class StudentChatFragment : ChatFragment() {
                 visibility = View.GONE
             }
             setOnClickListenerToBtnPositive {
-                getClassRoomInfo()
+                tutoringId?.let { chatViewModel.getClassroomInfo(it) }
             }
         }
 

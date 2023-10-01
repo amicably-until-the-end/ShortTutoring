@@ -85,6 +85,7 @@ abstract class ChatFragment : Fragment() {
         observeMessages()
         observeSocket()
 
+        clearChatRoomState()
 
 
         return binding.root
@@ -106,6 +107,14 @@ abstract class ChatFragment : Fragment() {
 
     private fun getRoomList() {
         chatViewModel.getChatRoomList(isTeacher())
+    }
+
+    private fun clearChatRoomState() {
+        Log.d("chat", "clearChatRoomState")
+        currentChatRoom = null
+        binding.tvChatRoomTitle.text = ""
+        binding.btnChatRoomRight.visibility = View.GONE
+        messageListAdapter.setItem(emptyList())
     }
 
     private fun observeSocket() {
@@ -157,6 +166,7 @@ abstract class ChatFragment : Fragment() {
     private fun observeMessages() {
         chatViewModel.messages.observe(viewLifecycleOwner) {
             when (it) {
+                is UIState.Empty -> return@observe
                 is UIState.Success -> {
                     setMessageListItems(it._data!!)
                 }
@@ -166,10 +176,11 @@ abstract class ChatFragment : Fragment() {
                 }
 
             }
+            chatViewModel.setMessageUI(UIState.Empty)
         }
     }
 
-    abstract fun enableChatRoomBtn()
+    abstract fun enablePickStudentBtn()
 
     protected fun disableChatRoomBtn() {
         setNotiVisible(true)
@@ -531,4 +542,5 @@ abstract class ChatFragment : Fragment() {
     protected fun setNotiVisible(b: Boolean) {
         binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
     }
+
 }
