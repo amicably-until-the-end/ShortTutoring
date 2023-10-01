@@ -65,6 +65,7 @@ class MessageListAdapter(
             is MessageBodyVO.ProblemImage -> TYPE_QUESTION
             is MessageBodyVO.AppointRequest -> TYPE_TEXT
             is MessageBodyVO.RequestDecline -> TYPE_BUTTONS
+            is MessageBodyVO.ReserveConfirm -> TYPE_TEXT
             else -> TYPE_TEXT
         }
     }
@@ -174,6 +175,14 @@ class MessageListAdapter(
                             body.startDateTime?.parseToLocalDateTime() ?: LocalDateTime.now()
                         tvText.text =
                             "안녕하세요 선생님! ${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 가능하신가요?"
+                    }
+
+                    is MessageBodyVO.ReserveConfirm -> {
+                        var body = item.bodyVO as MessageBodyVO.ReserveConfirm
+                        var time =
+                            body.startDateTime?.parseToLocalDateTime() ?: LocalDateTime.now()
+                        tvText.text =
+                            "${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 예약이 완료되었습니다."
                     }
 
                     else -> {}

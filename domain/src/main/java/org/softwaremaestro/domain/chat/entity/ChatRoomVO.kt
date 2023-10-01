@@ -68,6 +68,11 @@ sealed class MessageBodyVO {
 
     @Serializable
     object RequestDecline : MessageBodyVO()
+
+    @Serializable
+    data class ReserveConfirm(
+        val startDateTime: String?,
+    ) : MessageBodyVO()
 }
 
 enum class QuestionType {
