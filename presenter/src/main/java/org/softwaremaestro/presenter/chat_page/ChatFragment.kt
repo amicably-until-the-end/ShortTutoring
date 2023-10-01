@@ -376,6 +376,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun setChatMsgRecyclerView() {
         messageListAdapter = MessageListAdapter(
+            isTeacher(),
             onBtn1Click = {
                 val dialog = AnsweringTeacherSelectDialog(currentChatRoom?.id!!)
                 dialog.show(parentFragmentManager, "dialog")

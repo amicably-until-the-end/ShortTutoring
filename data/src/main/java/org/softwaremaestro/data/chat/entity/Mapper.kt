@@ -37,21 +37,24 @@ class Mapper {
 
     fun asDomain(messageEntity: MessageEntity): MessageVO {
         messageEntity.apply {
-            var bodyVO: MessageBodyVO;
+            var bodyVO: MessageBodyVO?
             val gson = Gson()
-            try {
+            bodyVO = try {
                 when (format) {
-                    "text" -> bodyVO = gson.fromJson(body, MessageBodyVO.Text::class.java)
-                    "problem-image" -> bodyVO =
-                        gson.fromJson(body, MessageBodyVO.ProblemImage::class.java)
+                    "text" -> gson.fromJson(body, MessageBodyVO.Text::class.java)
+                    "problem-image" -> gson.fromJson(body, MessageBodyVO.ProblemImage::class.java)
 
-                    "appoint-request" -> bodyVO =
-                        gson.fromJson(body, MessageBodyVO.AppointRequest::class.java)
+                    "appoint-request" -> gson.fromJson(
+                        body,
+                        MessageBodyVO.AppointRequest::class.java
+                    )
 
-                    else -> bodyVO = MessageBodyVO.Text(body)
+                    "request-decline" -> MessageBodyVO.RequestDecline
+
+                    else -> MessageBodyVO.Text(body)
                 }
             } catch (e: Exception) {
-                bodyVO = MessageBodyVO.Text(body)
+                MessageBodyVO.Text(body)
             }
             return MessageVO(
                 time = sendAt,
