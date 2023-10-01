@@ -99,7 +99,7 @@ class TeacherChatFragment : ChatFragment() {
             //일반 질문 일때
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    //일반 질문일 때는 별 다른거 없을 듯
+                    onProposedNormalRoomEnter()
                 }
 
                 QuestionState.RESERVED -> {
@@ -113,9 +113,14 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
+    private fun onProposedNormalRoomEnter() {
+        setNotiVisible(false)
+        setChatRoomBtnsVisible(false)
+    }
+
 
     override fun enablePickStudentBtn() {
-        setNotiVisible(false)
+        //setNotiVisible(false)
         binding.btnChatRoomRight.apply {
             visibility = View.VISIBLE
             text = "수락하기"
@@ -130,6 +135,7 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun onProposedSelectRoomEnter() {
         setNotiVisible(false)
+        setChatRoomBtnsVisible(false)
         enablePickStudentBtn()
         enableDeclineBtn()
     }
@@ -230,6 +236,7 @@ class TeacherChatFragment : ChatFragment() {
             when (it) {
                 is UIState.Loading -> {
                     //로딩
+                    loadingDialog.show()
                     with(binding.btnChatRoomRight) {
                         setBackgroundResource(R.drawable.bg_radius_100_background_grey)
                         isEnabled = false
@@ -239,12 +246,13 @@ class TeacherChatFragment : ChatFragment() {
 
                 is UIState.Success -> {
                     disableChatRoomBtn()
-
+                    loadingDialog.dismiss()
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
-                    chatViewModel.getChatRoomList(isTeacher())
+                    //chatViewModel.getChatRoomList(isTeacher())
                 }
 
                 is UIState.Failure -> {
+                    loadingDialog.dismiss()
                     //선생님 선택 실패
                 }
 
@@ -263,7 +271,7 @@ class TeacherChatFragment : ChatFragment() {
                         .withDayOfMonth(dayOfMonth)
                 )
             }
-            timePickerDialog.show(parentFragmentManager, "datePicker")
+            timePickerDialog.show(parentFragmentManager, "timePicker")
         }.apply {
             setTitle("수업 날짜를 선택해주세요")
             setBtnText("선택하기")

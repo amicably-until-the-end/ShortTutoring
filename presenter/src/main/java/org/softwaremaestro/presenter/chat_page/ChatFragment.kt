@@ -84,6 +84,7 @@ abstract class ChatFragment : Fragment() {
         setSendMessageButton()
         observeMessages()
         observeSocket()
+        observeCurrentRoom()
 
         clearChatRoomState()
 
@@ -106,7 +107,16 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun getRoomList() {
-        chatViewModel.getChatRoomList(isTeacher())
+        chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
+    }
+
+    private fun observeCurrentRoom() {
+        chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
+            it?.let {
+                enterChatRoom(it)
+                onChatRoomStateChange(it)
+            }
+        }
     }
 
     private fun clearChatRoomState() {
@@ -123,7 +133,8 @@ abstract class ChatFragment : Fragment() {
             if (currentChatRoom?.id == chatRoomId) {
                 chatViewModel.getMessages(chatRoomId)
             }
-            chatViewModel.getChatRoomList(isTeacher())
+            chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
+            currentChatRoom?.let { onChatRoomStateChange(it) }
         }
     }
 
@@ -183,7 +194,7 @@ abstract class ChatFragment : Fragment() {
     abstract fun enablePickStudentBtn()
 
     protected fun disableChatRoomBtn() {
-        setNotiVisible(true)
+        //setNotiVisible(true)
         setChatRoomBtnsVisible(false)
     }
 
@@ -288,16 +299,16 @@ abstract class ChatFragment : Fragment() {
     }
 
 
-    private fun clearRecyclersSelectedView(caller: RecyclerView.Adapter<*>?) {
+    private fun setSelectedRoomId(selectedRoomId: String?) {
 
         recyclerViewAdapters.listIterator().forEach {
             when (it) {
                 is ChatRoomListAdapter -> {
-                    it.clearSelectedItem(caller)
+                    it.setSelectedChattingRoomId(selectedRoomId)
                 }
 
                 is ChatRoomIconListAdapter -> {
-                    it.changeSelectedQuestionId(null)
+                    it.changeSelectedQuestionId(selectedRoomId)
                 }
             }
         }
@@ -306,7 +317,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun setQuestionTypeSelectToggle() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
-            clearRecyclersSelectedView(null)
+            setSelectedRoomId(null)
 
             when (checkId) {
                 R.id.rb_normal_question -> {
@@ -331,7 +342,7 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun resetMsgTab() {
-        setNotiVisible(false)
+        //setNotiVisible(false)
         setChatRoomBtnsVisible(false)
         messageListAdapter.setItem(emptyList())
         messageListAdapter.notifyDataSetChanged()
@@ -451,7 +462,7 @@ abstract class ChatFragment : Fragment() {
     }
 
 
-    private fun setOfferingTeacherMode() {
+    fun setOfferingTeacherMode() {
         binding.containerTutoringList.visibility = View.GONE
         binding.containerIconSideSection.visibility = View.VISIBLE
         binding.containerOfferingTeacher.visibility = View.VISIBLE
@@ -461,14 +472,14 @@ abstract class ChatFragment : Fragment() {
 
     }
 
-    private fun unSetOfferingTeacherMode() {
+    fun unSetOfferingTeacherMode() {
         binding.containerTutoringList.visibility = View.VISIBLE
         binding.containerIconSideSection.visibility = View.GONE
         binding.containerOfferingTeacher.visibility = View.GONE
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerTutoringList.id
         }
-        resetMsgTab()
+        //resetMsgTab()
     }
 
     protected fun moveToClassRoom(classroomInfoVO: ClassroomInfoVO) {
@@ -498,7 +509,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
         Log.d("chat", teacher.toString())
-        offeringTeacherAdapter.clearSelectedItem(null)
+        offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher)
         offeringTeacherAdapter.notifyDataSetChanged()
     }
@@ -514,18 +525,23 @@ abstract class ChatFragment : Fragment() {
         { teacherList, questionId, caller ->
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
-            clearRecyclersSelectedView(null)
+            setSelectedRoomId(null)
             proposedIconAdapter.changeSelectedQuestionId(questionId)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
-            currentChatRoom = chatRoom
-            onChatRoomStateChange(chatRoom)
-            chatViewModel.getMessages(chatRoom.id!!)
-            binding.tvChatRoomTitle.text = chatRoom.title
-            clearRecyclersSelectedView(caller)
-            Log.d("chat", "currentChatRoom: $currentChatRoom")
+            enterChatRoom(chatRoom)
         }
+
+    fun enterChatRoom(chatRoomVO: ChatRoomVO) {
+        loadingDialog.dismiss() // 로딩중에 방이 바뀌는 경우에 대비해서 로딩중인 다이얼로그를 닫는다.
+        currentChatRoom = chatRoomVO
+        onChatRoomStateChange(chatRoomVO)
+        chatViewModel.getMessages(chatRoomVO.id!!)
+        binding.tvChatRoomTitle.text = chatRoomVO.title ?: "undefine"
+        setSelectedRoomId(chatRoomVO.id)
+        Log.d("chat", "currentChatRoom: $currentChatRoom")
+    }
 
     protected fun setChatRoomRightBtnVisible(b: Boolean) {
         binding.btnChatRoomRight.visibility = if (b) View.VISIBLE else View.INVISIBLE
@@ -536,7 +552,7 @@ abstract class ChatFragment : Fragment() {
             binding.btnChatRoomRight,
             binding.btnChatRoomLeft
         ).forEach {
-            it.visibility = if (b) View.VISIBLE else View.INVISIBLE
+            it.visibility = if (b) View.VISIBLE else View.GONE
         }
     }
 

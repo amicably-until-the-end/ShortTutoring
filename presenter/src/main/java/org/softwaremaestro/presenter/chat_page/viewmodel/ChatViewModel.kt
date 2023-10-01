@@ -71,7 +71,10 @@ class ChatViewModel @Inject constructor(
 
     var selectedQuestionRoom: String? = null
 
-    val currentChattingId: String? = null
+    val _currentChattingRoomVO = MutableLiveData<ChatRoomVO?>()
+    val currentChattingRoomVO: LiveData<ChatRoomVO?>
+        get() = _currentChattingRoomVO
+
 
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
@@ -79,9 +82,9 @@ class ChatViewModel @Inject constructor(
 
     val gson = Gson()
 
-    fun getChatRoomList(isTeacher: Boolean) {
+    fun getChatRoomList(isTeacher: Boolean, currentRoomId: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            getChatRoomListUseCase.execute(isTeacher)
+            getChatRoomListUseCase.execute(isTeacher, currentRoomId)
                 .onStart { _reservedNormalChatRoomList.postValue(UIState.Loading) }
                 .catch { exception ->
                     _reservedNormalChatRoomList.postValue(UIState.Failure)
@@ -90,6 +93,7 @@ class ChatViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
+                            result.data.currentRoomVO?.let { _currentChattingRoomVO.postValue(it) }
                             _reservedNormalChatRoomList.postValue(
                                 UIState.Success(result.data.normalReserved)
                             )

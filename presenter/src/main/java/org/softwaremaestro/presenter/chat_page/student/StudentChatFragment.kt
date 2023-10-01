@@ -143,7 +143,7 @@ class StudentChatFragment : ChatFragment() {
         studentViewModel.pickTeacherResultState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
-                    //로딩
+                    loadingDialog.show()
                     with(binding.btnChatRoomRight) {
                         setBackgroundResource(R.drawable.bg_radius_100_background_grey)
                         isEnabled = false
@@ -153,8 +153,9 @@ class StudentChatFragment : ChatFragment() {
 
                 is UIState.Success -> {
                     disableChatRoomBtn()
+                    loadingDialog.dismiss()
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
-                    chatViewModel.getChatRoomList(isTeacher())
+                    //chatViewModel.getChatRoomList(isTeacher(),currentRoomId?.id
                 }
 
                 is UIState.Failure -> {
@@ -177,6 +178,7 @@ class StudentChatFragment : ChatFragment() {
             chatViewModel.getTutoringInfo(it) //예약하기 질문의 noti 세팅을 위한 과외 정보 api 호출
             observeTutoringInfo()
         }
+        unSetOfferingTeacherMode() // 채팅 보고 있을 때 선택 했을 경우에 대비해서 offeringTeacherMode 해제하고 해당 방으로 이동
     }
 
     private fun observeTutoringInfo() {

@@ -8,6 +8,7 @@ data class ChatRoomListVO(
     val normalReserved: List<ChatRoomVO>,
     val selectedProposed: List<ChatRoomVO>,
     val selectedReserved: List<ChatRoomVO>,
+    var currentRoomVO: ChatRoomVO? = null,
 )
 
 

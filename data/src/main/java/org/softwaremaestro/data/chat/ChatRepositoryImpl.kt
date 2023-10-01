@@ -28,6 +28,17 @@ class ChatRepositoryImpl @Inject constructor(
     ChatRepository {
 
 
+    private fun getOneRoomFromDB(roomId: String): ChatRoomVO? {
+        return try {
+            var result = chatDatabase.chatRoomDao().getChatRoomWithMessages(roomId)
+            Log.d("ChatRepositoryImpl", "chatroomId $roomId $result")
+            result.EntityToVO()
+        } catch (e: Exception) {
+            Log.d("ChatRepositoryImpl", e.toString())
+            null
+        }
+    }
+
     private suspend fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO? {
         try {
             var proposedNormal =
@@ -114,10 +125,14 @@ class ChatRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getRoomList(isTeacher: Boolean): Flow<BaseResult<ChatRoomListVO, String>> {
+    override suspend fun getRoomList(
+        isTeacher: Boolean,
+        currentRoomId: String?
+    ): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
             updateRoomStatus()
             var result = getRoomFromDB(isTeacher)
+            currentRoomId?.let { result?.currentRoomVO = getOneRoomFromDB(it) }
             Log.d("ChatRepositoryImpl", result.toString())
             if (result == null) {
                 emit(BaseResult.Error("error"))
