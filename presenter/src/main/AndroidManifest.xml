@@ -7,6 +7,9 @@
 
     <application android:usesCleartextTraffic="true">
         <activity
+            android:name=".coin.ChargeCoinActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.SplashActivity"
             android:exported="true"
             android:noHistory="true">
