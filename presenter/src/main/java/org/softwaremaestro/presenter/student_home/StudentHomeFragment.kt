@@ -46,7 +46,7 @@ class StudentHomeFragment : Fragment() {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
         // Todo: 나중에 api로 받아와야 함
-        binding.cbCoin.setCoin(1350)
+        binding.cbCoin.coin = 1350
         binding.cbCoin.setOnClickListener {
             startActivity(Intent(requireContext(), ChargeCoinActivity::class.java))
         }

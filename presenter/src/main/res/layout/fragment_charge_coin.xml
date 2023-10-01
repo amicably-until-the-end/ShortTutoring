@@ -55,10 +55,26 @@
                 android:textSize="18sp" />
 
             <org.softwaremaestro.presenter.util.widget.CoinBalance
+                android:id="@+id/cb_my_coin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                tools:coin="200" />
+                android:layout_marginLeft="14dp" />
+
+            <ImageView
+                android:id="@+id/iv_right_arrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginHorizontal="4dp"
+                android:src="@drawable/ic_arrow_right_line"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+            <org.softwaremaestro.presenter.util.widget.CoinBalance
+                android:id="@+id/cb_my_coin_after_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
@@ -95,6 +111,7 @@
             android:background="@drawable/bg_shadow_2_background_grey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_free_charge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_radius_5_stroke_background_light_blue"
@@ -193,6 +210,7 @@
             android:background="@drawable/bg_shadow_2_background_grey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_charge_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_radius_5_stroke_background_light_blue"
@@ -260,6 +278,7 @@
             android:background="@drawable/bg_shadow_2_background_grey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_charge_five"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_radius_5_stroke_background_light_blue"
@@ -322,11 +341,13 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_charge_coin"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/bg_radius_5_grey"
+        android:enabled="false"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:stateListAnimator="@null"
