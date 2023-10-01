@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.presenter.coin.ChargeCoinActivity
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
@@ -41,9 +42,14 @@ class StudentHomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
+        // Todo: 나중에 api로 받아와야 함
+        binding.cbCoin.coin = 1350
+        binding.cbCoin.setOnClickListener {
+            startActivity(Intent(requireContext(), ChargeCoinActivity::class.java))
+        }
 
         myProfileViewModel.getMyProfile()
 
