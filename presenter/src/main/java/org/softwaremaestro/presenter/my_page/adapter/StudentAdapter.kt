@@ -1,4 +1,4 @@
-package org.softwaremaestro.presenter.teacher_my_page.adapter
+package org.softwaremaestro.presenter.my_page.adapter
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -7,20 +7,20 @@ import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemStudentBinding
 
-class StudentAdapter() : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
+class StudentAdapter : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
 
     private var items: List<FollowerGetResponseVO> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): StudentAdapter.ViewHolder {
+    ): ViewHolder {
         val view =
             ItemStudentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: StudentAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBind(items[position])
     }
 
@@ -38,7 +38,7 @@ class StudentAdapter() : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
         fun onBind(item: FollowerGetResponseVO) {
 
             with(binding) {
-                ivProfile.setImageURI(Uri.parse(item.profileImage))
+                item.profileImage?.let { ivProfile.setImageURI(Uri.parse(it)) }
                 tvNickname.text = "${item.name}"
                 tvGrade.text = "${item.grade}"
 //                tvRecentDate.text = "${item.recentDate}"

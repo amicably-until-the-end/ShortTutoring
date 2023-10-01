@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".teacher_my_page.TeacherMyPageFragment">
+    tools:context=".my_page.teacher_my_page.TeacherMyPageFragment">
 
     <ScrollView
         android:layout_width="match_parent"

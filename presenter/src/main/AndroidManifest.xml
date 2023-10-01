@@ -26,10 +26,13 @@
             android:name=".teacher_search.TeacherSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".teacher_my_page.SettingTimeAndCostActivity"
+            android:name=".my_page.teacher_my_page.SettingTimeAndCostActivity"
             android:exported="false" />
         <activity
-            android:name=".teacher_my_page.FollowerActivity"
+            android:name=".my_page.teacher_my_page.FollowerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".my_page.teacher_my_page.FollowingActivity"
             android:exported="false" />
         <activity
             android:name=".teacher_profile.TeacherProfileActivity"

@@ -1,5 +1,6 @@
-package org.softwaremaestro.presenter.teacher_my_page.viewmodel
+package org.softwaremaestro.presenter.my_page.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,6 +52,7 @@ class ProfileViewModel @Inject constructor(
     val followingCount: LiveData<Int> get() = _followingCount
 
     fun getMyProfile() {
+        Log.d("hhcc", "hc")
         viewModelScope.launch {
             myProfileGetUseCase.execute()
                 .catch { exception ->
@@ -60,7 +62,7 @@ class ProfileViewModel @Inject constructor(
                     when (result) {
                         is BaseResult.Success -> {
                             with(result.data) {
-                                id?.let { _name.postValue(it) }
+                                id?.let { _id.postValue(it) }
                                 name?.let { _name.postValue(it) }
                                 bio?.let { _bio.postValue(it) }
                                 schoolName?.let { _univName.postValue(it) }
