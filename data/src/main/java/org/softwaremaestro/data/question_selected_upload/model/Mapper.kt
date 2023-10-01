@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.question_selected_upload.model
 
+import org.softwaremaestro.data.common.utils.toStringWithTimeZone
 import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelectedUploadVO
 
 object Mapper {
@@ -11,8 +12,8 @@ object Mapper {
                 schoolSubject = schoolSubject,
                 mainImageIndex = mainImageIndex,
                 images = images,
-                requestTutoringStartTime = requestTutoringStartTime,
-                requestTutoringEndTime = requestTutoringEndTime,
+                requestTutoringStartTime = requestTutoringStartTime.toStringWithTimeZone(),
+                requestTutoringEndTime = requestTutoringEndTime.toStringWithTimeZone(),
                 requestTeacherId = requestTeacherId
             )
         }

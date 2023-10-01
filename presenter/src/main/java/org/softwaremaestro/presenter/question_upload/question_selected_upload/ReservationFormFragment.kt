@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.question_upload.question_selected_upload
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
 import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
+import java.time.LocalDate
+import java.time.LocalTime
 
 @AndroidEntryPoint
 class ReservationFormFragment : Fragment() {
@@ -24,7 +27,7 @@ class ReservationFormFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentReservationFormBinding.inflate(layoutInflater)
 
         setDatePicker()
@@ -35,7 +38,8 @@ class ReservationFormFragment : Fragment() {
     }
 
     private fun setDatePicker() {
-        binding.dpQuestionReserve.setOnDateSelectListener() { year, month, day ->
+        binding.dpQuestionReserve.setOnDateSelectListener { year, month, day ->
+            questionSelectedUploadViewModel._requestDate.value = LocalDate.of(year, month, day)
             binding.containerTimePicker.visibility = View.VISIBLE
             Toast.makeText(requireContext(), "$year-$month-$day", Toast.LENGTH_SHORT).show()
         }
@@ -45,18 +49,28 @@ class ReservationFormFragment : Fragment() {
         binding.trpTutoringTime.rvTimePicker.apply {
             adapter = TimeRangePickerAdapter(10,
                 onBtnClick = { start, end ->
-                    questionSelectedUploadViewModel.setRequestTutoringStartTime(start?.let {
-                        listOf(
-                            it.toString()
-                        )
-                    })
-                    questionSelectedUploadViewModel.setRequestTutoringEndTime(end?.let {
-                        listOf(
-                            it.toString()
-                        )
-                    })
+
                 },
                 onRangeChange = { start, end ->
+                    with(start) {
+                        questionSelectedUploadViewModel.setRequestTutoringStartTime(
+                            LocalTime.of(hour, minute)
+                        )
+                        Log.d(
+                            "onRangeChange",
+                            "start: ${questionSelectedUploadViewModel.requestTutoringStartTime.value}"
+                        )
+                    }
+                    with(end) {
+                        questionSelectedUploadViewModel.setRequestTutoringEndTime(
+                            LocalTime.of(hour, minute)
+                        )
+                        Log.d(
+                            "onRangeChange",
+                            "end: ${questionSelectedUploadViewModel.requestTutoringEndTime}"
+                        )
+                    }
+                    Log.d("onRangeChange", "start: $start, end: $end")
                     val timeDuration = end.toTime() - start.toTime()
                     binding.tvSelectedTime.text =
                         "${start} ~ ${end} (${timeDuration}분)"

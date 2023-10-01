@@ -26,6 +26,7 @@ import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import java.time.LocalDateTime
 
 
 @AndroidEntryPoint
@@ -49,7 +50,7 @@ class QuestionSelectedFormFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentQuestionSelectedFormBinding.inflate(layoutInflater)
         return binding.root
@@ -132,7 +133,7 @@ class QuestionSelectedFormFragment : Fragment() {
 
 
     private fun setImageRecyclerView() {
-        imageAdapter = FormImageAdapter() {
+        imageAdapter = FormImageAdapter {
             navigateToCamera()
         }
 
@@ -223,8 +224,14 @@ class QuestionSelectedFormFragment : Fragment() {
                         images = viewModel.images.value!!.map {
                             it.toBase64()
                         },
-                        requestTutoringStartTime = viewModel.requestTutoringStartTime.value!!,
-                        requestTutoringEndTime = viewModel.requestTutoringEndTime.value!!,
+                        requestTutoringStartTime = LocalDateTime.of(
+                            viewModel.requestDate.value!!,
+                            viewModel.requestTutoringStartTime.value!!
+                        ),
+                        requestTutoringEndTime = LocalDateTime.of(
+                            viewModel.requestDate.value!!,
+                            viewModel.requestTutoringEndTime.value!!
+                        ),
                         requestTeacherId = viewModel.teacherId.value!!
                     )
                     viewModel.uploadQuestionSelected(questionSelectedUploadVO)

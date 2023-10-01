@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,8 @@ import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelect
 import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelectedUploadVO
 import org.softwaremaestro.domain.question_selected_upload.usecase.QuestionSelectedUploadUseCase
 import org.softwaremaestro.presenter.util.UIState
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,11 +47,16 @@ class QuestionSelectedUploadViewModel @Inject constructor(
     private var _images = MutableLiveData<List<Bitmap>>()
     val images: LiveData<List<Bitmap>> get() = _images
 
-    private var _requestTutoringStartTime = MutableLiveData<List<String>?>()
-    val requestTutoringStartTime: LiveData<List<String>?> get() = _requestTutoringStartTime
 
-    private var _requestTutoringEndTime = MutableLiveData<List<String>?>()
-    val requestTutoringEndTime: LiveData<List<String>?> get() = _requestTutoringEndTime
+    val _requestDate = MutableLiveData<LocalDate>()
+    val requestDate: LiveData<LocalDate> get() = _requestDate
+
+    val _requestTutoringStartTime = MutableLiveData<LocalTime?>()
+    val requestTutoringStartTime: LiveData<LocalTime?> get() = _requestTutoringStartTime
+
+
+    val _requestTutoringEndTime = MutableLiveData<LocalTime?>()
+    val requestTutoringEndTime: LiveData<LocalTime?> get() = _requestTutoringEndTime
 
     private var _requestTeacherId = MutableLiveData<String>()
     val requestTeacherId: LiveData<String> get() = _requestTeacherId
@@ -58,12 +66,14 @@ class QuestionSelectedUploadViewModel @Inject constructor(
 
     init {
         with(_startTimeAndEndTimeProper) {
-            addSource(_requestTutoringStartTime) {
-                postValue(_requestTutoringStartTime.value != null && _requestTutoringEndTime.value != null)
+            addSource(requestTutoringStartTime) {
+                Log.d("requestTutoringStartTime", requestTutoringStartTime.value.toString())
+                postValue(requestTutoringStartTime.value != null && requestTutoringEndTime.value != null)
             }
 
-            addSource(_requestTutoringEndTime) {
-                postValue(_requestTutoringStartTime.value != null && _requestTutoringEndTime.value != null)
+            addSource(requestTutoringEndTime) {
+                Log.d("requestTutoringEndTime", requestTutoringEndTime.value.toString())
+                postValue(_requestTutoringStartTime.value != null && requestTutoringEndTime.value != null)
             }
         }
     }
@@ -82,11 +92,11 @@ class QuestionSelectedUploadViewModel @Inject constructor(
 
     fun setTeacherId(teacherId: String) = _teacherId.postValue(teacherId)
 
-    fun setRequestTutoringStartTime(requestTutoringStartTime: List<String>?) =
+    fun setRequestTutoringStartTime(requestTutoringStartTime: LocalTime?) =
         _requestTutoringStartTime.postValue(requestTutoringStartTime)
 
 
-    fun setRequestTutoringEndTime(requestTutoringEndTime: List<String>?) =
+    fun setRequestTutoringEndTime(requestTutoringEndTime: LocalTime?) =
         _requestTutoringEndTime.postValue(requestTutoringEndTime)
 
     fun setRequestTeacherId(requestTeacherId: String) =
