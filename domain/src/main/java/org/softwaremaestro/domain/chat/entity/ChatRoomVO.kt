@@ -1,8 +1,6 @@
 package org.softwaremaestro.domain.chat.entity
 
 import kotlinx.serialization.Serializable
-import java.awt.TrayIcon
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class ChatRoomListVO(
@@ -66,6 +64,9 @@ sealed class MessageBodyVO {
     data class Text(
         val text: String?,
     ) : MessageBodyVO()
+
+    @Serializable
+    object RequestDecline : MessageBodyVO()
 }
 
 enum class QuestionType {

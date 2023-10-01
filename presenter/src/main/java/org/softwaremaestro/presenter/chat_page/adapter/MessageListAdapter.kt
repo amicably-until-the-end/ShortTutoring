@@ -17,6 +17,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class MessageListAdapter(
+    private val isTeacher: Boolean,
     private val onBtn1Click: () -> Unit,
     private val onBtn2Click: () -> Unit,
     private val onImageClick: (MessageBodyVO.ProblemImage) -> Unit,
@@ -62,7 +63,8 @@ class MessageListAdapter(
         return when (items[position].bodyVO) {
             is MessageBodyVO.Text -> TYPE_TEXT
             is MessageBodyVO.ProblemImage -> TYPE_QUESTION
-            is MessageBodyVO.AppointRequest -> TYPE_BUTTONS
+            is MessageBodyVO.AppointRequest -> TYPE_TEXT
+            is MessageBodyVO.RequestDecline -> TYPE_BUTTONS
             else -> TYPE_TEXT
         }
     }
@@ -154,9 +156,29 @@ class MessageListAdapter(
                         applyTo(root)
                     }
                 }
-                var body = item.bodyVO as MessageBodyVO.Text
-                tvText.text = body.text ?: ""
-                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${item.time.minute}"
+                tvTime.text = "${item.time.dayOfMonth}일 ${item.time.hour}:${
+                    String.format(
+                        "%02d",
+                        item.time.minute
+                    )
+                }"
+                when (item.bodyVO) {
+                    is MessageBodyVO.Text -> {
+                        var body = item.bodyVO as MessageBodyVO.Text
+                        tvText.text = body.text
+                    }
+
+                    is MessageBodyVO.AppointRequest -> {
+                        var body = item.bodyVO as MessageBodyVO.AppointRequest
+                        var time =
+                            body.startDateTime?.parseToLocalDateTime() ?: LocalDateTime.now()
+                        tvText.text =
+                            "안녕하세요 선생님! ${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 가능하신가요?"
+                    }
+
+                    else -> {}
+                }
+
             }
         }
     }
@@ -218,24 +240,30 @@ class MessageListAdapter(
                         applyTo(root)
                     }
                     when (item.bodyVO) {
-                        is MessageBodyVO.AppointRequest -> {
-                            var body = item.bodyVO as MessageBodyVO.AppointRequest
-                            var time =
-                                body.startDateTime?.parseToLocalDateTime() ?: LocalDateTime.now()
-                            tvText.text =
-                                "안녕하세요 선생님! ${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 가능하신가요?"
-                            btn1.visibility = Button.VISIBLE
-                            btn2.visibility = Button.VISIBLE
-                            btn3.visibility = Button.GONE
-                            btn1.text = "다른 선생님께 질문하기"
-                            btn2.text = "질문 삭제하기"
 
-                            btn1.setOnClickListener {
-                                onBtn1Click()
-                            }
 
-                            btn2.setOnClickListener {
-                                onBtn2Click()
+                        is MessageBodyVO.RequestDecline -> {
+                            var body = item.bodyVO as MessageBodyVO.RequestDecline
+                            tvText.text = "죄송합니다. 이 수업을 진행 할 수 없습니다."
+                            if (!isTeacher) {
+                                btn1.visibility = Button.VISIBLE
+                                btn2.visibility = Button.VISIBLE
+                                btn3.visibility = Button.GONE
+                                btn1.text = "다른 선생님께 질문하기"
+                                btn2.text = "질문 삭제하기"
+
+                                btn1.setOnClickListener {
+                                    onBtn1Click()
+                                }
+
+                                btn2.setOnClickListener {
+                                    onBtn2Click()
+                                }
+                            } else {
+                                btn1.visibility = Button.GONE
+                                btn2.visibility = Button.GONE
+                                btn3.visibility = Button.GONE
+
                             }
                         }
 
