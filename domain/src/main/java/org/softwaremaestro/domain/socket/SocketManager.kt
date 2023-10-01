@@ -4,10 +4,12 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.engineio.client.transports.WebSocket
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.softwaremaestro.domain.chat.ChatRepository
+import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.LoginRepository
 import org.softwaremaestro.domain.socket.vo.MessageFormat
 import javax.inject.Inject
@@ -25,6 +27,16 @@ class SocketManager @Inject constructor(
 
         CoroutineScope(DispatchersIO).launch {
             try {
+                userRepository.getUserInfo().collect {
+                    userId = when (it) {
+                        is BaseResult.Success -> {
+                            it.data.id
+                        }
+
+                        else -> null
+                    }
+                }
+
                 var header =
                     mapOf("Authorization" to listOf("Bearer ${userRepository.getToken()}"))
                 println("socket header: $header")
@@ -45,6 +57,7 @@ class SocketManager @Inject constructor(
     fun close() {
         mSocket?.disconnect()
         mSocket?.close()
+        mSocket = null
     }
 
     fun getSocket(): Socket {
@@ -69,7 +82,7 @@ class SocketManager @Inject constructor(
                         message.message.body,
                         message.message.format,
                         message.message.createdAt,
-                        false,
+                        message.message.sender == userId,
                     )
                     messageAppendListener?.let { it(message.chattingId) }
                 } catch (e: Exception) {
@@ -91,6 +104,7 @@ class SocketManager @Inject constructor(
         //private const val uri = "http://10.0.2.2:3000/"
 
         var mSocket: Socket? = null
+        var userId: String? = null
         private var messageAppendListener: ((String) -> Unit)? = null
     }
 }

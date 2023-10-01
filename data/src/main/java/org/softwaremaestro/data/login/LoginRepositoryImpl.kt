@@ -1,13 +1,10 @@
 package org.softwaremaestro.data.login
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.softwaremaestro.data.infra.SharedPrefs
-import org.softwaremaestro.data.common.module.SavedTokenModule
 import org.softwaremaestro.data.common.utils.SavedToken
+import org.softwaremaestro.data.infra.SharedPrefs
 import org.softwaremaestro.data.login.model.LoginReqDto
-import org.softwaremaestro.data.login.model.UserInfoResDto
 import org.softwaremaestro.data.login.remote.LoginApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.LoginRepository
@@ -23,6 +20,7 @@ class LoginRepositoryImpl @Inject constructor(
 
 
     override suspend fun autoLogin(): Flow<BaseResult<String, String>> {
+        //JWT 토큰 이용해서 로그인
         return flow {
             val savedToken: String = prefs.getJWT()
 

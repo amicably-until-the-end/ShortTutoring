@@ -69,6 +69,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    //lifeCycle
+    implementation 'androidx.lifecycle:lifecycle-process:2.4.1'
+
     // Toolbar
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
