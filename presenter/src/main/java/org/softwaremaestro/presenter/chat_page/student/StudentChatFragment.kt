@@ -84,7 +84,9 @@ class StudentChatFragment : ChatFragment() {
 
     private fun onProposedSelectQuestionSelect() {
         hideLeftButton()
+        setNotiVisible(false)
         hideRightButton()
+        setNotiVisible(false)
     }
 
     private fun hideLeftButton() {
@@ -131,7 +133,9 @@ class StudentChatFragment : ChatFragment() {
                 }
 
             }
-            chatViewModel._tutoringInfo.value = UIState.Empty
+            chatViewModel._classroomInfo.value = UIState.Empty
+
+
             //액티비티 종료되어 돌아오는 경우에 대비해서 초기화
         }
     }
@@ -141,15 +145,14 @@ class StudentChatFragment : ChatFragment() {
             when (it) {
                 is UIState.Loading -> {
                     //로딩
-                    with(binding.btnChatRoomRight) {
-                        setBackgroundResource(R.drawable.bg_radius_100_background_grey)
-                        isEnabled = false
-                        setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                    listOf(binding.btnChatRoomRight, binding.btnChatRoomLeft).forEach { btn ->
+                        btn.setBackgroundResource(R.drawable.bg_radius_100_background_grey)
+                        btn.isEnabled = false
+                        btn.setTextColor(resources.getColor(R.color.sub_text_grey, null))
                     }
                 }
 
                 is UIState.Success -> {
-                    disableChatRoomBtn()
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
                     chatViewModel.getChatRoomList(isTeacher())
                 }
@@ -169,7 +172,7 @@ class StudentChatFragment : ChatFragment() {
     }
 
     private fun onReservedRoomSelect() {
-        setNotiVisible(true)
+        disableChatRoomBtn()
         currentChatRoom?.questionId?.let {
             chatViewModel.getTutoringInfo(it) //예약하기 질문의 noti 세팅을 위한 과외 정보 api 호출
             observeTutoringInfo()
@@ -184,20 +187,19 @@ class StudentChatFragment : ChatFragment() {
                 is UIState.Success -> {
                     loadingDialog.dismiss()
                     it._data?.let { tutoringInfo ->
-                        setChatNoti(tutoringInfo.reservedStart)
+                        setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
                     }
                 }
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
-                    setChatNoti(null)
+                    setChatNoti(null, null)
                     Toast.makeText(requireContext(), "예약 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                         .show()
                 }
 
                 else -> {}
             }
-
         }
     }
 
@@ -279,12 +281,12 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-    override fun enableChatRoomBtn() {
+    override fun enablePickStudentBtn() {
         return
     }
 
 
-    fun setChatNoti(startAt: LocalDateTime?) {
+    fun setChatNoti(startAt: LocalDateTime?, tutoringId: String?) {
         Log.d("setChatNoti", "setChatNoti: ${startAt} ")
         binding.cnNoti.apply {
             setTvNotiMain("선생님과의 수업이 ${startAt?.toKoreanString()}에 진행됩니다")
@@ -295,7 +297,7 @@ class StudentChatFragment : ChatFragment() {
                 visibility = View.GONE
             }
             setOnClickListenerToBtnPositive {
-                getClassRoomInfo()
+                tutoringId?.let { chatViewModel.getClassroomInfo(it) }
             }
         }
 
