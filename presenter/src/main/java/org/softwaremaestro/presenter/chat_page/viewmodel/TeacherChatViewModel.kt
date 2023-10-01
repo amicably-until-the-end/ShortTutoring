@@ -10,8 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import org.softwaremaestro.domain.answer_upload.usecase.DeclineQuestionUseCase
 import org.softwaremaestro.domain.answer_upload.usecase.StudentPickUseCase
-import org.softwaremaestro.domain.classroom.usecase.StartClassUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
 import java.time.LocalDateTime
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TeacherChatViewModel @Inject constructor(
     private val studentPickUseCase: StudentPickUseCase,
-    private val startClassUseCase: StartClassUseCase
+    private val declineQuestionUseCase: DeclineQuestionUseCase
 ) : ViewModel() {
 
     private val _tutoringTime = MutableLiveData<LocalDateTime>()
@@ -75,6 +75,28 @@ class TeacherChatViewModel @Inject constructor(
         }
     }
 
+
+    fun declineQuestion(tutoringId: String) {
+        viewModelScope.launch {
+            declineQuestionUseCase.execute(tutoringId)
+                .onStart { _pickStudentResult.value = UIState.Loading }
+                .catch { exception ->
+                    _pickStudentResult.value = UIState.Failure
+                    Log.e(this@TeacherChatViewModel::class.java.name, exception.message.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _pickStudentResult.value = UIState.Success(true)
+                        }
+
+                        is BaseResult.Error -> {
+                            _pickStudentResult.value = UIState.Failure
+                        }
+                    }
+                }
+        }
+    }
 
     fun setTutoringTime(time: LocalDateTime) = _tutoringTime.postValue(time)
 

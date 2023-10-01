@@ -126,18 +126,30 @@ class TeacherChatFragment : ChatFragment() {
                 datePickerDialog.show(parentFragmentManager, "datePicker")
             }
         }
-
-        binding.btnChatRoomLeft.apply {
-            visibility = View.VISIBLE
-            setOnClickListener {
-                // 지정 질문 거절하기
-            }
-        }
     }
 
     private fun onProposedSelectRoomEnter() {
         setNotiVisible(false)
         enablePickStudentBtn()
+        enableDeclineBtn()
+    }
+
+    private fun enableDeclineBtn() {
+        binding.btnChatRoomLeft.apply {
+            visibility = View.VISIBLE
+            text = "거절하기"
+            setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
+            this.isEnabled = true
+            setTextColor(resources.getColor(R.color.white))
+            setOnClickListener {
+                SimpleConfirmDialog {
+                    currentChatRoom?.id?.let { teacherViewModel.declineQuestion(it) }
+                }.apply {
+                    title = "거절하시겠습니까?"
+                    description = "학생이 요청한 시간에 진행이 어렵다면 채팅을 통해 조율해보세요."
+                }.show(parentFragmentManager, "declineDialog")
+            }
+        }
     }
 
     private fun onReservedRoomEnter() {

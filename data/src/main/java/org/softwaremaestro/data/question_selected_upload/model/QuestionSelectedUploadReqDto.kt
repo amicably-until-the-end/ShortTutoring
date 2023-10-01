@@ -8,7 +8,7 @@ data class QuestionSelectedUploadReqDto(
     @SerializedName("schoolSubject") val schoolSubject: String?,
     @SerializedName("mainImageIndex") val mainImageIndex: Int?,
     @SerializedName("images") val images: List<String>?,
-    @SerializedName("requestTutoringStartTime") val requestTutoringStartTime: List<String>?,
-    @SerializedName("requestTutoringEndTime") val requestTutoringEndTime: List<String>?,
+    @SerializedName("requestTutoringStartTime") val requestTutoringStartTime: String,
+    @SerializedName("requestTutoringEndTime") val requestTutoringEndTime: String,
     @SerializedName("requestTeacherId") val requestTeacherId: String?
 )

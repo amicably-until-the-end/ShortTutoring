@@ -20,4 +20,9 @@ interface AnswerUploadApi {
     suspend fun pickStudent(
         @Path("questionId") questionId: String, @Body body: StudentPickReqDto
     ): Response<WrappedResponse<StudentPickResultDto>>
+
+    @GET("/tutoring/decline/{chattingId}")
+    suspend fun declineStudent(
+        @Path("chattingId") chattingId: String
+    ): Response<WrappedResponse<StudentPickResultDto>>
 }

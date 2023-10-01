@@ -64,4 +64,16 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
             }
         }
     }
+
+
+    override suspend fun declineQuestion(tutoringId: String): Flow<BaseResult<Boolean, String>> {
+        return flow {
+            val result = answerUploadApi.declineStudent(tutoringId)
+            if (result.isSuccessful && result.body()?.success == true) {
+                emit(BaseResult.Success(true))
+            } else {
+                emit(BaseResult.Error("error"))
+            }
+        }
+    }
 }

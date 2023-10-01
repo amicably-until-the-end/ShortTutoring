@@ -13,6 +13,8 @@ import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class MessageListAdapter(
     private val onBtn1Click: () -> Unit,
@@ -218,7 +220,8 @@ class MessageListAdapter(
                     when (item.bodyVO) {
                         is MessageBodyVO.AppointRequest -> {
                             var body = item.bodyVO as MessageBodyVO.AppointRequest
-                            var time = LocalDateTime.parse(body.startDateTime)!!
+                            var time =
+                                body.startDateTime?.parseToLocalDateTime() ?: LocalDateTime.now()
                             tvText.text =
                                 "안녕하세요 선생님! ${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 가능하신가요?"
                             btn1.visibility = Button.VISIBLE
@@ -319,6 +322,16 @@ class MessageListAdapter(
                     else -> {}
                 }
             }
+        }
+    }
+
+    fun String.parseToLocalDateTime(): LocalDateTime? {
+        return try {
+            val formatter = DateTimeFormatter.ISO_DATE_TIME
+            val zonedDateTime = ZonedDateTime.parse(this, formatter)
+            zonedDateTime.toLocalDateTime()
+        } catch (e: Exception) {
+            null
         }
     }
 

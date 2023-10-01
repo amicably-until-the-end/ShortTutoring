@@ -172,4 +172,5 @@ class ChatRepositoryImpl @Inject constructor(
             Log.d("ChatRepositoryImpl insertMessage", e.toString())
         }
     }
+
 }
