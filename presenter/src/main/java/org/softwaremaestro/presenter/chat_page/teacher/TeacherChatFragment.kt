@@ -19,6 +19,7 @@ import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 class TeacherChatFragment : ChatFragment() {
@@ -27,6 +28,7 @@ class TeacherChatFragment : ChatFragment() {
     private lateinit var datePickerDialog: DatePickerBottomDialog
     private lateinit var timePickerDialog: TimePickerBottomDialog
     private lateinit var numberPickerDialog: NumberPickerBottomDialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -263,14 +265,7 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun initDatePickerDialog() {
         datePickerDialog = DatePickerBottomDialog { date ->
-            with(date) {
-                teacherViewModel.setTutoringTime(
-                    LocalDateTime.now()
-                        .withYear(year)
-                        .withMonth(monthValue)
-                        .withDayOfMonth(dayOfMonth)
-                )
-            }
+            teacherViewModel.tutoringDate = date
             timePickerDialog.show(parentFragmentManager, "timePicker")
         }.apply {
             setTitle("수업 날짜를 선택해주세요")
@@ -280,17 +275,7 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun initTimePickerDialog() {
         timePickerDialog = TimePickerBottomDialog { time ->
-            teacherViewModel.setTutoringTime(
-                with(teacherViewModel.tutoringTime.value!!) {
-                    LocalDateTime.of(
-                        year,
-                        monthValue,
-                        dayOfMonth,
-                        time.hour,
-                        time.minute
-                    )
-                }
-            )
+            teacherViewModel.tutoringStart = LocalTime.of(time.hour, time.minute)
             numberPickerDialog.show(parentFragmentManager, "numberPicker")
         }.apply {
             setTitle("수업 시작 시간을 선택해주세요")
@@ -300,7 +285,8 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun initNumberPickerDialog() {
         numberPickerDialog = NumberPickerBottomDialog { number ->
-            teacherViewModel.setTutoringDuration(number)
+            teacherViewModel.tutoringDuration = number
+            teacherViewModel.pickStudent(currentChatRoom?.questionId!!, currentChatRoom?.id!!)
         }.apply {
             setTitle("수업을 몇 분간 진행할까요?")
             setBtnText("입력하기")
