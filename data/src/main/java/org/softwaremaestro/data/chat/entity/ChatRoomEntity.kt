@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 data class ChatRoomEntity(
     @PrimaryKey var id: String,
     var title: String,
-    var startDateTime: LocalDateTime,
+    var startDateTime: LocalDateTime?,
     var status: Int,
     var image: String,
     var opponentId: String?,

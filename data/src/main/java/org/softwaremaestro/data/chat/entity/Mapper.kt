@@ -10,7 +10,6 @@ import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 class Mapper {
 
@@ -116,7 +115,7 @@ class Mapper {
             title = dto.title!!,
             image = dto.roomImage,
             status = status,
-            startDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")),
+            startDateTime = dto.reservedStart?.parseToLocalDateTime(),
             opponentId = dto.opponentId,
             questionId = dto.questionId,
             subTitle =

@@ -33,7 +33,7 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
         return response
     }
 
-    private fun getJWT(role: String?): String? {
+    private fun getJWT(role: String?): String {
         return prefs.getJWT()
     }
 }

@@ -1,16 +1,10 @@
 package org.softwaremaestro.data.chat.model
 
-import android.util.Log
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.MessageBodyVO
-import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
-import org.softwaremaestro.domain.chat.entity.StudentInfoVO
-import org.softwaremaestro.domain.chat.entity.TeacherInfoVO
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -75,8 +69,6 @@ class Mapper {
             return ChatRoomVO(
                 id = id,
                 title = title,
-                schoolLevel = schoolLevel,
-                schoolSubject = schoolSubject,
                 roomType = RoomType.TEACHER,
                 roomImage = image,
                 questionId = questionId,

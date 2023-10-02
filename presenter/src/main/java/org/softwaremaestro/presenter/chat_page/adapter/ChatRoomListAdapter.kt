@@ -114,7 +114,7 @@ class ChatRoomListAdapter(
                 }
 
                 tvTitle.text = item.title
-                tvSubTitle.text = item.schoolSubject
+                tvSubTitle.text = item.subTitle
                 Glide.with(binding.root.context)
                     .load(item.roomImage)
                     .into(ivImage)
