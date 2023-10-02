@@ -52,8 +52,9 @@ data class MessageVO(
 sealed class MessageBodyVO {
     @Serializable
     data class ProblemImage(
-        val imageUrl: String?,
+        val image: String?,
         val description: String?,
+        val questionId: String?
     ) : MessageBodyVO()
 
     @Serializable
