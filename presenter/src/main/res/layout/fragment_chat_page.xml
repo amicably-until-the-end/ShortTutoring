@@ -27,7 +27,7 @@
             android:background="@drawable/ic_chevron_left"
             android:backgroundTint="@color/primary_blue" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -70,7 +70,7 @@
                     android:background="@color/background_light_blue" />
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
     </LinearLayout>
@@ -169,7 +169,7 @@
 
         </RadioGroup>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -359,7 +359,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
     </LinearLayout>
