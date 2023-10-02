@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.chat_page.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,7 @@ class ChatRoomListAdapter(
 
     private var selectedView: MaterialCardView? = null
 
-    private var selectedPosition: Int = -1
+    private var selectedChattingRoomId: String? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -48,12 +47,20 @@ class ChatRoomListAdapter(
         this.items = items
     }
 
-    fun clearSelectedItem(caller: RecyclerView.Adapter<*>?) {
-        if (caller !== this@ChatRoomListAdapter) {
-            selectedView?.strokeColor = selectedView?.context?.getColor(R.color.background_grey)!!
-            selectedView?.setBackgroundColor(selectedView?.context?.getColor(R.color.transparent)!!)
-            selectedView = null
-        }
+    fun setSelectedChattingRoomId(chattingId: String?) {
+        selectedChattingRoomId = chattingId
+        notifyDataSetChanged()
+    }
+
+
+    fun decorateSelectedView(selectedView: MaterialCardView?) {
+        selectedView?.strokeColor = selectedView?.context?.getColor(R.color.primary_blue)!!
+        selectedView.setBackgroundColor(selectedView.context?.getColor(R.color.background_light_blue)!!)
+    }
+
+    fun unDecorateSelectedView(selectedView: MaterialCardView?) {
+        selectedView?.strokeColor = selectedView?.context?.getColor(R.color.background_grey)!!
+        selectedView.setBackgroundColor(selectedView.context?.getColor(R.color.transparent)!!)
     }
 
     inner class ViewHolder(private val binding: ItemTutoringListRoomBinding) :
@@ -73,20 +80,18 @@ class ChatRoomListAdapter(
                     }
 
                     RoomType.TEACHER -> {
+                        if (selectedChattingRoomId == item.id) {
+                            decorateSelectedView(cvContainer)
+                        } else {
+                            unDecorateSelectedView(cvContainer)
+                        }
                         cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
                         root.setOnClickListener {
                             onTeacherClick(
                                 item,
                                 this@ChatRoomListAdapter
                             )
-                            Log.d("ChatRoomListAdapter", "teacher click ${item}")
-                            clearSelectedItem(null)
-                            cvContainer.strokeColor =
-                                binding.root.context.getColor(R.color.primary_blue)
-                            cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
-                            selectedView = cvContainer
                         }
-
                     }
                 }
                 if (!item.messages.isNullOrEmpty()) {

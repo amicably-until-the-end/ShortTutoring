@@ -14,7 +14,9 @@ import org.softwaremaestro.domain.answer_upload.usecase.DeclineQuestionUseCase
 import org.softwaremaestro.domain.answer_upload.usecase.StudentPickUseCase
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.presenter.util.UIState
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,55 +25,49 @@ class TeacherChatViewModel @Inject constructor(
     private val declineQuestionUseCase: DeclineQuestionUseCase
 ) : ViewModel() {
 
-    private val _tutoringTime = MutableLiveData<LocalDateTime>()
-    val tutoringTime: LiveData<LocalDateTime> get() = _tutoringTime
+    var tutoringDuration: Int? = null
+    var tutoringDate: LocalDate? = null
+    var tutoringStart: LocalTime? = null
 
-    private val _tutoringDuration = MutableLiveData<Int>()
-    val tutoringDuration: LiveData<Int> get() = _tutoringDuration
 
     private val _tutoringTimeAndDurationProper = MediatorLiveData<Boolean>()
     val tutoringTimeAndDurationProper: MediatorLiveData<Boolean> get() = _tutoringTimeAndDurationProper
 
-    private val _pickStudentResult = MutableLiveData<UIState<Boolean>>()
+    val _pickStudentResult = MutableLiveData<UIState<Boolean>>()
     val pickStudentResult: LiveData<UIState<Boolean>> get() = _pickStudentResult
 
-    init {
-        with(_tutoringTimeAndDurationProper) {
-            addSource(_tutoringTime) {
-                value = _tutoringTime.value != null && _tutoringDuration.value != null
-            }
-
-            addSource(_tutoringDuration) {
-                value = _tutoringTime.value != null && _tutoringDuration.value != null
-            }
-        }
-    }
-
     fun pickStudent(questionId: String, chattingId: String) {
-        var startTime = _tutoringTime.value!!
-        var endTime = _tutoringTime.value!!.plusMinutes(_tutoringDuration.value!!.toLong())
-        viewModelScope.launch {
-            Log.d(
-                "TeacherChatViewModel",
-                "pickStudent: $questionId, $startTime, $endTime, $chattingId"
-            )
-            studentPickUseCase.execute(questionId, startTime, endTime, chattingId)
-                .onStart { _pickStudentResult.value = UIState.Loading }
-                .catch { exception ->
-                    _pickStudentResult.value = UIState.Failure
-                    Log.e(this@TeacherChatViewModel::class.java.name, exception.message.toString())
-                }
-                .collect { result ->
-                    when (result) {
-                        is BaseResult.Success -> {
-                            _pickStudentResult.value = UIState.Success(true)
-                        }
+        try {
+            var startTime = LocalDateTime.of(tutoringDate, tutoringStart)
+            var endTime = startTime?.plusMinutes(tutoringDuration!!.toLong())!!
+            viewModelScope.launch {
+                Log.d(
+                    "TeacherChatViewModel",
+                    "pickStudent: $questionId, $startTime, $endTime, $chattingId"
+                )
+                studentPickUseCase.execute(questionId, startTime, endTime, chattingId)
+                    .onStart { _pickStudentResult.value = UIState.Loading }
+                    .catch { exception ->
+                        _pickStudentResult.value = UIState.Failure
+                        Log.e(
+                            this@TeacherChatViewModel::class.java.name,
+                            exception.message.toString()
+                        )
+                    }
+                    .collect { result ->
+                        when (result) {
+                            is BaseResult.Success -> {
+                                _pickStudentResult.value = UIState.Success(true)
+                            }
 
-                        is BaseResult.Error -> {
-                            _pickStudentResult.value = UIState.Failure
+                            is BaseResult.Error -> {
+                                _pickStudentResult.value = UIState.Failure
+                            }
                         }
                     }
-                }
+            }
+        } catch (e: Exception) {
+            Log.d("TeacherChatViewModel", "pickStudent: $e")
         }
     }
 
@@ -97,8 +93,4 @@ class TeacherChatViewModel @Inject constructor(
                 }
         }
     }
-
-    fun setTutoringTime(time: LocalDateTime) = _tutoringTime.postValue(time)
-
-    fun setTutoringDuration(duration: Int) = _tutoringDuration.postValue(duration)
 }

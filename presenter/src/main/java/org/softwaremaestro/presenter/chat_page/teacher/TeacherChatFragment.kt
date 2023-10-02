@@ -19,6 +19,7 @@ import org.softwaremaestro.presenter.util.widget.NumberPickerBottomDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 class TeacherChatFragment : ChatFragment() {
@@ -27,6 +28,7 @@ class TeacherChatFragment : ChatFragment() {
     private lateinit var datePickerDialog: DatePickerBottomDialog
     private lateinit var timePickerDialog: TimePickerBottomDialog
     private lateinit var numberPickerDialog: NumberPickerBottomDialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +42,6 @@ class TeacherChatFragment : ChatFragment() {
     }
 
     private fun observe() {
-        observeTutoringTimeAndDurationProper()
         observePickStudentResult()
         observeClassroomInfo()
         observeTutoringInfo()
@@ -79,6 +80,7 @@ class TeacherChatFragment : ChatFragment() {
         return true
     }
 
+
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         if (chatRoomVO.isSelect) {
             // 지정 질문 이면
@@ -98,8 +100,7 @@ class TeacherChatFragment : ChatFragment() {
             //일반 질문 일때
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
-                    setChatRoomBtnsVisible(false)
-                    setNotiVisible(false)
+                    onProposedNormalRoomEnter()
                 }
 
                 QuestionState.RESERVED -> {
@@ -107,14 +108,20 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
                 else -> {
+
                 }
             }
         }
     }
 
+    private fun onProposedNormalRoomEnter() {
+        setNotiVisible(false)
+        setChatRoomBtnsVisible(false)
+    }
+
 
     override fun enablePickStudentBtn() {
-        setNotiVisible(false)
+        //setNotiVisible(false)
         binding.btnChatRoomRight.apply {
             visibility = View.VISIBLE
             text = "수락하기"
@@ -129,6 +136,7 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun onProposedSelectRoomEnter() {
         setNotiVisible(false)
+        setChatRoomBtnsVisible(false)
         enablePickStudentBtn()
         enableDeclineBtn()
     }
@@ -213,21 +221,13 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
-    private fun observeTutoringTimeAndDurationProper() {
-        teacherViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
-            if (proper) {
-                currentChatRoom?.let {
-                    teacherViewModel.pickStudent(it.questionId!!, it.id!!)
-                }
-            }
-        }
-    }
-
     private fun observePickStudentResult() {
         teacherViewModel.pickStudentResult.observe(viewLifecycleOwner) {
             when (it) {
+                is UIState.Empty -> return@observe
                 is UIState.Loading -> {
                     //로딩
+                    loadingDialog.show()
                     with(binding.btnChatRoomRight) {
                         setBackgroundResource(R.drawable.bg_radius_100_background_grey)
                         isEnabled = false
@@ -237,31 +237,27 @@ class TeacherChatFragment : ChatFragment() {
 
                 is UIState.Success -> {
                     disableChatRoomBtn()
-
+                    loadingDialog.dismiss()
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
-                    chatViewModel.getChatRoomList(isTeacher())
+                    //chatViewModel.getChatRoomList(isTeacher())
                 }
 
                 is UIState.Failure -> {
+                    loadingDialog.dismiss()
                     //선생님 선택 실패
                 }
 
                 else -> {}
             }
+            teacherViewModel._pickStudentResult.value = UIState.Empty
+
         }
     }
 
     private fun initDatePickerDialog() {
         datePickerDialog = DatePickerBottomDialog { date ->
-            with(date) {
-                teacherViewModel.setTutoringTime(
-                    LocalDateTime.now()
-                        .withYear(year)
-                        .withMonth(monthValue)
-                        .withDayOfMonth(dayOfMonth)
-                )
-            }
-            timePickerDialog.show(parentFragmentManager, "datePicker")
+            teacherViewModel.tutoringDate = date
+            timePickerDialog.show(parentFragmentManager, "timePicker")
         }.apply {
             setTitle("수업 날짜를 선택해주세요")
             setBtnText("선택하기")
@@ -270,17 +266,7 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun initTimePickerDialog() {
         timePickerDialog = TimePickerBottomDialog { time ->
-            teacherViewModel.setTutoringTime(
-                with(teacherViewModel.tutoringTime.value!!) {
-                    LocalDateTime.of(
-                        year,
-                        monthValue,
-                        dayOfMonth,
-                        time.hour,
-                        time.minute
-                    )
-                }
-            )
+            teacherViewModel.tutoringStart = LocalTime.of(time.hour, time.minute)
             numberPickerDialog.show(parentFragmentManager, "numberPicker")
         }.apply {
             setTitle("수업 시작 시간을 선택해주세요")
@@ -290,7 +276,8 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun initNumberPickerDialog() {
         numberPickerDialog = NumberPickerBottomDialog { number ->
-            teacherViewModel.setTutoringDuration(number)
+            teacherViewModel.tutoringDuration = number
+            teacherViewModel.pickStudent(currentChatRoom?.questionId!!, currentChatRoom?.id!!)
         }.apply {
             setTitle("수업을 몇 분간 진행할까요?")
             setBtnText("입력하기")

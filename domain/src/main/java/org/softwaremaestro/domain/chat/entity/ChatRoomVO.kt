@@ -8,6 +8,7 @@ data class ChatRoomListVO(
     val normalReserved: List<ChatRoomVO>,
     val selectedProposed: List<ChatRoomVO>,
     val selectedReserved: List<ChatRoomVO>,
+    var currentRoomVO: ChatRoomVO? = null,
 )
 
 
@@ -67,6 +68,11 @@ sealed class MessageBodyVO {
 
     @Serializable
     object RequestDecline : MessageBodyVO()
+
+    @Serializable
+    data class ReserveConfirm(
+        val startDateTime: String?,
+    ) : MessageBodyVO()
 }
 
 enum class QuestionType {

@@ -51,6 +51,11 @@ class Mapper {
 
                     "request-decline" -> MessageBodyVO.RequestDecline
 
+                    "reserve-confirm" -> gson.fromJson(
+                        body,
+                        MessageBodyVO.ReserveConfirm::class.java
+                    )
+
                     else -> MessageBodyVO.Text(body)
                 }
             } catch (e: Exception) {
