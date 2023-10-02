@@ -1,13 +1,10 @@
 package org.softwaremaestro.data.chat.entity
 
-import android.system.StructMsghdr
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 @Entity
 data class ChatRoomEntity(
@@ -18,8 +15,7 @@ data class ChatRoomEntity(
     var image: String,
     var opponentId: String?,
     var questionId: String?,
-    var schoolSubject: String?,
-    var schoolLevel: String?,
+    var subTitle: String?,
     var isSelect: Boolean,
     var description: String?,
 )

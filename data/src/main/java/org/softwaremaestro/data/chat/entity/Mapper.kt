@@ -3,6 +3,7 @@ package org.softwaremaestro.data.chat.entity
 import android.util.Log
 import com.google.gson.Gson
 import org.softwaremaestro.data.chat.model.ChatRoomDto
+import org.softwaremaestro.data.common.utils.parseToLocalDateTime
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
@@ -18,8 +19,7 @@ class Mapper {
             return ChatRoomVO(
                 id = id,
                 title = title,
-                schoolLevel = schoolLevel,
-                schoolSubject = schoolSubject,
+                subTitle = subTitle,
                 roomType = RoomType.TEACHER,
                 roomImage = image,
                 questionId = questionId,
@@ -75,12 +75,11 @@ class Mapper {
             return ChatRoomVO(
                 id = chatRoomEntity.id,
                 title = chatRoomEntity.title,
-                schoolLevel = chatRoomEntity.schoolLevel,
-                schoolSubject = chatRoomEntity.schoolSubject,
                 roomType = if (chatRoomEntity.opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 roomImage = chatRoomEntity.image,
                 questionId = chatRoomEntity.questionId,
                 isSelect = chatRoomEntity.isSelect,
+                subTitle = chatRoomEntity.subTitle,
                 questionState =
                 if (chatRoomEntity.status == ChatRoomType.PROPOSED_NORMAL.type ||
                     chatRoomEntity.status == ChatRoomType.PROPOSED_SELECT.type
@@ -120,8 +119,10 @@ class Mapper {
             startDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")),
             opponentId = dto.opponentId,
             questionId = dto.questionId,
-            schoolLevel = dto.questionInfo?.problem?.schoolLevel ?: "undefined",
-            schoolSubject = dto.questionInfo?.problem?.schoolLevel ?: "undefined",
+            subTitle =
+            if (dto.questionState != "reserved")
+                "${dto.questionInfo?.problem?.schoolLevel} ${dto.questionInfo?.problem?.schoolSubject}"
+            else "${dto.reservedStart?.parseToLocalDateTime()?.toKoreanString()}",
             isSelect = dto.isSelect ?: false,
             description = dto.questionInfo?.problem?.description ?: "undefined",
         )
@@ -142,4 +143,10 @@ fun ChatRoomWithMessages.asDomain(): ChatRoomVO {
 
 fun ChatRoomDto.asEntity(): ChatRoomEntity {
     return Mapper().asEntity(this)
+}
+
+fun LocalDateTime.toKoreanString(): String {
+    return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시 ${
+        if (this.minute != 0) "${minute}분" else ""
+    }"
 }
