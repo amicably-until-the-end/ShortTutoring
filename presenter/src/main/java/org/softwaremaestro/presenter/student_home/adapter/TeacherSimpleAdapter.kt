@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherSimpleBinding
+import org.softwaremaestro.presenter.util.disableFor
 import java.lang.Integer.min
 
 class TeacherSimpleAdapter(
@@ -62,6 +63,7 @@ class TeacherSimpleAdapter(
 
             itemView.setOnClickListener {
                 onItemClickListener(item)
+                itemView.disableFor(500L)
             }
         }
     }

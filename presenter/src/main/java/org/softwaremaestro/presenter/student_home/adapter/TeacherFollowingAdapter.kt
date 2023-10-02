@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherFollowingBinding
+import org.softwaremaestro.presenter.util.disableFor
 
 class TeacherFollowingAdapter(private val onItemClickListener: (FollowingGetResponseVO) -> Unit) :
     RecyclerView.Adapter<TeacherFollowingAdapter.ViewHolder>() {
@@ -42,6 +43,7 @@ class TeacherFollowingAdapter(private val onItemClickListener: (FollowingGetResp
                 .into(binding.ivPhoto)
             binding.ivPhoto.setOnClickListener {
                 item.id?.let { onItemClickListener(item) }
+                binding.ivPhoto.disableFor(500L)
             }
         }
     }

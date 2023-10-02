@@ -8,6 +8,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
+import android.os.Handler
+import android.os.Looper
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
@@ -85,6 +87,11 @@ fun View.decreaseWidth(
         override fun onAnimationRepeat(p0: Animator) {}
     })
     anim.start()
+}
+
+fun View.disableFor(duration: Long) {
+    isEnabled = false
+    Handler(Looper.getMainLooper()).postDelayed({ isEnabled = true }, 500L)
 }
 
 fun View.increaseWidth(
