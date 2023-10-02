@@ -11,4 +11,8 @@ class QuestionGetUseCase @Inject constructor(private val repository: QuestionGet
     suspend fun execute(): Flow<BaseResult<List<QuestionGetResponseVO>, String>> {
         return repository.getQuestions()
     }
+
+    suspend fun getQuestionInfo(questionId: String): Flow<BaseResult<QuestionGetResponseVO, String>> {
+        return repository.getQuestionInfo(questionId)
+    }
 }

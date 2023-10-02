@@ -20,7 +20,7 @@ class MessageListAdapter(
     private val isTeacher: Boolean,
     private val onBtn1Click: () -> Unit,
     private val onBtn2Click: () -> Unit,
-    private val onImageClick: (MessageBodyVO.ProblemImage) -> Unit,
+    private val onImageClick: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<MessageVO> = emptyList()
@@ -352,7 +352,7 @@ class MessageListAdapter(
                             .centerCrop()
                             .into(ivImage)
                         root.setOnClickListener {
-                            onImageClick(body)
+                            onImageClick()
                         }
                     }
 
