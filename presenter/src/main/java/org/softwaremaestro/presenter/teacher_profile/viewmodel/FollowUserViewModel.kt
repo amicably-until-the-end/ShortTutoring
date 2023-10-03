@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.teacher_profile.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,10 +49,7 @@ class FollowUserViewModel @Inject constructor(
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> Log.d(
-                            this@FollowUserViewModel::class.java.name,
-                            result.data
-                        )
+                        is BaseResult.Success -> _followUserState.postValue(true)
 
                         is BaseResult.Error -> logError(
                             this@FollowUserViewModel::class.java,

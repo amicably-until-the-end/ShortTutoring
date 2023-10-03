@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.student_home.widget
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,7 +93,6 @@ class TeacherProfileDialog(
         if (SocketManager.userId == null || item.followers == null) return
         mItem = item
         following = SocketManager.userId!! in item.followers!!
-        Log.d("hhcc", "first following : ${following}")
     }
 
     /**
