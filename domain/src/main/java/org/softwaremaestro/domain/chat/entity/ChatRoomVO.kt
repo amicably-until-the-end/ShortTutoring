@@ -27,6 +27,7 @@ data class ChatRoomVO(
     val messages: List<MessageVO>? = null,
     var teachers: List<ChatRoomVO>? = null,
     val isSelect: Boolean,
+    val subTitle: String? = null,
 )
 
 data class StudentInfoVO(
@@ -52,8 +53,9 @@ data class MessageVO(
 sealed class MessageBodyVO {
     @Serializable
     data class ProblemImage(
-        val imageUrl: String?,
+        val image: String?,
         val description: String?,
+        val questionId: String?
     ) : MessageBodyVO()
 
     @Serializable

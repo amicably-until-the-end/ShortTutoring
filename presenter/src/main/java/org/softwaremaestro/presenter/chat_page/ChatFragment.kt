@@ -19,6 +19,7 @@ import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.chat_page.QuestionImageActivity.Companion.QUESTION_ID
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomIconListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.ChatRoomListAdapter
 import org.softwaremaestro.presenter.chat_page.adapter.MessageListAdapter
@@ -29,9 +30,6 @@ import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
-import org.softwaremaestro.presenter.teacher_home.DESCRIPTION
-import org.softwaremaestro.presenter.teacher_home.IMAGE
-import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -401,16 +399,9 @@ abstract class ChatFragment : Fragment() {
                     "detailAlertDialog"
                 )
             },
-            onImageClick = { body ->
+            onImageClick = {
                 val intent = Intent(requireActivity(), QuestionImageActivity::class.java).apply {
-                    putStringArrayListExtra(
-                        IMAGE, arrayListOf(
-                            "https://i.pravatar.cc/150?img=3",
-                            "https://i.pravatar.cc/150?img=4"
-                        )
-                    )
-                    putExtra(SUBJECT, "과목")
-                    putExtra(DESCRIPTION, body.description)
+                    putExtra(QUESTION_ID, currentChatRoom?.questionId)
                 }
                 startActivity(intent)
             }

@@ -1,30 +1,35 @@
 package org.softwaremaestro.presenter.chat_page
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.presenter.chat_page.viewmodel.QuestionImageViewModel
 import org.softwaremaestro.presenter.databinding.ActivityQuestionImageBinding
-import org.softwaremaestro.presenter.teacher_home.DESCRIPTION
-import org.softwaremaestro.presenter.teacher_home.IMAGE
-import org.softwaremaestro.presenter.teacher_home.SUBJECT
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionDetailImagesAdapter
 
+@AndroidEntryPoint
 class QuestionImageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityQuestionImageBinding
 
-    var images: ArrayList<String>? = null
-    var subject: String? = null
-    var description: String? = null
+    var questionId: String? = null
 
+    private val viewModel: QuestionImageViewModel by viewModels()
+
+
+    lateinit var adapter: QuestionDetailImagesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getIntentExtra()
-        setQuestionContent()
-        setImageRecyclerView()
         setCloseButton()
+        getIntentExtra()
+        setImageRecyclerView()
+        observeQuestionInfo()
+        questionId?.let { viewModel.getImages(it) }
 
     }
 
@@ -34,29 +39,40 @@ class QuestionImageActivity : AppCompatActivity() {
         }
     }
 
-    private fun setQuestionContent() {
-        binding.tvDescription.text = description
-        binding.tvSubject.text = subject
+    private fun observeQuestionInfo() {
+        viewModel.questionInfo.observe(this) {
+            Log.d("mymymy", it.toString())
+            if (it != null) {
+                setImageRecyclerViewItem(it.images ?: listOf())
+                binding.tvSubject.text = it.problemSubject
+                binding.tvDescription.text = it.problemDescription
+            }
+        }
     }
 
     private fun getIntentExtra() {
-        images = intent.getStringArrayListExtra(IMAGE)
-        subject = intent.getStringExtra(SUBJECT)
-        description = intent.getStringExtra(DESCRIPTION)
+        questionId = intent.getStringExtra(QUESTION_ID)
     }
 
 
     private fun setImageRecyclerView() {
-        val adapter = QuestionDetailImagesAdapter()
+        adapter = QuestionDetailImagesAdapter()
         binding.rvImages.apply {
-            this.adapter = adapter
+            this.adapter = this@QuestionImageActivity.adapter
             layoutManager = LinearLayoutManager(
                 this@QuestionImageActivity,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
         }
-        adapter.setItem(images as List<String>)
+    }
+
+    private fun setImageRecyclerViewItem(images: List<String>) {
+        adapter.setItem(images)
         adapter.notifyDataSetChanged()
+    }
+
+    companion object {
+        const val QUESTION_ID = "questionId"
     }
 }

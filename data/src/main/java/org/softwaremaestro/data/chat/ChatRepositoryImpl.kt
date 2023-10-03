@@ -74,6 +74,7 @@ class ChatRepositoryImpl @Inject constructor(
                             questionId = group.key,
                             questionState = QuestionState.PROPOSED,
                             description = group.value[0].description,
+                            subTitle = "${questionInfo.problemDto?.schoolLevel} ${questionInfo.problemDto?.schoolSubject}",
                             teachers = group.value.filter { it.opponentId != null },
                         )
                         groups.add(questionRoom)

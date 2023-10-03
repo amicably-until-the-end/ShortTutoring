@@ -20,7 +20,7 @@ class MessageListAdapter(
     private val isTeacher: Boolean,
     private val onBtn1Click: () -> Unit,
     private val onBtn2Click: () -> Unit,
-    private val onImageClick: (MessageBodyVO.ProblemImage) -> Unit,
+    private val onImageClick: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<MessageVO> = emptyList()
@@ -348,12 +348,14 @@ class MessageListAdapter(
                     is MessageBodyVO.ProblemImage -> {
                         var body = item.bodyVO as MessageBodyVO.ProblemImage
                         tvDesciption.text = body.description
-                        Glide.with(root.context).load(body.imageUrl)
+                        Glide.with(root.context).load(body.image)
                             .centerCrop()
                             .into(ivImage)
                         root.setOnClickListener {
-                            onImageClick(body)
+                            onImageClick()
                         }
+                        binding.tvSubject.text = body.questionId
+
                     }
 
                     else -> {}

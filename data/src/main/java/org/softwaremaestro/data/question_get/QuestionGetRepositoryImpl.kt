@@ -31,4 +31,13 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
             }
         }
     }
+
+    override suspend fun getQuestionInfo(questionId: String): Flow<BaseResult<QuestionGetResponseVO, String>> {
+        return flow {
+            val response = questionGetApi.getQuestionInfo(questionId)
+            response.body()?.data?.let {
+                emit(BaseResult.Success(it.asDomain()))
+            } ?: emit(BaseResult.Error("error"))
+        }
+    }
 }
