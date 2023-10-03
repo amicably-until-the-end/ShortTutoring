@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
-import org.softwaremaestro.domain.lecture_get.entity.LectureVO
 import org.softwaremaestro.presenter.coin.ChargeCoinActivity
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -22,6 +21,7 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.LectureViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
@@ -37,6 +37,7 @@ class StudentHomeFragment : Fragment() {
     private val followUserViewModel: FollowUserViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val teacherViewModel: TeacherViewModel by viewModels()
+    private val lectureViewModel: LectureViewModel by viewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -55,26 +56,22 @@ class StudentHomeFragment : Fragment() {
             startActivity(Intent(requireContext(), ChargeCoinActivity::class.java))
         }
 
-        myProfileViewModel.getMyProfile()
-        teacherViewModel.getTeachers()
-
+        getRemoteData()
         initTeacherProfileDialog()
-
         setQuestionButton()
         setTeacherFollowingRecyclerView()
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
         setNofiBtn()
-
-        observeFollowing()
-        observeMyProfile()
-        observeTeachers()
-
-        // mockup
-        setItemToLectureAdapter()
-
+        setObserver()
         return binding.root
+    }
+
+    private fun getRemoteData() {
+        myProfileViewModel.getMyProfile()
+        teacherViewModel.getTeachers()
+        lectureViewModel.getLectures()
     }
 
     private fun initTeacherProfileDialog() {
@@ -246,14 +243,6 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
-    private fun setItemToLectureAdapter() {
-        val lectures = mutableListOf<LectureVO>().apply {
-            add(LectureVO("경우의 수를 다 셌는데 안 맞아요", "수학1", ""))
-            add(LectureVO("이차곡선의 성질이 이해가 안 돼요", "기하", ""))
-        }
-        lectureAdapter.setItem(lectures)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -278,6 +267,29 @@ class StudentHomeFragment : Fragment() {
             setOnConfirmClick {
                 onConfirmClick()
             }
+        }
+    }
+
+    private fun setObserver() {
+        observeFollowing()
+        observeMyProfile()
+        observeTeachers()
+        observeLectures()
+    }
+
+    private fun observeLectures() {
+        lectureViewModel.lectures.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.tvLectureDesc.text = "지난 수업을 복습해봐요"
+                binding.rvLecture.visibility = View.VISIBLE
+                binding.containerLectureEmpty.visibility = View.GONE
+            } else {
+                binding.tvLectureDesc.text = "숏과외에 처음 오신 것을 환영해요!"
+                binding.rvLecture.visibility = View.GONE
+                binding.containerLectureEmpty.visibility = View.VISIBLE
+            }
+            lectureAdapter.setItem(it)
+            lectureAdapter.notifyDataSetChanged()
         }
     }
 

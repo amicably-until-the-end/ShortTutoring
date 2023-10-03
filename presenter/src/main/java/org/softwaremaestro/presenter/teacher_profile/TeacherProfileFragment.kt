@@ -100,7 +100,7 @@ class TeacherProfileFragment : Fragment() {
 //                tvTeacherRating.text = it.rating
                 Glide.with(this@TeacherProfileFragment).load(it.profileImage).circleCrop()
                     .into(ivTeacherImg)
-                btnFollow.text = "찜한 사람 ${it.followersCount}명"
+                btnFollow.text = "찜한 학생 ${it.followersCount}명"
                 // Todo: api에서 가져오기
                 val followers = listOf<String>(SocketManager.userId!!)
                 if (SocketManager.userId != null && followers != null) {
