@@ -31,6 +31,7 @@ class SplashActivity : AppCompatActivity() {
         loginViewModel.saveRole.observe(this) {
             when (it) {
                 is UIState.Success -> {
+                    loginViewModel.registerFCMToken()
                     if (it._data == "teacher") {
                         goToTeacherHomeActivity()
                     } else if (it._data == "student") {

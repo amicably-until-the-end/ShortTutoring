@@ -8,6 +8,7 @@ class SharedPrefs(private val context: Context) {
     companion object {
         private const val PREF = "DefaultPref"
         private const val PREF_TOKEN = "jwt"
+        private const val PREF_FCM_TOKEN = "fcm_token"
     }
 
     private val sharedPref: SharedPreferences =
@@ -16,6 +17,15 @@ class SharedPrefs(private val context: Context) {
 
     fun saveJWT(token: String) {
         put(PREF_TOKEN, token)
+    }
+
+
+    fun saveFCMToken(token: String) {
+        put(PREF_FCM_TOKEN, token)
+    }
+
+    fun getFCMToken(): String {
+        return get(PREF_FCM_TOKEN, String::class.java)
     }
 
     fun getJWT(): String {

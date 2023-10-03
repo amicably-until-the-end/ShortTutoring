@@ -24,14 +24,19 @@ class PushMessageService :
     @Inject
     lateinit var loginUseCase: LoginUseCase
 
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // 서버에 토큰 등록
-        Log.d("FCM Log", "Refreshed token: $token")
+        Log.d("fcm", "onNewToken in PushMessageService")
+        loginUseCase.saveFCMToken(token)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        Log.d(
+            "fcm",
+            "onMessageReceived ${remoteMessage.notification?.body} ${ExampleApplication.isForeground}"
+        )
         val notificationManager = NotificationManagerCompat.from(
             applicationContext
         )
@@ -49,9 +54,9 @@ class PushMessageService :
         } else {
             builder = NotificationCompat.Builder(applicationContext)
         }
-        val title = remoteMessage.notification!!.title
-        val body = remoteMessage.notification!!.body
-        builder!!.setContentTitle(title)
+        val title = remoteMessage.data["title"] ?: "undefined"
+        val body = remoteMessage.data["body"] ?: "undefined"
+        builder.setContentTitle(title)
             .setContentText(body)
             .setSmallIcon(R.drawable.btn_radio)
         val notification: Notification = builder.build()

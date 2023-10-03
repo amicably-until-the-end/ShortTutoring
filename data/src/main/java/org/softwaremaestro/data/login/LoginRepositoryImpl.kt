@@ -1,18 +1,24 @@
 package org.softwaremaestro.data.login
 
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.common.utils.SavedToken
 import org.softwaremaestro.data.infra.SharedPrefs
 import org.softwaremaestro.data.login.model.LoginReqDto
+import org.softwaremaestro.data.login.model.RegisterFCMTokenReqDto
+import org.softwaremaestro.data.login.remote.FCMApi
 import org.softwaremaestro.data.login.remote.LoginApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.LoginRepository
 import org.softwaremaestro.domain.login.entity.UserVO
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class LoginRepositoryImpl @Inject constructor(
     private val loginApi: LoginApi,
+    private val fcmApi: FCMApi,
     private val prefs: SharedPrefs,
     private val savedToken: SavedToken,
 ) :
@@ -87,6 +93,34 @@ class LoginRepositoryImpl @Inject constructor(
 
     override fun getToken(): String {
         return prefs.getJWT()
+    }
+
+    override fun saveFCMToken(token: String) {
+        prefs.saveFCMToken(token)
+    }
+
+    override suspend fun registerFCMToken(): Flow<BaseResult<String, String>> {
+        return flow {
+            val result = fcmApi.registerFCMToken(
+                RegisterFCMTokenReqDto(getFCMToken()!!)
+            )
+            if (result.isSuccessful) {
+                emit(BaseResult.Success("success"))
+            } else {
+                emit(BaseResult.Error("error"))
+            }
+        }
+    }
+
+
+    private suspend fun getFCMToken(): String? = suspendCoroutine { continuation ->
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                continuation.resume(task.result)
+            } else {
+                continuation.resume(null)
+            }
+        }
     }
 
 
