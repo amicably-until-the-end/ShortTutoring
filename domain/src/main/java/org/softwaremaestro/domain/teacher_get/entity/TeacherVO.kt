@@ -5,7 +5,8 @@ data class TeacherVO(
     val nickname: String?,
     val teacherId: String?,
     val bio: String?,
-    val pickCount: Int?,
     val univ: String?,
-    val rating: Float?
+    val rating: Float?,
+    val followers: List<String>?,
+    val reservationCnt: Int?
 )

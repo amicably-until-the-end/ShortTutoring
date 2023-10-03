@@ -57,7 +57,7 @@ class TeacherSimpleAdapter(
                 tvTeacherUniv.text = item.univ
                 tvTeacherBio.text = item.bio
                 tvRating.text = item.rating.toString()
-                tvFollowCnt.text = item.pickCount.toString()
+                tvFollowCnt.text = "${item.followers?.size ?: 0}"
             }
 
             itemView.setOnClickListener {

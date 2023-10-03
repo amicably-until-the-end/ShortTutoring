@@ -31,14 +31,14 @@ class LoginFragment @Inject constructor() :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.tvLogo.setOnClickListener {
             val intent = Intent(activity, StudentHomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
 
@@ -78,8 +78,8 @@ class LoginFragment @Inject constructor() :
     private fun setGoogleButton() {
         binding.btnLoginByGoogle.setOnClickListener {
             val intent = Intent(activity, TeacherHomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
@@ -91,15 +91,15 @@ class LoginFragment @Inject constructor() :
             when (it) {
                 "teacher" -> {
                     val intent = Intent(activity, TeacherHomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }
 
                 "student" -> {
                     val intent = Intent(activity, StudentHomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }
 
@@ -123,7 +123,7 @@ class LoginFragment @Inject constructor() :
 
     private fun observeKakaoLogin() {
         viewModel.isKakaoLoginSuccess.observe(viewLifecycleOwner) {
-            if (viewModel.isKakaoLoginSuccess?.value == true) {
+            if (viewModel.isKakaoLoginSuccess.value == true) {
                 //카카오 로그인 성공 //로컬에 idToken이 저장되어있음
 
             }

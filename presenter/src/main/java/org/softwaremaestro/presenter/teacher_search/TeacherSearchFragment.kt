@@ -86,24 +86,12 @@ class TeacherSearchFragment : Fragment() {
                     "강해린",
                     "1",
                     "풀 수 없는 문제는 없다.",
-                    35,
                     "성균관대학교",
-                    4.9f
+                    -2f,
+                    listOf(),
+                    -1
                 )
             )
-            (1..4).forEach {
-                add(
-                    TeacherVO(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                        "팜하니",
-                        "1",
-                        "풀 수 없는 문제는 없다.",
-                        31,
-                        "피식대학교",
-                        4.8f
-                    )
-                )
-            }
         }
 //        teacherAdapter.setItem(teachers)
     }

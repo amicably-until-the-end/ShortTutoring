@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.lecture_get.entity.LectureVO
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.coin.ChargeCoinActivity
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -25,6 +25,8 @@ import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherViewModel
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -32,7 +34,9 @@ class StudentHomeFragment : Fragment() {
     private lateinit var binding: FragmentStudentHomeBinding
 
     private val followingViewModel: FollowingViewModel by viewModels()
+    private val followUserViewModel: FollowUserViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
+    private val teacherViewModel: TeacherViewModel by viewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -52,6 +56,7 @@ class StudentHomeFragment : Fragment() {
         }
 
         myProfileViewModel.getMyProfile()
+        teacherViewModel.getTeachers()
 
         initTeacherProfileDialog()
 
@@ -64,9 +69,9 @@ class StudentHomeFragment : Fragment() {
 
         observeFollowing()
         observeMyProfile()
+        observeTeachers()
 
         // mockup
-        setItemToBestTeacherAdapter()
         setItemToLectureAdapter()
 
         return binding.root
@@ -86,7 +91,17 @@ class StudentHomeFragment : Fragment() {
 
                 dialogTeacherProfile.dismiss()
             },
-            onFollowBtnClicked = {},
+            onFollowBtnClicked = { following, teacherId ->
+                if (following) {
+                    followUserViewModel.unfollowUser(teacherId)
+                    Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    followUserViewModel.followUser(teacherId)
+                    Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+                }
+                // teacher의 followers를 갱신하기 위해 getTeachers() 호출
+                teacherViewModel.getTeachers()
+            },
             onReserveBtnClicked = { teacherId ->
                 startActivityForResult(
                     Intent(
@@ -108,17 +123,17 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherFollowingAdapter {
-            val teacherVO = TeacherVO(
-                profileUrl = it.profileImage,
-                nickname = it.name,
-                teacherId = it.id,
-                bio = it.bio,
-                pickCount = -1,
-                univ = "${it.schoolName} ${it.schoolDepartment}",
-                rating = -1.0f
-            )
-
-            dialogTeacherProfile.item = teacherVO
+//            val teacherVO = TeacherVO(
+//                profileUrl = it.profileImage,
+//                nickname = it.name,
+//                teacherId = it.id,
+//                bio = it.bio,
+//                pickCount = -1,
+//                univ = "${it.schoolName} ${it.schoolDepartment}",
+//                rating = -1.0f
+//            )
+//
+//            dialogTeacherProfile.item = teacherVO
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -133,7 +148,7 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherRecyclerView() {
 
         teacherAdapter = TeacherSimpleAdapter { teacherVO ->
-            dialogTeacherProfile.item = teacherVO
+            dialogTeacherProfile.setItem(teacherVO)
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -220,43 +235,15 @@ class StudentHomeFragment : Fragment() {
     private fun observeMyProfile() {
         myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
 
-            if (it.id == null) {
-                // 에러 처리
-            } else {
-                followingViewModel.getFollowing(it.id!!)
-            }
+            // Todo: 코인 설정
         }
     }
 
-    private fun setItemToBestTeacherAdapter() {
-
-        val teachers = mutableListOf<TeacherVO>().apply {
-            add(
-                TeacherVO(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                    "강해린",
-                    "1",
-                    "풀 수 없는 문제는 없다.",
-                    35,
-                    "성균관대학교",
-                    4.9f
-                )
-            )
-            (1..4).forEach {
-                add(
-                    TeacherVO(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                        "팜하니",
-                        "1",
-                        "풀 수 없는 문제는 없다.",
-                        31,
-                        "피식대학교",
-                        4.8f
-                    )
-                )
-            }
+    private fun observeTeachers() {
+        teacherViewModel.teachers.observe(viewLifecycleOwner) {
+            teacherAdapter.setItem(it)
+            teacherAdapter.notifyDataSetChanged()
         }
-        teacherAdapter.setItem(teachers)
     }
 
     private fun setItemToLectureAdapter() {
