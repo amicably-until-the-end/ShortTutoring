@@ -37,6 +37,8 @@ class SocketManager @Inject constructor(
                     }
                 }
 
+                var jwt = userRepository.getToken()
+                if (jwt.isNullOrEmpty()) return@launch
                 var header =
                     mapOf("Authorization" to listOf("Bearer ${userRepository.getToken()}"))
                 println("socket header: $header")

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.login.entity.UserVO
 import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
 import org.softwaremaestro.domain.login.usecase.LoginUseCase
 import org.softwaremaestro.domain.login.usecase.SaveKakaoJWTUseCase
@@ -118,6 +117,7 @@ class LoginViewModel @Inject constructor(
                     when (result) {
                         is BaseResult.Success -> {
                             //TODO: enum으로 바꾸기
+                            registerFCMToken()
                             _userRole.postValue(result.data)
                         }
 
@@ -126,6 +126,26 @@ class LoginViewModel @Inject constructor(
                         }
                     }
 
+                }
+        }
+    }
+
+    fun registerFCMToken() {
+        viewModelScope.launch {
+            loginUseCase.registerFCMToken()
+                .catch {
+                    Log.e("login", "registerFCMToken fail", it)
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+
+                        }
+
+                        else -> {
+
+                        }
+                    }
                 }
         }
     }

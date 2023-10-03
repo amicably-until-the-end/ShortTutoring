@@ -15,7 +15,7 @@ import org.softwaremaestro.domain.socket.SocketManager
 import javax.inject.Inject
 
 @HiltAndroidApp
-class ExampleApplication : Application(), LifecycleEventObserver {
+class ShortTutoringApplication : Application(), LifecycleEventObserver {
 
     private lateinit var db: ChatDatabase
 

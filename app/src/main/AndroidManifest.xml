@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
-        android:name=".ExampleApplication"
+        android:name=".ShortTutoringApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -48,6 +48,7 @@
         </activity>
         <service
             android:name=".PushMessageService"
+            android:directBootAware="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

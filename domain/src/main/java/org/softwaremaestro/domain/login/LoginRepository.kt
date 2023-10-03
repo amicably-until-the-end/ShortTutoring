@@ -16,4 +16,7 @@ interface LoginRepository {
     fun getUserInfo(): Flow<BaseResult<UserVO, String>>
 
     fun getToken(): String
+
+    suspend fun registerFCMToken(): Flow<BaseResult<String, String>>
+
 }
