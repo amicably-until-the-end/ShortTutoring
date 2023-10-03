@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import android.widget.ToggleButton
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -48,6 +49,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
+import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 
@@ -72,9 +74,10 @@ class ClassroomFragment : Fragment() {
     private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
     private lateinit var voiceInfo: SerializedVoiceRoomInfo
 
+    private lateinit var loadingDialog: LoadingDialog
+
 
     // Room State
-    private var isMicOn = true
     private var isProblemImgUploaded = false
 
     private var colorPallet: Dialog? = null
@@ -97,8 +100,23 @@ class ClassroomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentClassroomBinding.inflate(layoutInflater)
+        setTutoringArgument() // Extra Argument 반드시 맨 처음에 실행
+        permissionCheck()
+        setAgora()
+        setClassroomInfoUI()
+        viewModel.getQuestionInfo(whiteBoardInfo.questionId)
+        observeQuestionInfo()
+        initLoadingDialog()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadingDialog.show()
+    }
+
+    private fun permissionCheck() {
         if (!checkSelfPermission()) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
@@ -106,12 +124,6 @@ class ClassroomFragment : Fragment() {
                 PERMISSION_REQ_ID
             )
         }
-        startTimer()
-        setAgora()
-        viewModel.getQuestionInfo(whiteBoardInfo.questionId) //channelId 는 questionId랑 동일
-        observeQuestionInfo()
-
-        return binding.root
     }
 
     private fun checkSelfPermission(): Boolean {
@@ -121,6 +133,17 @@ class ClassroomFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private fun initLoadingDialog() {
+        loadingDialog = LoadingDialog(requireContext())
+    }
+
+
+    private fun setClassroomInfoUI() {
+        binding.tvRoomTitle.text = whiteBoardInfo.roomTitle
+        Glide.with(requireContext())
+            .load(whiteBoardInfo.roomProfileImage)
+            .into(binding.ivProfileImage)
+    }
 
     private fun initPallet(): Dialog {
         val rect = Rect()
@@ -158,10 +181,10 @@ class ClassroomFragment : Fragment() {
     }
 
 
-    private fun startTimer() {
-        binding.chElapsedTime.base = SystemClock.elapsedRealtime()
-        binding.chElapsedTime.start()
-    }
+    /* private fun startTimer() {
+         binding.chElapsedTime.base = SystemClock.elapsedRealtime()
+         binding.chElapsedTime.start()
+     }*/
 
 
     fun setTutoringArgument() {
@@ -198,7 +221,6 @@ class ClassroomFragment : Fragment() {
 
 
     private fun joinWhiteBoard() {
-        setTutoringArgument()
         sdkConfiguration = WhiteSdkConfiguration(whiteBoardInfo.appId, true)
         sdkConfiguration.region = Region.us
         whiteboardView = binding.white
@@ -226,6 +248,9 @@ class ClassroomFragment : Fragment() {
                 if (phase == RoomPhase.disconnected) {
                     classFinshed()
                 }
+                if (phase == RoomPhase.connected) {
+                    loadingDialog.dismiss()
+                }
             }
 
             override fun onDisconnectWithError(e: java.lang.Exception?) {
@@ -237,7 +262,13 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun onRoomStateChanged(modifyState: RoomState?) {
-                //TODO("Not yet implemented")
+                modifyState?.roomMembers.let {
+                    if (it?.size == 1) {
+                        setOnlineStatus(false)
+                    } else {
+                        setOnlineStatus(true)
+                    }
+                }
             }
 
             override fun onCanUndoStepsUpdate(canUndoSteps: Long) {
@@ -309,22 +340,32 @@ class ClassroomFragment : Fragment() {
     private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
         // Listen for the remote user joining the channel.
         override fun onUserJoined(uid: Int, elapsed: Int) {
-            showMessage("Remote user joined the channel, uid: " + uid + " elapsed: " + elapsed)
+            setOnlineStatus(true)
         }
 
         override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
-            // Successfully joined a channel
-            showMessage("Joined Channel $channel")
+            showMessage("onJoinChannelSuccess")
         }
 
         override fun onUserOffline(uid: Int, reason: Int) {
-            // Listen for remote users leaving the channel
-            showMessage("Remote user offline $uid $reason")
+            setOnlineStatus(false)
         }
 
         override fun onLeaveChannel(stats: RtcStats) {
             // Listen for the local user leaving the channel
-            showMessage("onLeaveChannel")
+            //showMessage("onLeaveChannel")
+        }
+    }
+
+    private fun setOnlineStatus(status: Boolean) {
+        if (status) {
+            binding.tvOnlineStatus.text = "접속중"
+            binding.tvOnlineStatus.setTextColor(resources.getColor(R.color.positive_mint))
+            binding.cvOnlineStatus.setCardBackgroundColor(resources.getColor(R.color.positive_mint))
+        } else {
+            binding.tvOnlineStatus.text = "미접속"
+            binding.tvOnlineStatus.setTextColor(resources.getColor(R.color.negative_orange))
+            binding.cvOnlineStatus.setCardBackgroundColor(resources.getColor(R.color.negative_orange))
         }
     }
 
@@ -355,6 +396,9 @@ class ClassroomFragment : Fragment() {
             window?.attributes?.x = rect.left
             window?.attributes?.y = rect.bottom + 10
             window?.setDimAmount(0f)
+            findViewById<AppCompatImageButton>(R.id.btn_close).setOnClickListener {
+                dismiss()
+            }
             var root = findViewById<LinearLayout>(R.id.container_images)
             for (i in 0 until (viewModel.questionInfo.value?.images?.size ?: 1)) {
                 Log.d("images", viewModel.questionInfo.value?.images?.get(i).toString())
@@ -366,6 +410,7 @@ class ClassroomFragment : Fragment() {
                             .into(this as ImageView)
                         setOnClickListener {
                             insertImageOnCenter(viewModel.questionInfo.value?.images?.get(i)!!)
+                            imagePallet?.dismiss()
                         }
                     } catch (e: Exception) {
                         Log.e("${this@ClassroomFragment}", e.toString())
@@ -382,6 +427,7 @@ class ClassroomFragment : Fragment() {
         currentApplianceName = ApplianceName.SELECTOR
         memberState.currentApplianceName = ApplianceName.SELECTOR.value
         whiteBoardRoom?.memberState = memberState
+        setCurrentApplianceButton(ApplianceName.SELECTOR)
     }
 
     private fun setPenButtons() {
@@ -394,6 +440,7 @@ class ClassroomFragment : Fragment() {
             currentApplianceName = ApplianceName.PENCIL
             memberState.currentApplianceName = ApplianceName.PENCIL.value
             whiteBoardRoom?.memberState = memberState
+            setCurrentApplianceButton(ApplianceName.PENCIL)
         }
 
     }
@@ -404,6 +451,7 @@ class ClassroomFragment : Fragment() {
             currentApplianceName = ApplianceName.ERASER
             memberState.currentApplianceName = ApplianceName.ERASER.value
             whiteBoardRoom?.memberState = memberState
+            setCurrentApplianceButton(ApplianceName.ERASER)
         }
     }
 
@@ -425,6 +473,7 @@ class ClassroomFragment : Fragment() {
     private fun setSelectorButton() {
         binding.btnSelector.setOnClickListener {
             changeApplianceToSelector()
+
         }
     }
 
@@ -466,7 +515,6 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun classFinshed() {
-        binding.chElapsedTime.stop()
         val dialog = SimpleAlertDialog().apply {
             title = "수업이 종료되었습니다."
         }
@@ -475,26 +523,28 @@ class ClassroomFragment : Fragment() {
 
     private fun setMicToggleButton() {
 
-        /*binding.btnMic.setOnClickListener {
-            if (!isMicOn) {
-                isMicOn = true
-                voiceEngine.enableLocalAudio(true)
-                Toast.makeText(requireContext(), "마이크가 켜졌습니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                isMicOn = false
-                voiceEngine.enableLocalAudio(false)
-                Toast.makeText(requireContext(), "마이크가 꺼졌습니다.", Toast.LENGTH_SHORT).show()
+        binding.btnMic.setOnClickListener {
+            with(it as ToggleButton) {
+                if (isChecked) {
+                    voiceEngine.enableLocalAudio(true)
+                    Toast.makeText(requireContext(), "마이크가 켜졌습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    voiceEngine.enableLocalAudio(false)
+                    Toast.makeText(requireContext(), "마이크가 꺼졌습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
-        }*/
+        }
     }
 
-
-    private fun uploadProblemImg() {
-        if (whiteBoardInfo.uid == "1" && !isProblemImgUploaded) {
-            val imgUrl = requireActivity().intent.getStringExtra("problemImgUrl")
-            val imageInfo = ImageInformationWithUrl(0.0, 0.0, 400.0, 400.0, imgUrl)
-            whiteBoardRoom?.insertImage(imageInfo)
-            isProblemImgUploaded = true
+    private fun setCurrentApplianceButton(current: ApplianceName) {
+        val buttons = listOf(binding.btnColorPen, binding.btnColorErase, binding.btnSelector)
+        buttons.forEach {
+            it.isChecked = false
+        }
+        when (current) {
+            ApplianceName.PENCIL -> binding.btnColorPen.isChecked = true
+            ApplianceName.ERASER -> binding.btnColorErase.isChecked = true
+            ApplianceName.SELECTOR -> binding.btnSelector.isChecked = true
         }
     }
 
@@ -506,7 +556,7 @@ class ClassroomFragment : Fragment() {
     enum class ApplianceName(val value: String) {
         PENCIL("pencil"),
         ERASER("eraser"),
-        SELECTOR("selector")
+        SELECTOR("selector"),
     }
 
 

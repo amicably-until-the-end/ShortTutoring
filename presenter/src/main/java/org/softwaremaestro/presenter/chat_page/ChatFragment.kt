@@ -480,6 +480,8 @@ abstract class ChatFragment : Fragment() {
                 roomToken = it.boardToken,
                 uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}",
                 questionId = currentChatRoom?.questionId ?: "",
+                roomTitle = "${currentChatRoom?.title} ${if (isTeacher()) "학생과" else "선생님과"} 수업 중",
+                roomProfileImage = currentChatRoom?.roomImage ?: ""
             )
             val voiceRoomInfo = SerializedVoiceRoomInfo(
                 appId = it.rtcAppId,
