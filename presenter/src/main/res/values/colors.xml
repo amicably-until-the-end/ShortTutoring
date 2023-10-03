@@ -14,6 +14,13 @@
     <color name="primary_blue">#0f4bdf</color>
     <color name="secondary_blue">#006fff</color>
     <color name="primary_bright">#C2E8FD</color>
+    <color name="pen_green">#00C853</color>
+    <color name="pen_orange">#FF6D00</color>
+    <color name="pen_red">#FF0000</color>
+    <color name="pen_blue">#2962FF</color>
+    <color name="pen_purple">#AA00FF</color>
+    <color name="pen_black">#000000</color>
+    <color name="pen_yellow">#FFD600</color>
     <color name="kakao">#FEE500</color>
     <color name="background_grey">#F6F7F8</color>
     <color name="sub_text_grey">#A3A9B5</color>

@@ -2,19 +2,26 @@ package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.card.MaterialCardView
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
@@ -34,6 +41,7 @@ import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
@@ -67,10 +75,13 @@ class ClassroomFragment : Fragment() {
     private var isMicOn = true
     private var isProblemImgUploaded = false
 
+    private var pallet: Dialog? = null
 
     private var whiteBoardRoom: Room? = null
 
     private val viewModel: ClassroomViewModel by viewModels()
+
+    private var currentApplianceName: ApplianceName = ApplianceName.PENCIL
 
     private val PERMISSION_REQ_ID = 22
     private val REQUESTED_PERMISSIONS = arrayOf<String>(
@@ -102,6 +113,43 @@ class ClassroomFragment : Fragment() {
         setAgora()
 
         return binding.root
+    }
+
+
+    private fun initPallet(): Dialog {
+        val rect = Rect()
+        binding.btnColorPen.getGlobalVisibleRect(rect)
+        pallet = Dialog(requireContext()).apply {
+            setContentView(R.layout.dialog_pallet)
+            setCancelable(true)
+            Log.d("pallet", rect.toString())
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            window?.attributes?.gravity = Gravity.TOP or Gravity.LEFT
+            window?.attributes?.x = rect.left
+            window?.attributes?.y = rect.bottom
+            window?.setDimAmount(0f)
+            var root = findViewById<LinearLayout>(R.id.container_color_pallet)
+            for (i in 0 until root.childCount) {
+                root.getChildAt(i).setOnClickListener {
+                    try {
+                        var background = (it as MaterialCardView).cardBackgroundColor.defaultColor
+                        var color = with(background) {
+                            intArrayOf(Color.red(this), Color.green(this), Color.blue(this))
+                        }
+                        Log.d("pallet", color.toString())
+                        var memberState = MemberState()
+                        memberState.currentApplianceName = "pencil"
+                        currentApplianceName = ApplianceName.PENCIL
+                        memberState.strokeColor = color
+                        whiteBoardRoom?.memberState = memberState
+                    } catch (e: Exception) {
+                        Log.d("pallet", e.toString())
+                    }
+                    dismiss()
+                }
+            }
+        }
+        return pallet!!
     }
 
 
@@ -155,7 +203,7 @@ class ClassroomFragment : Fragment() {
             override fun then(wRoom: Room?) {
                 whiteBoardRoom = wRoom!!
                 var memberState = MemberState()
-                memberState.currentApplianceName = "pencil"
+                memberState.currentApplianceName = ApplianceName.PENCIL.value
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom.memberState = memberState
                 wRoom.disableSerialization(false)
@@ -288,8 +336,12 @@ class ClassroomFragment : Fragment() {
     private fun setPenButtons() {
         binding.btnColorPen.setOnClickListener {
             var memberState = MemberState()
-            memberState.currentApplianceName = "pencil"
-            memberState.strokeColor = IntArray(3) { 255;0;0; }
+            if (currentApplianceName == ApplianceName.PENCIL) {
+                pallet?.show() ?: initPallet().show()
+            }
+            Log.d("pallet", "${memberState.currentApplianceName}")
+            currentApplianceName = ApplianceName.PENCIL
+            memberState.currentApplianceName = ApplianceName.PENCIL.value
             whiteBoardRoom?.memberState = memberState
         }
 
@@ -298,7 +350,8 @@ class ClassroomFragment : Fragment() {
     private fun setEraseButton() {
         binding.btnColorErase.setOnClickListener {
             var memberState = MemberState()
-            memberState.currentApplianceName = "eraser"
+            currentApplianceName = ApplianceName.ERASER
+            memberState.currentApplianceName = ApplianceName.ERASER.value
             whiteBoardRoom?.memberState = memberState
         }
     }
@@ -318,7 +371,8 @@ class ClassroomFragment : Fragment() {
     private fun setSelectorButton() {
         binding.btnSelector.setOnClickListener {
             var memberState = MemberState()
-            memberState.currentApplianceName = "selector"
+            currentApplianceName = ApplianceName.SELECTOR
+            memberState.currentApplianceName = ApplianceName.SELECTOR.value
             whiteBoardRoom?.memberState = memberState
         }
     }
@@ -401,5 +455,12 @@ class ClassroomFragment : Fragment() {
         const val RTC_TEACHER_UID = 1
         const val RTC_STUDENT_UID = 2
     }
+
+    enum class ApplianceName(val value: String) {
+        PENCIL("pencil"),
+        ERASER("eraser"),
+        SELECTOR("selector")
+    }
+
 
 }
