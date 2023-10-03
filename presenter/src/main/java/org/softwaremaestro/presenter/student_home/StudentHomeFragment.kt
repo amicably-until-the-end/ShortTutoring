@@ -249,6 +249,13 @@ class StudentHomeFragment : Fragment() {
 
     private fun observeTeachers() {
         teacherViewModel.teachers.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.dvRanking.visibility = View.VISIBLE
+                binding.containerBestTeacherSection.visibility = View.VISIBLE
+            } else {
+                binding.dvRanking.visibility = View.GONE
+                binding.containerBestTeacherSection.visibility = View.GONE
+            }
             teacherAdapter.setItem(it)
             teacherAdapter.notifyDataSetChanged()
         }

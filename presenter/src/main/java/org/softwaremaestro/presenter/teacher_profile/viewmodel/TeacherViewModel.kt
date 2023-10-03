@@ -15,20 +15,20 @@ class TeacherViewModel @Inject constructor() : ViewModel() {
     fun getTeachers() {
         _teachers.postValue(
             mutableListOf<TeacherVO>()
-//                .apply {
-//                add(
-//                    TeacherVO(
-//                        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-//                        "목업데이터입니다",
-//                        "hc-teacher-id",
-//                        "풀 수 없는 문제는 없다.",
-//                        "성균관대학교",
-//                        4.9f,
-//                        listOf(),
-//                        -1
-//                    )
-//                )
-//            }
+                .apply {
+                    add(
+                        TeacherVO(
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
+                            "목업데이터입니다",
+                            "hc-teacher-id",
+                            "풀 수 없는 문제는 없다.",
+                            "성균관대학교",
+                            4.9f,
+                            listOf(),
+                            -1
+                        )
+                    )
+                }
         )
     }
 

@@ -194,7 +194,6 @@
                             android:id="@+id/dv_teacher"
                             android:layout_width="1dp"
                             android:layout_height="50dp"
-                            android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toRightOf="@id/ns_teacher_following"
@@ -334,22 +333,23 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
+                    android:id="@+id/dv_ranking"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:background="#eeeff1" />
+                    android:background="@color/background_grey" />
 
                 <LinearLayout
                     android:id="@+id/container_best_teacher_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
                     android:paddingTop="30dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/section_horizontal_padding_default">
 
                         <TextView
                             android:id="@+id/tv_best_teacher_desc"
@@ -392,9 +392,10 @@
                         android:id="@+id/rv_teacher"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="12dp"
                         android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false" />
+                        android:nestedScrollingEnabled="false"
+                        android:paddingLeft="@dimen/section_horizontal_padding_default" />
 
                 </LinearLayout>
 
