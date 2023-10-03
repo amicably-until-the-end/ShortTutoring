@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
-import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
+import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
 import java.time.LocalDate
 import java.time.LocalTime
@@ -22,7 +22,7 @@ import java.time.LocalTime
 class ReservationFormFragment : Fragment() {
 
     private lateinit var binding: FragmentReservationFormBinding
-    private val questionSelectedUploadViewModel: QuestionSelectedUploadViewModel by activityViewModels()
+    private val questionReservationViewModel: QuestionReservationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +30,7 @@ class ReservationFormFragment : Fragment() {
     ): View {
         binding = FragmentReservationFormBinding.inflate(layoutInflater)
 
+        resetViewModelValue()
         setDatePicker()
         setTimeRangePicker()
         observe()
@@ -37,11 +38,17 @@ class ReservationFormFragment : Fragment() {
         return binding.root
     }
 
+    private fun resetViewModelValue() {
+        questionReservationViewModel.resetInputs()
+    }
+
     private fun setDatePicker() {
-        binding.dpQuestionReserve.setOnDateSelectListener { year, month, day ->
-            questionSelectedUploadViewModel._requestDate.value = LocalDate.of(year, month, day)
-            binding.containerTimePicker.visibility = View.VISIBLE
-            Toast.makeText(requireContext(), "$year-$month-$day", Toast.LENGTH_SHORT).show()
+        binding.dpQuestionReserve.apply {
+            setOnDateSelectListener { year, month, day ->
+                questionReservationViewModel.setRequestDate(LocalDate.of(year, month, day))
+                binding.containerTimePicker.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "$year-$month-$day", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -49,25 +56,30 @@ class ReservationFormFragment : Fragment() {
         binding.trpTutoringTime.rvTimePicker.apply {
             adapter = TimeRangePickerAdapter(10,
                 onBtnClick = { start, end ->
-
+                    questionReservationViewModel.setRequestTutoringStartTime(
+                        start?.run { LocalTime.of(hour, minute) }
+                    )
+                    questionReservationViewModel.setRequestTutoringEndTime(
+                        end?.run { LocalTime.of(hour, minute) }
+                    )
                 },
                 onRangeChange = { start, end ->
                     with(start) {
-                        questionSelectedUploadViewModel.setRequestTutoringStartTime(
+                        questionReservationViewModel.setRequestTutoringStartTime(
                             LocalTime.of(hour, minute)
                         )
                         Log.d(
                             "onRangeChange",
-                            "start: ${questionSelectedUploadViewModel.requestTutoringStartTime.value}"
+                            "start: ${questionReservationViewModel.requestTutoringStartTime.value}"
                         )
                     }
                     with(end) {
-                        questionSelectedUploadViewModel.setRequestTutoringEndTime(
+                        questionReservationViewModel.setRequestTutoringEndTime(
                             LocalTime.of(hour, minute)
                         )
                         Log.d(
                             "onRangeChange",
-                            "end: ${questionSelectedUploadViewModel.requestTutoringEndTime}"
+                            "end: ${questionReservationViewModel.requestTutoringEndTime}"
                         )
                     }
                     Log.d("onRangeChange", "start: $start, end: $end")
@@ -84,12 +96,13 @@ class ReservationFormFragment : Fragment() {
     }
 
     private fun observe() {
-        questionSelectedUploadViewModel.startTimeAndEndTimeProper.observe(viewLifecycleOwner) { proper ->
+        questionReservationViewModel.inputProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
                 setBtnSubmit(true)
                 binding.btnSubmit.moveToCameraFragmentWhenClicked()
             } else {
                 setBtnSubmit(false)
+                binding.btnSubmit.setOnClickListener(null)
             }
         }
     }

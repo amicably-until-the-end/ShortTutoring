@@ -34,7 +34,7 @@ class QuestionCameraFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentQuestionCameraBinding.inflate(inflater, container, false)
         setShutterListener()
         setPreviewRecyclerView()
@@ -62,6 +62,16 @@ class QuestionCameraFragment : Fragment() {
                 previewAdapter.items[4] = image
             }
             previewAdapter.notifyDataSetChanged()
+
+            binding.btnNext.apply {
+                if (previewAdapter.items.isNotEmpty()) {
+                    setBackgroundResource(R.drawable.bg_radius_18_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_18_background_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
         }
     }
 
@@ -77,11 +87,21 @@ class QuestionCameraFragment : Fragment() {
     }
 
     private fun setPreviewRecyclerView() {
-        previewAdapter = CapturePreviewAdapter() {
+        previewAdapter = CapturePreviewAdapter {
             if (it < previewAdapter.items.size) {
                 previewAdapter.items.removeAt(it)
                 previewSelected -= 1
-                previewAdapter.notifyDataSetChanged()
+            }
+            previewAdapter.notifyDataSetChanged()
+
+            binding.btnNext.apply {
+                if (previewAdapter.items.isNotEmpty()) {
+                    setBackgroundResource(R.drawable.bg_radius_18_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_18_background_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
             }
         }
 
@@ -90,7 +110,6 @@ class QuestionCameraFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = previewAdapter
         }
-
     }
 
     private fun setCloseBtn() {

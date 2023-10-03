@@ -21,12 +21,12 @@
             android:background="@color/light_grey" />
 
         <LinearLayout
-            android:id="@+id/tv_time"
+            android:id="@+id/container_time"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/bg_radius_10"
+            android:background="@drawable/bg_radius_10_white"
             android:backgroundTint="@color/black"
             android:gravity="center"
             android:orientation="horizontal"
@@ -35,21 +35,31 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
                 android:text="🕙"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
+
+            <ImageView
+                android:id="@+id/iv_check"
+                android:layout_width="12dp"
+                android:layout_height="8dp"
+                android:src="@drawable/ic_check"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLength="16"
-                android:text="undefined"
+                android:layout_marginLeft="2dp"
+                android:ellipsize="end"
+                android:maxWidth="150dp"
+                android:maxLines="1"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                tools:text="undefined" />
         </LinearLayout>
 
         <LinearLayout

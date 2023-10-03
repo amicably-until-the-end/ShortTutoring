@@ -20,7 +20,7 @@ object QuestionGetResultMapper {
                 problemSubject = problemDto?.schoolSubject,
                 createdAt = createdAt,
                 problemDescription = problemDto?.description,
-                teacherIds = teacherIds,
+                offerTeachers = offerTeachers,
                 status = status,
                 tutoringId = tutoringId
             )

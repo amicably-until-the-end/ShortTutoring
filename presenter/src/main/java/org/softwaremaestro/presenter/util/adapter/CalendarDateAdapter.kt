@@ -13,6 +13,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 class CalendarDateAdapter(
+    private val defaultDate: LocalDate? = null,
     private val recyclerView: RecyclerView,
     private val onSelectedDayChange: (Int, Int, Int) -> Unit,
     private val onMonthChange: (Int, Int) -> Unit
@@ -122,7 +123,7 @@ class CalendarDateAdapter(
         }
     }
 
-    private fun onDateClick(nowSelect: ViewHolder) {
+    fun onDateClick(nowSelect: ViewHolder) {
         if (selectedHolder != null) {
             with(selectedHolder!!.binding) {
                 cvDateMarker.setCardBackgroundColor(
@@ -181,6 +182,12 @@ class CalendarDateAdapter(
 
             binding.root.setOnClickListener {
                 onDateClick(this)
+            }
+
+            defaultDate?.let { date ->
+                if (item == date) {
+                    onDateClick(this)
+                }
             }
         }
     }

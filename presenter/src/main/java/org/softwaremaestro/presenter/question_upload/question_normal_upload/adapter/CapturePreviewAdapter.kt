@@ -2,8 +2,10 @@ package org.softwaremaestro.presenter.question_upload.question_normal_upload.ada
 
 import android.graphics.Bitmap
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemCapturePreviewBinding
 
 class CapturePreviewAdapter(private val onClick: (Int) -> Unit) :
@@ -40,12 +42,38 @@ class CapturePreviewAdapter(private val onClick: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: Bitmap?, position: Int) {
-            binding.ivCapture.setImageBitmap(item)
+            binding.tvNumber.text = "${position + 1}"
+            binding.ivCancel.visibility =
+                if (position < items.size) {
+                    View.VISIBLE
+                } else {
+                    View.INVISIBLE
+                }
+            binding.tvNumber.visibility =
+                if (position <= items.size) {
+                    View.VISIBLE
+                } else {
+                    View.INVISIBLE
+                }
+            if (position < items.size) {
+                binding.ivCapture.setImageBitmap(item)
+            } else {
+                binding.ivCapture.setImageBitmap(item)
+            }
+            if (position == items.size) {
+                binding.cvImage.setBackgroundResource(R.drawable.bg_radius_10_grey_and_stroke_white)
+            } else {
+                binding.cvImage.setBackgroundResource(R.drawable.bg_radius_10_grey)
+            }
             binding.root.setOnClickListener {
-                onClick(position)
-
+                if (position < items.size) {
+                    onClick(position)
+                } else {
+                    null
+                }
             }
         }
     }
+
 
 }
