@@ -62,6 +62,16 @@ class QuestionCameraFragment : Fragment() {
                 previewAdapter.items[4] = image
             }
             previewAdapter.notifyDataSetChanged()
+
+            binding.btnNext.apply {
+                if (previewAdapter.items.isNotEmpty()) {
+                    setBackgroundResource(R.drawable.bg_radius_18_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_18_background_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
         }
     }
 
@@ -80,9 +90,18 @@ class QuestionCameraFragment : Fragment() {
         previewAdapter = CapturePreviewAdapter {
             if (it < previewAdapter.items.size) {
                 previewAdapter.items.removeAt(it)
-                previewAdapter.notifyDataSetChanged()
                 previewSelected -= 1
+            }
+            previewAdapter.notifyDataSetChanged()
 
+            binding.btnNext.apply {
+                if (previewAdapter.items.isNotEmpty()) {
+                    setBackgroundResource(R.drawable.bg_radius_18_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_18_background_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
             }
         }
 
