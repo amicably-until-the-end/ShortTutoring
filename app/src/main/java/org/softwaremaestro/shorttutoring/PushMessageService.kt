@@ -33,10 +33,6 @@ class PushMessageService :
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.d(
-            "fcm",
-            "onMessageReceived ${remoteMessage.notification?.body} ${ExampleApplication.isForeground}"
-        )
         val notificationManager = NotificationManagerCompat.from(
             applicationContext
         )
