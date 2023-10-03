@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -14,6 +13,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomListener
@@ -47,6 +48,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 
 
@@ -75,7 +77,9 @@ class ClassroomFragment : Fragment() {
     private var isMicOn = true
     private var isProblemImgUploaded = false
 
-    private var pallet: Dialog? = null
+    private var colorPallet: Dialog? = null
+    private var imagePallet: Dialog? = null
+
 
     private var whiteBoardRoom: Room? = null
 
@@ -87,13 +91,6 @@ class ClassroomFragment : Fragment() {
     private val REQUESTED_PERMISSIONS = arrayOf<String>(
         Manifest.permission.RECORD_AUDIO
     )
-
-    private fun checkSelfPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            REQUESTED_PERMISSIONS[0]
-        ) == PackageManager.PERMISSION_GRANTED
-    }
 
 
     override fun onCreateView(
@@ -111,18 +108,26 @@ class ClassroomFragment : Fragment() {
         }
         startTimer()
         setAgora()
+        viewModel.getQuestionInfo(whiteBoardInfo.questionId) //channelId 는 questionId랑 동일
+        observeQuestionInfo()
 
         return binding.root
+    }
+
+    private fun checkSelfPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            REQUESTED_PERMISSIONS[0]
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
 
     private fun initPallet(): Dialog {
         val rect = Rect()
         binding.btnColorPen.getGlobalVisibleRect(rect)
-        pallet = Dialog(requireContext()).apply {
+        colorPallet = Dialog(requireContext()).apply {
             setContentView(R.layout.dialog_pallet)
             setCancelable(true)
-            Log.d("pallet", rect.toString())
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             window?.attributes?.gravity = Gravity.TOP or Gravity.LEFT
             window?.attributes?.x = rect.left
@@ -149,7 +154,7 @@ class ClassroomFragment : Fragment() {
                 }
             }
         }
-        return pallet!!
+        return colorPallet!!
     }
 
 
@@ -213,7 +218,6 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun catchEx(t: SDKError?) {
-                Log.i("agora", t.toString())
                 Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
             }
         }
@@ -245,7 +249,7 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun onCatchErrorWhenAppendFrame(userId: Long, error: java.lang.Exception?) {
-                //TODO("Not yet implemented")
+                TODO("Not yet implemented")
             }
         }
 
@@ -333,11 +337,58 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun observeQuestionInfo() {
+        viewModel.questionInfo.observe(viewLifecycleOwner) { _ ->
+            initProblemImagePallet()
+            Log.d("images", viewModel.questionInfo.value?.images.toString())
+        }
+    }
+
+    private fun initProblemImagePallet(): Dialog {
+        val rect = Rect()
+        binding.btnGetImage.getGlobalVisibleRect(rect)
+        imagePallet = Dialog(requireContext()).apply {
+            setContentView(R.layout.dialog_problem_image_pallet)
+            setCancelable(true)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            window?.attributes?.gravity = Gravity.TOP or Gravity.LEFT
+            window?.attributes?.x = rect.left
+            window?.attributes?.y = rect.bottom + 10
+            window?.setDimAmount(0f)
+            var root = findViewById<LinearLayout>(R.id.container_images)
+            for (i in 0 until (viewModel.questionInfo.value?.images?.size ?: 1)) {
+                Log.d("images", viewModel.questionInfo.value?.images?.get(i).toString())
+                root.getChildAt(i).apply {
+                    try {
+                        Glide.with(requireContext())
+                            .load(viewModel.questionInfo.value?.images?.get(i))
+                            .placeholder(R.drawable.ic_chatting_empty)
+                            .into(this as ImageView)
+                        setOnClickListener {
+                            insertImageOnCenter(viewModel.questionInfo.value?.images?.get(i)!!)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("${this@ClassroomFragment}", e.toString())
+                    }
+                    dismiss()
+                }
+            }
+        }
+        return imagePallet!!
+    }
+
+    private fun changeApplianceToSelector() {
+        var memberState = MemberState()
+        currentApplianceName = ApplianceName.SELECTOR
+        memberState.currentApplianceName = ApplianceName.SELECTOR.value
+        whiteBoardRoom?.memberState = memberState
+    }
+
     private fun setPenButtons() {
         binding.btnColorPen.setOnClickListener {
             var memberState = MemberState()
             if (currentApplianceName == ApplianceName.PENCIL) {
-                pallet?.show() ?: initPallet().show()
+                colorPallet?.show() ?: initPallet().show()
             }
             Log.d("pallet", "${memberState.currentApplianceName}")
             currentApplianceName = ApplianceName.PENCIL
@@ -358,22 +409,22 @@ class ClassroomFragment : Fragment() {
 
     private fun setImageButton() {
         binding.btnGetImage.setOnClickListener {
-            whiteBoardRoom?.cleanScene(true)
-            val imageInfo = ImageInformationWithUrl(
-                0.0, 0.0, 200.0, 200.0,
-                "https://4.bp.blogspot.com/-TTRkTOT6oRY/WiA37N0gqpI/AAAAAAAAP_E/rHjroHUXRN4pMHmOkY41-yl39O0uYibAwCLcBGAs/s640/KSAT_Math_GA_Q14.JPG"
-            )
-            whiteBoardRoom?.insertImage(imageInfo)
+            imagePallet?.show() ?: initProblemImagePallet().show()
         }
 
     }
 
+    private fun insertImageOnCenter(imageUrl: String) {
+        val imageInfo = ImageInformationWithUrl(
+            0.0, 0.0, 200.0, 200.0,
+            imageUrl
+        )
+        whiteBoardRoom?.insertImage(imageInfo)
+    }
+
     private fun setSelectorButton() {
         binding.btnSelector.setOnClickListener {
-            var memberState = MemberState()
-            currentApplianceName = ApplianceName.SELECTOR
-            memberState.currentApplianceName = ApplianceName.SELECTOR.value
-            whiteBoardRoom?.memberState = memberState
+            changeApplianceToSelector()
         }
     }
 
@@ -416,14 +467,10 @@ class ClassroomFragment : Fragment() {
 
     private fun classFinshed() {
         binding.chElapsedTime.stop()
-        val dialog = AlertDialog.Builder(requireContext()).apply {
-            setTitle("과외가 종료되었습니다.")
-            setPositiveButton("확인") { _, _ ->
-                voiceEngine.leaveChannel()
-                requireActivity().finish()
-            }
+        val dialog = SimpleAlertDialog().apply {
+            title = "수업이 종료되었습니다."
         }
-        dialog.show()
+        dialog.show(requireActivity().supportFragmentManager, "classFinished")
     }
 
     private fun setMicToggleButton() {

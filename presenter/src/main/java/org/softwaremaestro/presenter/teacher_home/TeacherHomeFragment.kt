@@ -219,7 +219,7 @@ class TeacherHomeFragment : Fragment() {
                         it.whiteBoardAppId!!,
                         it.whiteBoardUUID!!,
                         it.whiteBoardToken!!,
-                        "1"
+                        "1", ""
                     )
                     val voiceRoomInfo = SerializedVoiceRoomInfo(
                         it.RTCAppId!!,

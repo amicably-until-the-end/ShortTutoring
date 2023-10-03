@@ -478,7 +478,8 @@ abstract class ChatFragment : Fragment() {
                 appId = it.boardAppId,
                 uuid = it.boardUUID,
                 roomToken = it.boardToken,
-                uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}"
+                uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}",
+                questionId = currentChatRoom?.questionId ?: "",
             )
             val voiceRoomInfo = SerializedVoiceRoomInfo(
                 appId = it.rtcAppId,

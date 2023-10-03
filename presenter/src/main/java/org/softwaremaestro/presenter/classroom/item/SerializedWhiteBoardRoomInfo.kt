@@ -6,6 +6,7 @@ data class SerializedWhiteBoardRoomInfo(
     val appId: String,
     val uuid: String,
     val roomToken: String,
-    val uid: String
+    val uid: String,
+    val questionId: String,
 ) : Serializable
 
