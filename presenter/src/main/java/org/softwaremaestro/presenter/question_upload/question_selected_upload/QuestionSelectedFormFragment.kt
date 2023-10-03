@@ -21,6 +21,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionSelectedFormBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.TimeSelectAdapter
+import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
@@ -35,7 +36,8 @@ class QuestionSelectedFormFragment : Fragment() {
     private lateinit var loadingDialog: LoadingDialog
 
     lateinit var binding: FragmentQuestionSelectedFormBinding
-    private val viewModel: QuestionSelectedUploadViewModel by activityViewModels()
+    private val questionSelectedUploadViewModel: QuestionSelectedUploadViewModel by activityViewModels()
+    private val questionReservationViewModel: QuestionReservationViewModel by activityViewModels()
 
 
     //recyclerView adapters
@@ -59,36 +61,34 @@ class QuestionSelectedFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        resetViewModelValue()
         parseMathSubjectJson()
         setObserver()
         setToolBar()
         setImageRecyclerView()
-        checkAndEnableSubjectBtn()
         setSubmitButton()
         setFields()
         setTeacherId()
     }
 
-    private fun setTeacherId() {
-        requireActivity().intent.getStringExtra("teacher-id")?.let { viewModel.setTeacherId(it) }
+    private fun resetViewModelValue() {
+        questionSelectedUploadViewModel.resetInputs()
     }
 
-    /**
-     *  모든 내용이 입력되었으면 제출 버튼을 활성화한다
-     */
-    private fun checkAndEnableSubjectBtn() {
-        isAllFieldsEntered().let {
-            binding.btnSubmit.setEnabledAndChangeColor(it)
-        }
+    private fun setTeacherId() {
+        requireActivity().intent.getStringExtra("teacher-id")
+            ?.let { questionSelectedUploadViewModel.setTeacherId(it) }
     }
 
     /**
     뷰를 클릭하면 해당 뷰에 값을 입력하는 페이지로 이동한다
      */
     private fun setFields() {
-        binding.etQuestionDesc.setText(viewModel.description.value)
         binding.etQuestionDesc.addTextChangedListener {
-            viewModel.setDescription(it.toString())
+            questionSelectedUploadViewModel.setDescription(
+                if (it.isNullOrEmpty()) null
+                else it.toString()
+            )
         }
         binding.btnSchoolSelect.setOnClickListener {
             showSchoolSelectDialog()
@@ -106,7 +106,7 @@ class QuestionSelectedFormFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setItems(mathSubjects.keys.toTypedArray()) { _, which ->
                 val selectedSchool = mathSubjects.keys.toTypedArray()[which]
-                viewModel.setSchoolLevel(selectedSchool)
+                questionSelectedUploadViewModel.setSchoolLevel(selectedSchool)
                 showSubjectSelectDialog()
             }
             .setTitle("학교")
@@ -118,12 +118,12 @@ class QuestionSelectedFormFragment : Fragment() {
 
     private fun showSubjectSelectDialog() {
         var subjects =
-            mathSubjects[viewModel.schoolLevel.value]?.keys?.toTypedArray()!!
+            mathSubjects[questionSelectedUploadViewModel.schoolLevel.value]?.keys?.toTypedArray()!!
 
         AlertDialog.Builder(requireContext())
             .setItems(subjects) { _, which ->
                 val selectedSubject = subjects[which]
-                viewModel.setSchoolSubject(selectedSubject)
+                questionSelectedUploadViewModel.setSchoolSubject(selectedSubject)
             }
             .setTitle("교과 과정")
             .setPositiveButton("확인", null)
@@ -146,30 +146,27 @@ class QuestionSelectedFormFragment : Fragment() {
     }
 
     private fun observeImages() {
-        viewModel.images.observe(viewLifecycleOwner) {
-            imageAdapter.setItem(it)
-            checkAndEnableSubjectBtn()
+        questionSelectedUploadViewModel.images.observe(viewLifecycleOwner) {
+            it?.let { imageAdapter.setItem(it) }
         }
     }
 
 
     private fun observeSchoolLevel() {
-        viewModel.schoolLevel.observe(viewLifecycleOwner) {
+        questionSelectedUploadViewModel.schoolLevel.observe(viewLifecycleOwner) {
             binding.tvSchoolSelected.text = it
-            checkAndEnableSubjectBtn()
         }
     }
 
     private fun observeSubject() {
-        viewModel.schoolSubject.observe(viewLifecycleOwner) {
+        questionSelectedUploadViewModel.schoolSubject.observe(viewLifecycleOwner) {
             binding.tvSubjectSelected.text = it
-            checkAndEnableSubjectBtn()
         }
     }
 
 
-    private fun observeQuestionId() {
-        viewModel.questionUploadState.observe(viewLifecycleOwner) {
+    private fun observeQuestionUploadState() {
+        questionSelectedUploadViewModel.questionUploadState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
                     loadingDialog = LoadingDialog(requireContext())
@@ -192,8 +189,6 @@ class QuestionSelectedFormFragment : Fragment() {
                 }
             }
         }
-
-        checkAndEnableSubjectBtn()
     }
 
 
@@ -201,7 +196,15 @@ class QuestionSelectedFormFragment : Fragment() {
         observeImages()
         observeSchoolLevel()
         observeSubject()
-        observeQuestionId()
+        observeInputProper()
+        observeQuestionUploadState()
+
+    }
+
+    private fun observeInputProper() {
+        questionSelectedUploadViewModel.inputProper.observe(viewLifecycleOwner) {
+            binding.btnSubmit.setEnabledAndChangeColor(it)
+        }
     }
 
     private fun navigateToCamera() {
@@ -214,37 +217,37 @@ class QuestionSelectedFormFragment : Fragment() {
     private fun setSubmitButton() {
         binding.btnSubmit.apply {
             setOnClickListener {
-                if (isAllFieldsEntered()) {
-                    //버튼 여러번 눌러지는 거 방지
-                    val questionSelectedUploadVO = QuestionSelectedUploadVO(
-                        description = binding.etQuestionDesc.text.toString(),
-                        schoolLevel = binding.tvSchoolSelected.text.toString(),
-                        schoolSubject = binding.tvSubjectSelected.text.toString(),
-                        mainImageIndex = 0,
-                        images = viewModel.images.value!!.map {
-                            it.toBase64()
-                        },
-                        requestTutoringStartTime = LocalDateTime.of(
-                            viewModel.requestDate.value!!,
-                            viewModel.requestTutoringStartTime.value!!
-                        ),
-                        requestTutoringEndTime = LocalDateTime.of(
-                            viewModel.requestDate.value!!,
-                            viewModel.requestTutoringEndTime.value!!
-                        ),
-                        requestTeacherId = viewModel.teacherId.value!!
-                    )
-                    viewModel.uploadQuestionSelected(questionSelectedUploadVO)
-                } else {
-                    alertEmptyField()
-                }
+//                if (isAllFieldsEntered()) {
+                //버튼 여러번 눌러지는 거 방지
+                val questionSelectedUploadVO = QuestionSelectedUploadVO(
+                    description = binding.etQuestionDesc.text.toString(),
+                    schoolLevel = binding.tvSchoolSelected.text.toString(),
+                    schoolSubject = binding.tvSubjectSelected.text.toString(),
+                    mainImageIndex = 0,
+                    images = questionSelectedUploadViewModel.images.value!!.map {
+                        it.toBase64()
+                    },
+                    requestTutoringStartTime = LocalDateTime.of(
+                        questionReservationViewModel.requestDate.value!!,
+                        questionReservationViewModel.requestTutoringStartTime.value!!
+                    ),
+                    requestTutoringEndTime = LocalDateTime.of(
+                        questionReservationViewModel.requestDate.value!!,
+                        questionReservationViewModel.requestTutoringEndTime.value!!
+                    ),
+                    requestTeacherId = questionSelectedUploadViewModel.teacherId.value!!
+                )
+                questionSelectedUploadViewModel.uploadQuestionSelected(questionSelectedUploadVO)
+//                } else {
+//                    alertEmptyField()
+//                }
             }
         }
     }
 
     private fun alertEmptyField() {
         with(binding) {
-            if (viewModel.images.value.isNullOrEmpty()) {
+            if (questionSelectedUploadViewModel.images.value.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "사진을 등록해주세요", Toast.LENGTH_SHORT).show()
             } else if (etQuestionDesc.text.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "질문 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
@@ -260,7 +263,7 @@ class QuestionSelectedFormFragment : Fragment() {
 
     private fun isAllFieldsEntered(): Boolean {
         with(binding) {
-            return (viewModel.images.value != null &&
+            return (questionSelectedUploadViewModel.images.value != null &&
                     etQuestionDesc.text != null && tvSchoolSelected.text != null
                     && tvSubjectSelected.text != null)
         }

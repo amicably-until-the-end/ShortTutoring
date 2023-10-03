@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.util.widget
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,9 +20,7 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
     private val binding: WidgetSimpleDatePickerBinding =
         WidgetSimpleDatePickerBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private lateinit var adapter: CalendarDateAdapter
-
-    var selectedDate: LocalDate? = null
+    private lateinit var mAdapter: CalendarDateAdapter
 
     private var onDateClickListener: ((Int, Int, Int) -> Unit)? = null
 
@@ -40,8 +39,8 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
 
     private fun setDateRecyclerView() {
         binding.rvCalendar.apply {
-            adapter = CalendarDateAdapter(
-                this,
+            mAdapter = CalendarDateAdapter(
+                recyclerView = this,
                 onMonthChange = { year, month ->
                     binding.tvMonth.text = "${year}년 ${month}월"
                     bindFromLastMonthToNextMonth(year, month)
@@ -53,6 +52,8 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
                 .apply {
                     setHasStableIds(true)
                 }
+
+            adapter = mAdapter
             layoutManager = GridLayoutManager(context, 7)
             addItemDecoration(GridSpacingItemDecoration(7, 0))
         }
@@ -68,6 +69,7 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
             for (date in 1..mFirstDay.lengthOfMonth()) {
                 val id =
                     "${mYear}${"%02d".format(mMonth)}${"%02d".format(date)}".toLong()
+                Log.d("hhcc", "id: ${id}")
                 val viewHolder = binding.rvCalendar.findViewHolderForItemId(id)
                 if (viewHolder != null) {
                     (viewHolder as CalendarDateAdapter.ViewHolder).onBind(
