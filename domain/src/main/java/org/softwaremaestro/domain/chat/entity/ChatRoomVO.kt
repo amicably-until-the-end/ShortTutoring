@@ -27,6 +27,7 @@ data class ChatRoomVO(
     val messages: List<MessageVO>? = null,
     var teachers: List<ChatRoomVO>? = null,
     val isSelect: Boolean,
+    val subTitle: String? = null,
 )
 
 data class StudentInfoVO(

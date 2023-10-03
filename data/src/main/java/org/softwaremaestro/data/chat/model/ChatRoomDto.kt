@@ -2,7 +2,6 @@ package org.softwaremaestro.data.chat.model
 
 import com.google.gson.annotations.SerializedName
 import org.softwaremaestro.data.question_get.model.ProblemDto
-import org.softwaremaestro.data.question_get.model.QuestionsGetResultDto
 
 data class ChatRoomListDto(
     @SerializedName("normalProposed") val normalProposed: List<ChatRoomDto>,
@@ -22,6 +21,7 @@ data class ChatRoomDto(
     @SerializedName("questionId") val questionId: String?,
     @SerializedName("messages") val messages: List<MessageDto>?,
     @SerializedName("questionInfo") val questionInfo: QuestionInfoDto?,
+    @SerializedName("reservedStart") val reservedStart: String?,
 )
 
 data class QuestionInfoDto(
