@@ -157,7 +157,9 @@
         android:paddingTop="20dp"
         android:paddingBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_1">
+        app:layout_constraintTop_toBottomOf="@id/divider_1"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="-311dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -214,19 +216,19 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_redo"
+                android:id="@+id/btn_undo"
                 android:layout_width="@dimen/classroom_toolbox_item_width"
                 android:layout_height="@dimen/classroom_toolbox_item_height"
-                android:background="@drawable/ic_redo_48"
+                android:background="@drawable/ic_undo"
                 android:maxWidth="0dp"
                 android:maxHeight="0dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_undo"
+                android:id="@+id/btn_redo"
                 android:layout_width="@dimen/classroom_toolbox_item_width"
                 android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
-                android:background="@drawable/ic_undo_48"
+                android:background="@drawable/ic_redo"
                 android:maxWidth="0dp"
                 android:maxHeight="0dp" />
 
@@ -272,7 +274,7 @@
                 android:layout_width="@dimen/classroom_toolbox_item_width"
                 android:layout_height="@dimen/classroom_toolbox_item_height"
                 android:layout_marginStart="24dp"
-                android:background="@drawable/ic_add_photo_48"
+                android:background="@drawable/ic_add_image"
                 android:maxWidth="0dp"
                 android:maxHeight="0dp" />
 
