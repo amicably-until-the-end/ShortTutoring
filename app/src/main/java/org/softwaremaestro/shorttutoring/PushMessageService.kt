@@ -7,14 +7,19 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.login.usecase.LoginUseCase
+import org.softwaremaestro.domain.socket.SocketManager
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,18 +29,20 @@ class PushMessageService :
     @Inject
     lateinit var loginUseCase: LoginUseCase
 
+    @Inject
+    lateinit var socketManager: SocketManager
 
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Log.d("fcm", "onNewToken in PushMessageService")
-        loginUseCase.saveFCMToken(token)
-    }
+    @Inject
+    lateinit var chatRepository: ChatRepository
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         val notificationManager = NotificationManagerCompat.from(
             applicationContext
         )
+        if (ShortTutoringApplication.isForeground) {
+            return
+        }
         var builder: NotificationCompat.Builder? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
@@ -52,6 +59,20 @@ class PushMessageService :
         }
         val title = remoteMessage.data["title"] ?: "undefined"
         val body = remoteMessage.data["body"] ?: "undefined"
+        if (true) {
+            with(remoteMessage.data) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    chatRepository.insertMessage(
+                        "40146be0-6886-4eb6-8014-5684eba1b173",
+                        get("body") ?: "테스트 insert",
+                        get("format") ?: "text",
+                        get("createdAt") ?: LocalDateTime.now().toString(),
+                        get("sender") == SocketManager.userId,
+                    )
+                }
+            }
+        }
+
         builder.setContentTitle(title)
             .setContentText(body)
             .setSmallIcon(R.drawable.btn_radio)
@@ -76,5 +97,10 @@ class PushMessageService :
     companion object {
         private const val CHANNEL_ID = "channel_id"
         private const val CHANNEL_NAME = "channel_name"
+    }
+
+    enum class PayloadType(val value: String) {
+        CHAT_MESSAGE("chat-message"),
+        ALERT("alert"),
     }
 }
