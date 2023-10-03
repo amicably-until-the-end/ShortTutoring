@@ -1,6 +1,4 @@
-package org.softwaremaestro.domain.question_get.entity;
-
-import java.time.LocalTime
+package org.softwaremaestro.domain.question_get.entity
 
 data class QuestionGetResponseVO(
     var id: String?,
@@ -14,7 +12,7 @@ data class QuestionGetResponseVO(
     val problemSchoolLevel: String?,
     val problemSubject: String?,
     val problemDescription: String?,
-    val teacherIds: List<String>?,
+    val offerTeachers: List<String>?,
     val status: String?,
     val createdAt: String?,
     val tutoringId: String?
