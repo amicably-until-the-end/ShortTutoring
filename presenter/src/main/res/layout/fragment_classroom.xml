@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:orientation="vertical"
     tools:context=".classroom.ClassroomFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_toolbar"
-        style="@style/ToolBar">
+        style="@style/ToolBar"
+        tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_toolbar_back"
@@ -97,14 +100,69 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <LinearLayout
+        android:id="@+id/divider_1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_blue"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/container_tool_box" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_board"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background_grey"
+        android:paddingHorizontal="38dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_1">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="4dp"
+            app:cardCornerRadius="15dp">
+
+            <com.herewhite.sdk.WhiteboardView
+                android:id="@+id/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_scene_list"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:background="@color/grey"
+        android:paddingHorizontal="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_tool_box">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_scene_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_tool_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_light_blue"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:gravity="center_vertical"
         android:paddingHorizontal="@dimen/section_horizontal_padding_default"
-        android:paddingVertical="12dp">
+        android:paddingVertical="12dp"
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -137,6 +195,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/container_tool_appliances"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -150,7 +209,6 @@
                 android:id="@+id/btn_color_pen"
                 android:layout_width="@dimen/classroom_toolbox_item_width"
                 android:layout_height="@dimen/classroom_toolbox_item_height"
-                android:layout_marginStart="24dp"
                 android:background="@drawable/ic_stylus_48"
                 android:maxWidth="0dp"
                 android:maxHeight="0dp" />
@@ -211,51 +269,55 @@
 
         </LinearLayout>
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintLeft_toLeftOf="@id/container_tool_appliances"
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <LinearLayout
+                android:id="@+id/container_color_pallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_pen_red"
+                    style="@style/colorPallet"
+                    app:cardBackgroundColor="@color/pen_red" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_pen_orange"
+                    style="@style/colorPallet"
+                    app:cardBackgroundColor="@color/pen_orange" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_pen_yellow"
+                    style="@style/colorPallet"
+                    app:cardBackgroundColor="@color/pen_yellow" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_pen_green"
+                    style="@style/colorPallet"
+                    app:cardBackgroundColor="@color/pen_green" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_color_black"
+                    style="@style/colorPallet"
+                    app:cardBackgroundColor="@color/pen_black" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btn_pen_purple"
+                    style="@style/colorPallet"
+                    app:cardBackgroundColor="@color/pen_purple" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/primary_blue" />
-
-    <FrameLayout
-        android:id="@+id/container_board"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_grey"
-        android:paddingHorizontal="38dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="32dp">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="4dp"
-            app:cardCornerRadius="15dp">
-
-            <com.herewhite.sdk.WhiteboardView
-                android:id="@+id/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible" />
-        </androidx.cardview.widget.CardView>
-    </FrameLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_scene_list"
-        android:layout_width="200dp"
-        android:layout_height="0dp"
-        android:background="@color/grey"
-        android:paddingHorizontal="20dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_tool_box">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_scene_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
