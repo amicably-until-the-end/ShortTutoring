@@ -10,5 +10,4 @@ class LoginUseCase @Inject constructor(private val repository: LoginRepository) 
 
     suspend fun registerFCMToken(): Flow<BaseResult<String, String>> = repository.registerFCMToken()
 
-    fun saveFCMToken(token: String) = repository.saveFCMToken(token)
 }
