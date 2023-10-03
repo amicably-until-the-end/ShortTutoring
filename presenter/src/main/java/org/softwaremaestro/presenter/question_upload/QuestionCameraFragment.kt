@@ -34,7 +34,7 @@ class QuestionCameraFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentQuestionCameraBinding.inflate(inflater, container, false)
         setShutterListener()
         setPreviewRecyclerView()
@@ -77,11 +77,12 @@ class QuestionCameraFragment : Fragment() {
     }
 
     private fun setPreviewRecyclerView() {
-        previewAdapter = CapturePreviewAdapter() {
+        previewAdapter = CapturePreviewAdapter {
             if (it < previewAdapter.items.size) {
                 previewAdapter.items.removeAt(it)
-                previewSelected -= 1
                 previewAdapter.notifyDataSetChanged()
+                previewSelected -= 1
+
             }
         }
 
@@ -90,7 +91,6 @@ class QuestionCameraFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = previewAdapter
         }
-
     }
 
     private fun setCloseBtn() {
