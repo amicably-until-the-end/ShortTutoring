@@ -95,9 +95,6 @@ class LoginRepositoryImpl @Inject constructor(
         return prefs.getJWT()
     }
 
-    override fun saveFCMToken(token: String) {
-        prefs.saveFCMToken(token)
-    }
 
     override suspend fun registerFCMToken(): Flow<BaseResult<String, String>> {
         return flow {

@@ -20,14 +20,6 @@ class SharedPrefs(private val context: Context) {
     }
 
 
-    fun saveFCMToken(token: String) {
-        put(PREF_FCM_TOKEN, token)
-    }
-
-    fun getFCMToken(): String {
-        return get(PREF_FCM_TOKEN, String::class.java)
-    }
-
     fun getJWT(): String {
         return get(PREF_TOKEN, String::class.java)
     }

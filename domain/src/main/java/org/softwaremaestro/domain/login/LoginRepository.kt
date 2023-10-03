@@ -17,8 +17,6 @@ interface LoginRepository {
 
     fun getToken(): String
 
-    fun saveFCMToken(token: String)
-
     suspend fun registerFCMToken(): Flow<BaseResult<String, String>>
 
 }
