@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
 import org.softwaremaestro.presenter.student_home.StudentHomeFragmentDirections
-import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
+import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.teacher_search.viewmodel.MyProfileViewModel
@@ -25,7 +25,7 @@ class TeacherSearchFragment : Fragment() {
     private val followingViewModel: FollowingViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
 
-    private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
+    private lateinit var teacherCircularAdapter: TeacherCircularAdapter
     private lateinit var teacherAdapter: TeacherAdapter
 
     override fun onCreateView(
@@ -53,7 +53,7 @@ class TeacherSearchFragment : Fragment() {
     }
 
     private fun setFollowingRecyclerView() {
-        teacherFollowingAdapter = TeacherFollowingAdapter {
+        teacherCircularAdapter = TeacherCircularAdapter {
             //TODO: 선생님별
             val action =
                 StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment("null")
@@ -61,7 +61,7 @@ class TeacherSearchFragment : Fragment() {
         }
 
         binding.rvFollowing.apply {
-            adapter = teacherFollowingAdapter
+            adapter = teacherCircularAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -98,8 +98,8 @@ class TeacherSearchFragment : Fragment() {
 
     private fun observeFollowing() {
         followingViewModel.following.observe(viewLifecycleOwner) {
-            teacherFollowingAdapter.setItem(it)
-            teacherFollowingAdapter.notifyDataSetChanged()
+            teacherCircularAdapter.setItem(it)
+            teacherCircularAdapter.notifyDataSetChanged()
         }
     }
 

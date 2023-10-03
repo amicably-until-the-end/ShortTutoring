@@ -8,21 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.socket.SocketManager
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.coin.ChargeCoinActivity
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
-import org.softwaremaestro.presenter.student_home.adapter.TeacherFollowingAdapter
+import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.LectureViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
@@ -33,13 +36,15 @@ class StudentHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentHomeBinding
 
-    private val followingViewModel: FollowingViewModel by viewModels()
-    private val followUserViewModel: FollowUserViewModel by viewModels()
-    private val myProfileViewModel: MyProfileViewModel by viewModels()
-    private val teacherViewModel: TeacherViewModel by viewModels()
-    private val lectureViewModel: LectureViewModel by viewModels()
+    private val followingViewModel: FollowingViewModel by activityViewModels()
+    private val teacherOnlineViewModel: TeacherOnlineViewModel by activityViewModels()
+    private val followUserViewModel: FollowUserViewModel by activityViewModels()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
+    private val teacherViewModel: TeacherViewModel by activityViewModels()
+    private val lectureViewModel: LectureViewModel by activityViewModels()
 
-    private lateinit var teacherFollowingAdapter: TeacherFollowingAdapter
+    private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
+    private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
@@ -50,16 +55,17 @@ class StudentHomeFragment : Fragment() {
     ): View {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
+
         // Todo: 나중에 api로 받아와야 함
         binding.cbCoin.coin = 1350
         binding.cbCoin.setOnClickListener {
             startActivity(Intent(requireContext(), ChargeCoinActivity::class.java))
         }
-
         getRemoteData()
         initTeacherProfileDialog()
         setQuestionButton()
         setTeacherFollowingRecyclerView()
+        setTeacherOnlineRecyclerView()
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
@@ -72,6 +78,8 @@ class StudentHomeFragment : Fragment() {
         myProfileViewModel.getMyProfile()
         teacherViewModel.getTeachers()
         lectureViewModel.getLectures()
+        SocketManager.userId?.let { followingViewModel.getFollowing(it) }
+        teacherOnlineViewModel.getTeacherOnlines()
     }
 
     private fun initTeacherProfileDialog() {
@@ -119,7 +127,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setTeacherFollowingRecyclerView() {
-        teacherFollowingAdapter = TeacherFollowingAdapter {
+        teacherFollowingAdapter = TeacherCircularAdapter {
 //            val teacherVO = TeacherVO(
 //                profileUrl = it.profileImage,
 //                nickname = it.name,
@@ -136,6 +144,30 @@ class StudentHomeFragment : Fragment() {
 
         binding.rvTeacherFollowing.apply {
             adapter = teacherFollowingAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setTeacherOnlineRecyclerView() {
+        teacherOnlineAdapter = TeacherCircularAdapter {
+            val teacherVO = TeacherVO(
+                profileUrl = it.profileImage,
+                nickname = it.name,
+                teacherId = it.id,
+                bio = it.bio,
+                univ = "${it.schoolName} ${it.schoolDepartment}",
+                rating = -1.0f,
+                listOf(),
+                -1,
+            )
+
+            dialogTeacherProfile.setItem(teacherVO)
+            dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
+        }
+
+        binding.rvTeacherOnline.apply {
+            adapter = teacherOnlineAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -187,46 +219,25 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun observeFollowing() {
-        val sampleData = mutableListOf<FollowingGetResponseVO>().apply {
-            add(
-                FollowingGetResponseVO(
-                    "1",
-                    "강해린",
-                    "a",
-                    "https://yt3.ggpht.com/tWxrapVNxQBe-VnvRxOMAOmyVNsnEmFlT8ON3oQyqLPr6_QwwevRIHsslAmYSNogDehyCQNvqg=s176-c-k-c0x00ffffff-no-nd-rj",
-                    "f",
-                    "f",
-                    "d",
-                    "d",
-                    1,
-                    -1,
-                    -1
-                )
-            )
-            add(
-                FollowingGetResponseVO(
-                    "1",
-                    "강해린",
-                    "a",
-                    "https://yt3.ggpht.com/tWxrapVNxQBe-VnvRxOMAOmyVNsnEmFlT8ON3oQyqLPr6_QwwevRIHsslAmYSNogDehyCQNvqg=s176-c-k-c0x00ffffff-no-nd-rj",
-                    "f",
-                    "f",
-                    "d",
-                    "d",
-                    1,
-                    -1,
-                    -1
-                )
-            )
-        }
-        teacherFollowingAdapter.setItem(sampleData)
-
         followingViewModel.following.observe(viewLifecycleOwner) {
-            teacherFollowingAdapter.setItem(it)
+            if (it.isNotEmpty()) {
+                binding.containerMyTeacherSection.visibility = View.VISIBLE
+                binding.nsTeacherFollowing.visibility = View.VISIBLE
+            } else {
+                binding.dvTeacher.visibility = View.GONE
+                binding.nsTeacherFollowing.visibility = View.GONE
+                if (teacherOnlineViewModel.teacherOnlines.value.isNullOrEmpty()) {
+                    binding.containerMyTeacherSection.visibility = View.GONE
+                } else {
+                    binding.containerMyTeacherSection.visibility = View.VISIBLE
+                }
+            }
+            teacherFollowingAdapter.setItem(
+                if (teacherOnlineViewModel.teacherOnlines.value.isNullOrEmpty()) it
+                else it.take(3)
+            )
             teacherFollowingAdapter.notifyDataSetChanged()
         }
-
-        return
     }
 
     private fun observeMyProfile() {
@@ -275,6 +286,7 @@ class StudentHomeFragment : Fragment() {
         observeMyProfile()
         observeTeachers()
         observeLectures()
+        observeTeacherOnlines()
     }
 
     private fun observeLectures() {
@@ -290,6 +302,42 @@ class StudentHomeFragment : Fragment() {
             }
             lectureAdapter.setItem(it)
             lectureAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun observeTeacherOnlines() {
+        teacherOnlineViewModel.teacherOnlines.observe(viewLifecycleOwner) { teacherOnlines ->
+            teacherOnlines.map {
+                FollowingGetResponseVO(
+                    id = it.teacherId,
+                    name = it.nickname,
+                    bio = it.bio,
+                    profileImage = it.profileUrl,
+                    role = "teacher",
+                    schoolDivision = "",
+                    schoolName = it.univ,
+                    schoolDepartment = "더미 학과",
+                    schoolGrade = -1,
+                    followersCount = it.followers?.size,
+                    followingCount = -1
+                )
+            }.let {
+                teacherOnlineAdapter.setItem(it)
+
+                if (it.isNotEmpty()) {
+                    binding.containerMyTeacherSection.visibility = View.VISIBLE
+                    binding.nsTeacherOnline.visibility = View.VISIBLE
+                } else {
+                    binding.dvTeacher.visibility = View.GONE
+                    binding.nsTeacherOnline.visibility = View.GONE
+                    if (followingViewModel.following.value.isNullOrEmpty()) {
+                        binding.containerMyTeacherSection.visibility = View.GONE
+                    } else {
+                        binding.containerMyTeacherSection.visibility = View.VISIBLE
+                    }
+                }
+            }
+            teacherOnlineAdapter.notifyDataSetChanged()
         }
     }
 
