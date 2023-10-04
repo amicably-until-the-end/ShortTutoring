@@ -34,7 +34,7 @@ class ChatRepositoryImpl @Inject constructor(
             Log.d("ChatRepositoryImpl", "chatroomId $roomId $result")
             result.EntityToVO()
         } catch (e: Exception) {
-            Log.d("ChatRepositoryImpl", e.toString())
+            Log.e("ChatRepositoryImpl", e.toString())
             null
         }
     }
@@ -42,16 +42,20 @@ class ChatRepositoryImpl @Inject constructor(
     private suspend fun getRoomFromDB(isTeacher: Boolean): ChatRoomListVO? {
         try {
             var proposedNormal =
-                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.PROPOSED_NORMAL.type)
+                chatDatabase.chatRoomDao()
+                    .getChatRoomListWithUnReadCnt(ChatRoomType.PROPOSED_NORMAL.type)
                     .map { it.EntityToVO() }
             var proposedSelect =
-                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.PROPOSED_SELECT.type)
+                chatDatabase.chatRoomDao()
+                    .getChatRoomListWithUnReadCnt(ChatRoomType.PROPOSED_SELECT.type)
                     .map { it.EntityToVO() }
             var reservedNormal =
-                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.RESERVED_NORMAL.type)
+                chatDatabase.chatRoomDao()
+                    .getChatRoomListWithUnReadCnt(ChatRoomType.RESERVED_NORMAL.type)
                     .map { it.EntityToVO() }
             var reservedSelect =
-                chatDatabase.chatRoomDao().getChatRoomByGroupType(ChatRoomType.RESERVED_SELECT.type)
+                chatDatabase.chatRoomDao()
+                    .getChatRoomListWithUnReadCnt(ChatRoomType.RESERVED_SELECT.type)
                     .map { it.EntityToVO() }
 
 
@@ -61,8 +65,7 @@ class ChatRepositoryImpl @Inject constructor(
             if (!isTeacher) {
                 //학생이면 그룹화
                 proposedNormal.groupBy { it.questionId }.forEach { group ->
-                    val questionInfo = questionApi.getQuestionInfo(group.key!!).body()?.data
-                    Log.d("ChatRepositoryImpl info", questionInfo.toString())
+                    val questionInfo = questionApi.getQuestionInfo(group.key ?: "").body()?.data
                     questionInfo?.let {
                         val questionRoom = ChatRoomVO(
                             roomType = RoomType.QUESTION,
@@ -199,6 +202,10 @@ class ChatRepositoryImpl @Inject constructor(
                 emit(BaseResult.Success(result))
             }
         }
+    }
+
+    override suspend fun markAsRead(chatRoomId: String) {
+        chatDatabase.messageDao().markAsRead(chatRoomId)
     }
 
 }

@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.data.chat.entity.ChatRoomWithMessages
+import org.softwaremaestro.data.chat.entity.ChatRoomWithUnReadMessageCnt
 
 @Dao
 interface ChatRoomDao {
@@ -40,5 +41,6 @@ interface ChatRoomDao {
     @Query("SELECT * FROM ChatRoomEntity WHERE status = :type")
     fun getChatRoomByGroupType(type: Int): List<ChatRoomWithMessages>
 
-
+    @Query("SELECT ChatRoomEntity.*, COUNT(MessageEntity.id) AS unReadCnt FROM ChatRoomEntity LEFT JOIN MessageEntity ON MessageEntity.roomId = ChatRoomEntity.id AND MessageEntity.isRead = 0 WHERE ChatRoomEntity.status = :type GROUP BY ChatRoomEntity.id")
+    fun getChatRoomListWithUnReadCnt(type: Int): List<ChatRoomWithUnReadMessageCnt>
 }

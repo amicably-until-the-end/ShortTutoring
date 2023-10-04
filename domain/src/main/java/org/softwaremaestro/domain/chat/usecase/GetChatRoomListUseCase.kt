@@ -12,4 +12,7 @@ class GetChatRoomListUseCase @Inject constructor(private val repository: ChatRep
         currentRoomId: String?
     ): Flow<BaseResult<ChatRoomListVO, String>> =
         repository.getRoomList(isTeacher, currentRoomId)
+
+
+    suspend fun markAsRead(chatRoomId: String) = repository.markAsRead(chatRoomId)
 }

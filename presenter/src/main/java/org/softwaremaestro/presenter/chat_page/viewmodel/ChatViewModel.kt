@@ -235,6 +235,12 @@ class ChatViewModel @Inject constructor(
         _messages.value = UIState.Empty
     }
 
+    fun markAsRead(chatRoomId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getChatRoomListUseCase.markAsRead(chatRoomId)
+        }
+    }
+
 
     @Serializable
     data class Message(

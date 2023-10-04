@@ -24,7 +24,7 @@ data class ChatRoomVO(
     val startDateTime: LocalDateTime? = null,
     val description: String,
     val schoolLevel: String? = null,
-    val messages: List<MessageVO>? = null,
+    val messages: Int? = 0,
     var teachers: List<ChatRoomVO>? = null,
     val isSelect: Boolean,
     val subTitle: String? = null,

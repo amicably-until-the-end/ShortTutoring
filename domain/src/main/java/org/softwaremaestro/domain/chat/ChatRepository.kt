@@ -23,4 +23,6 @@ interface ChatRepository {
     suspend fun getChatRoomInfo(chatRoomId: String): Flow<BaseResult<ChatRoomVO, String>>
 
     suspend fun getMessages(chatRoomId: String): Flow<BaseResult<List<MessageVO>, String>>
+
+    suspend fun markAsRead(chatRoomId: String)
 }

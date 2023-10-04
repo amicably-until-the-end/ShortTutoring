@@ -30,6 +30,20 @@ data class ChatRoomWithMessages(
     val messages: List<MessageEntity>
 )
 
+data class ChatRoomWithUnReadMessageCnt(
+    var id: String,
+    var title: String,
+    var startDateTime: LocalDateTime?,
+    var status: Int,
+    var image: String,
+    var opponentId: String?,
+    var questionId: String?,
+    var subTitle: String?,
+    var isSelect: Boolean,
+    var description: String?,
+    val unReadCnt: Int,
+)
+
 enum class ChatRoomType(val type: Int) {
     PROPOSED_NORMAL(type = 0),
     PROPOSED_SELECT(type = 1),

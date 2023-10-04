@@ -525,6 +525,7 @@ abstract class ChatFragment : Fragment() {
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             enterChatRoom(chatRoom)
+            chatViewModel.markAsRead(chatRoom.id!!)
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {

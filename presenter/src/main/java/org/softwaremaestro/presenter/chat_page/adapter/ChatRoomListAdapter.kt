@@ -94,24 +94,28 @@ class ChatRoomListAdapter(
                         }
                     }
                 }
-                if (!item.messages.isNullOrEmpty()) {
-                    tvNewMsgCnt.visibility = android.view.View.VISIBLE
-                    when (item.roomType) {
-                        RoomType.QUESTION -> {
-                            var cnt = 0
-                            item.teachers?.listIterator()?.forEach { teacherRoom ->
-                                cnt += teacherRoom.messages?.size ?: 0
-                            }
-                            tvNewMsgCnt.text = cnt.toString()
+                val messageCnt = when (item.roomType) {
+                    RoomType.QUESTION -> {
+                        var cnt = 0
+                        item.teachers?.listIterator()?.forEach { teacherRoom ->
+                            cnt += teacherRoom.messages ?: 0
                         }
-
-                        RoomType.TEACHER -> {
-                            tvNewMsgCnt.text = item.messages?.size.toString()
-                        }
+                        cnt
                     }
+
+                    RoomType.TEACHER -> {
+                        item.messages ?: 0
+                    }
+
+                }
+                if (messageCnt > 0) {
+                    tvNewMsgCnt.visibility = android.view.View.VISIBLE
+                    tvNewMsgCnt.text = messageCnt.toString()
+
                 } else {
                     tvNewMsgCnt.visibility = android.view.View.GONE
                 }
+
 
                 tvTitle.text = item.title
                 tvSubTitle.text = item.subTitle

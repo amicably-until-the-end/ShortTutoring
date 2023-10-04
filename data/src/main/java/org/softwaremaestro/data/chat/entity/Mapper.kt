@@ -34,6 +34,28 @@ class Mapper {
         }
     }
 
+    fun asDomain(entity: ChatRoomWithUnReadMessageCnt): ChatRoomVO {
+        entity.apply {
+            return ChatRoomVO(
+                id = id,
+                title = title,
+                roomType = if (opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
+                roomImage = image,
+                questionId = questionId,
+                isSelect = isSelect,
+                subTitle = subTitle,
+                questionState =
+                if (status == ChatRoomType.PROPOSED_NORMAL.type ||
+                    status == ChatRoomType.PROPOSED_SELECT.type
+                )
+                    QuestionState.PROPOSED else QuestionState.RESERVED,
+                messages = unReadCnt,
+                opponentId = opponentId,
+                description = description ?: "undefined",
+            )
+        }
+    }
+
     fun asDomain(messageEntity: MessageEntity): MessageVO {
         messageEntity.apply {
             var bodyVO: MessageBodyVO?
@@ -84,7 +106,7 @@ class Mapper {
                     chatRoomEntity.status == ChatRoomType.PROPOSED_SELECT.type
                 )
                     QuestionState.PROPOSED else QuestionState.RESERVED,
-                messages = messages.map { it.asDomain() },
+                messages = 0,
                 opponentId = chatRoomEntity.opponentId,
                 description = chatRoomEntity.description ?: "undefined",
             )
@@ -148,4 +170,8 @@ fun LocalDateTime.toKoreanString(): String {
     return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시 ${
         if (this.minute != 0) "${minute}분" else ""
     }"
+}
+
+fun ChatRoomWithUnReadMessageCnt.asDomain(): ChatRoomVO {
+    return Mapper().asDomain(this)
 }
