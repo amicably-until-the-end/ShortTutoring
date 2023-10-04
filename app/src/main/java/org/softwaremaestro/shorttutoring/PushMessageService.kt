@@ -5,6 +5,8 @@ import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.login.usecase.LoginUseCase
 import org.softwaremaestro.domain.socket.SocketManager
+import org.softwaremaestro.presenter.login.SplashActivity
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -35,8 +38,25 @@ class PushMessageService :
     @Inject
     lateinit var chatRepository: ChatRepository
 
+    override fun onCreate() {
+        super.onCreate()
+        createChannel()
+    }
+
+    private fun createChannel() {
+        val notificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        notificationManager.createNotificationChannel(channel)
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        Log.d("PushMessageService", "${remoteMessage.data}")
         if (ShortTutoringApplication.isForeground) {
             //앱이 포그라운드 상태일 때는 그냥 무시한다.
             return
@@ -44,7 +64,7 @@ class PushMessageService :
         when (remoteMessage.data["type"]) {
             PayloadType.CHAT_MESSAGE.value -> {
                 insertChatMessage(remoteMessage.data)
-                sendChatMessageNotification()
+                sendChatMessageNotification(remoteMessage.data)
             }
 
             PayloadType.ALERT.value -> {
@@ -53,8 +73,29 @@ class PushMessageService :
         }
     }
 
-    private fun sendChatMessageNotification() {
-        sendNotification(null, "새로운 메시지가 도착했습니다.")
+    private fun sendChatMessageNotification(data: Map<String, String>) {
+        var builder: NotificationCompat.Builder =
+            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+
+        val intent = Intent(applicationContext, SplashActivity::class.java)
+        intent.putExtra(
+            SplashActivity.APP_LINK_ARGS_CHAT_ID,
+            "40146be0-6886-4eb6-8014-5684eba1b173"
+        )
+
+        val pendingIntent = PendingIntent.getActivity(
+            applicationContext,
+            SplashActivity.CHAT_INTENT_FLAG,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        with(data) {
+            builder.setContentTitle(get("title"))
+                .setContentText(get("body"))
+                .setSmallIcon(R.drawable.btn_radio)
+                .setContentIntent(pendingIntent)
+        }
+        sendNotification(builder.build())
     }
 
     private fun insertChatMessage(data: Map<String, String>) {
@@ -75,24 +116,11 @@ class PushMessageService :
         }
     }
 
-    private fun sendNotification(title: String?, body: String?) {
+    private fun sendNotification(notification: Notification) {
         val notificationManager = NotificationManagerCompat.from(
             applicationContext
         )
-        var builder: NotificationCompat.Builder =
-            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-        if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-        builder.setContentTitle(title)
-            .setContentText(body)
-            .setSmallIcon(R.drawable.btn_radio)
-        val notification: Notification = builder.build()
+
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
@@ -104,12 +132,12 @@ class PushMessageService :
     }
 
     companion object {
-        private const val CHANNEL_ID = "channel_id"
-        private const val CHANNEL_NAME = "channel_name"
+        private const val CHANNEL_ID = "shot_tutoring"
+        private const val CHANNEL_NAME = "숏과외"
     }
 
     enum class PayloadType(val value: String) {
-        CHAT_MESSAGE("chatting"),
+        CHAT_MESSAGE("message"),
         ALERT("announce"),
     }
 }

@@ -30,6 +30,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.student_home.viewmodel.DeepLinkViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -54,6 +55,7 @@ abstract class ChatFragment : Fragment() {
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     protected val chatViewModel: ChatViewModel by activityViewModels()
+    private val deepLinkViewModel: DeepLinkViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -91,8 +93,10 @@ abstract class ChatFragment : Fragment() {
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkDeepLinkArgs()
         loadingDialog = LoadingDialog(requireContext())
     }
 
@@ -113,6 +117,12 @@ abstract class ChatFragment : Fragment() {
             it?.let {
                 enterChatRoom(it)
             }
+        }
+    }
+
+    private fun checkDeepLinkArgs() {
+        if (!deepLinkViewModel.chattingId.isNullOrEmpty()) {
+            Log.d("deepLink@ChatFragment", "chattingId: ${deepLinkViewModel.chattingId}")
         }
     }
 

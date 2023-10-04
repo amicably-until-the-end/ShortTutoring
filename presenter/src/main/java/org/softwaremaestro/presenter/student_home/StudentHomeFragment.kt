@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.student_home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,8 @@ class StudentHomeFragment : Fragment() {
     ): View {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
+
+        Log.d("deepLink", "onViewCreated ${this::class.java} ${this.hashCode()}")
 
         // Todo: 나중에 api로 받아와야 함
         binding.cbCoin.coin = 1350
