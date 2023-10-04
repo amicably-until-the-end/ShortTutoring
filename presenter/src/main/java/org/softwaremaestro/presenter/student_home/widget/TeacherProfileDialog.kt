@@ -65,7 +65,6 @@ class TeacherProfileDialog(
     }
 
     private fun setFollowBtn() {
-        if (!::mItem.isInitialized) return
         with(mItem) {
             if (teacherId == null) {
                 Toast.makeText(requireContext(), "선생님의 아이디가 확인되지 않습니다", Toast.LENGTH_SHORT)
