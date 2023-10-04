@@ -140,7 +140,15 @@ abstract class ChatFragment : Fragment() {
             if (currentChatRoom?.id == chatRoomId) {
                 chatViewModel.getMessages(chatRoomId)
             }
-            chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
+            getRoomList()
+        }
+    }
+
+    private fun observeChatRoomChange() {
+        //TODO: 채팅방 전체 갱신 안하고 하나씩 새로고침하는 리팩토링 용도
+        chatViewModel.changedChatRoom.observe(viewLifecycleOwner) {
+            it?.apply {
+            }
         }
     }
 
@@ -149,7 +157,7 @@ abstract class ChatFragment : Fragment() {
         currentChatRoom?.let {
             chatViewModel.sendMessage(
                 binding.etMessage.text.toString(),
-                chattingId = it.id!!,
+                chattingId = it.id,
                 receiverId = it.opponentId!!,
             )
         }
@@ -255,6 +263,7 @@ abstract class ChatFragment : Fragment() {
                     chatViewModel.proposedNormalChatRoomList.value?._data?.find { room ->
                         room.questionId == it
                     }?.let { room ->
+                        Log.d("mymymymy", "room: ${room.teachers}")
                         setOfferingTeacherListItems(room.teachers ?: emptyList())
                         offeringTeacherAdapter.notifyDataSetChanged()
                     }
@@ -313,9 +322,7 @@ abstract class ChatFragment : Fragment() {
                     it.setSelectedChattingRoomId(selectedRoomId)
                 }
 
-                is ChatRoomIconListAdapter -> {
-                    it.changeSelectedQuestionId(selectedRoomId)
-                }
+                else -> {}
             }
         }
 
@@ -377,7 +384,8 @@ abstract class ChatFragment : Fragment() {
         binding.apply {
             tvReservedCount.text = list.size.toString()
             cvQuestionReservedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
-            reservedAdapter.setItem(list)
+            reservedAdapter.setItem(list.map { it.id })
+            reservedAdapter.setRoomInfo(chatRoomVOtoMap(list))
             reservedAdapter.notifyDataSetChanged()
         }
     }
@@ -386,7 +394,8 @@ abstract class ChatFragment : Fragment() {
         binding.apply {
             tvApplyCount.text = list.size.toString()
             cvQuestionProposedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
-            proposedAdapter.setItem(list)
+            proposedAdapter.setItem(list.map { it.id })
+            proposedAdapter.setRoomInfo(chatRoomVOtoMap(list))
             proposedAdapter.notifyDataSetChanged()
         }
     }
@@ -522,11 +531,19 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    private fun chatRoomVOtoMap(rooms: List<ChatRoomVO>): Map<String, ChatRoomVO> {
+        val roomInfo: MutableMap<String, ChatRoomVO> = mutableMapOf()
+        rooms.forEach {
+            roomInfo[it.id] = it
+        }
+        return roomInfo
+    }
+
 
     private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
-        Log.d("chat", teacher.toString())
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
-        offeringTeacherAdapter.setItem(teacher)
+        offeringTeacherAdapter.setItem(teacher.map { it.id })
+        offeringTeacherAdapter.setRoomInfo(chatRoomVOtoMap(teacher))
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
@@ -549,13 +566,14 @@ abstract class ChatFragment : Fragment() {
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             enterChatRoom(chatRoom)
+            chatViewModel.markAsRead(chatRoom.id)
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
         loadingDialog.dismiss() // 로딩중에 방이 바뀌는 경우에 대비해서 로딩중인 다이얼로그를 닫는다.
         currentChatRoom = chatRoomVO
         onChatRoomStateChange(chatRoomVO)
-        chatViewModel.getMessages(chatRoomVO.id!!)
+        chatViewModel.getMessages(chatRoomVO.id)
         binding.tvChatRoomTitle.text = chatRoomVO.title ?: "undefine"
         setSelectedRoomId(chatRoomVO.id)
         Log.d("chat", "currentChatRoom: $currentChatRoom")

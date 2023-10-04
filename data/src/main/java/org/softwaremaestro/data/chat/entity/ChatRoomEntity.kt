@@ -14,7 +14,7 @@ data class ChatRoomEntity(
     var status: Int,
     var image: String,
     var opponentId: String?,
-    var questionId: String?,
+    var questionId: String,
     var subTitle: String?,
     var isSelect: Boolean,
     var description: String?,
@@ -28,6 +28,20 @@ data class ChatRoomWithMessages(
         entityColumn = "roomId"
     )
     val messages: List<MessageEntity>
+)
+
+data class ChatRoomWithUnReadMessageCnt(
+    var id: String,
+    var title: String,
+    var startDateTime: LocalDateTime?,
+    var status: Int,
+    var image: String,
+    var opponentId: String?,
+    var questionId: String,
+    var subTitle: String?,
+    var isSelect: Boolean,
+    var description: String?,
+    val unReadCnt: Int,
 )
 
 enum class ChatRoomType(val type: Int) {
