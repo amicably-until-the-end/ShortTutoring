@@ -17,7 +17,9 @@ class ChatRoomListAdapter(
 ) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>() {
 
-    private var items: List<ChatRoomVO> = emptyList()
+    private var chatRoomIdList: List<String> = emptyList()
+
+    private var roomInfo: Map<String, ChatRoomVO>? = null
 
     private var selectedView: MaterialCardView? = null
 
@@ -36,15 +38,19 @@ class ChatRoomListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(items[position], position)
+        holder.onBind(roomInfo?.get(chatRoomIdList[position])!!, position)
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return chatRoomIdList.size
     }
 
-    fun setItem(items: List<ChatRoomVO>) {
-        this.items = items
+    fun setItem(items: List<String>) {
+        this.chatRoomIdList = items
+    }
+
+    fun setRoomInfo(roomInfo: Map<String, ChatRoomVO>) {
+        this.roomInfo = roomInfo
     }
 
     fun setSelectedChattingRoomId(chattingId: String?) {
@@ -72,7 +78,7 @@ class ChatRoomListAdapter(
                     RoomType.QUESTION -> {
                         root.setOnClickListener {
                             onQuestionClick(
-                                item.teachers ?: emptyList(), item.questionId ?: "",
+                                item.teachers ?: emptyList(), item.questionId,
                                 this@ChatRoomListAdapter
                             )
                         }
@@ -87,6 +93,7 @@ class ChatRoomListAdapter(
                         }
                         cvImage.radius = Util.toPx(20, binding.root.context).toFloat()
                         root.setOnClickListener {
+                            roomInfo?.get(item.id)?.messages = 0
                             onTeacherClick(
                                 item,
                                 this@ChatRoomListAdapter
@@ -108,7 +115,7 @@ class ChatRoomListAdapter(
                     }
 
                 }
-                if (messageCnt > 0) {
+                if (messageCnt > 0 && selectedChattingRoomId != item.id) {
                     tvNewMsgCnt.visibility = android.view.View.VISIBLE
                     tvNewMsgCnt.text = messageCnt.toString()
 

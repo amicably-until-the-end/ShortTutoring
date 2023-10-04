@@ -12,13 +12,13 @@ data class ChatRoomListDto(
 
 
 data class ChatRoomDto(
-    @SerializedName("id") val id: String?,
+    @SerializedName("id") val id: String,
     @SerializedName("roomImage") val roomImage: String,
     @SerializedName("status") val questionState: String?,
     @SerializedName("opponentId") val opponentId: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("isSelect") val isSelect: Boolean?,
-    @SerializedName("questionId") val questionId: String?,
+    @SerializedName("questionId") val questionId: String,
     @SerializedName("messages") val messages: List<MessageDto>?,
     @SerializedName("questionInfo") val questionInfo: QuestionInfoDto?,
     @SerializedName("reservedStart") val reservedStart: String?,

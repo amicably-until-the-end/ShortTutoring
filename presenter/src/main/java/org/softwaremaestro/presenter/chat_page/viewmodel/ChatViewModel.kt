@@ -75,6 +75,10 @@ class ChatViewModel @Inject constructor(
     val currentChattingRoomVO: LiveData<ChatRoomVO?>
         get() = _currentChattingRoomVO
 
+    val _changedChatRoom = MutableLiveData<ChatRoomVO?>()
+    val changedChatRoom: LiveData<ChatRoomVO?>
+        get() = _changedChatRoom
+
 
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
@@ -109,6 +113,21 @@ class ChatViewModel @Inject constructor(
                         }
 
                         is BaseResult.Error -> _reservedNormalChatRoomList.postValue(UIState.Failure)
+                    }
+                }
+        }
+    }
+
+    fun getChatRoomInfo(chattingId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getChatRoomListUseCase.getChatRoom(chattingId).catch { }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _changedChatRoom.postValue(result.data)
+                        }
+
+                        else -> {}
                     }
                 }
         }

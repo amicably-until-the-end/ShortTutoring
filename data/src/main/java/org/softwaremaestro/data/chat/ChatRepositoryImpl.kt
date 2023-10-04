@@ -65,9 +65,10 @@ class ChatRepositoryImpl @Inject constructor(
             if (!isTeacher) {
                 //학생이면 그룹화
                 proposedNormal.groupBy { it.questionId }.forEach { group ->
-                    val questionInfo = questionApi.getQuestionInfo(group.key ?: "").body()?.data
+                    val questionInfo = questionApi.getQuestionInfo(group.key).body()?.data
                     questionInfo?.let {
                         val questionRoom = ChatRoomVO(
+                            id = group.value[0].questionId,
                             roomType = RoomType.QUESTION,
                             roomImage = questionInfo.problemDto?.mainImage,
                             title = questionInfo.problemDto?.description,
@@ -134,7 +135,7 @@ class ChatRepositoryImpl @Inject constructor(
         currentRoomId: String?
     ): Flow<BaseResult<ChatRoomListVO, String>> {
         return flow {
-            updateRoomStatus()
+            //updateRoomStatus()
             var result = getRoomFromDB(isTeacher)
             currentRoomId?.let { result?.currentRoomVO = getOneRoomFromDB(it) }
             Log.d("ChatRepositoryImpl", result.toString())
@@ -167,13 +168,11 @@ class ChatRepositoryImpl @Inject constructor(
     ) {
         try {
             Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
+            var result = chatApi.getRoom(roomId)
             if (!chatDatabase.chatRoomDao().isIdExist(roomId)) {
-                var result = chatApi.getRoom(roomId)
-                Log.d(
-                    "ChatRepositoryImpl",
-                    "insert data entity ${result.body()}"
-                )
                 result.body()?.data?.let { chatDatabase.chatRoomDao().insert(it.asEntity()) }
+            } else {
+                result.body()?.data?.let { chatDatabase.chatRoomDao().update(it.asEntity()) }
             }
             chatDatabase.messageDao().insert(
                 MessageEntity(

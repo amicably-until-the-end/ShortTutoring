@@ -13,18 +13,18 @@ data class ChatRoomListVO(
 
 
 data class ChatRoomVO(
-    val id: String? = null,
+    val id: String,
     val roomType: RoomType,
     val roomImage: String?,
     val questionState: QuestionState,
-    val questionId: String?,
+    val questionId: String,
     val opponentId: String? = null,
     val title: String?,
     val schoolSubject: String? = null,
     val startDateTime: LocalDateTime? = null,
     val description: String,
     val schoolLevel: String? = null,
-    val messages: Int? = 0,
+    var messages: Int? = 0,
     var teachers: List<ChatRoomVO>? = null,
     val isSelect: Boolean,
     val subTitle: String? = null,
