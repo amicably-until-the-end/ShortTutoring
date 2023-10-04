@@ -66,10 +66,10 @@ class TeacherProfileFragment : Fragment() {
         binding.btnFollow.setOnClickListener {
             if (following) {
                 followUserViewModel.unfollowUser(selectedUserId)
-                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
             } else {
                 followUserViewModel.followUser(selectedUserId)
-                Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
             }
         }
     }

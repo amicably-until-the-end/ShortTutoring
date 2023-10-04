@@ -5,36 +5,39 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.profile.usecase.MyProfileGetUseCase
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.teacher_onlines_get.entity.TeacherOnlineVO
+import org.softwaremaestro.domain.teacher_onlines_get.usecase.TeacherOnlinesGetUseCase
+import org.softwaremaestro.presenter.util.Util
 import javax.inject.Inject
 
 @HiltViewModel
-class TeacherOnlineViewModel @Inject constructor(private val myProfileGetUseCase: MyProfileGetUseCase) :
+class TeacherOnlineViewModel @Inject constructor(private val teacherOnlinesGetUseCase: TeacherOnlinesGetUseCase) :
     ViewModel() {
 
-    private val _teacherOnlines: MutableLiveData<List<TeacherVO>> = MutableLiveData()
-    val teacherOnlines: LiveData<List<TeacherVO>> get() = _teacherOnlines
+    private val _teacherOnlines: MutableLiveData<List<TeacherOnlineVO>> = MutableLiveData()
+    val teacherOnlines: LiveData<List<TeacherOnlineVO>> get() = _teacherOnlines
 
     fun getTeacherOnlines() {
         viewModelScope.launch {
-            _teacherOnlines.postValue(mutableListOf<TeacherVO>().apply {
-                repeat(3) {
-                    add(
-                        TeacherVO(
-                            profileUrl = "",
-                            nickname = "더미데이터${it}",
-                            teacherId = "hc-teacher-id",
-                            bio = "더미데이터입니다",
-                            univ = "한양대학교 수학교육과",
-                            rating = -1.0f,
-                            listOf(),
-                            -1,
-                        )
+            teacherOnlinesGetUseCase.execute()
+                .catch { exception ->
+                    Util.logError(
+                        this@TeacherOnlineViewModel::class.java,
+                        exception.message.toString()
                     )
                 }
-            })
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> _teacherOnlines.postValue(result.data)
+                        is BaseResult.Error -> Util.logError(
+                            this@TeacherOnlineViewModel::class.java,
+                            result.toString()
+                        )
+                    }
+                }
         }
     }
 }

@@ -99,10 +99,10 @@ class StudentHomeFragment : Fragment() {
             onFollowBtnClicked = { following, teacherId ->
                 if (following) {
                     followUserViewModel.unfollowUser(teacherId)
-                    Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
                 } else {
                     followUserViewModel.followUser(teacherId)
-                    Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "선생님을 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
                 }
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
                 teacherViewModel.getTeachers()
@@ -316,16 +316,17 @@ class StudentHomeFragment : Fragment() {
         teacherOnlineViewModel.teacherOnlines.observe(viewLifecycleOwner) { teacherOnlines ->
             teacherOnlines.map {
                 FollowingGetResponseVO(
-                    id = it.teacherId,
-                    name = it.nickname,
-                    bio = it.bio,
-                    profileImage = it.profileUrl,
+                    id = it.id,
+                    name = it.name,
+                    // Todo: api 수정해야 함
+                    bio = "수정해주세요",
+                    profileImage = it.profileImage,
                     role = "teacher",
                     schoolDivision = "",
-                    schoolName = it.univ,
+                    schoolName = "",
                     schoolDepartment = "더미 학과",
                     schoolGrade = -1,
-                    followersCount = it.followers?.size,
+                    followersCount = it.followers,
                     followingCount = -1
                 )
             }.let {
