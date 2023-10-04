@@ -130,12 +130,13 @@
                     android:background="@drawable/bg_radius_5_grad_blue"
                     android:fontFamily="@font/pretendard_medium"
                     android:gravity="center"
-                    android:text="찜한 학생 56"
+                    android:stateListAnimator="@null"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/container_reserve"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="찜한 학생 56" />
 
                 <LinearLayout
                     android:id="@+id/container_reserve"
@@ -157,6 +158,7 @@
                         android:textSize="13sp" />
 
                     <TextView
+                        android:id="@+id/tv_reservation_cnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pretendard_medium"
