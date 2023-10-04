@@ -18,9 +18,6 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
-import org.softwaremaestro.presenter.classroom.ClassroomActivity
-import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
-import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
@@ -180,7 +177,7 @@ class TeacherHomeFragment : Fragment() {
         observeQuestions()
         observeAnswer()
         observeOfferRemove()
-        observeCheck()
+        //observeCheck()
     }
 
     private fun observeQuestions() {
@@ -206,44 +203,6 @@ class TeacherHomeFragment : Fragment() {
         }
     }
 
-
-    private fun observeCheck() {
-        checkViewModel.check.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
-            when (it.studentSelect) {
-                "selected" -> {
-                    //snackbar가 떠 있으면 계속 api를 호출하는 상태임. 결과 나왔으면 그만 호출 해야함.
-                    waitingSnackbar.dismiss()
-                    //Acticity 간 data class 전달을 위해 Serializable 사용
-                    val whiteBoardRoomInfo = SerializedWhiteBoardRoomInfo(
-                        it.whiteBoardAppId!!,
-                        it.whiteBoardUUID!!,
-                        it.whiteBoardToken!!,
-                        "1"
-                    )
-                    val voiceRoomInfo = SerializedVoiceRoomInfo(
-                        it.RTCAppId!!,
-                        it.teacherRTCToken!!,
-                        it.tutoringId!!,
-                        1,
-                    )
-                    // 교실 액티비티로 이동한다
-                    val intent = Intent(requireActivity(), ClassroomActivity::class.java).apply {
-                        putExtra("problemImgUrl", checkViewModel.selectedQuestionImgUrl)
-                        putExtra("whiteBoardInfo", whiteBoardRoomInfo)
-                        putExtra("voiceRoomInfo", voiceRoomInfo)
-                    }
-                    checkViewModel.clearCheck()
-                    startActivity(intent)
-                }
-
-                "rejected" -> {
-                    waitingSnackbar.setText("학생이 다른 선생님을 선택했습니다")
-                    waitingSnackbar.duration = Snackbar.LENGTH_SHORT
-                }
-            }
-        }
-    }
 
     private fun keepGettingQuestions(timeInterval: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
