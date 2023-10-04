@@ -3,23 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="12dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="340dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="4dp"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:strokeColor="@color/bright_grey"
-        app:strokeWidth="1dp">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_teacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_shadow_1_background_grey"
             android:padding="20dp">
 
             <androidx.cardview.widget.CardView
@@ -127,6 +122,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
 </LinearLayout>
