@@ -8,12 +8,12 @@ import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import javax.inject.Inject
 
 @HiltViewModel
-class TeacherViewModel @Inject constructor() : ViewModel() {
-    private val _teachers: MutableLiveData<List<TeacherVO>> = MutableLiveData()
-    val teachers: LiveData<List<TeacherVO>> get() = _teachers
+class TeacherRecommendViewModel @Inject constructor() : ViewModel() {
+    private val _teacherRecommends: MutableLiveData<List<TeacherVO>> = MutableLiveData()
+    val teacherRecommends: LiveData<List<TeacherVO>> get() = _teacherRecommends
 
     fun getTeachers() {
-        _teachers.postValue(
+        _teacherRecommends.postValue(
             mutableListOf<TeacherVO>()
                 .apply {
                     add(

@@ -14,7 +14,7 @@
             android:id="@+id/container_teacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_shadow_1_background_grey"
+            android:background="@drawable/bg_shadow_1_background_blue"
             android:padding="20dp">
 
             <androidx.cardview.widget.CardView
