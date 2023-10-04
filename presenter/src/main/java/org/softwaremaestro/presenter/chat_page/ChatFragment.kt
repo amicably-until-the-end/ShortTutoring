@@ -347,6 +347,20 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    private fun focusChatRoom(chattingId: String) {
+        recyclerViewAdapters.forEach {
+            when (it) {
+                is ChatRoomListAdapter -> {
+                    it.setSelectedChattingRoomId(chattingId)
+                }
+
+                is ChatRoomIconListAdapter -> {
+                    it.changeSelectedQuestionId(chattingId)
+                }
+            }
+        }
+    }
+
     private fun resetMsgTab() {
         //setNotiVisible(false)
         setChatRoomBtnsVisible(false)
