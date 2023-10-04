@@ -80,7 +80,7 @@ class PushMessageService :
         val intent = Intent(applicationContext, SplashActivity::class.java)
         intent.putExtra(
             SplashActivity.APP_LINK_ARGS_CHAT_ID,
-            "40146be0-6886-4eb6-8014-5684eba1b173"
+            "453f92e6-4c97-4798-98c9-2e3df36ae943"
         )
 
         val pendingIntent = PendingIntent.getActivity(

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
+import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
@@ -96,7 +97,6 @@ abstract class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkDeepLinkArgs()
         loadingDialog = LoadingDialog(requireContext())
     }
 
@@ -122,7 +122,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun checkDeepLinkArgs() {
         if (!deepLinkViewModel.chattingId.isNullOrEmpty()) {
-            Log.d("deepLink@ChatFragment", "chattingId: ${deepLinkViewModel.chattingId}")
+            focusChatRoom(deepLinkViewModel.chattingId!!)
         }
     }
 
@@ -252,7 +252,7 @@ abstract class ChatFragment : Fragment() {
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
-
+            checkDeepLinkArgs()
         }
         chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
@@ -269,12 +269,17 @@ abstract class ChatFragment : Fragment() {
                     }
                 }
             }
+            checkDeepLinkArgs()
         }
         chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
+            checkDeepLinkArgs()
+
         }
         chatViewModel.reservedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
+            checkDeepLinkArgs()
+
         }
     }
 
@@ -355,17 +360,31 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun focusChatRoom(chattingId: String) {
-        recyclerViewAdapters.forEach {
-            when (it) {
-                is ChatRoomListAdapter -> {
-                    it.setSelectedChattingRoomId(chattingId)
-                }
+        val list = listOf<List<ChatRoomVO>?>(
+            chatViewModel.reservedSelectedChatRoomList.value?._data,
+            chatViewModel.reservedNormalChatRoomList.value?._data,
+            chatViewModel.proposedSelectedChatRoomList.value?._data,
+            chatViewModel.proposedNormalChatRoomList.value?._data,
+        )
+        Log.d("focus chat", "rooms: $list")
+        list.forEach { rooms ->
 
-                is ChatRoomIconListAdapter -> {
-                    it.changeSelectedQuestionId(chattingId)
+            rooms?.find { it.id == chattingId }?.let {
+                if (it.isSelect) {
+                    //TODO 지정질문 탭으로 이동
+                } else {
+                    //TODO 일반질문 탭으로 이동
                 }
+                if (!isTeacher() && !it.isSelect && it.questionState == QuestionState.PROPOSED) {
+                    setOfferingTeacherMode()
+                } else {
+                    unSetOfferingTeacherMode()
+                }
+                enterChatRoom(it)
+                return
             }
         }
+        deepLinkViewModel.chattingId = null
     }
 
     private fun resetMsgTab() {
@@ -385,7 +404,7 @@ abstract class ChatFragment : Fragment() {
             tvReservedCount.text = list.size.toString()
             cvQuestionReservedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             reservedAdapter.setItem(list.map { it.id })
-            reservedAdapter.setRoomInfo(chatRoomVOtoMap(list))
+            reservedAdapter.roomInfo = chatRoomVOtoMap(list)
             reservedAdapter.notifyDataSetChanged()
         }
     }
@@ -395,7 +414,7 @@ abstract class ChatFragment : Fragment() {
             tvApplyCount.text = list.size.toString()
             cvQuestionProposedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             proposedAdapter.setItem(list.map { it.id })
-            proposedAdapter.setRoomInfo(chatRoomVOtoMap(list))
+            proposedAdapter.roomInfo = chatRoomVOtoMap(list)
             proposedAdapter.notifyDataSetChanged()
         }
     }
@@ -543,7 +562,7 @@ abstract class ChatFragment : Fragment() {
     private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher.map { it.id })
-        offeringTeacherAdapter.setRoomInfo(chatRoomVOtoMap(teacher))
+        offeringTeacherAdapter.roomInfo = chatRoomVOtoMap(teacher)
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
