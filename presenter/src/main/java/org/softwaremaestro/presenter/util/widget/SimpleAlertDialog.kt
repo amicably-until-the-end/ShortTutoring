@@ -21,7 +21,11 @@ class SimpleAlertDialog : DialogFragment() {
     ): View {
         binding = DialogSimpleAlertBinding.inflate(layoutInflater)
         binding.tvTitle.text = title
-        binding.tvDesciption.text = description
+        if (description.isNullOrEmpty()) {
+            binding.tvDesciption.visibility = View.GONE
+        } else {
+            binding.tvDesciption.text = description
+        }
         binding.btnConfirm.setOnClickListener {
             dismiss()
         }

@@ -1,18 +1,10 @@
 package org.softwaremaestro.presenter.classroom.viewmodel
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.herewhite.sdk.Room
-import com.herewhite.sdk.domain.Promise
-import com.herewhite.sdk.domain.SDKError
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
@@ -20,16 +12,15 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.classroom.usecase.FinishClassUseCase
 import org.softwaremaestro.domain.classroom.usecase.GetTutoringInfoUseCase
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.login.entity.UserVO
-import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
-import org.softwaremaestro.domain.login.usecase.LoginUseCase
-import org.softwaremaestro.domain.login.usecase.SaveKakaoJWTUseCase
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
+import org.softwaremaestro.domain.question_get.usecase.QuestionGetUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ClassroomViewModel @Inject constructor(
     private val finishClassUseCase: FinishClassUseCase,
-    private val getTutoringInfoUseCase: GetTutoringInfoUseCase
+    private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
+    private val questionGetUseCase: QuestionGetUseCase,
 ) :
     ViewModel() {
 
@@ -37,6 +28,8 @@ class ClassroomViewModel @Inject constructor(
     private val _finishClassResult = MutableLiveData<String>()
     val finishClassResult: LiveData<String> = _finishClassResult
 
+    private val _questionInfo = MutableLiveData<QuestionGetResponseVO>()
+    val questionInfo: LiveData<QuestionGetResponseVO> = _questionInfo
 
     fun finishClass(tutoringId: String) {
         viewModelScope.launch {
@@ -45,7 +38,7 @@ class ClassroomViewModel @Inject constructor(
 
                 }
                 .catch { e ->
-                    Log.d("error", e.toString())
+                    Log.e("${this@ClassroomViewModel::class.java}", e.toString())
                 }
                 .collect { result ->
                     when (result) {
@@ -56,6 +49,30 @@ class ClassroomViewModel @Inject constructor(
                         is BaseResult.Error -> {
                             _finishClassResult.postValue("error")
                         }
+                    }
+                }
+        }
+    }
+
+    fun getQuestionInfo(questionId: String) {
+        viewModelScope.launch {
+            questionGetUseCase.getQuestionInfo(questionId)
+                .onStart {
+
+                }
+                .catch { e ->
+                    Log.e("${this@ClassroomViewModel::class.java}", e.toString())
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> {
+                            _questionInfo.postValue(result.data)
+                        }
+
+                        else -> {
+
+                        }
+
                     }
                 }
         }

@@ -189,4 +189,16 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getChatRoomInfo(chatRoomId: String): Flow<BaseResult<ChatRoomVO, String>> {
+        return flow {
+            var result = getOneRoomFromDB(chatRoomId)
+            Log.d("ChatRepositoryImpl", "chatroomId $chatRoomId $result")
+            if (result == null) {
+                emit(BaseResult.Error("error"))
+            } else {
+                emit(BaseResult.Success(result))
+            }
+        }
+    }
+
 }
