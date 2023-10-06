@@ -205,10 +205,10 @@ class TeacherChatFragment : ChatFragment() {
         binding.cnNoti.apply {
             setTvNotiMain("수업이 ${startAt?.toKoreanString()}에 예약되어있습니다.")
             setTvNotiSub("수업을 시작하면 학생이 강의실에 입장할 수 있어요")
-            setBtnNegativeText("일정 변경하기")
+            setBtnNegativeText("닫기")
             setBtnPositiveText("강의실 입장하기")
             setOnClickListenerToBtnNegative {
-                visibility = View.GONE
+                setNotiVisible(false)
             }
             setOnClickListenerToBtnPositive {
                 SimpleConfirmDialog {

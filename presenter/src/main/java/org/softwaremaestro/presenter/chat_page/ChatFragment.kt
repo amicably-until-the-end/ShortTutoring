@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -141,7 +142,6 @@ abstract class ChatFragment : Fragment() {
         socketManager.addOnMessageReceiveListener { chatRoomId ->
             if (currentChatRoom?.id == chatRoomId) {
                 chatViewModel.getMessages(chatRoomId)
-                scrollMessageToBottom()
             }
             getRoomList()
         }
@@ -503,6 +503,7 @@ abstract class ChatFragment : Fragment() {
             messages
         )
         messageListAdapter.notifyDataSetChanged()
+        scrollMessageToBottom()
     }
 
     private fun setOfferingTeacherRecyclerView() {
@@ -631,6 +632,17 @@ abstract class ChatFragment : Fragment() {
         Log.d("chat", "currentChatRoom: $currentChatRoom")
         scrollMessageToBottom()
         setMessageInputBoxVisibility()
+        setNoNewMessageRoom(chatRoomVO.id)
+    }
+
+    private fun setNoNewMessageRoom(roomId: String) {
+        recyclerViewAdapters.forEach {
+            when (it) {
+                is ChatRoomListAdapter -> {
+                    it.noNewMessageRoom.add(roomId)
+                }
+            }
+        }
     }
 
     private fun setMessageInputBoxVisibility() {
@@ -652,7 +664,36 @@ abstract class ChatFragment : Fragment() {
     }
 
     protected fun setNotiVisible(b: Boolean) {
-        binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
+        with(binding) {
+            if (b) {
+                cnNoti.visibility = View.VISIBLE
+                //noti 밑에서 부터 메시지 보이게
+                ConstraintSet().apply {
+                    clone(containerMessages)
+                    clear(rvMsgs.id, ConstraintSet.TOP)
+                    connect(
+                        rvMsgs.id,
+                        ConstraintSet.TOP,
+                        cnNoti.id,
+                        ConstraintSet.BOTTOM,
+                    )
+                    applyTo(containerMessages)
+                }
+            } else {
+                cnNoti.visibility = View.GONE
+                //noti 없으면 메시지가 맨 위에 붙게
+                ConstraintSet().apply {
+                    clone(containerMessages)
+                    connect(
+                        rvMsgs.id,
+                        ConstraintSet.TOP,
+                        containerMessages.id,
+                        ConstraintSet.TOP,
+                    )
+                    applyTo(containerMessages)
+                }
+            }
+        }
     }
 
 }

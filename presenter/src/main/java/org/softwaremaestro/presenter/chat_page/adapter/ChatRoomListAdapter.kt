@@ -25,6 +25,8 @@ class ChatRoomListAdapter(
 
     private var selectedChattingRoomId: String? = null
 
+    val noNewMessageRoom = mutableSetOf<String>()
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -47,6 +49,7 @@ class ChatRoomListAdapter(
 
     fun setItem(items: List<String>) {
         this.chatRoomIdList = items
+        noNewMessageRoom.clear()
     }
 
 
@@ -112,10 +115,12 @@ class ChatRoomListAdapter(
                     }
 
                 }
-                if (messageCnt > 0 && selectedChattingRoomId != item.id) {
+                if (messageCnt > 0 && selectedChattingRoomId != item.id && !noNewMessageRoom.contains(
+                        item.id
+                    )
+                ) {
                     tvNewMsgCnt.visibility = android.view.View.VISIBLE
                     tvNewMsgCnt.text = messageCnt.toString()
-
                 } else {
                     tvNewMsgCnt.visibility = android.view.View.GONE
                 }
