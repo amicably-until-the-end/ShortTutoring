@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Rect
@@ -16,6 +17,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -115,6 +117,30 @@ class ClassroomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog.show()
     }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("ClassroomFragment", "onStop")
+        activity?.finish()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("ClassroomFragment", "onDestroy")
+        whiteboardView.removeAllViews()
+        voiceEngine.leaveChannel()
+        whiteboardView.destroy()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            onBackPressedCallback
+        )
+    }
+
 
     private fun permissionCheck() {
         if (!checkSelfPermission()) {
@@ -319,13 +345,6 @@ class ClassroomFragment : Fragment() {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        whiteboardView.removeAllViews()
-        voiceEngine.leaveChannel()
-        whiteboardView.destroy()
-    }
-
     fun showMessage(message: String?) {
         requireActivity().runOnUiThread {
             Toast.makeText(
@@ -379,7 +398,7 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun observeQuestionInfo() {
-        viewModel.questionInfo.observe(viewLifecycleOwner) { _ ->
+        viewModel.questionInfo.observe(viewLifecycleOwner) {
             initProblemImagePallet()
             Log.d("images", viewModel.questionInfo.value?.images.toString())
         }
@@ -503,15 +522,20 @@ class ClassroomFragment : Fragment() {
 
     private fun setUpFinishButton() {
         binding.btnToolbarBack.setOnClickListener {
-            val dialogLectureEnd = SimpleConfirmDialog {
-                viewModel.finishClass(voiceInfo.channelId)
-                activity?.finish()
-            }.apply {
-                title = "수업을 종료할까요?"
-                description = "과외 영상이 자동으로 저장됩니다"
-            }
-            dialogLectureEnd.show(requireActivity().supportFragmentManager, "lectureEnd")
+            showFinishClassDialog()
         }
+    }
+
+    private fun showFinishClassDialog() {
+        val dialogLectureEnd = SimpleConfirmDialog {
+            viewModel.finishClass(voiceInfo.channelId)
+            activity?.finish()
+        }.apply {
+            title = "수업을 종료할까요?"
+            description = "과외 영상이 자동으로 저장됩니다"
+        }
+        dialogLectureEnd.show(requireActivity().supportFragmentManager, "lectureEnd")
+
     }
 
     private fun classFinshed() {
@@ -546,6 +570,12 @@ class ClassroomFragment : Fragment() {
             ApplianceName.PENCIL -> binding.btnColorPen.isChecked = true
             ApplianceName.ERASER -> binding.btnColorErase.isChecked = true
             ApplianceName.SELECTOR -> binding.btnSelector.isChecked = true
+        }
+    }
+
+    val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            showFinishClassDialog()
         }
     }
 

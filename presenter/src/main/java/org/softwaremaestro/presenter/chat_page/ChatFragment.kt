@@ -141,6 +141,7 @@ abstract class ChatFragment : Fragment() {
         socketManager.addOnMessageReceiveListener { chatRoomId ->
             if (currentChatRoom?.id == chatRoomId) {
                 chatViewModel.getMessages(chatRoomId)
+                scrollMessageToBottom()
             }
             getRoomList()
         }
@@ -493,6 +494,10 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    private fun scrollMessageToBottom() {
+        binding.rvMsgs.scrollToPosition(messageListAdapter.itemCount - 1)
+    }
+
     private fun setMessageListItems(messages: List<MessageVO>) {
         messageListAdapter.setItem(
             messages
@@ -624,6 +629,7 @@ abstract class ChatFragment : Fragment() {
         chatViewModel.markAsRead(chatRoomVO.id)
         setSelectedRoomId(chatRoomVO.id)
         Log.d("chat", "currentChatRoom: $currentChatRoom")
+        scrollMessageToBottom()
         setMessageInputBoxVisibility()
     }
 
