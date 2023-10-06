@@ -52,6 +52,7 @@ class StudentChatFragment : ChatFragment() {
     }
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
+        enableChatting(true)
         if (chatRoomVO.isSelect) {
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {
@@ -275,7 +276,7 @@ class StudentChatFragment : ChatFragment() {
         studentViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
                 currentChatRoom?.let {
-                    studentViewModel.pickTeacher(it.id!!, it.questionId!!)
+                    studentViewModel.pickTeacher(it.id, it.questionId)
                 }
                 studentViewModel.setTutoringTime(null)
                 studentViewModel.setTutoringDuration(null)

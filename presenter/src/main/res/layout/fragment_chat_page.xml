@@ -215,15 +215,12 @@
                         android:nestedScrollingEnabled="false"
                         android:overScrollMode="never" />
 
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:id="@+id/cv_question_proposed_empty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:elevation="4dp"
-                        android:visibility="invisible"
-                        app:cardCornerRadius="10dp"
-                        app:strokeColor="@color/background_grey"
-                        app:strokeWidth="1dp">
+                        android:background="@drawable/bg_shadow_1_stroke_background_grey"
+                        android:visibility="invisible">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -263,7 +260,7 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
 
                 </FrameLayout>
 
@@ -306,15 +303,12 @@
                         android:nestedScrollingEnabled="false"
                         android:overScrollMode="never" />
 
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:id="@+id/cv_question_reserved_empty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:elevation="4dp"
-                        android:visibility="invisible"
-                        app:cardCornerRadius="10dp"
-                        app:strokeColor="@color/background_grey"
-                        app:strokeWidth="1dp">
+                        android:background="@drawable/bg_shadow_1_stroke_background_grey"
+                        android:visibility="invisible">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -353,7 +347,7 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
 
                 </FrameLayout>
 
@@ -463,7 +457,9 @@
                     android:id="@+id/container_input_box_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="30dp"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:layout_editor_absoluteX="55dp">
 
@@ -482,7 +478,10 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:background="@null"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:hint="메시지를 입력하세요"
+                            android:textColor="@color/black"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"

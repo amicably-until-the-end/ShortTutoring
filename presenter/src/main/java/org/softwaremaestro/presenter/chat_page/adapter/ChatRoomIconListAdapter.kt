@@ -2,14 +2,13 @@ package org.softwaremaestro.presenter.chat_page.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.card.MaterialCardView
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemTutoringListRoomIconBinding
-import org.softwaremaestro.presenter.util.Util
 
 class ChatRoomIconListAdapter(
     private val onQuestionClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit
@@ -18,7 +17,7 @@ class ChatRoomIconListAdapter(
 
     private var items: List<ChatRoomVO> = emptyList()
 
-    private var selectedView: MaterialCardView? = null
+    private var selectedView: View? = null
 
     var selectedQuestionId: String? = null
 
@@ -61,26 +60,19 @@ class ChatRoomIconListAdapter(
                     if (item.questionId != selectedQuestionId) {
                         onQuestionClick(
                             item.teachers ?: emptyList(),
-                            item.questionId ?: "",
+                            item.questionId,
                             this@ChatRoomIconListAdapter
                         )
-                        selectedQuestionId = item.questionId ?: ""
+                        selectedQuestionId = item.questionId
                     }
                     Log.d("ChatRoomIconListAdapter", "all items $items")
-                    cvContainer.strokeColor =
-                        binding.root.context.getColor(R.color.primary_blue)
-                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
-                    selectedView = cvContainer
-                    cvContainer.strokeColor = binding.root.context.getColor(R.color.primary_blue)
-                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
+                    cvContainer.setBackgroundResource(R.drawable.bg_shadow_1_stroke_primary_blue)
                     selectedView = cvContainer
                 }
                 if (item.questionId == selectedQuestionId) {
-                    cvContainer.strokeColor = binding.root.context.getColor(R.color.primary_blue)
-                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.background_light_blue))
+                    cvContainer.setBackgroundResource(R.drawable.bg_shadow_1_stroke_primary_blue)
                 } else {
-                    cvContainer.strokeColor = binding.root.context.getColor(R.color.background_grey)
-                    cvContainer.setBackgroundColor(binding.root.context.getColor(R.color.transparent))
+                    cvContainer.setBackgroundResource(R.drawable.bg_shadow_1_stroke_background_grey)
                 }
 
                 Glide.with(binding.root.context)

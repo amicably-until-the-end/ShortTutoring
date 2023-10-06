@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.chat_page.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -59,14 +60,12 @@ class ChatRoomListAdapter(
     }
 
 
-    fun decorateSelectedView(selectedView: MaterialCardView?) {
-        selectedView?.strokeColor = selectedView?.context?.getColor(R.color.primary_blue)!!
-        selectedView.setBackgroundColor(selectedView.context?.getColor(R.color.background_light_blue)!!)
+    fun decorateSelectedView(selectedView: View?) {
+        selectedView?.setBackgroundResource(R.drawable.bg_shadow_1_stroke_primary_blue)
     }
 
-    fun unDecorateSelectedView(selectedView: MaterialCardView?) {
-        selectedView?.strokeColor = selectedView?.context?.getColor(R.color.background_grey)!!
-        selectedView.setBackgroundColor(selectedView.context?.getColor(R.color.transparent)!!)
+    fun unDecorateSelectedView(selectedView: View?) {
+        selectedView?.setBackgroundResource(R.drawable.bg_shadow_1_stroke_background_grey)
     }
 
     inner class ViewHolder(private val binding: ItemTutoringListRoomBinding) :
@@ -116,11 +115,11 @@ class ChatRoomListAdapter(
 
                 }
                 if (messageCnt > 0 && selectedChattingRoomId != item.id) {
-                    tvNewMsgCnt.visibility = android.view.View.VISIBLE
+                    tvNewMsgCnt.visibility = View.VISIBLE
                     tvNewMsgCnt.text = messageCnt.toString()
 
                 } else {
-                    tvNewMsgCnt.visibility = android.view.View.GONE
+                    tvNewMsgCnt.visibility = View.GONE
                 }
 
 
