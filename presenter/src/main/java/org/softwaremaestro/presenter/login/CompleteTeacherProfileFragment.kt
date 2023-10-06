@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteTeacherProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
@@ -28,6 +29,7 @@ class CompleteTeacherProfileFragment : Fragment() {
     private lateinit var binding: FragmentCompleteTeacherProfileBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
     private lateinit var dialog: ProfileImageSelectBottomDialog
+    private var isBtnCompleteEnabled = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -116,7 +118,7 @@ class CompleteTeacherProfileFragment : Fragment() {
 
     private fun setBtnComplete() {
         binding.btnComplete.setOnClickListener {
-            if (binding.btnComplete.isEnabled) {
+            if (isBtnCompleteEnabled) {
                 viewModel.registerTeacher()
             } else {
                 Toast.makeText(requireContext(), "닉네임, 한줄소개와 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
@@ -146,7 +148,16 @@ class CompleteTeacherProfileFragment : Fragment() {
 
     private fun observeInputProper() {
         viewModel.teacherInputProper.observe(viewLifecycleOwner) {
-            binding.btnComplete.setEnabledAndChangeColor(it)
+            with(binding.btnComplete) {
+                if (it) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
+            isBtnCompleteEnabled = it
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteStudentProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
@@ -29,6 +30,7 @@ class CompleteStudentProfileFragment : Fragment() {
     private lateinit var binding: FragmentCompleteStudentProfileBinding
     private val viewModel: StudentRegisterViewModel by activityViewModels()
     private lateinit var dialog: ProfileImageSelectBottomDialog
+    private var isBtnCompleteEnabled = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +83,16 @@ class CompleteStudentProfileFragment : Fragment() {
 
     private fun observeStudentNameAndImageProper() {
         viewModel.studentNameAndImageProper.observe(viewLifecycleOwner) {
-            binding.btnComplete.setEnabledAndChangeColor(it)
+            with(binding.btnComplete) {
+                if (it) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
+            isBtnCompleteEnabled = it
         }
     }
 
@@ -140,11 +151,10 @@ class CompleteStudentProfileFragment : Fragment() {
 
     private fun setBtnComplete() {
         binding.btnComplete.setOnClickListener {
-            if (binding.btnComplete.isEnabled) {
+            if (isBtnCompleteEnabled) {
                 viewModel.registerStudent()
             } else {
-                Toast.makeText(requireContext(), "닉네임과 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "닉네임과 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT).show()
             }
         }
     }

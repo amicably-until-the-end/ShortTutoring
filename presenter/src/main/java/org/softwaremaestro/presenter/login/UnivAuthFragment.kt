@@ -28,7 +28,7 @@ class UnivAuthFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentUnivAuthBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -36,6 +36,7 @@ class UnivAuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setToolBar()
         initUnivAndMails()
         setEtUnivMailHeader()
         setEtUnivMailBody()
@@ -43,6 +44,12 @@ class UnivAuthFragment : Fragment() {
         setEtAuthCode()
         setNextButton()
         observe()
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setEtUnivMailHeader() {
