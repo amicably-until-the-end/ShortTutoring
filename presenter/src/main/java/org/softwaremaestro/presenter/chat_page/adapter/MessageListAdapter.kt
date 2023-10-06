@@ -354,7 +354,7 @@ class MessageListAdapter(
                         root.setOnClickListener {
                             onImageClick()
                         }
-                        binding.tvSubject.text = body.questionId
+                        binding.tvSubject.text = body.subTitle
 
                     }
 

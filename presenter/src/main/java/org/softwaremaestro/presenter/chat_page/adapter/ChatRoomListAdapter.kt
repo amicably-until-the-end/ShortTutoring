@@ -19,7 +19,7 @@ class ChatRoomListAdapter(
 
     private var chatRoomIdList: List<String> = emptyList()
 
-    private var roomInfo: Map<String, ChatRoomVO>? = null
+    var roomInfo: Map<String, ChatRoomVO>? = null
 
     private var selectedView: MaterialCardView? = null
 
@@ -49,9 +49,6 @@ class ChatRoomListAdapter(
         this.chatRoomIdList = items
     }
 
-    fun setRoomInfo(roomInfo: Map<String, ChatRoomVO>) {
-        this.roomInfo = roomInfo
-    }
 
     fun setSelectedChattingRoomId(chattingId: String?) {
         selectedChattingRoomId = chattingId

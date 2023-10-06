@@ -463,26 +463,30 @@
                     android:id="@+id/container_input_box_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="30dp"
+                    android:paddingHorizontal="30dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:layout_editor_absoluteX="55dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/container_input_box"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/bg_radius_20_white"
                         android:minHeight="40dp"
                         android:paddingVertical="4dp"
                         android:paddingLeft="15dp"
-                        android:paddingRight="4dp">
+                        android:paddingRight="4dp"
+                        android:visibility="gone">
 
                         <EditText
                             android:id="@+id/et_message"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:background="@null"
                             android:hint="메시지를 입력하세요"
+                            android:minHeight="40dp"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -493,10 +497,10 @@
                             android:id="@+id/btn_send_message"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:layout_marginBottom="4dp"
                             android:background="@drawable/ic_send_message"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintRight_toRightOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>

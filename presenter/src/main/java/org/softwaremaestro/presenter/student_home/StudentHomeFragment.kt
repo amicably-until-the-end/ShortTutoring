@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.student_home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +57,8 @@ class StudentHomeFragment : Fragment() {
     ): View {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
+
+        Log.d("deepLink", "onViewCreated ${this::class.java} ${this.hashCode()}")
 
         // Todo: 나중에 api로 받아와야 함
         binding.cbCoin.coin = 1350
@@ -131,17 +134,18 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
-//            val teacherVO = TeacherVO(
-//                profileUrl = it.profileImage,
-//                nickname = it.name,
-//                teacherId = it.id,
-//                bio = it.bio,
-//                pickCount = -1,
-//                univ = "${it.schoolName} ${it.schoolDepartment}",
-//                rating = -1.0f
-//            )
-//
-//            dialogTeacherProfile.item = teacherVO
+            val teacherVO = TeacherVO(
+                profileUrl = it.profileImage,
+                nickname = it.name,
+                teacherId = it.id,
+                bio = it.bio,
+                univ = "${it.schoolName} ${it.schoolDepartment}",
+                rating = -1.0f,
+                followers = listOf(),
+                reservationCnt = -1,
+            )
+
+            dialogTeacherProfile.setItem(teacherVO)
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 

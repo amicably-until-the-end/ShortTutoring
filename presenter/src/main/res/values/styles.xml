@@ -181,6 +181,7 @@
 
     <style name="PretendardEditText" parent="@android:style/Widget.DeviceDefault.EditText">
         <item name="android:fontFamily">@font/app_font</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="PretendardRadioButton" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
