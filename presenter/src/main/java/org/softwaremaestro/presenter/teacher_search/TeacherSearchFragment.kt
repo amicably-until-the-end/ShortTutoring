@@ -4,28 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
-import org.softwaremaestro.presenter.student_home.StudentHomeFragmentDirections
-import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
-import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
-import org.softwaremaestro.presenter.teacher_search.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.teacher_search.viewmodel.TeacherSearchViewModel
+import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 
 @AndroidEntryPoint
 class TeacherSearchFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherSearchBinding
-
-    private val followingViewModel: FollowingViewModel by viewModels()
-    private val myProfileViewModel: MyProfileViewModel by viewModels()
-
-    private lateinit var teacherCircularAdapter: TeacherCircularAdapter
+    private val teacherSearchViewModel: TeacherSearchViewModel by viewModels()
     private lateinit var teacherAdapter: TeacherAdapter
 
     override fun onCreateView(
@@ -37,79 +35,90 @@ class TeacherSearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        myProfileViewModel.getMyProfile()
-
-        setFollowingRecyclerView()
-        setTeacherRecommendRecyclerView()
-
-        setItemToTeacherAdapter()
-
-        observeFollowing()
-        observeMyProfile()
-
-
         super.onViewCreated(view, savedInstanceState)
+
+        setToolBar()
+        setAtvOptionSearch()
+        setEtSearch()
+        setRvTeacher()
+        setObserver()
     }
 
-    private fun setFollowingRecyclerView() {
-        teacherCircularAdapter = TeacherCircularAdapter {
-            //TODO: 선생님별
-            val action =
-                StudentHomeFragmentDirections.actionStudentHomeFragmentToTeacherProfileFragment("null")
-            findNavController().navigate(action)
-        }
-
-        binding.rvFollowing.apply {
-            adapter = teacherCircularAdapter
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            requireActivity().finish()
         }
     }
 
-    private fun setTeacherRecommendRecyclerView() {
-
-        teacherAdapter = TeacherAdapter {}
-
-        binding.rvTeacherRecommend.apply {
-            adapter = teacherAdapter
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-        }
-    }
-
-    private fun setItemToTeacherAdapter() {
-        val teachers = mutableListOf<TeacherVO>().apply {
-            add(
-                TeacherVO(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png",
-                    "강해린",
-                    "1",
-                    "풀 수 없는 문제는 없다.",
-                    "성균관대학교",
-                    -2f,
-                    listOf(),
-                    -1
-                )
+    private fun setAtvOptionSearch() {
+        val optionAdapter = ArrayAdapter(
+            requireContext(), R.layout.item_univ, listOf(
+                "별점", "찜한 학생 수", "예약 질문 수", "대학교", "학과"
             )
+        )
+        with(binding.atvOptionSearch) {
+            setAdapter(optionAdapter)
+            setOnClickListener {
+                if (!isPopupShowing) {
+                    showDropDown()
+                    binding.ivUnfold.setBackgroundResource(R.drawable.ic_fold)
+                } else {
+                    dismissDropDown()
+                    binding.ivUnfold.setBackgroundResource(R.drawable.ic_unfold)
+                }
+            }
+            onItemClickListener =
+                AdapterView.OnItemClickListener { _, _, _, _ ->
+                    hideKeyboardAndRemoveFocus(binding.etSearch)
+                    binding.ivUnfold.setBackgroundResource(R.drawable.ic_unfold)
+                }
         }
-//        teacherAdapter.setItem(teachers)
     }
 
-    private fun observeFollowing() {
-        followingViewModel.following.observe(viewLifecycleOwner) {
-            teacherCircularAdapter.setItem(it)
-            teacherCircularAdapter.notifyDataSetChanged()
+    private fun setEtSearch() {
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if ("별점" == binding.atvOptionSearch.text.toString()) {
+                    teacherSearchViewModel.searchTeacherByName(binding.etSearch.text.toString())
+                } else {
+                    // 설정된 검색 옵션에 맞게 viewModel의 다른 메서드 호출
+                }
+                hideKeyboardAndRemoveFocus(binding.etSearch)
+                return@setOnEditorActionListener true
+            } else return@setOnEditorActionListener false
         }
     }
 
-    private fun observeMyProfile() {
-        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
+    private fun setRvTeacher() {
+        teacherAdapter = TeacherAdapter {
+            // 선생님 다이어로그 띄워주기
+        }
 
-            if (it.id == null) {
-                // 에러 처리
-            } else {
-                followingViewModel.getFollowing(it.id!!)
+        binding.rvTeacher.apply {
+            adapter = teacherAdapter
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
+    }
+
+    private fun setObserver() {
+        teacherSearchViewModel.searchedResult.observe(viewLifecycleOwner) {
+            it?.map {
+                FollowingGetResponseVO(
+                    id = it.teacherId,
+                    name = it.nickname,
+                    bio = it.bio,
+                    profileImage = it.profileUrl,
+                    role = "teacher",
+                    schoolDivision = "학부 설정 안되어있음",
+                    schoolName = it.univ,
+                    schoolDepartment = "학부 설정 안되어있음",
+                    schoolGrade = -1,
+                    followersCount = -1,
+                    followingCount = -1
+                )
+            }?.let {
+                teacherAdapter.setItem(it)
+                teacherAdapter.notifyDataSetChanged()
             }
         }
     }
