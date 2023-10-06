@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.login
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
@@ -11,9 +12,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteTeacherProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
@@ -31,7 +32,7 @@ class CompleteTeacherProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCompleteTeacherProfileBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -156,7 +157,7 @@ class CompleteTeacherProfileFragment : Fragment() {
 
                 is UIState.Success -> {
                     loadingDialog.dismiss()
-                    findNavController().navigate(R.id.action_completeStudentProfileFragment_to_loginFrament)
+                    startActivity(Intent(requireActivity(), TeacherHomeActivity::class.java))
                 }
 
                 else -> {
