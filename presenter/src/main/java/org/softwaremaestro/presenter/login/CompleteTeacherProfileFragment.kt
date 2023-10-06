@@ -116,7 +116,12 @@ class CompleteTeacherProfileFragment : Fragment() {
 
     private fun setBtnComplete() {
         binding.btnComplete.setOnClickListener {
-            viewModel.registerTeacher()
+            if (binding.btnComplete.isEnabled) {
+                viewModel.registerTeacher()
+            } else {
+                Toast.makeText(requireContext(), "닉네임, 한줄소개와 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 

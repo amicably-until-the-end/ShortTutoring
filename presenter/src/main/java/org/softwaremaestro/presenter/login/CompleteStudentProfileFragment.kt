@@ -140,7 +140,12 @@ class CompleteStudentProfileFragment : Fragment() {
 
     private fun setBtnComplete() {
         binding.btnComplete.setOnClickListener {
-            viewModel.registerStudent()
+            if (binding.btnComplete.isEnabled) {
+                viewModel.registerStudent()
+            } else {
+                Toast.makeText(requireContext(), "닉네임과 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 }
