@@ -28,7 +28,7 @@ class Mapper {
                 questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
                 opponentId = opponentId,
                 title = title,
-                messages = listOf(),
+                messages = 0,
                 roomImage = roomImage,
                 roomType = if (opponentId != null) RoomType.TEACHER else RoomType.QUESTION,
                 isSelect = isSelect ?: false,
@@ -63,6 +63,7 @@ class Mapper {
             isMyMsg = messageDto.isMyMsg,
         )
     }*/
+
 
     fun asDomain(chatRoomEntity: ChatRoomEntity): ChatRoomVO {
         chatRoomEntity.apply {
@@ -112,3 +113,4 @@ fun MessageDto.asDomain(): MessageVO {
 fun ChatRoomEntity.asDomain(): ChatRoomVO {
     return Mapper().asDomain(this)
 }
+

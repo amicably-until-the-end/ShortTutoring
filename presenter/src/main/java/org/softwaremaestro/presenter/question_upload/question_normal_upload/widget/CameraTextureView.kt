@@ -42,7 +42,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
             val cameraManager = mContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
             val cameraId = getBackFacingCameraId(cameraManager)
             if (cameraId == null) {
-                Log.d("mymymy", "Fail to get camera info")
+                Log.e("mymymy", "Fail to get camera info")
                 previewSize = null
                 return
             }
@@ -93,11 +93,11 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
                 val map =
                     cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                 if (map == null) {
-                    Log.e("mymymy", "map null")
+                    Log.e(this@CameraTextureView::class.java.name, "Fail to get configuration")
                     Toast.makeText(context, "Fail to open Camera!", Toast.LENGTH_SHORT).show()
                     return null
                 }
-                val previewSize = map!!.getOutputSizes(
+                val previewSize = map.getOutputSizes(
                     SurfaceTexture::class.java
                 )[0]
                 cameraManager.openCamera(cameraId, callback, null)
@@ -115,7 +115,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
         }
         val texture = this.surfaceTexture ?: return
         if (previewSize == null) return
-        texture.setDefaultBufferSize(previewSize!!.width, previewSize.height)
+        texture.setDefaultBufferSize(previewSize.width, previewSize.height)
         val surface = Surface(texture)
         val builder: CaptureRequest.Builder = try {
             cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
@@ -138,7 +138,6 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
             )
         } catch (e: CameraAccessException) {
             e.printStackTrace()
-            Toast.makeText(context, "fail to open camera", Toast.LENGTH_SHORT).show()
 
         }
     }
@@ -150,7 +149,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
         val backgroundHandler = Handler(thread.looper)
         try {
             val matrix = configureTransform(width, height)
-            //setTransform(matrix)
+            setTransform(matrix)
             session.setRepeatingRequest(builder.build(), null, backgroundHandler)
         } catch (e: CameraAccessException) {
             e.printStackTrace()
@@ -191,12 +190,17 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
 
     fun capture(): Bitmap {
         val bitmap = bitmap
-        val width = width
-        val height = height
+        val width = (width * cropWidthPercent).toInt()
+        val height = (width * cropAspectRatio).toInt()
         return Bitmap.createBitmap(
             bitmap!!,
             (bitmap.width - width) / 2, (bitmap.height - height) / 2, width, height,
             getTransform(null), true
         )
+    }
+
+    companion object {
+        const val cropWidthPercent = 0.8f
+        const val cropAspectRatio = 1.25f
     }
 }
