@@ -53,12 +53,32 @@ class TeacherSearchFragment : Fragment() {
     private fun setAtvOptionSearch() {
         val optionAdapter = ArrayAdapter(
             requireContext(), R.layout.item_univ, listOf(
-                "별점", "찜한 학생 수", "예약 질문 수", "대학교", "학과"
+                "닉네임", "별점", "찜한 학생 수", "예약 질문 수", "대학교", "학과"
             )
         )
         with(binding.atvOptionSearch) {
             setAdapter(optionAdapter)
-            setOnClickListener {
+            onItemClickListener =
+                AdapterView.OnItemClickListener { _, _, pos, _ ->
+                    when (pos) {
+                        0 -> {
+                            binding.tvSearch.visibility = View.GONE
+                            binding.containerSearch.visibility = View.VISIBLE
+                        }
+
+                        1 -> {
+                            binding.tvSearch.visibility = View.VISIBLE
+                            binding.containerSearch.visibility = View.GONE
+                        }
+
+                        else -> {}
+                    }
+                    binding.ivUnfold.setBackgroundResource(R.drawable.ic_unfold)
+                }
+        }
+
+        binding.containerOptionSearch.setOnClickListener {
+            with(binding.atvOptionSearch) {
                 if (!isPopupShowing) {
                     showDropDown()
                     binding.ivUnfold.setBackgroundResource(R.drawable.ic_fold)
@@ -67,11 +87,6 @@ class TeacherSearchFragment : Fragment() {
                     binding.ivUnfold.setBackgroundResource(R.drawable.ic_unfold)
                 }
             }
-            onItemClickListener =
-                AdapterView.OnItemClickListener { _, _, _, _ ->
-                    hideKeyboardAndRemoveFocus(binding.etSearch)
-                    binding.ivUnfold.setBackgroundResource(R.drawable.ic_unfold)
-                }
         }
     }
 
