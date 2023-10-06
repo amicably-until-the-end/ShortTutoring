@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionNormalFormBinding
@@ -177,6 +180,9 @@ class QuestionNormalFormFragment : Fragment() {
     private fun observeImages() {
         viewModel.images.observe(viewLifecycleOwner) {
             imageAdapter.setItem(it!!)
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel._imagesBase64.postValue(it.map { it.toBase64() })
+            }
             checkAndEnableSubjectBtn()
         }
     }
@@ -245,7 +251,7 @@ class QuestionNormalFormFragment : Fragment() {
                 if (isAllFieldsEntered()) {
                     //버튼 여러번 눌러지는 거 방지
                     val questionUploadVO = QuestionUploadVO(
-                        images = viewModel.images.value!!.map { it.toBase64() },
+                        images = viewModel.imagesBase64.value!!,
                         description = binding.etQuestionDesc.text.toString(),
                         schoolLevel = binding.tvSchoolSelected.text.toString(),
                         schoolSubject = binding.tvSubjectSelected.text.toString(),

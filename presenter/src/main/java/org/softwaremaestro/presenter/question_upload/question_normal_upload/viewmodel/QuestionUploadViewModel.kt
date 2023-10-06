@@ -23,7 +23,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
 
 
     private val _questionUploadState: MutableLiveData<UIState<QuestionUploadResultVO>> =
-        MutableLiveData();
+        MutableLiveData()
     val questionUploadState: LiveData<UIState<QuestionUploadResultVO>> get() = _questionUploadState
 
     val _description: MutableLiveData<String?> = MutableLiveData()
@@ -31,6 +31,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val _subject: MutableLiveData<String?> = MutableLiveData()
     val _difficulty: MutableLiveData<String?> = MutableLiveData()
     val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData()
+    val _imagesBase64: MutableLiveData<List<String>?> = MutableLiveData()
 
 
     val description: LiveData<String?> get() = _description
@@ -38,6 +39,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val subject: LiveData<String?> get() = _subject
     val difficulty: LiveData<String?> get() = _difficulty
     val images: LiveData<List<Bitmap>?> get() = _images
+    val imagesBase64: LiveData<List<String>?> get() = _imagesBase64
 
 
     init {
