@@ -22,7 +22,6 @@ import org.softwaremaestro.presenter.question_upload.question_selected_upload.Qu
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
-import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.LectureViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
@@ -30,6 +29,7 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherViewModel
+import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {

@@ -126,9 +126,8 @@ class TeacherRegisterViewModel @Inject constructor(
                     bio = bio.value!!,
                     name = name.value!!,
                     schoolName = schoolName.value!!,
-                    "",
                     schoolDepartment = major.value!!,
-                    -1
+                    profileImg = image.value!!
                 )
             )
                 .onStart {
