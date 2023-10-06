@@ -36,7 +36,7 @@
             android:name=".my_page.teacher_my_page.FollowerActivity"
             android:exported="false" />
         <activity
-            android:name=".my_page.teacher_my_page.FollowingActivity"
+            android:name=".my_page.student_my_page.FollowingActivity"
             android:exported="false" />
         <activity
             android:name=".teacher_profile.TeacherProfileActivity"

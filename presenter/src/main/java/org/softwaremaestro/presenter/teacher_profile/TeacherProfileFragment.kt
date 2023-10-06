@@ -16,6 +16,7 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherProfileBinding
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 
 class TeacherProfileFragment : Fragment() {
 
@@ -23,6 +24,7 @@ class TeacherProfileFragment : Fragment() {
     private lateinit var selectedUserId: String
     private val profileViewModel: ProfileViewModel by activityViewModels()
     private val followUserViewModel: FollowUserViewModel by activityViewModels()
+    private lateinit var unfollowDialog: DetailAlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +36,19 @@ class TeacherProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initUnfollowDialog()
         setProfile()
         observe()
+    }
+
+    private fun initUnfollowDialog() {
+        unfollowDialog = DetailAlertDialog(
+            title = "선생님 찜하기를 취소할까요?",
+            description = "선생님에게 예약 질문을 할 수 없게 됩니다"
+        ) {
+            followUserViewModel.unfollowUser(selectedUserId)
+            Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setProfile() {
@@ -65,11 +78,12 @@ class TeacherProfileFragment : Fragment() {
 
         binding.btnFollow.setOnClickListener {
             if (following) {
-                followUserViewModel.unfollowUser(selectedUserId)
-                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다.", Toast.LENGTH_SHORT).show()
+                // Todo: 다이어로그 보여주고
+                // 언팔, 토스트 보여주는 건 다이어로그 확인 눌렀을 때
+                unfollowDialog.show(parentFragmentManager, "unfollowDialog")
             } else {
                 followUserViewModel.followUser(selectedUserId)
-                Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
             }
         }
     }

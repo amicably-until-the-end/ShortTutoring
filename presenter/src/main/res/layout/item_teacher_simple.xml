@@ -3,130 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="12dp"
+    android:background="@drawable/bg_shadow_1_background_blue">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_teacher"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="4dp"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:strokeColor="@color/bright_grey"
-        app:strokeWidth="1dp">
+        android:padding="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container_teacher"
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/container_profile_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="100dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_grey" />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/container_profile_img"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/container_profile_img"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                app:cardCornerRadius="100dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/iv_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/light_grey" />
-
-            </androidx.cardview.widget.CardView>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_teacher_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/container_profile_img"
-                app:layout_constraintTop_toTopOf="parent">
+                android:fontFamily="@font/pretendard_bold"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="유정연 선생님" />
 
-                <TextView
-                    android:id="@+id/tv_teacher_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="유정연 선생님" />
+            <TextView
+                android:id="@+id/tv_teacher_univ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/primary_blue"
+                android:textSize="12sp"
+                tools:text="서울대학교 행정학과" />
 
-                <TextView
-                    android:id="@+id/tv_teacher_univ"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_medium"
-                    android:textColor="@color/primary_blue"
-                    android:textSize="12sp"
-                    tools:text="서울대학교 행정학과" />
-
-                <TextView
-                    android:id="@+id/tv_teacher_bio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:fontFamily="@font/pretendard_medium"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    tools:text="풀 수 없는 문제는 없다." />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:background="@drawable/ic_heart_grey" />
-
-                    <TextView
-                        android:id="@+id/tv_follow_cnt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:fontFamily="@font/pretendard_medium"
-                        android:textColor="@color/sub_text_grey"
-                        android:textSize="12sp"
-                        tools:text="223" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_teacher_bio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                tools:text="풀 수 없는 문제는 없다." />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="14dp"
                     android:layout_height="14dp"
-                    android:background="@drawable/ic_star" />
+                    android:background="@drawable/ic_heart_grey" />
 
                 <TextView
-                    android:id="@+id/tv_rating"
+                    android:id="@+id/tv_follow_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="4.2" />
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textColor="@color/sub_text_grey"
+                    android:textSize="12sp"
+                    tools:text="223" />
 
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:background="@drawable/ic_star" />
+
+            <TextView
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="4.2" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
