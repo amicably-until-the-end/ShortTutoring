@@ -30,6 +30,7 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
+import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -69,6 +70,7 @@ class StudentHomeFragment : Fragment() {
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
+        setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
         return binding.root
@@ -186,6 +188,12 @@ class StudentHomeFragment : Fragment() {
             adapter = teacherAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setMoreTeacherBtn() {
+        binding.containerMoreTeacher.setOnClickListener {
+            startActivity(Intent(requireActivity(), TeacherSearchActivity::class.java))
         }
     }
 
