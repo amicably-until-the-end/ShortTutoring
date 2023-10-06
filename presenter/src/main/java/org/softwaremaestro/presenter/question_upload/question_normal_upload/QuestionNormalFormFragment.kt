@@ -32,6 +32,8 @@ import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 @AndroidEntryPoint
@@ -258,6 +260,17 @@ class QuestionNormalFormFragment : Fragment() {
                         hopeImmediate = binding.toggleAnswerNow.isChecked,
                         hopeTutoringTime = timeSelectAdapter!!.items.map {
                             it.toString()
+                        }.let {
+                            if (binding.toggleAnswerNow.isChecked) {
+                                mutableListOf(
+                                    LocalTime.now()
+                                        .format(DateTimeFormatter.ofPattern("hh시 mm분"))
+                                ).apply {
+                                    addAll(it)
+                                }
+                            } else {
+                                it
+                            }
                         },
                         mainImageIndex = 0
                     )

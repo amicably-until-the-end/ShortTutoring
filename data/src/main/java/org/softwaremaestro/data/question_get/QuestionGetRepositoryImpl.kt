@@ -17,6 +17,7 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
         return flow {
             val response = questionGetApi.getQuestions()
             val body = response.body()!!
+            Log.d("hhcc", body.toString())
             if (body.success == true) {
                 body.data
                     ?.map { it.asDomain() }
