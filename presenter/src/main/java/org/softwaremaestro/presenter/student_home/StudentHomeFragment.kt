@@ -134,17 +134,18 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
-//            val teacherVO = TeacherVO(
-//                profileUrl = it.profileImage,
-//                nickname = it.name,
-//                teacherId = it.id,
-//                bio = it.bio,
-//                pickCount = -1,
-//                univ = "${it.schoolName} ${it.schoolDepartment}",
-//                rating = -1.0f
-//            )
-//
-//            dialogTeacherProfile.item = teacherVO
+            val teacherVO = TeacherVO(
+                profileUrl = it.profileImage,
+                nickname = it.name,
+                teacherId = it.id,
+                bio = it.bio,
+                univ = "${it.schoolName} ${it.schoolDepartment}",
+                rating = -1.0f,
+                followers = listOf(),
+                reservationCnt = -1,
+            )
+
+            dialogTeacherProfile.setItem(teacherVO)
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 

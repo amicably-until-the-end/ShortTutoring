@@ -291,7 +291,6 @@ abstract class ChatFragment : Fragment() {
      */
     private fun makeAdapterList() {
         recyclerViewAdapters.apply {
-            add(proposedAdapter)
             add(reservedAdapter)
             add(messageListAdapter)
             add(offeringTeacherAdapter)
