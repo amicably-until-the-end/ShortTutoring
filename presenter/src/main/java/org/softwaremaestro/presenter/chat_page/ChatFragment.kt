@@ -429,6 +429,7 @@ abstract class ChatFragment : Fragment() {
         messageListAdapter.setItem(
             messages
         )
+        binding.rvMsgs.scrollToPosition(messages.size - 1)
         messageListAdapter.notifyDataSetChanged()
     }
 
