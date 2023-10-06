@@ -379,12 +379,16 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun focusChatRoom(chattingId: String) {
-        val list = listOf<List<ChatRoomVO>?>(
+        val list = mutableListOf<List<ChatRoomVO>?>(
             chatViewModel.reservedSelectedChatRoomList.value?._data,
             chatViewModel.reservedNormalChatRoomList.value?._data,
             chatViewModel.proposedSelectedChatRoomList.value?._data,
-            chatViewModel.proposedNormalChatRoomList.value?._data,
         )
+        chatViewModel.proposedNormalChatRoomList.value?._data?.forEach {
+            it.teachers?.forEach { room ->
+                list.add(listOf(room))
+            }
+        }
         Log.d("focus chat", "rooms: $list")
         list.forEach { rooms ->
 
@@ -395,9 +399,11 @@ abstract class ChatFragment : Fragment() {
                     toggleQuestionType(false)
                 }
                 if (!isTeacher() && !it.isSelect && it.questionState == QuestionState.PROPOSED) {
-                    setOfferingTeacherMode()
-                    proposedIconAdapter.selectedQuestionId = it.questionId
-                    proposedIconAdapter.changeSelectedQuestionId(it.questionId)
+                    val teachers =
+                        chatViewModel.proposedNormalChatRoomList.value?._data?.find { room ->
+                            room.questionId == it.questionId
+                        }?.teachers
+                    onQuestionRoomClick(teachers ?: emptyList(), it.questionId, proposedAdapter)
                 } else {
                     unSetOfferingTeacherMode()
                 }
@@ -596,6 +602,7 @@ abstract class ChatFragment : Fragment() {
 
     private val onQuestionRoomClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit =
         { teacherList, questionId, caller ->
+            Log.d("chat", "onQuestionRoomClick: $teacherList")
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             setSelectedRoomId(null)
@@ -606,7 +613,6 @@ abstract class ChatFragment : Fragment() {
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             enterChatRoom(chatRoom)
-            chatViewModel.markAsRead(chatRoom.id)
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
@@ -615,6 +621,7 @@ abstract class ChatFragment : Fragment() {
         onChatRoomStateChange(chatRoomVO)
         chatViewModel.getMessages(chatRoomVO.id)
         binding.tvChatRoomTitle.text = chatRoomVO.title ?: "undefine"
+        chatViewModel.markAsRead(chatRoomVO.id)
         setSelectedRoomId(chatRoomVO.id)
         Log.d("chat", "currentChatRoom: $currentChatRoom")
     }

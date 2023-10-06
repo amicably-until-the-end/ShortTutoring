@@ -90,10 +90,10 @@ class PushMessageService :
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         with(data) {
-            builder.setContentTitle(get("title"))
-                .setContentText(get("body"))
+            builder.setContentText("새로운 메시지가 도착했습니다.")
                 .setSmallIcon(R.drawable.btn_radio)
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
         }
         sendNotification(builder.build())
     }
