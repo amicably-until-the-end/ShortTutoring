@@ -76,6 +76,13 @@ sealed class MessageBodyVO {
     data class ReserveConfirm(
         val startDateTime: String?,
     ) : MessageBodyVO()
+
+    @Serializable
+    data class TutoringFinished(
+        val startAt: String?,
+        val endAt: String?,
+    ) : MessageBodyVO()
+
 }
 
 enum class QuestionType {

@@ -77,6 +77,11 @@ class Mapper {
                         MessageBodyVO.ReserveConfirm::class.java
                     )
 
+                    "tutoring-finished" -> gson.fromJson(
+                        body,
+                        MessageBodyVO.TutoringFinished::class.java
+                    )
+
                     else -> MessageBodyVO.Text(body)
                 }
             } catch (e: Exception) {
@@ -133,7 +138,7 @@ class Mapper {
         Log.d("ChatRoomDto", "to entity Mapper${dto} ${status}")
 
         return ChatRoomEntity(
-            id = dto.id ?: dto.questionId ?: "undefined",
+            id = dto.id ?: dto.questionId,
             title = dto.title!!,
             image = dto.roomImage,
             status = status,
