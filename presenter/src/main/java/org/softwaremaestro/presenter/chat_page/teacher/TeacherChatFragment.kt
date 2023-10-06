@@ -211,6 +211,10 @@ class TeacherChatFragment : ChatFragment() {
                 setNotiVisible(false)
             }
             setOnClickListenerToBtnPositive {
+                if (chatViewModel.tutoringInfo.value?._data?.status == "finished") {
+                    Toast.makeText(requireContext(), "이미 종료된 수업입니다.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListenerToBtnPositive
+                }
                 SimpleConfirmDialog {
                     tutoringId?.let { chatViewModel.startClassroom(it) }
                 }.apply {
