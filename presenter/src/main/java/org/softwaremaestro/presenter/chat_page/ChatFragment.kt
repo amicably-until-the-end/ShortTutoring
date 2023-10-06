@@ -130,6 +130,7 @@ abstract class ChatFragment : Fragment() {
     private fun clearChatRoomState() {
         Log.d("chat", "clearChatRoomState")
         currentChatRoom = null
+        setMessageInputBoxVisibility()
         binding.tvChatRoomTitle.text = ""
         binding.btnChatRoomRight.visibility = View.GONE
         messageListAdapter.setItem(emptyList())
@@ -624,6 +625,12 @@ abstract class ChatFragment : Fragment() {
         chatViewModel.markAsRead(chatRoomVO.id)
         setSelectedRoomId(chatRoomVO.id)
         Log.d("chat", "currentChatRoom: $currentChatRoom")
+        setMessageInputBoxVisibility()
+    }
+
+    private fun setMessageInputBoxVisibility() {
+        binding.containerInputBox.visibility =
+            if (currentChatRoom == null) View.GONE else View.VISIBLE
     }
 
     protected fun setChatRoomRightBtnVisible(b: Boolean) {
