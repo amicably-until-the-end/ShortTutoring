@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".student_home.StudentHomeFragment">
 
     <LinearLayout
@@ -392,7 +393,7 @@
                         android:id="@+id/rv_teacher"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="20dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
                         android:paddingLeft="@dimen/section_horizontal_padding_default" />
