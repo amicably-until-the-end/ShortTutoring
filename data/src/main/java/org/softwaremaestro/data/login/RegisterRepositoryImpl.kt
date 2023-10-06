@@ -29,6 +29,7 @@ class RegisterRepositoryImpl @Inject constructor(
                     vendor = token.vendor!!,
                     schoolLevel = studentRegisterVO.schoolLevel,
                     schoolGrade = studentRegisterVO.schoolGrade,
+                    profileImg = studentRegisterVO.profileImg
                 )
             )
             if (response.isSuccessful && response.body()?.success == true) {

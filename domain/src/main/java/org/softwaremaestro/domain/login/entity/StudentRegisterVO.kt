@@ -5,4 +5,5 @@ data class StudentRegisterVO(
     val bio: String,
     val schoolLevel: String,
     val schoolGrade: Int,
+    val profileImg: String
 )

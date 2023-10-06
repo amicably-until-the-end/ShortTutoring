@@ -9,4 +9,5 @@ data class StudentRegisterReqDto(
     @SerializedName("vendor") val vendor: String,
     @SerializedName("schoolLevel") val schoolLevel: String,
     @SerializedName("schoolGrade") val schoolGrade: Int,
+    @SerializedName("profileImg") val profileImg: String
 )

@@ -79,7 +79,8 @@ class StudentRegisterViewModel @Inject constructor(
                     name = name.value!!,
                     bio = bio.value!!,
                     schoolLevel = schoolLevel.value!!,
-                    schoolGrade = schoolGrade.value!!
+                    schoolGrade = schoolGrade.value!!,
+                    profileImg = image.value!!
                 )
             )
                 .onStart {
@@ -99,10 +100,6 @@ class StudentRegisterViewModel @Inject constructor(
 
     fun setName(name: String) {
         _name.value = name
-    }
-
-    fun setBio(bio: String) {
-        _bio.value = bio
     }
 
     fun setSchoolLevel(schoolLevel: String) {
