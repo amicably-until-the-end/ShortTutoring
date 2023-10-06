@@ -515,6 +515,7 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun classFinshed() {
+        loadingDialog.dismiss()
         val dialog = SimpleAlertDialog().apply {
             title = "수업이 종료되었습니다."
         }

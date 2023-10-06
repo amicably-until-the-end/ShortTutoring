@@ -34,6 +34,7 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     }
 
     private fun getJWT(role: String?): String {
+
         return prefs.getJWT()
     }
 }

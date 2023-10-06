@@ -122,6 +122,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun checkDeepLinkArgs() {
         if (!deepLinkViewModel.chattingId.isNullOrEmpty()) {
+            Log.d("deeplink chat", "checkDeepLinkArgs ${deepLinkViewModel.chattingId}")
             focusChatRoom(deepLinkViewModel.chattingId!!)
         }
     }
@@ -339,24 +340,42 @@ abstract class ChatFragment : Fragment() {
 
             when (checkId) {
                 R.id.rb_normal_question -> {
-                    setReservedSectionItems(
-                        chatViewModel.reservedNormalChatRoomList.value?._data ?: emptyList()
-                    )
-                    setProposedSectionItems(
-                        chatViewModel.proposedNormalChatRoomList.value?._data ?: emptyList()
-                    )
+                    setRoomListToNormal()
                 }
 
                 R.id.rb_selected_question -> {
-                    setReservedSectionItems(
-                        chatViewModel.reservedSelectedChatRoomList.value?._data ?: emptyList()
-                    )
-                    setProposedSectionItems(
-                        chatViewModel.proposedSelectedChatRoomList.value?._data ?: emptyList()
-                    )
+                    setRoomListToSelected()
                 }
             }
         }
+    }
+
+    private fun toggleQuestionType(isSelect: Boolean) {
+        if (isSelect) {
+            binding.rbSelectedQuestion.isChecked = true
+            setRoomListToSelected()
+        } else {
+            binding.rbNormalQuestion.isChecked = true
+            setRoomListToNormal()
+        }
+    }
+
+    private fun setRoomListToNormal() {
+        setReservedSectionItems(
+            chatViewModel.reservedNormalChatRoomList.value?._data ?: emptyList()
+        )
+        setProposedSectionItems(
+            chatViewModel.proposedNormalChatRoomList.value?._data ?: emptyList()
+        )
+    }
+
+    private fun setRoomListToSelected() {
+        setReservedSectionItems(
+            chatViewModel.reservedSelectedChatRoomList.value?._data ?: emptyList()
+        )
+        setProposedSectionItems(
+            chatViewModel.proposedSelectedChatRoomList.value?._data ?: emptyList()
+        )
     }
 
     private fun focusChatRoom(chattingId: String) {
@@ -371,20 +390,22 @@ abstract class ChatFragment : Fragment() {
 
             rooms?.find { it.id == chattingId }?.let {
                 if (it.isSelect) {
-                    //TODO 지정질문 탭으로 이동
+                    toggleQuestionType(true)
                 } else {
-                    //TODO 일반질문 탭으로 이동
+                    toggleQuestionType(false)
                 }
                 if (!isTeacher() && !it.isSelect && it.questionState == QuestionState.PROPOSED) {
                     setOfferingTeacherMode()
+                    proposedIconAdapter.selectedQuestionId = it.questionId
+                    proposedIconAdapter.changeSelectedQuestionId(it.questionId)
                 } else {
                     unSetOfferingTeacherMode()
                 }
                 enterChatRoom(it)
+                deepLinkViewModel.chattingId = null
                 return
             }
         }
-        deepLinkViewModel.chattingId = null
     }
 
     private fun resetMsgTab() {

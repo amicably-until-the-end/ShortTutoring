@@ -80,7 +80,7 @@ class PushMessageService :
         val intent = Intent(applicationContext, SplashActivity::class.java)
         intent.putExtra(
             SplashActivity.APP_LINK_ARGS_CHAT_ID,
-            "453f92e6-4c97-4798-98c9-2e3df36ae943"
+            data["chattingId"]
         )
 
         val pendingIntent = PendingIntent.getActivity(
@@ -137,7 +137,7 @@ class PushMessageService :
     }
 
     enum class PayloadType(val value: String) {
-        CHAT_MESSAGE("message"),
+        CHAT_MESSAGE("chatting"),
         ALERT("announce"),
     }
 }
