@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherCircularBinding
 
-class TeacherCircularAdapter(private val onItemClickListener: (FollowingGetResponseVO) -> Unit) :
+class TeacherCircularAdapter(private val onItemClickListener: (TeacherVO) -> Unit) :
     RecyclerView.Adapter<TeacherCircularAdapter.ViewHolder>() {
 
-    private var items: List<FollowingGetResponseVO> = emptyList()
+    private var items: List<TeacherVO> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -29,19 +29,20 @@ class TeacherCircularAdapter(private val onItemClickListener: (FollowingGetRespo
         return items.size
     }
 
-    fun setItem(items: List<FollowingGetResponseVO>) {
+    fun setItem(items: List<TeacherVO>) {
         this.items = items
     }
 
     inner class ViewHolder(private val binding: ItemTeacherCircularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: FollowingGetResponseVO) {
-            binding.tvName.text = item.name
-            Glide.with(binding.root.context).load(item.profileImage).centerCrop()
+        fun onBind(item: TeacherVO) {
+            binding.tvName.text = item.nickname
+            binding
+            Glide.with(binding.root.context).load(item.profileUrl).centerCrop()
                 .into(binding.ivPhoto)
             binding.ivPhoto.setOnClickListener {
-                item.id?.let { onItemClickListener(item) }
+                item.teacherId?.let { onItemClickListener(item) }
             }
         }
     }

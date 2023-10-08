@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
@@ -132,18 +131,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
-            val teacherVO = TeacherVO(
-                teacherId = it.id,
-                nickname = it.name,
-                bio = it.bio,
-                profileUrl = it.profileImage,
-                rating = -1.0f,
-                univ = "${it.schoolName} ${it.schoolDepartment}",
-                followers = it.followers,
-                reservationCnt = -1
-            )
-
-            dialogTeacherProfile.setItem(teacherVO)
+            dialogTeacherProfile.setItem(it)
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -156,18 +144,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherOnlineRecyclerView() {
         teacherOnlineAdapter = TeacherCircularAdapter {
-            val teacherVO = TeacherVO(
-                teacherId = it.id,
-                nickname = it.name,
-                bio = it.bio,
-                profileUrl = it.profileImage,
-                rating = -1.0f,
-                univ = "${it.schoolName} ${it.schoolDepartment}",
-                followers = it.followers,
-                reservationCnt = -1
-            )
-
-            dialogTeacherProfile.setItem(teacherVO)
+            dialogTeacherProfile.setItem(it)
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -332,43 +309,24 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun observeTeacherOnlines() {
-        teacherOnlineViewModel.teacherOnlines.observe(viewLifecycleOwner) { teacherOnlines ->
-            teacherOnlines.map {
-                FollowingGetResponseVO(
-                    id = it.id,
-                    name = it.name,
-                    // Todo API 수정하고 나서 주석 해제하기
-//                    bio = it.bio,
-                    bio = "더미 데이터",
-                    profileImage = it.profileImage,
-                    role = "teacher",
-                    schoolDivision = "",
-//                    schoolName = it.schoolName,
-                    schoolName = "더미 데이터",
-//                    schoolDepartment = it.schoolDepartment",
-                    schoolDepartment = "더미 데이터",
-//                    schoolGrade = "4학년",
-//                    followers = it.followers,
-                    followers = listOf("더미 데이터"),
-                    followingCount = 0
-                )
-            }.let {
-                teacherOnlineAdapter.setItem(it)
+        teacherOnlineViewModel.teacherOnlines.observe(viewLifecycleOwner) {
 
-                if (it.isNotEmpty()) {
-                    binding.containerMyTeacherSection.visibility = View.VISIBLE
-                    binding.nsTeacherOnline.visibility = View.VISIBLE
+            teacherOnlineAdapter.setItem(it)
+
+            if (it.isNotEmpty()) {
+                binding.containerMyTeacherSection.visibility = View.VISIBLE
+                binding.nsTeacherOnline.visibility = View.VISIBLE
+            } else {
+                binding.dvTeacher.visibility = View.GONE
+                binding.nsTeacherOnline.visibility = View.GONE
+                if (followingViewModel.following.value.isNullOrEmpty()) {
+                    binding.containerMyTeacherSection.visibility = View.GONE
                 } else {
-                    binding.dvTeacher.visibility = View.GONE
-                    binding.nsTeacherOnline.visibility = View.GONE
-                    if (followingViewModel.following.value.isNullOrEmpty()) {
-                        binding.containerMyTeacherSection.visibility = View.GONE
-                    } else {
-                        binding.containerMyTeacherSection.visibility = View.VISIBLE
-                    }
+                    binding.containerMyTeacherSection.visibility = View.VISIBLE
                 }
+                teacherOnlineAdapter.notifyDataSetChanged()
+
             }
-            teacherOnlineAdapter.notifyDataSetChanged()
         }
     }
 

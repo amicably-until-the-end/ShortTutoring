@@ -70,7 +70,7 @@ class TeacherProfileDialog(
             Glide.with(root.context).load(mItem?.profileUrl).centerCrop()
                 .into(ivTeacherImg)
             tvTeacherName.text = mItem?.nickname ?: "undefined"
-            tvTeacherUniv.text = mItem?.univ ?: "undefined"
+            tvTeacherUniv.text = "${mItem?.univ} ${mItem?.major}"
             tvTeacherBio.text = mItem?.bio ?: "undefined"
             tvTeacherRating.text = mItem?.rating.toString()
             // Todo: 추후에 api로 수정

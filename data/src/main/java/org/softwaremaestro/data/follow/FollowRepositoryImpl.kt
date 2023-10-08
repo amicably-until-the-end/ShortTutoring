@@ -8,7 +8,7 @@ import org.softwaremaestro.data.follow.remote.FollowApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.follow.FollowRepository
 import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import javax.inject.Inject
 
 class FollowRepositoryImpl @Inject constructor(private val followApi: FollowApi) :
@@ -61,7 +61,7 @@ class FollowRepositoryImpl @Inject constructor(private val followApi: FollowApi)
         }
     }
 
-    override suspend fun getFollowing(userId: String): Flow<BaseResult<List<FollowingGetResponseVO>, String>> {
+    override suspend fun getFollowing(userId: String): Flow<BaseResult<List<TeacherVO>, String>> {
         return flow {
             val response = followApi.getFollowing(userId)
             val body = response.body()!!

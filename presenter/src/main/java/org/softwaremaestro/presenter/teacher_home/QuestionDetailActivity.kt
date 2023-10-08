@@ -22,7 +22,7 @@ class QuestionDetailActivity : AppCompatActivity() {
     var subject: String? = null
     var description: String? = null
     var questionId: String? = null
-    var hopeTime: ArrayList<String>? = null
+    var hopeTime: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ class QuestionDetailActivity : AppCompatActivity() {
     private fun setQuestionContent() {
         binding.tvDescription.text = description
         binding.tvSubject.text = subject
-        binding.tvHopeTime.text = hopeTime.toString()
+        binding.tvHopeTime.text = hopeTime
     }
 
     fun getIntentExtra() {
@@ -61,7 +61,7 @@ class QuestionDetailActivity : AppCompatActivity() {
         subject = intent.getStringExtra(SUBJECT)
         description = intent.getStringExtra(DESCRIPTION)
         questionId = intent.getStringExtra(QUESTION_ID)
-        hopeTime = intent.getStringArrayListExtra(HOPE_TIME)
+        hopeTime = intent.getStringExtra(HOPE_TIME)
     }
 
     private fun setObserver() {

@@ -1,6 +1,8 @@
 package org.softwaremaestro.data.question_get.model
 
+import org.softwaremaestro.data.common.utils.parseToLocalDateTime
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
+import java.time.LocalTime
 
 private const val EMPTY_STRING = "-"
 
@@ -14,7 +16,9 @@ object QuestionGetResultMapper {
                 studentProfileImage = student?.profileImage,
                 images = problemDto?.image,
                 mainImage = problemDto?.mainImage,
-                hopeTutoringTime = hopeTutoringTime,
+                hopeTutoringTime = hopeTutoringTime?.map {
+                    it.parseToLocalDateTime()?.toLocalTime() ?: LocalTime.now()
+                } ?: emptyList(),
                 hopeImmediately = hopeImmediately,
                 problemSchoolLevel = problemDto?.schoolLevel,
                 problemSubject = problemDto?.schoolSubject,

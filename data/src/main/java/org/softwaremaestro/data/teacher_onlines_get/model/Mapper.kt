@@ -1,20 +1,25 @@
 package org.softwaremaestro.data.teacher_onlines_get.model
 
-import org.softwaremaestro.domain.teacher_onlines_get.entity.TeacherOnlineVO
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 
 object Mapper {
-    fun asDomain(teacherOnlineDto: TeacherOnlineDto): TeacherOnlineVO {
+    fun asDomain(teacherOnlineDto: TeacherOnlineDto): TeacherVO {
         with(teacherOnlineDto) {
-            return TeacherOnlineVO(
-                id = id,
-                name = name,
-                profileImage = profileImage,
-                followers = followers
+            return TeacherVO(
+                teacherId = id,
+                nickname = name,
+                profileUrl = profileImage,
+                followers = followers,
+                reservationCnt = reserveCnt,
+                bio = bio,
+                rating = rating,
+                major = major,
+                univ = univ,
             )
         }
     }
 }
 
-fun TeacherOnlineDto.asDomain(): TeacherOnlineVO {
+fun TeacherOnlineDto.asDomain(): TeacherVO {
     return Mapper.asDomain(this)
 }

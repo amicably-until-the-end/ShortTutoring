@@ -161,8 +161,9 @@
                         android:id="@+id/tv_reservation_cnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
                         android:fontFamily="@font/pretendard_medium"
-                        android:text=" 0개"
+                        android:text="0개"
                         android:textColor="@color/alert_red"
                         android:textSize="13sp" />
 
@@ -177,7 +178,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="40dp"
+        android:visibility="gone">
 
         <RadioGroup
             android:id="@+id/rg_review_and_clip"
