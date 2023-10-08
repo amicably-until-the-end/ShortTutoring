@@ -8,11 +8,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogSchoolSubjectBinding
 
 class DialogSchoolSubject(
+    private val schoolLevel: String,
     private val onSubjectClick: ((String) -> Unit)
 ) :
     BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogSchoolSubjectBinding
+    private lateinit var subjects: Array<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,13 +27,29 @@ class DialogSchoolSubject(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setSubjects()
+        setSubjectNumberPicker()
+        setBtnSelect()
+    }
+
+    private fun setSubjects() {
+        subjects = when (schoolLevel) {
+            "중학교" -> subjects_middle
+            else -> subjects_high
+        }
+    }
+
+    private fun setSubjectNumberPicker() {
         binding.npSubject.apply {
             minValue = 0
-            maxValue = 6
+            maxValue = subjects.size - 1
             displayedValues = subjects
             value = 0
         }
+    }
 
+    private fun setBtnSelect() {
         binding.btnSelect.setOnClickListener {
             onSubjectClick(subjects[binding.npSubject.value])
             dismiss()
@@ -39,7 +57,10 @@ class DialogSchoolSubject(
     }
 
     companion object {
-        private val subjects = arrayOf(
+        private val subjects_middle = arrayOf(
+            "1학년 1학기", "1학년 2학기", "2학년 1학기", "2학년 2학기", "3학년 1학기", "3학년 2학기"
+        )
+        private val subjects_high = arrayOf(
             "고등수학(상)", "고등수학(하)", "수학1", "수학2", "미적분", "확률과 통계", "기하"
         )
     }

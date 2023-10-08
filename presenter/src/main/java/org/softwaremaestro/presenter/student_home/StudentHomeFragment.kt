@@ -9,13 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -57,11 +55,6 @@ class StudentHomeFragment : Fragment() {
     ): View {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
-
-        binding.ivLogo.setOnClickListener {
-            findNavController().navigate(R.id.action_studentHomeFragment_to_toSFragment2)
-        }
-
         getRemoteData()
         initTeacherProfileDialog()
         setCoinButton()
