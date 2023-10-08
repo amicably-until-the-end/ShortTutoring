@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.profile.entity.MyProfileGetResponseVO
+import org.softwaremaestro.domain.profile.entity.MyProfileResVO
 import org.softwaremaestro.domain.profile.usecase.MyProfileGetUseCase
 import javax.inject.Inject
 
@@ -17,8 +17,8 @@ import javax.inject.Inject
 class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: MyProfileGetUseCase) :
     ViewModel() {
 
-    private val _myProfile: MutableLiveData<MyProfileGetResponseVO> = MutableLiveData()
-    val myProfile: LiveData<MyProfileGetResponseVO> get() = _myProfile
+    private val _myProfile: MutableLiveData<MyProfileResVO> = MutableLiveData()
+    val myProfile: LiveData<MyProfileResVO> get() = _myProfile
 
     fun getMyProfile() {
         viewModelScope.launch {

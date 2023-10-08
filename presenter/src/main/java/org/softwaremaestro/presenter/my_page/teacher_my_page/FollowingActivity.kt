@@ -59,7 +59,6 @@ class FollowingActivity : AppCompatActivity() {
                             "한양대학교",
                             "",
                             null,
-                            0,
                             0
                         )
                     )

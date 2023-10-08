@@ -15,6 +15,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
+import org.softwaremaestro.presenter.util.moveBack
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -34,6 +35,7 @@ class ReservationFormFragment : Fragment() {
         setDatePicker()
         setTimeRangePicker()
         observe()
+        setToolbar()
 
         return binding.root
     }
@@ -131,6 +133,12 @@ class ReservationFormFragment : Fragment() {
 
                 cvQuestionCost.visibility = View.GONE
             }
+        }
+    }
+
+    private fun setToolbar() {
+        binding.btnToolbarBack.setOnClickListener {
+            moveBack()
         }
     }
 

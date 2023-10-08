@@ -28,11 +28,10 @@ object Mapper {
                 bio,
                 profileImage,
                 role,
-                school?.division,
-                school?.name,
-                school?.department,
-                school?.grade,
-                followersCount,
+                "",
+                school?.schoolName,
+                school?.schoolDepartment,
+                followers,
                 followingCount
             )
         }

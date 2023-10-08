@@ -1,6 +1,6 @@
 package org.softwaremaestro.domain.profile.entity
 
-data class ProfileGetResponseVO(
+data class MyProfileResVO(
     val id: String?,
     val name: String?,
     val bio: String?,
@@ -8,9 +8,10 @@ data class ProfileGetResponseVO(
     val role: String?,
     val schoolLevel: String?,
     val schoolGrade: Int?,
-    val schoolDivision: String?,
     val schoolName: String?,
     val schoolDepartment: String?,
-    val followersCount: Int?,
-    val followingCount: Int?
+    val followers: List<String>?,
+    val following: List<String>?,
+    val amount: Int?,
+    val lastReceivedFreeCoinAt: String?
 )

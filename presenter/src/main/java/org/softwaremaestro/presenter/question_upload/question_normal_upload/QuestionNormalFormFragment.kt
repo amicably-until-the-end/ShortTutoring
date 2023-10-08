@@ -27,6 +27,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.view
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolLevel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
@@ -312,7 +313,7 @@ class QuestionNormalFormFragment : Fragment() {
 
     private fun setToolBar() {
         binding.btnToolbarBack.setOnClickListener {
-            activity?.finish()
+            moveBack()
         }
     }
 

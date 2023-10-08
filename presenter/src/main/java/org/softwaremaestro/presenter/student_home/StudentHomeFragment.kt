@@ -56,13 +56,9 @@ class StudentHomeFragment : Fragment() {
 
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
 
-        // Todo: 나중에 api로 받아와야 함
-        binding.cbCoin.coin = 1350
-        binding.cbCoin.setOnClickListener {
-            startActivity(Intent(requireContext(), ChargeCoinActivity::class.java))
-        }
         getRemoteData()
         initTeacherProfileDialog()
+        setCoinButton()
         setQuestionButton()
         setTeacherFollowingRecyclerView()
         setTeacherOnlineRecyclerView()
@@ -129,17 +125,18 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
-//            val teacherVO = TeacherVO(
-//                profileUrl = it.profileImage,
-//                nickname = it.name,
-//                teacherId = it.id,
-//                bio = it.bio,
-//                pickCount = -1,
-//                univ = "${it.schoolName} ${it.schoolDepartment}",
-//                rating = -1.0f
-//            )
-//
-//            dialogTeacherProfile.item = teacherVO
+            val teacherVO = TeacherVO(
+                teacherId = it.id,
+                nickname = it.name,
+                bio = it.bio,
+                profileUrl = it.profileImage,
+                rating = -1.0f,
+                univ = "${it.schoolName} ${it.schoolDepartment}",
+                followers = it.followers,
+                reservationCnt = -1
+            )
+
+            dialogTeacherProfile.setItem(teacherVO)
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -153,14 +150,14 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherOnlineRecyclerView() {
         teacherOnlineAdapter = TeacherCircularAdapter {
             val teacherVO = TeacherVO(
-                profileUrl = it.profileImage,
-                nickname = it.name,
                 teacherId = it.id,
+                nickname = it.name,
                 bio = it.bio,
-                univ = "${it.schoolName} ${it.schoolDepartment}",
+                profileUrl = it.profileImage,
                 rating = -1.0f,
-                listOf(),
-                -1,
+                univ = "${it.schoolName} ${it.schoolDepartment}",
+                followers = it.followers,
+                reservationCnt = -1
             )
 
             dialogTeacherProfile.setItem(teacherVO)
@@ -208,6 +205,14 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun setCoinButton() {
+        binding.cbCoin.setOnClickListener {
+            startActivity(Intent(requireContext(), ChargeCoinActivity::class.java).apply {
+                putExtra("my-coin", myProfileViewModel.amount.value)
+            })
+        }
+    }
+
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
             startQuestionUploadActivity()
@@ -241,10 +246,9 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
-    private fun observeMyProfile() {
-        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
-
-            // Todo: 코인 설정
+    private fun observeAmount() {
+        myProfileViewModel.amount.observe(viewLifecycleOwner) {
+            binding.cbCoin.coin = it
         }
     }
 
@@ -291,7 +295,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setObserver() {
         observeFollowing()
-        observeMyProfile()
+        observeAmount()
         observeTeachers()
         observeLectures()
         observeTeacherOnlines()
@@ -319,16 +323,20 @@ class StudentHomeFragment : Fragment() {
                 FollowingGetResponseVO(
                     id = it.id,
                     name = it.name,
-                    // Todo: api 수정해야 함
-                    bio = "수정해주세요",
+                    // Todo API 수정하고 나서 주석 해제하기
+//                    bio = it.bio,
+                    bio = "더미 데이터",
                     profileImage = it.profileImage,
                     role = "teacher",
                     schoolDivision = "",
-                    schoolName = "",
-                    schoolDepartment = "더미 학과",
-                    schoolGrade = -1,
-                    followersCount = it.followers,
-                    followingCount = -1
+//                    schoolName = it.schoolName,
+                    schoolName = "더미 데이터",
+//                    schoolDepartment = it.schoolDepartment",
+                    schoolDepartment = "더미 데이터",
+//                    schoolGrade = "4학년",
+//                    followers = it.followers,
+                    followers = listOf("더미 데이터"),
+                    followingCount = 0
                 )
             }.let {
                 teacherOnlineAdapter.setItem(it)

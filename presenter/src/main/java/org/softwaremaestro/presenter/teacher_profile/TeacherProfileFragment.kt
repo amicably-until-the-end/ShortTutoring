@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.teacher_profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,8 +77,6 @@ class TeacherProfileFragment : Fragment() {
 
         binding.btnFollow.setOnClickListener {
             if (following) {
-                // Todo: 다이어로그 보여주고
-                // 언팔, 토스트 보여주는 건 다이어로그 확인 눌렀을 때
                 unfollowDialog.show(parentFragmentManager, "unfollowDialog")
             } else {
                 followUserViewModel.followUser(selectedUserId)
@@ -114,12 +111,9 @@ class TeacherProfileFragment : Fragment() {
 //                tvTeacherRating.text = it.rating
                 Glide.with(this@TeacherProfileFragment).load(it.profileImage).circleCrop()
                     .into(ivTeacherImg)
-                btnFollow.text = "찜한 학생 ${it.followersCount}명"
-                // Todo: api에서 가져오기
-                val followers = listOf<String>(SocketManager.userId!!)
-                if (SocketManager.userId != null && followers != null) {
-                    (SocketManager.userId!! in followers).also {
-                        Log.d("hhcc", "following : ${it}")
+                btnFollow.text = "찜한 학생 ${it.followers?.size ?: 0}명"
+                if (SocketManager.userId != null && it.followers != null) {
+                    (SocketManager.userId!! in it.followers!!).also {
                         setBtnFollow(it)
                         setBtnReserve(it)
                     }

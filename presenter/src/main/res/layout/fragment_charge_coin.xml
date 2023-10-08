@@ -108,13 +108,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_shadow_2_background_grey">
+            android:background="@drawable/bg_shadow_1_stroke_background_grey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_free_charge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_radius_5_stroke_background_light_blue"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="25dp">
 
@@ -171,7 +170,7 @@
 
         </LinearLayout>
 
-        <com.google.android.material.divider.MaterialDivider
+        <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_marginTop="20dp"
@@ -207,13 +206,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_shadow_2_background_grey">
+            android:background="@drawable/bg_shadow_1_stroke_background_grey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_charge_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_radius_5_stroke_background_light_blue"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="25dp">
 
@@ -275,13 +273,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/bg_shadow_2_background_grey">
+            android:background="@drawable/bg_shadow_1_stroke_background_grey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_charge_five"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_radius_5_stroke_background_light_blue"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="25dp">
 

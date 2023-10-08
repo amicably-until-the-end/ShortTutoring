@@ -9,7 +9,6 @@ data class FollowingGetResponseVO(
     val schoolDivision: String?,
     val schoolName: String?,
     val schoolDepartment: String?,
-    val schoolGrade: Int?,
-    val followersCount: Int?,
+    val followers: List<String>?,
     val followingCount: Int?
 )
