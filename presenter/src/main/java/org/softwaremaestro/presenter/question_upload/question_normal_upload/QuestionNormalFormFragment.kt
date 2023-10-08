@@ -82,18 +82,18 @@ class QuestionNormalFormFragment : Fragment() {
 
     private fun initDialog() {
         initSchoolLevelDialog()
-        initSchoolSubjectDialog()
     }
 
     private fun initSchoolLevelDialog() {
         dialogSchoolLevel = DialogSchoolLevel {
             viewModel._school.value = it
+            initSchoolSubjectDialog(it)
             dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
         }
     }
 
-    private fun initSchoolSubjectDialog() {
-        dialogSchoolSubject = DialogSchoolSubject {
+    private fun initSchoolSubjectDialog(schoolLevel: String) {
+        dialogSchoolSubject = DialogSchoolSubject(schoolLevel) {
             viewModel._subject.value = it
         }
     }
