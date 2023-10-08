@@ -11,8 +11,8 @@
         android:label="로그인"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_registerRoleFragment"
-            app:destination="@id/registerRoleFragment" />
+            android:id="@+id/action_loginFragment_to_toSFragment"
+            app:destination="@id/toSFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerRoleFragment"
@@ -67,4 +67,13 @@
         android:name="org.softwaremaestro.presenter.login.CompleteTeacherProfileFragment"
         android:label="fragment_complete_teacher_profile"
         tools:layout="@layout/fragment_complete_teacher_profile" />
+    <fragment
+        android:id="@+id/toSFragment"
+        android:name="org.softwaremaestro.presenter.login.ToSFragment"
+        android:label="fragment_tos"
+        tools:layout="@layout/fragment_tos">
+        <action
+            android:id="@+id/action_toSFragment_to_registerRoleFragment"
+            app:destination="@id/registerRoleFragment" />
+    </fragment>
 </navigation>
