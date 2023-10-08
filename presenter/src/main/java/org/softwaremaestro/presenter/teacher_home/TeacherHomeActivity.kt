@@ -31,6 +31,7 @@ class TeacherHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTeacherHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        requirePermission()
         initSocket()
         setUpBottomNavigationBar()
     }
@@ -98,5 +99,10 @@ class TeacherHomeActivity : AppCompatActivity() {
             }
             itemIconTintList = null
         }
+    }
+
+    private fun requirePermission() {
+        val permission = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
+        requestPermissions(permission, 0)
     }
 }

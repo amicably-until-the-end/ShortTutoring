@@ -272,7 +272,9 @@ class ClassroomFragment : Fragment() {
         var roomListener = object : RoomListener {
             override fun onPhaseChanged(phase: RoomPhase?) {
                 if (phase == RoomPhase.disconnected) {
+                    setOnlineStatus(false)
                     classFinshed()
+                    activity?.finish()
                 }
                 if (phase == RoomPhase.connected) {
                     loadingDialog.dismiss()
@@ -575,7 +577,11 @@ class ClassroomFragment : Fragment() {
 
     val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            showFinishClassDialog()
+            if (whiteBoardRoom?.roomPhase == RoomPhase.connected)
+                showFinishClassDialog()
+            else {
+                activity?.finish()
+            }
         }
     }
 

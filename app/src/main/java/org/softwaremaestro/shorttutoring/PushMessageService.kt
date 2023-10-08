@@ -1,7 +1,6 @@
 package org.softwaremaestro.shorttutoring
 
 import android.Manifest
-import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -42,6 +41,7 @@ class PushMessageService :
         super.onCreate()
         createChannel()
     }
+
 
     private fun createChannel() {
         val notificationManager =
@@ -85,16 +85,14 @@ class PushMessageService :
 
         val pendingIntent = PendingIntent.getActivity(
             applicationContext,
-            SplashActivity.CHAT_INTENT_FLAG,
+            data.hashCode(),
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE,
         )
-        with(data) {
-            builder.setContentText("새로운 메시지가 도착했습니다.")
-                .setSmallIcon(R.drawable.btn_radio)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-        }
+        builder.setContentText("새로운 메시지가 도착했습니다.")
+            .setSmallIcon(R.drawable.ic_noti_logo)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
         sendNotification(builder.build())
     }
 
@@ -126,9 +124,11 @@ class PushMessageService :
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            Log.e("PushMessageService", "no permission")
             return
         }
-        notificationManager.notify(1, notification)
+        Log.d("PushMessageService", "sendNotification")
+        notificationManager.notify(notification.hashCode(), notification)
     }
 
     companion object {

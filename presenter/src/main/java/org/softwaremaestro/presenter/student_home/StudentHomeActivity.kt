@@ -42,6 +42,7 @@ class StudentHomeActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         getIntentExtra()
+        requirePermission()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -116,5 +117,10 @@ class StudentHomeActivity : AppCompatActivity() {
         val item = binding.bottomNavView.menu.findItem(R.id.studentChatFragment)
         // Return true only if the destination we've navigated to matches the MenuItem
         NavigationUI.onNavDestinationSelected(item, navController)
+    }
+
+    private fun requirePermission() {
+        val permission = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
+        requestPermissions(permission, 0)
     }
 }

@@ -107,7 +107,7 @@ class ChatRepositoryImpl @Inject constructor(
                 val chatRoomVO = it.asEntity()
                 insertOrUpdateRoom(chatRoomVO)
                 if (!chatRoomVO.isSelect && chatRoomVO.status == ChatRoomType.RESERVED_NORMAL.type) {
-                    chatRoomVO.questionId?.let { questionId ->
+                    chatRoomVO.questionId.let { questionId ->
                         Log.d(
                             "ChatRepositoryImpl delete",
                             " ${questionId} ${chatRoomVO.description}"
@@ -174,6 +174,7 @@ class ChatRepositoryImpl @Inject constructor(
             } else {
                 result.body()?.data?.let { chatDatabase.chatRoomDao().update(it.asEntity()) }
             }
+            val now = java.time.LocalDateTime.now()
             chatDatabase.messageDao().insert(
                 MessageEntity(
                     id = roomId + sendAt,
@@ -181,10 +182,11 @@ class ChatRepositoryImpl @Inject constructor(
                     body = body,
                     format = format,
                     isRead = isMyMsg,
-                    sendAt = java.time.LocalDateTime.now(),
+                    sendAt = now,
                     isMyMsg = isMyMsg
                 )
             )
+            chatDatabase.chatRoomDao().updateLastMessageTime(roomId, now)
 
         } catch (e: Exception) {
             Log.d("ChatRepositoryImpl insertMessage", e.toString())

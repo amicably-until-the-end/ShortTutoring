@@ -275,7 +275,7 @@ class StudentChatFragment : ChatFragment() {
         studentViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
                 currentChatRoom?.let {
-                    studentViewModel.pickTeacher(it.id!!, it.questionId!!)
+                    studentViewModel.pickTeacher(it.id, it.questionId)
                 }
                 studentViewModel.setTutoringTime(null)
                 studentViewModel.setTutoringDuration(null)
@@ -293,12 +293,16 @@ class StudentChatFragment : ChatFragment() {
         binding.cnNoti.apply {
             setTvNotiMain("선생님과의 수업이 ${startAt?.toKoreanString()}에 진행됩니다")
             setTvNotiSub("선생님이 수업을 시작하면 강의실에 입장할 수 있어요")
-            setBtnNegativeText("일정 변경하기")
+            setBtnNegativeText("닫기")
             setBtnPositiveText("강의실 입장하기")
             setOnClickListenerToBtnNegative {
-                visibility = View.GONE
+                setNotiVisible(false)
             }
             setOnClickListenerToBtnPositive {
+                if (chatViewModel.tutoringInfo.value?._data?.status == "finished") {
+                    Toast.makeText(requireContext(), "이미 종료된 수업입니다.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListenerToBtnPositive
+                }
                 tutoringId?.let { chatViewModel.getClassroomInfo(it) }
             }
         }
