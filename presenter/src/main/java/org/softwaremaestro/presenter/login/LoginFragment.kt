@@ -35,15 +35,15 @@ class LoginFragment @Inject constructor() :
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        binding.tvLogo.setOnClickListener {
-            val intent = Intent(activity, StudentHomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
+//        binding.tvLogo.setOnClickListener {
+//            val intent = Intent(activity, StudentHomeActivity::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(intent)
+//        }
 
         setKakaoButton()
-        setGoogleButton()
+//        setGoogleButton()
 
         return binding.root
     }
@@ -75,15 +75,6 @@ class LoginFragment @Inject constructor() :
         }
     }
 
-    private fun setGoogleButton() {
-        binding.btnLoginByGoogle.setOnClickListener {
-            val intent = Intent(activity, TeacherHomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
-    }
-
 
     private fun observeLoginResult() {
         viewModel.userRole.observe(viewLifecycleOwner) {
@@ -105,7 +96,7 @@ class LoginFragment @Inject constructor() :
 
                 "not registered" -> {
                     Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_loginFragment_to_registerRoleFragment)
+                        .navigate(R.id.action_loginFragment_to_toSFragment)
                 }
 
                 else -> return@observe

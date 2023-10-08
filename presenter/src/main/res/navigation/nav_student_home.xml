@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_studentHomeFragment_to_teacherProfileFragment"
             app:destination="@id/teacherProfileFragment" />
+        <action
+            android:id="@+id/action_studentHomeFragment_to_toSFragment2"
+            app:destination="@id/toSFragment2" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
@@ -55,4 +58,9 @@
         android:name="org.softwaremaestro.presenter.coin.ChargeCoinSecondFragment"
         android:label="fragment_charge_coin_second"
         tools:layout="@layout/fragment_charge_coin_second" />
+    <fragment
+        android:id="@+id/toSFragment2"
+        android:name="org.softwaremaestro.presenter.login.ToSFragment"
+        android:label="fragment_tos"
+        tools:layout="@layout/fragment_tos" />
 </navigation>

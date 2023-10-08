@@ -1,0 +1,684 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>숏과외 개인정보 처리방침</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="132a4ac5-896d-4b1f-82aa-1eba98784383" class="page sans"><header><h1 class="page-title">숏과외 개인정보 처리방침</h1><p class="page-description"></p></header><div class="page-body"><p id="542c71c8-f911-4a02-8877-b11de71507b2" class="">사막(이하 &quot;회사&quot;)은(는) 숏과외을(를) 제공함에 있어 정보주체의 자유와 권리 보호를 위해 「개인정보 보호법」 및 관계 법령이 정한 바를 준수하여, 적법하게 개인정보를 처리하고 안전하게 관리하고 있습니다. 이에 「개인정보 보호법」 제30조에 따라 정보주체에게 개인정보 처리에 관한 절차 및 기준을 안내하고, 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.</p><h2 id="541cf566-c1f7-44cb-9be4-7e3f1302f851" class=""><strong>목차</strong></h2><ol type="1" id="2c56ef2e-ac1c-4f5e-bce3-6d6e65600ec8" class="numbered-list" start="1"><li>개인정보의 처리목적, 수집 항목, 보유 및 이용기간</li></ol><ol type="1" id="f3b667d9-c9cc-407a-8799-0faede91bbcb" class="numbered-list" start="2"><li>개인정보 처리 업무의 위탁</li></ol><ol type="1" id="27c034ca-bc21-43b4-bc95-15e8d0007cb3" class="numbered-list" start="3"><li>개인정보의 파기 및 절차</li></ol><ol type="1" id="0365cb07-2383-4af4-ba73-4993d134c91a" class="numbered-list" start="4"><li>미이용자의 개인정보 파기 등에 관한 조치</li></ol><ol type="1" id="87d7e8f4-b7af-496b-abf5-565b952f2930" class="numbered-list" start="5"><li>정보주체와 법정대리인의 권리·의무 및 행사방법</li></ol><ol type="1" id="c6b1498f-6583-47f4-acf2-14fc68ee38e6" class="numbered-list" start="6"><li>개인정보의 안전성 확보조치</li></ol><ol type="1" id="298def39-023c-47c6-a028-e940640c9145" class="numbered-list" start="7"><li>개인정보 자동 수집 장치의 설치·운영 및 거부에 관한 사항</li></ol><ol type="1" id="a3dc8db9-8886-4865-99c9-00c078313c6e" class="numbered-list" start="8"><li>행태정보의 수집·이용 및 거부 등에 관한 사항</li></ol><ol type="1" id="96ce3389-48c3-4fae-bab4-fb47624d9252" class="numbered-list" start="9"><li>개인정보 보호책임자 및 개인정보 열람청구</li></ol><ol type="1" id="b91cb734-45c3-4198-9fc1-fdc600a833e8" class="numbered-list" start="10"><li>권익침해 구제 방법</li></ol><h2 id="da31a23e-5845-48c7-9518-36c42d764897" class="">1.  <strong>개인정보의 처리목적, 수집 항목, 보유 및 이용기간</strong></h2><p id="16b4fa3a-9e0d-4b0a-8005-60e7c396c706" class="">① 회사가 처리하고 있는 개인정보의 항목과 목적, 보유 및 이용기간은 아래와 같습니다.</p><table id="a2a2d201-4314-487f-943b-3b198dae227f" class="simple-table"><tbody><tr id="b179e497-4de7-4481-88b1-df8a6342b76e"><td id="kkOL" class="">구분(업무명)</td><td id="Ssso" class="">처리 목적</td><td id="w^Gj" class="">처리 항목</td><td id="Zw_|" class="">보유 및 이용기간</td></tr><tr id="ebf859e8-f556-4e61-923d-ea860ad06f28"><td id="kkOL" class=""></td><td id="Ssso" class=""></td><td id="w^Gj" class=""></td><td id="Zw_|" class=""></td></tr><tr id="2c91b8e4-1b47-486d-ad1d-598ed4751c5b"><td id="kkOL" class="">회원가입 및 관리</td><td id="Ssso" class="">• 본인 식별·인증
+• 회원자격 유지·관리</td><td id="w^Gj" class="">필수 : 닉네임, 프로필 사진
+선택 : 소속(기관명)</td><td id="Zw_|" class="">• 회원 탈퇴 시까지</td></tr><tr id="67f0f4a9-a026-415e-9a03-49543c64039e"><td id="kkOL" class="">제품 및 서비스</td><td id="Ssso" class="">• 콘텐츠 제공
+• 이용자 식별
+• 제품 및 서비스 제공
+• 서비스 이용 내역 제공
+• 서비스 환경의 유지·관리 및 개선</td><td id="w^Gj" class="">필수 : 닉네임, 프로필 사진, 서비스 이용 내역, 쿠키</td><td id="Zw_|" class="">• 회원 탈퇴 시까지</td></tr></tbody></table><p id="8542e722-0064-46f7-80b4-e36fac95404f" class="">② 처리하고 있는 개인정보는 상기의 목적 이외의 용도로는 이용되지 않으며, 처리 목적이 변경되는 경우에는 개인정보 보호법 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p><p id="f289a405-ba73-4c21-8b01-6360b62b8d21" class="">③ 회사는 법령에 따른 개인정보 보유∙이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의 받은 개인정보 보유∙이용기간 내에서 개인정보를 처리∙보유합니다. 다만, 다음의 사유에 해당하는 경우에는 해당 사유 종료시까지 처리∙보유합니다.</p><p id="66fb9b2a-c761-411b-ada2-80a05c1942e7" class="">1) 관계 법령 위반에 따른 수사∙조사 등이 진행 중인 경우에는 해당 수사∙조사 종료 시까지</p><p id="546d3413-980e-4a01-879c-f7bf3ae0636e" class="">2) 홈페이지 이용에 따른 채권∙채무관계 잔존 시에는 해당 채권∙채무관계 정산 시까지</p><p id="1195a795-fe35-4f20-91b2-f0af03c2908a" class="">3) 관련 법령에 따른 의무 보유기간에 해당 시에는 해당 기간 종료 시까지</p><ul id="b365e832-910b-4fab-8d04-2e5f0f8b246f" class="bulleted-list"><li style="list-style-type:disc">통신비밀보호법 : 웹사이트 방문 기록 등의 통신사실확인자료(3개월)</li></ul><ul id="9877c218-2f0c-46cb-8230-203128b7320e" class="bulleted-list"><li style="list-style-type:disc">전자상거래법 : 계약 또는 청약철회 등에 관한 기록(5년)</li></ul><ul id="c4b5477b-ca6b-4d9c-92b1-a9a8fd0a340d" class="bulleted-list"><li style="list-style-type:disc">전자상거래법 : 대금결제 및 재화 등의 공급에 관한 기록(5년)</li></ul><ul id="6ccab503-1b23-4a7f-924b-52c19f20a4e5" class="bulleted-list"><li style="list-style-type:disc">전자상거래법 : 소비자의 불만 또는 분쟁처리에 관한 기록(3년)</li></ul><ul id="c96164d8-e9d4-4ccd-9e28-9a1847c164c9" class="bulleted-list"><li style="list-style-type:disc">전자상거래법 : 표시·광고에 관한 기록(6개월)</li></ul><ul id="6a19b3dc-fdc9-4814-b7a7-68b76f73989b" class="bulleted-list"><li style="list-style-type:disc">정보통신망법 : 본인확인에 관한 기록(6개월)</li></ul><h2 id="763433bd-6fae-4a46-b581-c67b7f426883" class=""><strong>2. 개인정보 처리 업무의 위탁</strong></h2><p id="35174c55-bfad-456b-a70f-bcbc06b6b5ee" class="">회사는 원활한 개인정보 업무 처리를 위하여 다음과 같이 개인정보 처리업무를 위탁하고 있습니다.</p><table id="522202e6-d083-4a5b-a112-d33a46d35e47" class="simple-table"><tbody><tr id="a400d65a-1199-48dd-819c-97d44b6992c1"><td id="\jwn" class="">위탁받는 자(수탁자)</td><td id="}BOB" class="">위탁업무</td></tr><tr id="1e2bbbb2-58e2-4b9e-9517-75cdc95ad5cf"><td id="\jwn" class="">Google LLC</td><td id="}BOB" class="">• Google Analytics를 통한 서비스 이용/방문 트래픽 통계 분석</td></tr></tbody></table><p id="9349f6ef-cd8e-4036-8481-8a56a4cdeaac" class="">회사는 아래와 같이 국외에 개인정보 처리 업무를 위탁하고 있습니다.</p><table id="88c3ed0d-7d02-4753-82ec-14bbb84ac269" class="simple-table"><tbody><tr id="fbf5d275-83bc-4850-9bdc-b9f82cb0aeb8"><td id="zhTa" class="">업체명</td><td id="p=\;" class="">국가</td><td id="sRjj" class="">위치(주소)</td><td id="\Vb;" class="">일시 및 방법</td><td id="]M:X" class="">이전 항목</td><td id="LDri" class="">보유 및 이용기간</td><td id="nTBG" class="">관리책임자의 연락처</td></tr><tr id="2d6190d7-d48c-420a-a66f-781b229a67a9"><td id="zhTa" class="">Google LLC</td><td id="p=\;" class="">미국</td><td id="sRjj" class="">1601 Amphitheatre Parkwa Mountain View, CA 94043, USA</td><td id="\Vb;" class="">• 서비스 이용 시점에 서버를 통해 전송</td><td id="]M:X" class="">서비스 이용 내역</td><td id="LDri" class="">• 회원 탈퇴 시까지</td><td id="nTBG" class="">googlekrsupport@google.com</td></tr></tbody></table><p id="be356bf8-cafa-4165-9126-b765ffdc09d1" class="">② 회사는 위탁계약 체결 시 「개인정보 보호법」 제26조에 따라 위탁업무 수행 목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다.</p><p id="8f085577-49aa-40bf-83ca-cbf9d4b882d7" class="">③ 위탁업무의 내용이나 수탁자가 변경될 경우에는 지체 없이 본 개인정보 처리방침을 통하여 공개하도록 하겠습니다.</p><h2 id="5efe5640-635a-41f5-8872-db76541fa28f" class="">3. <strong>개인정보의 파기</strong></h2><p id="aee76b36-5338-41f3-9361-32a39657b378" class="">① 회사는 개인정보 보유기간의 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.</p><p id="690e2ac6-6cc3-469e-9a60-f977e4c732fd" class="">② 정보주체로부터 동의 받은 개인정보 보유기간이 경과하거나 처리 목적이 달성되었음에도 불구하고 다른 법령에 따라 개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의 데이터베이스(DB)로 옮기거나 보관 장소를 달리하여 보존합니다.</p><p id="5f4a50d4-6a35-44db-9554-c7ee45147546" class="">③ 개인정보 파기의 절차 및 방법은 다음과 같습니다.</p><ul id="5713e7b6-085f-40e6-8287-81e8720993c6" class="bulleted-list"><li style="list-style-type:disc">파기절차 : 파기 사유가 발생한 개인정보를 선정하고 개인정보 보호책임자의 승인을 받아 개인정보를 파기합니다.</li></ul><ul id="fc676141-3603-4599-804f-91dfbb6c8acc" class="bulleted-list"><li style="list-style-type:disc">파기방법 : 전자적 파일 형태로 기록·저장된 개인정보는 기록을 재생할 수 없도록 파기하며, 종이 문서에 기록·저장된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.</li></ul><h2 id="79c9aa1d-e5e6-4315-928f-caca0e7ed49b" class=""><strong>4. 미이용자의 개인정보 파기 등에 관한 조치</strong></h2><p id="3319c73b-2d39-4b5b-ad4e-5806368e5ec7" class="">① 회사는 1년간 서비스를 이용하지 않은 이용자의 정보를 파기하고 있습니다. 다만, 다른 법령에서 정한 보존기간이 경과할 때까지 다른 이용자의 개인정보와 분리하여 별도로 저장·관리할 수 있습니다.</p><p id="504804d2-77ea-4c78-9941-e967cd2aa468" class="">② 회사는 개인정보의 파기 30일 전까지 개인정보가 파기되는 사실, 기간 만료일 및 파기되는 개인정보의 항목을 이메일, 문자 등 이용자에게 통지 가능한 방법으로 알리고 있습니다.</p><p id="e7e67003-c2df-4a9f-bef7-a746bbe17535" class="">③ 개인정보의 파기를 원하지 않으시는 경우, 기간 만료 전 서비스 로그인을 하시면 됩니다.</p><h2 id="e037850b-82af-417d-8bf4-89af10c14726" class=""><strong>5. 정보주체와 법정대리인의 권리·의무 및 행사방법</strong></h2><p id="8196071f-48c4-47aa-b062-da5977f91c35" class="">① 정보주체는 회사에 대해 언제든지 개인정보 열람·정정·삭제·처리정지 요구 등의 권리를 행사할 수 있습니다.</p><p id="f38718af-ff1a-47f0-9a08-4f5be44857cd" class="">② 권리 행사는 「개인정보 보호법」 시행령 제41조 제1항에 따라 서면, 전자우편, 모사전송(FAX) 등을 통하여 하실 수 있으며, 회사는 이에 대해 지체 없이 조치하겠습니다.</p><p id="32ce934d-6fe6-46ad-abd0-ac1dfa32e21e" class="">③ 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 하실 수도 있습니다. 이 경우 &quot;개인정보 처리 방법에 관한 고시(제2020-7호)&quot; 별지 제11호 서식에 따른 위임장을 제출하셔야 합니다.</p><p id="456611a8-836a-459f-af28-f9c63a3af63d" class="">④ 개인정보 열람 및 처리정지 요구는 「개인정보 보호법」 제35조 제4항, 제37조 제2항에 의하여 정보주체의 권리가 제한될 수 있습니다.</p><p id="7a793860-b0f1-47dd-87af-5cbf795c1ae7" class="">⑤ 개인정보의 정정 및 삭제 요구는 다른 법령에서 그 개인정보가 수집 대상으로 명시되어 있는 경우에는 그 삭제를 요구할 수 없습니다.</p><p id="1490b311-ecac-41b4-a9a0-a5ec0d858315" class="">⑥ 회사는 정보주체 권리에 따른 열람의 요구, 정정·삭제의 요구, 처리 정지의 요구 시 열람 등 요구를 한 자가 본인이거나 정당한 대리인인지를 확인합니다.</p><h2 id="42a9fcd4-d413-4c34-8cb6-b3fd26b0ef62" class=""><strong>6. 개인정보의 안전성 확보조치</strong></h2><p id="4058a799-c01d-47f1-8021-8c217ba6c1a3" class="">회사는 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다.</p><p id="858866e9-69de-4418-ad93-858c582d27d3" class="">1) 관리적 조치 : 내부관리계획 수립·시행, 전담조직 운영, 정기적 직원 교육</p><p id="85eeea84-7afe-4c03-b6bd-a15afcfdb888" class="">2) 기술적 조치 : 개인정보처리시스템 등의 접근 권한 관리, 접근통제시스템 설치, 개인정보의 암호화, 보안 프로그램 설치 및 갱신</p><h2 id="131a848c-3592-4ba8-bd71-f8f3389b0794" class=""><strong>7. 개인정보 자동 수집 장치의 설치·운영 및 거부에 관한 사항</strong></h2><p id="4bb479a3-5e0e-4f1d-9d2d-9c67f0cacd2e" class="">① 회사는 아래의 목적으로 &quot;쿠키(cookie)&quot;를 사용합니다. 쿠키는 웹사이트를 운영하는데 이용되는 서버(http)가 이용자의 컴퓨터 브라우저 또는 모바일 어플리케이션에게 보내는 소량의 정보로, 이용자의 컴퓨터 내부 하드디스크 또는 모바일 기기에 저장됩니다.</p><p id="fb37ddf8-3231-4969-bd5c-cbfeefd17e19" class="">1) 쿠키의 사용 목적 : 로그인 상태 유지, 이용자의 환경설정 유지, 서비스 편의기능 제공</p><p id="7a911a7b-aae4-45cd-815a-0a9d2c278e5c" class="">2) 쿠키 저장 거부 시 불이익 : 맞춤형 서비스 이용에 어려움이 있을 수 있습니다.</p><p id="03439b02-2e97-47a4-abe7-de18f7e30eab" class="">3) 쿠키의 설치·운영 및 거부 : 브라우저나 앱의 종류에 따라 아래의 방법으로 쿠키의 저장을 거부할 수 있습니다.</p><ul id="ba23f2fd-19ec-4729-9941-5a14a230f66a" class="bulleted-list"><li style="list-style-type:disc">Safari App을 사용하는 경우 쿠키 설정 방법 <a href="https://support.apple.com/ko-kr/HT201265">보기</a></li></ul><ul id="236eadd3-1c1d-4c90-9416-abbd9261c457" class="bulleted-list"><li style="list-style-type:disc">Chrome App을 사용하는 경우 쿠키 설정 방법 <a href="https://support.google.com/chrome/answer/95647?hl=ko&amp;co=GENIE.Platform%3DAndroid">보기</a></li></ul><ul id="ae004253-d2e0-45f4-9a19-d497fe08f2ad" class="bulleted-list"><li style="list-style-type:disc">Naver App을 사용하는 경우 쿠키 설정 방법: 설정 &gt; 인터넷 사용 기록 &gt; 쿠키 삭제</li></ul><ul id="c4108dd7-624e-4d4d-9246-e34113bb3c9a" class="bulleted-list"><li style="list-style-type:disc">Android : 설정 &gt; 애플리케이션 &gt; 서비스 선택 &gt; 저장공간 &gt; 캐시 삭제</li></ul><ul id="f6229676-68c2-476e-afd6-d293ca13d798" class="bulleted-list"><li style="list-style-type:disc">iOS: 설정 &gt; 개인 정보 보호 &gt; 추적 &gt; 서비스 앱 비활성화 선택</li></ul><p id="2dc2940c-9776-4dd9-932a-14779d66c8cf" class="">② 회사는 이용자에게 더 나은 이용 경험을 제공하기 위하여, 홈페이지/앱 접속 시 자동으로 방문기록과 접속 수단에 관한 정보를 수집하여 분석하는 &quot;웹 로그 분석 도구&quot;를 사용합니다. 경우에 따라 회사는 웹 로그 분석 업무를 타사에 위탁하며, 그 과정에서 수집된 정보가 국외로 이전될 수 있습니다. 이에 관한 내용은 &quot;개인정보 처리의 위탁&quot; 부분에서 확인하실 수 있습니다.</p><p id="87871013-ab58-44b6-95c2-4d5a453271f0" class="">1) 웹 로그 분석 도구의 사용 목적 : 이용자의 서비스 이용 통계 분석을 통한 서비스 개선</p><p id="f88c56d8-4429-4276-8617-046c17322de9" class="">2) 웹 로그 분석 도구의 거부·차단 방법 :</p><ul id="9d184419-781f-4e53-a61c-b019d0214bcb" class="bulleted-list"><li style="list-style-type:disc">[Google Analytics] <a href="https://chrome.google.com/webstore/detail/google-analytics-opt-out/fllaojicojecljbmefodhfapmkghcbnh?hl=ko">보기</a></li></ul><p id="d397b6f4-8d31-4928-8da2-7c1e108cafca" class="">3) 거부 시 불이익 : 서비스 이용에 불이익은 없습니다. 다만, 서비스 개선을 위한 통계 분석에 영향을 끼칠 수 있습니다.</p><h2 id="3096ec70-7c87-4df4-bcc9-f9024940ed77" class="">8. <strong>행태정보의 수집·이용 및 거부 등에 관한 사항</strong></h2><p id="c610b433-5aad-4003-9907-daeb2ba6c67c" class="">① 회사는 서비스 이용과정에서 정보주체에게 최적화된 맞춤형 서비스 및 혜택, 온라인 맞춤형 광고 등을 제공하기 위하여 행태정보를 수집·이용하고 있습니다.</p><p id="a0c0362b-5ad3-482d-93c5-bdd8e898f5ab" class="">② 회사는 다음과 같이 행태정보를 수집합니다.</p><table id="fff4d3bd-db7d-4066-ba6b-893cb8e2918a" class="simple-table"><tbody><tr id="88334edd-e2e3-4a9d-b8ca-1e540e27a2a8"><td id="UFCT" class="">행태정보 수집 항목</td><td id="n@V|" class="">수집 방법</td><td id="qr&lt;J" class="">수집 목적</td><td id="aGa:" class="">보유 및 이용기간</td></tr><tr id="ad9be498-a41f-4673-961f-797607d1fecb"><td id="UFCT" class=""></td><td id="n@V|" class=""></td><td id="qr&lt;J" class=""></td><td id="aGa:" class=""></td></tr><tr id="18868960-ce72-468c-8d4c-55dbf5b8022f"><td id="UFCT" class="">이용자의 서비스 방문이력</td><td id="n@V|" class="">이용자가 서비스 방문/실행 시 자동 수집</td><td id="qr&lt;J" class="">이용자의 관심, 성향에 기반한 개인 맞춤형 상품 추천 서비스(광고포함)를 제공</td><td id="aGa:" class="">수집일로부터 90일 후 파기</td></tr></tbody></table><p id="89e6bc76-aee9-43bd-8894-f3710929f816" class="">③ 회사는 온라인 맞춤형 광고 사업자가 행태정보를 수집∙처리하도록 허용하고 있지 않습니다.</p><p id="9448e0ec-c222-4963-9302-59ebea195d12" class="">④ 회사는 온라인 맞춤형 광고 등에 필요한 최소한의 행태정보만을 수집하며, 사상, 신념, 가족 및 친인척관계, 학력·병력, 기타 사회활동 경력 등 개인의 권리·이익이나 사생활을 뚜렷하게 침해할 우려가 있는 민감한 행태정보를 수집하지 않습니다.</p><p id="9f1761b8-fee3-49cc-8def-ac484b213996" class="">⑤ 회사는 만 14세 미만임을 알고 있는 아동이나 만14세 미만의 아동을 주 이용자로 하는 온라인 서비스로부터 맞춤형 광고 목적의 행태정보를 수집하지 않고, 만 14세 미만임을 알고 있는 아동에게는 맞춤형 광고를 제공하지 않습니다.</p><p id="38a28364-4bc3-47ae-aa20-7a48069d4462" class="">⑥ 정보주체는 아래와 같이 설정 변경을 통해 맞춤형 광고를 차단·허용할 수 있습니다.</p><p id="7e9db665-bf5a-4bd5-b9ea-daa19b9ded11" class="">스마트폰의 광고식별자 차단/허용</p><ul id="89a43b0b-a0ee-4cc6-8072-655e1c319d85" class="bulleted-list"><li style="list-style-type:disc">[Android] 설정 &gt; 개인정보 보호 &gt; 광고 &gt; 광고 ID 재설정 또는 광고ID 삭제</li></ul><ul id="f59e2a36-163e-4031-aeb2-d575f9bc7bf8" class="bulleted-list"><li style="list-style-type:disc">[iOS] 설정 &gt; 개인정보 보호 및 보안 &gt; 추적 &gt; 앱이 추적을 요청하도록 허용 끔</li></ul><p id="21476790-0727-44fa-9587-cbb57ef3fb4b" class="">※ 모바일 OS 버전에 따라 메뉴 및 방법이 다소 상이할 수 있습니다.</p><p id="7f0453de-0234-4bc5-b0e4-c949236f5c88" class="">⑦ 정보주체는 본 개인정보 처리방침에 안내된 개인정보 보호책임자 및 개인정보 담당부서를 통하여 행태정보와 관련하여 궁금한 사항과 거부권 행사, 피해 신고 접수 등을 문의할 수 있습니다.</p><h2 id="39385f6b-63b1-4433-951e-200191301fcb" class=""><strong>9. 개인정보 보호책임자 및 개인정보 열람청구</strong></h2><p id="ef7a8ea4-7134-4b94-8ad6-c983c3131b9c" class="">① 회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만 처리 및 피해 구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p><p id="7b310c2f-2cdf-4e2a-9470-f008eb768c00" class="">② 정보주체는 「개인정보 보호법」 제35조에 따른 개인정보의 열람 청구를 아래의 연락처로 할 수 있습니다. 회사는 정보주체의 개인정보 열람 청구가 신속하게 처리되도록 노력하겠습니다.</p><table id="8c25c559-e3ce-4c0a-8a79-46f3ef720e1b" class="simple-table"><tbody><tr id="2e558766-318c-4848-896e-837954908523"><td id="t}aW" class="">구분</td><td id="_sbc" class="">담당자</td><td id="dEBo" class="">연락처</td></tr><tr id="eefb66a8-7837-4b90-b520-6966322c5127"><td id="t}aW" class=""></td><td id="_sbc" class=""></td><td id="dEBo" class=""></td></tr><tr id="aa04fe42-c1b1-4a84-a2d0-58c68a00c18f"><td id="t}aW" class="">개인정보 보호책임자</td><td id="_sbc" class="">직책/직위 : 팀장
+담당자 성명 : 박근형</td><td id="dEBo" class="">w8385@naver.com</td></tr><tr id="540b7b1f-a9a8-4e1d-869c-8e147cbede30"><td id="t}aW" class="">개인정보 열람 청구</td><td id="_sbc" class="">부서명 : 백엔드팀
+담당자 성명 : 이성윤</td><td id="dEBo" class="">mader0708@gmail.com</td></tr></tbody></table><p id="9ac9ac43-aefd-410e-b84c-ba07e0ff10ff" class="">③ 정보주체는 회사의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보보호 관련 문의, 불만 처리, 피해 구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의할 수 있습니다. 회사는 정보주체의 문의에 대해 지체 없이 답변 및 처리해 드릴 것입니다.</p><h2 id="c48a85ce-9b8a-4218-9b4f-75d3828e7298" class="">10. <strong>권익침해 구제 방법</strong></h2><p id="eea3cc20-0189-4d3b-89a8-bab6f31f54c6" class="">① 회사는 정보주체의 개인정보 자기 결정권을 보장하고, 개인정보 침해로 인한 상담 및 피해 구제를 위해 노력하고 있으며, 신고나 상담이 필요한 경우 담당부서로 연락해 주시기 바랍니다.</p><p id="b7092938-b977-4232-8599-3f845e7dcc52" class="">② 정보주체는 개인정보 침해로 인한 구제를 받기 위하여 개인정보 분쟁조정위원회, 한국인터넷진흥원 개인정보 침해신고센터 등에 분쟁해결이나 상담 등을 신청할 수 있습니다. 이 밖에 기타 개인정보 침해의 신고, 상담에 대하여는 아래의 기관에 문의하시기 바랍니다.</p><ul id="9f0486d9-5bc7-400f-8fef-a4462f6aa3b5" class="bulleted-list"><li style="list-style-type:disc">개인정보분쟁조정위원회 : (국번없이) 1833-6972 (www.kopico.go.kr)</li></ul><ul id="d9f93430-abb4-43bf-91c1-57575ba5568a" class="bulleted-list"><li style="list-style-type:disc">개인정보침해신고센터 : (국번없이) 118 (privacy.kisa.or.kr)</li></ul><ul id="d4024c33-7e5d-4045-9561-4ba6d69f18c9" class="bulleted-list"><li style="list-style-type:disc">대검찰청 : (국번없이) 1301 (www.spo.go.kr)</li></ul><ul id="b1d718d3-2d2e-4be9-9f23-e0e1ae9ba82f" class="bulleted-list"><li style="list-style-type:disc">경찰청 : (국번없이) 182 (ecrm.cyber.go.kr)</li></ul><p id="5b390928-eff8-4690-88ee-9dfbd860a57d" class="">③ 「개인정보 보호법」 제35조(개인정보의 열람), 제36조(개인정보의 정정·삭제), 제37조(개인정보의 처리정지 등)의 규정에 의한 요구에 대하여 공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익의 침해를 받은 자는 행정심판법이 정하는 바에 따라 행정심판을 청구할 수 있습니다.</p><ul id="57205f43-f022-49ed-96b0-0bd3fd323367" class="bulleted-list"><li style="list-style-type:disc">중앙행정심판위원회 : (국번없이) 110 (www.simpan.go.kr)</li></ul><h3 id="9bc505be-f247-4c1a-a314-264f2956d1c8" class=""><strong>◾️ 개인정보 처리방침의 변경에 관한 사항</strong></h3><p id="2da41b20-86c4-47ea-b315-dae423c47d3e" class="">① 본 방침은 2023년 10월 09일부터 시행됩니다.</p></div></article></body></html>

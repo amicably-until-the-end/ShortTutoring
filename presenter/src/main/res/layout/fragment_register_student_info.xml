@@ -18,7 +18,7 @@
 
         <TextView
             style="@style/ToolBarTitle"
-            android:text="질문 올리기" />
+            android:text="회원 가입" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

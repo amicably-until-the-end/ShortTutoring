@@ -7,6 +7,12 @@
 
     <application android:usesCleartextTraffic="true">
         <activity
+            android:name=".login.ToSNotionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.PrivacyPolicyNotionActivity"
+            android:exported="false" />
+        <activity
             android:name=".coin.ChargeCoinActivity"
             android:exported="false" />
         <activity
