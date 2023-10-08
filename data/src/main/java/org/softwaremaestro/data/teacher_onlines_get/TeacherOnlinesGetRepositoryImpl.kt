@@ -6,14 +6,14 @@ import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.teacher_onlines_get.model.asDomain
 import org.softwaremaestro.data.teacher_onlines_get.remote.TeacherOnlinesGetApi
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.domain.teacher_onlines_get.TeacherOnlinesGetRepository
-import org.softwaremaestro.domain.teacher_onlines_get.entity.TeacherOnlineVO
 import javax.inject.Inject
 
 class TeacherOnlinesGetRepositoryImpl @Inject constructor(private val teacherOnlinesGetApi: TeacherOnlinesGetApi) :
     TeacherOnlinesGetRepository {
 
-    override suspend fun getTeacherOnlines(): Flow<BaseResult<List<TeacherOnlineVO>, String>> {
+    override suspend fun getTeacherOnlines(): Flow<BaseResult<List<TeacherVO>, String>> {
         return flow {
             val response = teacherOnlinesGetApi.getTeacherOnlines()
             val body = response.body()!!
@@ -27,7 +27,8 @@ class TeacherOnlinesGetRepositoryImpl @Inject constructor(private val teacherOnl
                 val errorString =
                     "error in ${this@TeacherOnlinesGetRepositoryImpl::class.java.name}\n" +
                             "message: ${response.body()!!.message}"
-                Log.d("Error", errorString)
+                Log.e("Error", errorString)
+                emit(BaseResult.Error(errorString))
             }
         }
     }

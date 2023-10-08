@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
@@ -117,24 +116,10 @@ class TeacherSearchFragment : Fragment() {
 
     private fun setObserver() {
         teacherSearchViewModel.searchedResult.observe(viewLifecycleOwner) {
-            it?.map {
-                FollowingGetResponseVO(
-                    // Todo 추후에 수정하기
-                    id = it.teacherId,
-                    name = it.nickname,
-                    bio = it.bio,
-                    profileImage = it.profileUrl,
-                    role = "teacher",
-                    schoolDivision = "학부 설정 안되어있음",
-                    schoolName = it.univ,
-                    schoolDepartment = "학부 설정 안되어있음",
-                    followers = it.followers,
-                    followingCount = -1
-                )
-            }?.let {
-                teacherAdapter.setItem(it)
-                teacherAdapter.notifyDataSetChanged()
-            }
+
+            teacherAdapter.setItem(it)
+            teacherAdapter.notifyDataSetChanged()
+
         }
     }
 }

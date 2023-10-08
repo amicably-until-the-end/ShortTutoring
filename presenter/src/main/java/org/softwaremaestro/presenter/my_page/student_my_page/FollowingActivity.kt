@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ActivityFollowingBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
@@ -87,24 +86,9 @@ class FollowingActivity : AppCompatActivity() {
 
     private fun observeTeacherRecommends() {
         teacherRecommendsViewModel.teacherRecommends.observe(this) { teachers ->
-            teachers?.let { teacher ->
-                teacher.map {
-                    FollowingGetResponseVO(
-                        id = it.teacherId,
-                        name = it.nickname,
-                        bio = it.bio,
-                        profileImage = it.profileUrl,
-                        role = "teacher",
-                        schoolDivision = "",
-                        schoolName = it.univ,
-                        schoolDepartment = "",
-                        followers = it.followers,
-                        followingCount = it.followers?.size
-                    )
-                }.let {
-                    teacherRecommendsAdapter.setItem(it)
-                    teacherRecommendsAdapter.notifyDataSetChanged()
-                }
+            teachers?.let {
+                teacherRecommendsAdapter.setItem(it)
+                teacherRecommendsAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -112,7 +96,7 @@ class FollowingActivity : AppCompatActivity() {
     private fun getRemoteData() {
         if (SocketManager.userId != null) {
             followingViewModel.getFollowing(SocketManager.userId!!)
-            teacherRecommendsViewModel.getTeachers()
+            //teacherRecommendsViewModel.getTeachers()
         } else {
             Toast.makeText(this, "사용자의 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
             Util.logError(this::class.java, "userId is null")

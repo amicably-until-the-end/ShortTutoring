@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.follow.usecase.FollowingGetUseCase
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
@@ -17,8 +17,8 @@ import javax.inject.Inject
 class FollowingViewModel @Inject constructor(private val followingGetUseCase: FollowingGetUseCase) :
     ViewModel() {
 
-    private val _following = MutableLiveData<List<FollowingGetResponseVO>>()
-    val following: LiveData<List<FollowingGetResponseVO>> get() = _following
+    private val _following = MutableLiveData<List<TeacherVO>>()
+    val following: LiveData<List<TeacherVO>> get() = _following
 
     fun getFollowing(userId: String) {
         viewModelScope.launch {

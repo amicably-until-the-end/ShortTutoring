@@ -6,6 +6,7 @@ data class TeacherVO(
     val teacherId: String?,
     val bio: String?,
     val univ: String?,
+    val major: String? = null,
     val rating: Float?,
     val followers: List<String>?,
     val reservationCnt: Int?

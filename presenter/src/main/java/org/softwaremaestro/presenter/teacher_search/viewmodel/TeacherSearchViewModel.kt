@@ -22,10 +22,10 @@ class TeacherSearchViewModel @Inject constructor() : ViewModel() {
                         nickname = "더미데이터입니다",
                         teacherId = "hc-teacher-id",
                         bio = "더미데이터입니다",
-                        univ = "더미데이터입니다",
+                        univ = "피식대학교",
                         rating = -1F,
                         followers = listOf(),
-                        reservationCnt = -1
+                        reservationCnt = 1,
                     )
                 )
             }

@@ -23,9 +23,10 @@ class TeacherRecommendViewModel @Inject constructor() : ViewModel() {
                             "hc-teacher-id",
                             "풀 수 없는 문제는 없다.",
                             "성균관대학교",
-                            4.9f,
+                            "기계공학과",
+                            -1.0f,
                             listOf(),
-                            -1
+                            -1,
                         )
                     )
                 }

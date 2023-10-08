@@ -4,7 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
+import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import java.lang.Integer.min
 
@@ -14,7 +14,7 @@ class TeacherAdapter(
 ) :
     RecyclerView.Adapter<TeacherAdapter.ViewHolder>() {
 
-    private var items: List<FollowingGetResponseVO> = emptyList()
+    private var items: List<TeacherVO> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -39,26 +39,26 @@ class TeacherAdapter(
         else min(itemCountLimit, items.size)
     }
 
-    fun setItem(items: List<FollowingGetResponseVO>) {
+    fun setItem(items: List<TeacherVO>) {
         this.items = items
     }
 
     inner class ViewHolder(private val binding: ItemTeacherBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: FollowingGetResponseVO) {
+        fun onBind(item: TeacherVO) {
 
             with(binding) {
-                item.profileImage?.let { ivTeacherImg.setImageURI(Uri.parse(it)) }
-                tvTeacherName.text = item.name
-                tvTeacherUniv.text = item.schoolName
+                item.profileUrl.let { ivTeacherImg.setImageURI(Uri.parse(it)) }
+                tvTeacherName.text = item.nickname
+                tvTeacherUniv.text = item.univ
                 tvTeacherBio.text = item.bio
-//                tvTeacherRating.text = item.rating.toString()
+                tvTeacherRating.text = String.format("%.1f", item.rating)
                 btnFollow.text = "찜한 학생 ${item.followers?.size ?: 0}"
             }
 
             itemView.setOnClickListener {
-                item.id?.let { onItemClickListener(it) }
+                item.teacherId?.let { onItemClickListener(it) }
             }
         }
     }

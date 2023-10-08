@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.presenter.databinding.ActivityFollowingBinding
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 
@@ -27,7 +26,7 @@ class FollowingActivity : AppCompatActivity() {
         setTeacherRecyclerView()
 
         // mock up
-        addItemToStudentAdapter()
+        //addItemToStudentAdapter()
     }
 
     private fun setTeacherRecyclerView() {
@@ -43,29 +42,4 @@ class FollowingActivity : AppCompatActivity() {
         }
     }
 
-    private fun addItemToStudentAdapter() {
-
-        teacherAdapter.setItem(
-            mutableListOf<FollowingGetResponseVO>().apply {
-                repeat(5) {
-                    add(
-                        FollowingGetResponseVO(
-                            "",
-                            "강혜린쌤",
-                            "선생님 소개",
-                            null,
-                            "teacher",
-                            "수학교육과",
-                            "한양대학교",
-                            "",
-                            null,
-                            0
-                        )
-                    )
-                }
-            }
-        )
-
-        teacherAdapter.notifyDataSetChanged()
-    }
 }
