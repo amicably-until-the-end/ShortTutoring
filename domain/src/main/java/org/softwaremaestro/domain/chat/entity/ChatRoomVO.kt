@@ -85,12 +85,13 @@ sealed class MessageBodyVO {
 
 }
 
-enum class QuestionType {
-    NORMAL, SELECTED
+enum class QuestionType(val value: String) {
+    NORMAL("normal"), SELECTED("selected")
 }
 
-enum class QuestionState {
-    PROPOSED, RESERVED
+enum class QuestionState(val value: String) {
+    PROPOSED("pending"),
+    RESERVED("reserved"),
 }
 
 enum class RoomType {
