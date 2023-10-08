@@ -78,18 +78,18 @@ class QuestionSelectedFormFragment : Fragment() {
 
     private fun initDialog() {
         initSchoolLevelDialog()
-        initSchoolSubjectDialog()
     }
 
     private fun initSchoolLevelDialog() {
         dialogSchoolLevel = DialogSchoolLevel {
             questionSelectedUploadViewModel.setSchoolLevel(it)
+            initSchoolSubjectDialog(it)
             dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
         }
     }
 
-    private fun initSchoolSubjectDialog() {
-        dialogSchoolSubject = DialogSchoolSubject {
+    private fun initSchoolSubjectDialog(schoolLevel: String) {
+        dialogSchoolSubject = DialogSchoolSubject(schoolLevel) {
             questionSelectedUploadViewModel.setSchoolSubject(it)
         }
     }

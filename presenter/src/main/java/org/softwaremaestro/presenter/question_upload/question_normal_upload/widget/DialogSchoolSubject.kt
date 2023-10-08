@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogSchoolSubjectBinding
 
@@ -46,6 +47,7 @@ class DialogSchoolSubject(
             maxValue = subjects.size - 1
             displayedValues = subjects
             value = 0
+            descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
         }
     }
 
