@@ -61,7 +61,17 @@ class QuestionAdapter(
                 else {
                     tvTime.visibility = View.VISIBLE
                     ivCheck.visibility = View.GONE
-                    val times = "${item.hopeTutoringTime?.joinToString(", ") ?: ""}"
+                    val times = "${
+                        item.hopeTutoringTime?.map {
+                            "${it.hour}:${
+                                String.format(
+                                    "%02d",
+                                    it.minute
+                                )
+                            }"
+                        }
+                            ?.joinToString(", ") ?: ""
+                    }"
                     tvTimeText.text = times
                 }
 

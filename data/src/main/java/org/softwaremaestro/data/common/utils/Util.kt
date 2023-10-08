@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.common.utils
 
+import android.util.Log
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -19,6 +20,7 @@ fun String.parseToLocalDateTime(): LocalDateTime? {
         val zonedDateTime = ZonedDateTime.parse(this, formatter)
         return zonedDateTime.toLocalDateTime()
     } catch (e: Exception) {
+        Log.e("parseToLocalDateTime", e.toString())
         return null
     }
 }

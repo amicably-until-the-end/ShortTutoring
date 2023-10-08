@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -137,14 +138,20 @@ class TeacherHomeFragment : Fragment() {
 
         val onQuestionClickListener = { question: QuestionGetResponseVO ->
 
+            val hopeTime =
+                question.hopeTutoringTime?.map { "${it.hour}시 ${it.minute}분" }
+                    ?.joinToString(", ")
+            Log.d("my question", "$question $hopeTime")
+
+
             val intent = Intent(requireActivity(), QuestionDetailActivity::class.java).apply {
                 putStringArrayListExtra(IMAGE, question.images as ArrayList<String>)
                 putExtra(SUBJECT, question.problemSubject)
                 putExtra(DESCRIPTION, question.problemDescription)
                 putExtra(QUESTION_ID, question.id)
-                putStringArrayListExtra(
+                putExtra(
                     HOPE_TIME,
-                    question.hopeTutoringTime as ArrayList<String>
+                    if (!hopeTime.isNullOrEmpty()) hopeTime else "시간을 선택하지 않았어요."
                 )
             }
             startActivity(intent)
