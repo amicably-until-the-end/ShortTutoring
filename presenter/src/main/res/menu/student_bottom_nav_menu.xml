@@ -5,10 +5,17 @@
         android:icon="@drawable/selector_ic_home"
         android:title="홈" />
 
+    <!--
     <item
         android:id="@+id/teacherSearchFragment"
         android:icon="@drawable/selector_ic_shorts"
         android:title="숏츠" />
+        -->
+
+    <item
+        android:id="@+id/chargeCoinSecondFragment"
+        android:icon="@drawable/selector_ic_coin"
+        android:title="코인 받기" />
 
     <item
         android:id="@+id/questionCameraFragment"

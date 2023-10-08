@@ -50,4 +50,9 @@
         android:name="org.softwaremaestro.presenter.chat_page.student.StudentChatFragment"
         android:label="fragment_student_tutoring_list"
         tools:layout="@layout/fragment_chat_page" />
+    <fragment
+        android:id="@+id/chargeCoinSecondFragment"
+        android:name="org.softwaremaestro.presenter.coin.ChargeCoinSecondFragment"
+        android:label="fragment_charge_coin_second"
+        tools:layout="@layout/fragment_charge_coin_second" />
 </navigation>
