@@ -68,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_radius_100_background_grey"
-                android:enabled="false"
                 android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:paddingHorizontal="12dp"
@@ -129,7 +128,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/iv_coin_1"
+                        android:id="@+id/iv_coin_free"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:src="@drawable/ic_coin"
@@ -144,8 +143,8 @@
                         android:text="200"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        app:layout_constraintLeft_toRightOf="@id/iv_coin_1"
-                        app:layout_constraintTop_toTopOf="@id/iv_coin_1" />
+                        app:layout_constraintLeft_toRightOf="@id/iv_coin_free"
+                        app:layout_constraintTop_toTopOf="@id/iv_coin_free" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -155,11 +154,12 @@
                         android:text="일반 질문 2회"
                         android:textColor="@color/sub_text_grey"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_coin_1" />
+                        app:layout_constraintTop_toBottomOf="@id/iv_coin_free" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
+                    android:id="@+id/tv_detail_free_coin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_medium"
@@ -227,7 +227,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/iv_coin_2"
+                        android:id="@+id/iv_coin_100"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:src="@drawable/ic_coin"
@@ -242,8 +242,8 @@
                         android:text="100"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        app:layout_constraintLeft_toRightOf="@id/iv_coin_2"
-                        app:layout_constraintTop_toTopOf="@id/iv_coin_2" />
+                        app:layout_constraintLeft_toRightOf="@id/iv_coin_100"
+                        app:layout_constraintTop_toTopOf="@id/iv_coin_100" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -253,7 +253,7 @@
                         android:text="일반 질문 1회"
                         android:textColor="@color/sub_text_grey"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_coin_2" />
+                        app:layout_constraintTop_toBottomOf="@id/iv_coin_100" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -294,7 +294,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/iv_coin_3"
+                        android:id="@+id/iv_coin_500"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:src="@drawable/ic_coin"
@@ -309,8 +309,8 @@
                         android:text="500"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        app:layout_constraintLeft_toRightOf="@id/iv_coin_3"
-                        app:layout_constraintTop_toTopOf="@id/iv_coin_3" />
+                        app:layout_constraintLeft_toRightOf="@id/iv_coin_500"
+                        app:layout_constraintTop_toTopOf="@id/iv_coin_500" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -320,7 +320,7 @@
                         android:text="일반 질문 5회"
                         android:textColor="@color/sub_text_grey"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/iv_coin_3" />
+                        app:layout_constraintTop_toBottomOf="@id/iv_coin_500" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -333,7 +333,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="5,000" />
+                    tools:text="5,000원" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

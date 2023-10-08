@@ -63,12 +63,17 @@ class StudentHomeActivity : AppCompatActivity() {
             var intent = Intent(this, QuestionUploadActivity::class.java)
             startActivity(intent)
         }
-
     }
 
     fun moveToChatTab() {
         val chatItem = binding.bottomNavView.menu.findItem(R.id.studentChatFragment)
         NavigationUI.onNavDestinationSelected(chatItem, navController)
+        //파라미터 넘기고 싶으면 navController navigate 직접 호출하고 바텀 네비게이션은 선택된 아이콘 직접 바꾸기
+    }
+
+    fun moveToCoinTab() {
+        val coinItem = binding.bottomNavView.menu.findItem(R.id.chargeCoinSecondFragment)
+        NavigationUI.onNavDestinationSelected(coinItem, navController)
         //파라미터 넘기고 싶으면 navController navigate 직접 호출하고 바텀 네비게이션은 선택된 아이콘 직접 바꾸기
     }
 }

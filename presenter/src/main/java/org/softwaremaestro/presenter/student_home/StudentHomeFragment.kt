@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
-import org.softwaremaestro.presenter.coin.ChargeCoinActivity
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
@@ -207,9 +206,10 @@ class StudentHomeFragment : Fragment() {
 
     private fun setCoinButton() {
         binding.cbCoin.setOnClickListener {
-            startActivity(Intent(requireContext(), ChargeCoinActivity::class.java).apply {
-                putExtra("my-coin", myProfileViewModel.amount.value)
-            })
+//            startActivity(Intent(requireContext(), ChargeCoinActivity::class.java).apply {
+//                putExtra("my-coin", myProfileViewModel.amount.value)
+//            })
+            (requireActivity() as StudentHomeActivity).moveToCoinTab()
         }
     }
 
