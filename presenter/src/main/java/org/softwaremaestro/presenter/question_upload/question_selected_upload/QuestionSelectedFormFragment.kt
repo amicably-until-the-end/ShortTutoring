@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.question_upload.question_selected_upload
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +20,8 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionSelectedFormBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.TimeSelectAdapter
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolLevel
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
 import org.softwaremaestro.presenter.util.UIState
@@ -35,6 +36,8 @@ import java.time.LocalDateTime
 class QuestionSelectedFormFragment : Fragment() {
 
     private lateinit var loadingDialog: LoadingDialog
+    private lateinit var dialogSchoolLevel: DialogSchoolLevel
+    private lateinit var dialogSchoolSubject: DialogSchoolSubject
 
     lateinit var binding: FragmentQuestionSelectedFormBinding
     private val questionSelectedUploadViewModel: QuestionSelectedUploadViewModel by activityViewModels()
@@ -62,6 +65,7 @@ class QuestionSelectedFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initDialog()
         resetViewModelValue()
         parseMathSubjectJson()
         setObserver()
@@ -70,6 +74,24 @@ class QuestionSelectedFormFragment : Fragment() {
         setSubmitButton()
         setFields()
         setTeacherId()
+    }
+
+    private fun initDialog() {
+        initSchoolLevelDialog()
+        initSchoolSubjectDialog()
+    }
+
+    private fun initSchoolLevelDialog() {
+        dialogSchoolLevel = DialogSchoolLevel {
+            questionSelectedUploadViewModel.setSchoolLevel(it)
+            dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+        }
+    }
+
+    private fun initSchoolSubjectDialog() {
+        dialogSchoolSubject = DialogSchoolSubject {
+            questionSelectedUploadViewModel.setSchoolSubject(it)
+        }
     }
 
     private fun resetViewModelValue() {
@@ -104,32 +126,11 @@ class QuestionSelectedFormFragment : Fragment() {
     }
 
     private fun showSchoolSelectDialog() {
-        AlertDialog.Builder(requireContext())
-            .setItems(mathSubjects.keys.toTypedArray()) { _, which ->
-                val selectedSchool = mathSubjects.keys.toTypedArray()[which]
-                questionSelectedUploadViewModel.setSchoolLevel(selectedSchool)
-                showSubjectSelectDialog()
-            }
-            .setTitle("학교")
-            .setPositiveButton("확인", null)
-            .setNegativeButton("취소", null)
-            .create().show()
-
+        dialogSchoolLevel.show(parentFragmentManager, "dialogSchoolLevel")
     }
 
     private fun showSubjectSelectDialog() {
-        var subjects =
-            mathSubjects[questionSelectedUploadViewModel.schoolLevel.value]?.keys?.toTypedArray()!!
-
-        AlertDialog.Builder(requireContext())
-            .setItems(subjects) { _, which ->
-                val selectedSubject = subjects[which]
-                questionSelectedUploadViewModel.setSchoolSubject(selectedSubject)
-            }
-            .setTitle("교과 과정")
-            .setPositiveButton("확인", null)
-            .setNegativeButton("취소", null)
-            .create().show()
+        dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
     }
 
 
@@ -222,8 +223,8 @@ class QuestionSelectedFormFragment : Fragment() {
                 //버튼 여러번 눌러지는 거 방지
                 val questionSelectedUploadVO = QuestionSelectedUploadVO(
                     description = binding.etQuestionDesc.text.toString(),
-                    schoolLevel = binding.tvSchoolSelected.text.toString(),
-                    schoolSubject = binding.tvSubjectSelected.text.toString(),
+                    schoolLevel = questionSelectedUploadViewModel.schoolLevel.value!!,
+                    schoolSubject = questionSelectedUploadViewModel.schoolSubject.value!!,
                     mainImageIndex = 0,
                     images = questionSelectedUploadViewModel.images.value!!.map {
                         it.toBase64()

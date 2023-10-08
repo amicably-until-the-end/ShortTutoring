@@ -31,6 +31,7 @@ import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.text.SimpleDateFormat
 import java.time.LocalTime
@@ -226,7 +227,10 @@ class QuestionNormalFormFragment : Fragment() {
                 else -> {
                     loadingDialog.dismiss()
                     binding.btnSubmit.setEnabledAndChangeColor(true)
-                    Toast.makeText(requireContext(), "질문 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    SimpleAlertDialog().apply {
+                        title = "질문 등록에 실패했습니다"
+                        description = "잠시 후 다시 시도해주세요"
+                    }
                 }
             }
         }
