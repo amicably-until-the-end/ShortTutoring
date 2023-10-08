@@ -179,6 +179,7 @@ class StudentChatFragment : ChatFragment() {
             chatViewModel.getTutoringInfo(it) //예약하기 질문의 noti 세팅을 위한 과외 정보 api 호출
             observeTutoringInfo()
         }
+        hideRightButton()
         unSetOfferingTeacherMode() // 채팅 보고 있을 때 선택 했을 경우에 대비해서 offeringTeacherMode 해제하고 해당 방으로 이동
     }
 

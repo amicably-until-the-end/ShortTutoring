@@ -302,6 +302,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun setCloseOfferingTeacherButton() {
         binding.btnCloseOfferingTeacher.setOnClickListener {
+            chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
             unSetOfferingTeacherMode()
         }
     }
