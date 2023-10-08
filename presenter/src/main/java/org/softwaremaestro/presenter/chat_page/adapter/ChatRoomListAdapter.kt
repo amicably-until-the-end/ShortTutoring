@@ -20,11 +20,13 @@ class ChatRoomListAdapter(
 
     private var chatRoomIdList: List<String> = emptyList()
 
-    private var roomInfo: Map<String, ChatRoomVO>? = null
+    var roomInfo: Map<String, ChatRoomVO>? = null
 
     private var selectedView: MaterialCardView? = null
 
     private var selectedChattingRoomId: String? = null
+
+    val noNewMessageRoom = mutableSetOf<String>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -48,10 +50,7 @@ class ChatRoomListAdapter(
 
     fun setItem(items: List<String>) {
         this.chatRoomIdList = items
-    }
-
-    fun setRoomInfo(roomInfo: Map<String, ChatRoomVO>) {
-        this.roomInfo = roomInfo
+        noNewMessageRoom.clear()
     }
 
     fun setSelectedChattingRoomId(chattingId: String?) {
@@ -114,7 +113,10 @@ class ChatRoomListAdapter(
                     }
 
                 }
-                if (messageCnt > 0 && selectedChattingRoomId != item.id) {
+                if (messageCnt > 0 && selectedChattingRoomId != item.id && !noNewMessageRoom.contains(
+                        item.id
+                    )
+                ) {
                     tvNewMsgCnt.visibility = View.VISIBLE
                     tvNewMsgCnt.text = messageCnt.toString()
 

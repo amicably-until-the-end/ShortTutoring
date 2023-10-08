@@ -18,6 +18,7 @@ data class ChatRoomEntity(
     var subTitle: String?,
     var isSelect: Boolean,
     var description: String?,
+    var lastMessageTime: LocalDateTime? = LocalDateTime.now(),
 )
 
 @Entity

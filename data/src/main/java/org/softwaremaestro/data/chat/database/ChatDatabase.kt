@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.softwaremaestro.data.chat.dao.ChatRoomDao
 import org.softwaremaestro.data.chat.dao.MessageDao
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
@@ -14,7 +16,7 @@ import org.softwaremaestro.data.chat.entity.MessageEntity
 
 @Database(
     entities = [ChatRoomEntity::class, MessageEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converter::class)
@@ -22,8 +24,15 @@ abstract class ChatDatabase : RoomDatabase() {
     abstract fun chatRoomDao(): ChatRoomDao
     abstract fun messageDao(): MessageDao
 
+
     companion object {
         private var instance: ChatDatabase? = null
+
+        private val migration_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ChatRoomEntity ADD COLUMN lastMessageTime TEXT DEFAULT '2021-09-02T14:56:20.669'")
+            }
+        }
 
         @Synchronized
         fun getInstance(context: Context): ChatDatabase? {
@@ -32,10 +41,12 @@ abstract class ChatDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         ChatDatabase::class.java, "chat.db"
-                    ).build()
+                    ).addMigrations(migration_1_2)
+                        .build()
                 }
             }
             return instance
         }
     }
+
 }

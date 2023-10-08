@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.student_home.widget
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ class TeacherProfileDialog(
     BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogTeacherProfileBinding
-    private lateinit var mItem: TeacherVO
+    private var mItem: TeacherVO? = null
     private var following = false
     private lateinit var unfollowDialog: DetailAlertDialog
 
@@ -52,33 +53,40 @@ class TeacherProfileDialog(
     this MUST be called when creating this dialog.
      */
     fun setItem(item: TeacherVO) {
+        Log.d("TeacherProfileDialog", "setItem $item ${SocketManager.userId}")
         if (SocketManager.userId == null || item.followers == null) return
         mItem = item
         following = SocketManager.userId!! in item.followers!!
     }
 
     private fun bind() {
+        if (mItem == null) {
+            logError(this::class.java, "mItem is null in bind()")
+            dismiss()
+            Toast.makeText(requireContext(), "선생님 정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show()
+            return
+        }
         with(binding) {
-            Glide.with(root.context).load(mItem.profileUrl).centerCrop()
+            Glide.with(root.context).load(mItem?.profileUrl).centerCrop()
                 .into(ivTeacherImg)
-            tvTeacherName.text = mItem.nickname
-            tvTeacherUniv.text = mItem.univ
-            tvTeacherBio.text = mItem.bio
-            tvTeacherRating.text = mItem.rating.toString()
+            tvTeacherName.text = mItem?.nickname ?: "undefined"
+            tvTeacherUniv.text = mItem?.univ ?: "undefined"
+            tvTeacherBio.text = mItem?.bio ?: "undefined"
+            tvTeacherRating.text = mItem?.rating.toString()
             // Todo: 추후에 api로 수정
-            btnFollow.text = "찜한 학생 ${mItem.followers?.size ?: 0}"
-            tvReservationCnt.text = "${mItem.reservationCnt ?: 0}"
+            btnFollow.text = "찜한 학생 ${mItem?.followers?.size ?: 0}"
+            tvReservationCnt.text = "${mItem?.reservationCnt ?: 0}"
         }
     }
 
     private fun setProfileContainer() {
         binding.containerContent.setOnClickListener {
-            mItem.teacherId?.let { onProfileClick(it) }
+            mItem?.teacherId?.let { onProfileClick(it) }
         }
     }
 
     private fun setFollowBtn() {
-        with(mItem) {
+        mItem?.apply {
             if (teacherId != null) {
                 binding.btnFollow.setOnClickListener {
                     if (following) {
@@ -89,7 +97,7 @@ class TeacherProfileDialog(
                         with(binding.btnFollow) {
                             setBackgroundResource(R.drawable.bg_radius_5_background_light_blue)
                             setTextColor(resources.getColor(R.color.primary_blue, null))
-                            mItem.followers?.let { text = "찜한 학생 ${it.size + 1}" }
+                            mItem?.followers?.let { text = "찜한 학생 ${it.size + 1}" }
                         }
                     }
                 }
@@ -106,7 +114,7 @@ class TeacherProfileDialog(
 
     private fun setReserveBtn() {
         binding.containerReserve.setOnClickListener {
-            mItem.teacherId?.let { onReserve(it) }
+            mItem?.teacherId?.let { onReserve(it) }
         }
     }
 
@@ -115,12 +123,12 @@ class TeacherProfileDialog(
             title = "선생님 찜하기를 취소할까요?",
             description = "선생님에게 예약 질문을 할 수 없게 됩니다"
         ) {
-            onUnfollow(mItem.teacherId!!)
+            onUnfollow(mItem?.teacherId ?: "undefined")
             following = false
             with(binding.btnFollow) {
                 setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
                 setTextColor(resources.getColor(R.color.white, null))
-                mItem.followers?.let { text = "찜한 학생 ${it.size}" }
+                mItem?.followers?.let { text = "찜한 학생 ${it.size}" }
             }
         }
     }

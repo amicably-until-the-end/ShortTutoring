@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
+import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
@@ -30,6 +32,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.student_home.viewmodel.DeepLinkViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -54,6 +57,7 @@ abstract class ChatFragment : Fragment() {
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     protected val chatViewModel: ChatViewModel by activityViewModels()
+    private val deepLinkViewModel: DeepLinkViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -90,6 +94,7 @@ abstract class ChatFragment : Fragment() {
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = LoadingDialog(requireContext())
@@ -115,9 +120,17 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    private fun checkDeepLinkArgs() {
+        if (!deepLinkViewModel.chattingId.isNullOrEmpty()) {
+            Log.d("deeplink chat", "checkDeepLinkArgs ${deepLinkViewModel.chattingId}")
+            focusChatRoom(deepLinkViewModel.chattingId!!)
+        }
+    }
+
     private fun clearChatRoomState() {
         Log.d("chat", "clearChatRoomState")
         currentChatRoom = null
+        setMessageInputBoxVisibility()
         binding.tvChatRoomTitle.text = ""
         binding.btnChatRoomRight.visibility = View.GONE
         binding.btnChatRoomLeft.visibility = View.GONE
@@ -243,7 +256,7 @@ abstract class ChatFragment : Fragment() {
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
-
+            checkDeepLinkArgs()
         }
         chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
@@ -260,12 +273,17 @@ abstract class ChatFragment : Fragment() {
                     }
                 }
             }
+            checkDeepLinkArgs()
         }
         chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
+            checkDeepLinkArgs()
+
         }
         chatViewModel.reservedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
+            checkDeepLinkArgs()
+
         }
     }
 
@@ -275,7 +293,6 @@ abstract class ChatFragment : Fragment() {
      */
     private fun makeAdapterList() {
         recyclerViewAdapters.apply {
-            add(proposedAdapter)
             add(reservedAdapter)
             add(messageListAdapter)
             add(offeringTeacherAdapter)
@@ -326,22 +343,76 @@ abstract class ChatFragment : Fragment() {
 
             when (checkId) {
                 R.id.rb_normal_question -> {
-                    setReservedSectionItems(
-                        chatViewModel.reservedNormalChatRoomList.value?._data ?: emptyList()
-                    )
-                    setProposedSectionItems(
-                        chatViewModel.proposedNormalChatRoomList.value?._data ?: emptyList()
-                    )
+                    setRoomListToNormal()
                 }
 
                 R.id.rb_selected_question -> {
-                    setReservedSectionItems(
-                        chatViewModel.reservedSelectedChatRoomList.value?._data ?: emptyList()
-                    )
-                    setProposedSectionItems(
-                        chatViewModel.proposedSelectedChatRoomList.value?._data ?: emptyList()
-                    )
+                    setRoomListToSelected()
                 }
+            }
+        }
+    }
+
+    private fun toggleQuestionType(isSelect: Boolean) {
+        if (isSelect) {
+            binding.rbSelectedQuestion.isChecked = true
+            setRoomListToSelected()
+        } else {
+            binding.rbNormalQuestion.isChecked = true
+            setRoomListToNormal()
+        }
+    }
+
+    private fun setRoomListToNormal() {
+        setReservedSectionItems(
+            chatViewModel.reservedNormalChatRoomList.value?._data ?: emptyList()
+        )
+        setProposedSectionItems(
+            chatViewModel.proposedNormalChatRoomList.value?._data ?: emptyList()
+        )
+    }
+
+    private fun setRoomListToSelected() {
+        setReservedSectionItems(
+            chatViewModel.reservedSelectedChatRoomList.value?._data ?: emptyList()
+        )
+        setProposedSectionItems(
+            chatViewModel.proposedSelectedChatRoomList.value?._data ?: emptyList()
+        )
+    }
+
+    private fun focusChatRoom(chattingId: String) {
+        val list = mutableListOf<List<ChatRoomVO>?>(
+            chatViewModel.reservedSelectedChatRoomList.value?._data,
+            chatViewModel.reservedNormalChatRoomList.value?._data,
+            chatViewModel.proposedSelectedChatRoomList.value?._data,
+        )
+        chatViewModel.proposedNormalChatRoomList.value?._data?.forEach {
+            it.teachers?.forEach { room ->
+                list.add(listOf(room))
+            }
+        }
+        Log.d("focus chat", "rooms: $list")
+        list.forEach { rooms ->
+
+            rooms?.find { it.id == chattingId }?.let {
+                if (it.isSelect) {
+                    toggleQuestionType(true)
+                } else {
+                    toggleQuestionType(false)
+                }
+                if (!isTeacher() && !it.isSelect && it.questionState == QuestionState.PROPOSED) {
+                    val teachers =
+                        chatViewModel.proposedNormalChatRoomList.value?._data?.find { room ->
+                            room.questionId == it.questionId
+                        }?.teachers
+                    onQuestionRoomClick(teachers ?: emptyList(), it.questionId, proposedAdapter)
+                } else {
+                    unSetOfferingTeacherMode()
+                }
+                enterChatRoom(it)
+                deepLinkViewModel.chattingId = null
+                return
             }
         }
     }
@@ -363,7 +434,7 @@ abstract class ChatFragment : Fragment() {
             tvReservedCount.text = list.size.toString()
             cvQuestionReservedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             reservedAdapter.setItem(list.map { it.id })
-            reservedAdapter.setRoomInfo(chatRoomVOtoMap(list))
+            reservedAdapter.roomInfo = chatRoomVOtoMap(list)
             reservedAdapter.notifyDataSetChanged()
         }
     }
@@ -373,7 +444,7 @@ abstract class ChatFragment : Fragment() {
             tvApplyCount.text = list.size.toString()
             cvQuestionProposedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             proposedAdapter.setItem(list.map { it.id })
-            proposedAdapter.setRoomInfo(chatRoomVOtoMap(list))
+            proposedAdapter.roomInfo = chatRoomVOtoMap(list)
             proposedAdapter.notifyDataSetChanged()
         }
     }
@@ -425,12 +496,17 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    private fun scrollMessageToBottom() {
+        binding.rvMsgs.scrollToPosition(messageListAdapter.itemCount - 1)
+    }
+
     private fun setMessageListItems(messages: List<MessageVO>) {
         messageListAdapter.setItem(
             messages
         )
         binding.rvMsgs.scrollToPosition(messages.size - 1)
         messageListAdapter.notifyDataSetChanged()
+        scrollMessageToBottom()
     }
 
     private fun setOfferingTeacherRecyclerView() {
@@ -522,7 +598,7 @@ abstract class ChatFragment : Fragment() {
     private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher.map { it.id })
-        offeringTeacherAdapter.setRoomInfo(chatRoomVOtoMap(teacher))
+        offeringTeacherAdapter.roomInfo = chatRoomVOtoMap(teacher)
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
@@ -535,6 +611,7 @@ abstract class ChatFragment : Fragment() {
 
     private val onQuestionRoomClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit =
         { teacherList, questionId, caller ->
+            Log.d("chat", "onQuestionRoomClick: $teacherList")
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             setSelectedRoomId(null)
@@ -545,7 +622,6 @@ abstract class ChatFragment : Fragment() {
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
             enterChatRoom(chatRoom)
-            chatViewModel.markAsRead(chatRoom.id)
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
@@ -554,8 +630,27 @@ abstract class ChatFragment : Fragment() {
         onChatRoomStateChange(chatRoomVO)
         chatViewModel.getMessages(chatRoomVO.id)
         binding.tvChatRoomTitle.text = chatRoomVO.title ?: "undefine"
+        chatViewModel.markAsRead(chatRoomVO.id)
         setSelectedRoomId(chatRoomVO.id)
         Log.d("chat", "currentChatRoom: $currentChatRoom")
+        scrollMessageToBottom()
+        setMessageInputBoxVisibility()
+        setNoNewMessageRoom(chatRoomVO.id)
+    }
+
+    private fun setNoNewMessageRoom(roomId: String) {
+        recyclerViewAdapters.forEach {
+            when (it) {
+                is ChatRoomListAdapter -> {
+                    it.noNewMessageRoom.add(roomId)
+                }
+            }
+        }
+    }
+
+    private fun setMessageInputBoxVisibility() {
+        binding.containerInputBox.visibility =
+            if (currentChatRoom == null) View.GONE else View.VISIBLE
     }
 
     protected fun setChatRoomRightBtnVisible(b: Boolean) {
@@ -572,7 +667,36 @@ abstract class ChatFragment : Fragment() {
     }
 
     protected fun setNotiVisible(b: Boolean) {
-        binding.cnNoti.visibility = if (b) View.VISIBLE else View.GONE
+        with(binding) {
+            if (b) {
+                cnNoti.visibility = View.VISIBLE
+                //noti 밑에서 부터 메시지 보이게
+                ConstraintSet().apply {
+                    clone(containerMessages)
+                    clear(rvMsgs.id, ConstraintSet.TOP)
+                    connect(
+                        rvMsgs.id,
+                        ConstraintSet.TOP,
+                        cnNoti.id,
+                        ConstraintSet.BOTTOM,
+                    )
+                    applyTo(containerMessages)
+                }
+            } else {
+                cnNoti.visibility = View.GONE
+                //noti 없으면 메시지가 맨 위에 붙게
+                ConstraintSet().apply {
+                    clone(containerMessages)
+                    connect(
+                        rvMsgs.id,
+                        ConstraintSet.TOP,
+                        containerMessages.id,
+                        ConstraintSet.TOP,
+                    )
+                    applyTo(containerMessages)
+                }
+            }
+        }
     }
 
     protected fun enableChatting(b: Boolean) {

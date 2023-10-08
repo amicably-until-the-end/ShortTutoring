@@ -15,6 +15,7 @@ import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
@@ -27,8 +28,8 @@ import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewMod
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
-import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherViewModel
-import org.softwaremaestro.presenter.teacher_search.viewmodel.FollowingViewModel
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
+import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -39,7 +40,7 @@ class StudentHomeFragment : Fragment() {
     private val teacherOnlineViewModel: TeacherOnlineViewModel by activityViewModels()
     private val followUserViewModel: FollowUserViewModel by activityViewModels()
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
-    private val teacherViewModel: TeacherViewModel by activityViewModels()
+    private val teacherRecommendViewModel: TeacherRecommendViewModel by activityViewModels()
     private val lectureViewModel: LectureViewModel by activityViewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
@@ -64,6 +65,7 @@ class StudentHomeFragment : Fragment() {
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
+        setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
         return binding.root
@@ -71,7 +73,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun getRemoteData() {
         myProfileViewModel.getMyProfile()
-        teacherViewModel.getTeachers()
+        teacherRecommendViewModel.getTeachers()
         lectureViewModel.getLectures()
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         teacherOnlineViewModel.getTeacherOnlines()
@@ -95,13 +97,13 @@ class StudentHomeFragment : Fragment() {
                 followUserViewModel.unfollowUser(teacherId)
                 Toast.makeText(requireContext(), "선생님을 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
-                teacherViewModel.getTeachers()
+                teacherRecommendViewModel.getTeachers()
             },
             onFollow = { teacherId ->
                 followUserViewModel.followUser(teacherId)
                 Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
-                teacherViewModel.getTeachers()
+                teacherRecommendViewModel.getTeachers()
             },
             onReserve = { teacherId ->
                 startActivityForResult(
@@ -185,6 +187,12 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun setMoreTeacherBtn() {
+        binding.containerMoreTeacher.setOnClickListener {
+            startActivity(Intent(requireActivity(), TeacherSearchActivity::class.java))
+        }
+    }
+
     private fun setNofiBtn() {
         binding.btnToolbarNotification.setOnClickListener {
             showNoti("제목", "본문") {
@@ -253,7 +261,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun observeTeachers() {
-        teacherViewModel.teachers.observe(viewLifecycleOwner) {
+        teacherRecommendViewModel.teacherRecommends.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 binding.dvRanking.visibility = View.VISIBLE
                 binding.containerBestTeacherSection.visibility = View.VISIBLE

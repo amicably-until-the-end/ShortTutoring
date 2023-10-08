@@ -27,8 +27,8 @@ class ShortTutoringApplication : Application(), LifecycleEventObserver {
         KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
         initDataBase()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
         //clearDataBase()
+
     }
 
 

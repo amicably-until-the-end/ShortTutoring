@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentStudentMyPageBinding
-import org.softwaremaestro.presenter.my_page.teacher_my_page.FollowingActivity
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel

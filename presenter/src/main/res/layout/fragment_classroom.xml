@@ -14,9 +14,7 @@
         android:id="@+id/container_toolbar"
         style="@style/ToolBar"
         android:background="@color/background_grey"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="1dp">
+        tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_toolbar_back"

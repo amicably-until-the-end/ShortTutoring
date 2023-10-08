@@ -1,69 +1,73 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ActivityFollowerBinding
 import org.softwaremaestro.presenter.my_page.adapter.StudentAdapter
+import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
+import org.softwaremaestro.presenter.util.Util.logError
 
 @AndroidEntryPoint
 class FollowerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFollowerBinding
-
-    private lateinit var studentAdapter: StudentAdapter
+    private val followerViewModel: FollowerViewModel by viewModels()
+    private lateinit var followersAdapter: StudentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFollowerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setFollowersRecyclerView()
+        observeFollower()
+        getRemoteData()
+        setToolbar()
+    }
+
+    private fun setToolbar() {
         binding.btnToolbarBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-        setStudentRecyclerView()
-
-        // mock up
-        addItemToStudentAdapter()
     }
 
-    private fun setStudentRecyclerView() {
+    private fun setFollowersRecyclerView() {
 
-        studentAdapter = StudentAdapter()
+        followersAdapter = StudentAdapter()
 
         binding.rvFollowers.apply {
-            adapter = studentAdapter
+            adapter = followersAdapter
             layoutManager =
                 LinearLayoutManager(this@FollowerActivity, LinearLayoutManager.VERTICAL, false)
         }
     }
 
-    private fun addItemToStudentAdapter() {
-
-        studentAdapter.setItem(
-            mutableListOf<FollowerGetResponseVO>().apply {
-                repeat(5) {
-                    add(
-                        FollowerGetResponseVO(
-                            "",
-                            "예비성대생",
-                            "고등학교 2학년",
-                            null,
-                            "student",
-                            "고등학교",
-                            2,
-//                            "23.08.20"
-                            -1,
-                            -1
-                        )
-                    )
-                }
+    private fun observeFollower() {
+        followerViewModel.follower.observe(this) {
+            it?.let {
+                binding.tvFollower.text =
+                    if (it.isNotEmpty()) {
+                        "${it.size}명의 학생이 나를 찜했어요"
+                    } else {
+                        "아직 나를 찜한 학생이 없어요"
+                    }
+                followersAdapter.setItem(it)
+                followersAdapter.notifyDataSetChanged()
             }
-        )
+        }
+    }
 
-        studentAdapter.notifyDataSetChanged()
+    private fun getRemoteData() {
+        if (SocketManager.userId != null) {
+            followerViewModel.getFollower(SocketManager.userId!!)
+        } else {
+            Toast.makeText(this, "사용자의 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            logError(this::class.java, "userId is null")
+        }
     }
 }

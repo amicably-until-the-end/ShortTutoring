@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,12 +19,28 @@ class SplashActivity : AppCompatActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
 
+    private var chatId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("deepLink", "onViewCreated ${this::class.java} ${this.hashCode()}")
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        loginViewModel.autoLogin()
+        getPendingIntent()
         observeAutoLoginResult()
+        loginViewModel.autoLogin()
+    }
+
+    private fun getPendingIntent() {
+        val args = intent.extras
+        args?.apply {
+            try {
+                Log.d("deepLink@Splash", "args: $args ${getString(APP_LINK_ARGS_CHAT_ID)}")
+                chatId = getString(APP_LINK_ARGS_CHAT_ID)
+            } catch (e: Exception) {
+                Log.w(this@SplashActivity::class.java.name, "getPendingIntent: $e")
+            }
+        }
     }
 
 
@@ -54,17 +71,25 @@ class SplashActivity : AppCompatActivity() {
 
     private fun goToTeacherHomeActivity() {
         val intent = Intent(this, TeacherHomeActivity::class.java)
+        chatId?.let { intent.putExtra(APP_LINK_ARGS_CHAT_ID, it) }
         startActivity(intent)
     }
 
     private fun goToStudentHomeActivity() {
         val intent = Intent(this, StudentHomeActivity::class.java)
+        chatId?.let { intent.putExtra(APP_LINK_ARGS_CHAT_ID, it) }
+        Log.d("deepLink@Splash", "startStudentHome: $chatId")
         startActivity(intent)
     }
 
     private fun goToLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    companion object {
+        const val APP_LINK_ARGS_CHAT_ID = "chattingId"
+        const val CHAT_INTENT_FLAG = 100
     }
 
 }
