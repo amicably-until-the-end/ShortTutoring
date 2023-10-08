@@ -244,4 +244,8 @@ class ChatRepositoryImpl @Inject constructor(
         chatDatabase.messageDao().markAsRead(chatRoomId)
     }
 
+    override suspend fun hasUnreadMessages(): Boolean {
+        return chatDatabase.messageDao().hasUnreadMessages()
+    }
+
 }

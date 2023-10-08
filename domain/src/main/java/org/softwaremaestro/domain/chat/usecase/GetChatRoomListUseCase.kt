@@ -20,4 +20,6 @@ class GetChatRoomListUseCase @Inject constructor(private val repository: ChatRep
         repository.getChatRoomInfo(chatRoomId)
 
     suspend fun markAsRead(chatRoomId: String) = repository.markAsRead(chatRoomId)
+
+    suspend fun hasUnreadMessages() = repository.hasUnreadMessages()
 }

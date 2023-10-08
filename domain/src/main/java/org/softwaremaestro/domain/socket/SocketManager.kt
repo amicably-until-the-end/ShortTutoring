@@ -56,6 +56,10 @@ class SocketManager @Inject constructor(
 
     }
 
+    fun addHomeListener(listener: () -> Unit) {
+        homeMessageAppendListener = listener
+    }
+
     fun close() {
         mSocket?.disconnect()
         mSocket?.close()
@@ -87,6 +91,7 @@ class SocketManager @Inject constructor(
                         message.message.sender == userId,
                     )
                     messageAppendListener?.let { it(message.chattingId) }
+                    homeMessageAppendListener?.let { it() }
                 } catch (e: Exception) {
                     println("socket message error: ${e.message}")
                 }
@@ -108,5 +113,6 @@ class SocketManager @Inject constructor(
         var mSocket: Socket? = null
         var userId: String? = null
         private var messageAppendListener: ((String) -> Unit)? = null
+        private var homeMessageAppendListener: (() -> Unit)? = null
     }
 }

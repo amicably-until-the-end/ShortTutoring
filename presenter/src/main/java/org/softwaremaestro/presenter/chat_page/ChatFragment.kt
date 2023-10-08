@@ -32,7 +32,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
-import org.softwaremaestro.presenter.student_home.viewmodel.DeepLinkViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -57,7 +57,7 @@ abstract class ChatFragment : Fragment() {
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     protected val chatViewModel: ChatViewModel by activityViewModels()
-    private val deepLinkViewModel: DeepLinkViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -121,9 +121,9 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun checkDeepLinkArgs() {
-        if (!deepLinkViewModel.chattingId.isNullOrEmpty()) {
-            Log.d("deeplink chat", "checkDeepLinkArgs ${deepLinkViewModel.chattingId}")
-            focusChatRoom(deepLinkViewModel.chattingId!!)
+        if (!homeViewModel.chattingId.isNullOrEmpty()) {
+            Log.d("deeplink chat", "checkDeepLinkArgs ${homeViewModel.chattingId}")
+            focusChatRoom(homeViewModel.chattingId!!)
         }
     }
 
@@ -412,7 +412,7 @@ abstract class ChatFragment : Fragment() {
                     unSetOfferingTeacherMode()
                 }
                 enterChatRoom(it)
-                deepLinkViewModel.chattingId = null
+                homeViewModel.chattingId = null
                 return
             }
         }
@@ -435,7 +435,7 @@ abstract class ChatFragment : Fragment() {
             tvReservedCount.text = list.size.toString()
             cvQuestionReservedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             reservedAdapter.setItem(list.map { it.id })
-            reservedAdapter.roomInfo = chatRoomVOtoMap(list)
+            reservedAdapter.setRoomInfo(chatRoomVOtoMap(list))
             reservedAdapter.notifyDataSetChanged()
         }
     }
@@ -445,7 +445,7 @@ abstract class ChatFragment : Fragment() {
             tvApplyCount.text = list.size.toString()
             cvQuestionProposedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             proposedAdapter.setItem(list.map { it.id })
-            proposedAdapter.roomInfo = chatRoomVOtoMap(list)
+            proposedAdapter.setRoomInfo(chatRoomVOtoMap(list))
             proposedAdapter.notifyDataSetChanged()
         }
     }
@@ -603,7 +603,7 @@ abstract class ChatFragment : Fragment() {
         }
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher.map { it.id })
-        offeringTeacherAdapter.roomInfo = chatRoomVOtoMap(teacher)
+        offeringTeacherAdapter.setRoomInfo(chatRoomVOtoMap(teacher))
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
@@ -621,12 +621,20 @@ abstract class ChatFragment : Fragment() {
             setOfferingTeacherMode()
             setSelectedRoomId(null)
             proposedIconAdapter.changeSelectedQuestionId(questionId)
+            currentChatRoom?.let {
+                chatViewModel.markAsRead(it.id)
+            }
             setNotiVisible(false)
             setChatRoomBtnsVisible(false)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
+            currentChatRoom?.let {
+                chatViewModel.markAsRead(it.id)
+            }
             enterChatRoom(chatRoom)
+            chatViewModel.getChatRoomList(isTeacher(), chatRoom.id)
+
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {

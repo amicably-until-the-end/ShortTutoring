@@ -14,7 +14,7 @@ import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityTeacherHomeBinding
 import org.softwaremaestro.presenter.login.SplashActivity
-import org.softwaremaestro.presenter.student_home.viewmodel.DeepLinkViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -22,7 +22,7 @@ class TeacherHomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTeacherHomeBinding
     private lateinit var navController: NavController
-    private val deepLinkViewModel: DeepLinkViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var socketManager: SocketManager
@@ -43,6 +43,9 @@ class TeacherHomeActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         getIntentExtra()
+        observeNewMessage()
+        addSocketListener()
+        homeViewModel.getNewMessageExist()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -52,12 +55,30 @@ class TeacherHomeActivity : AppCompatActivity() {
             try {
                 val chatId = getStringExtra(SplashActivity.APP_LINK_ARGS_CHAT_ID)
                 if (!chatId.isNullOrEmpty()) {
-                    deepLinkViewModel.chattingId = chatId
+                    homeViewModel.chattingId = chatId
                     moveToChatTab()
                 }
             } catch (e: Exception) {
                 Log.w(this@TeacherHomeActivity::class.java.name, "onNewIntent: $e")
             }
+        }
+    }
+
+    private fun observeNewMessage() {
+        homeViewModel.newMessageExist.observe(this) {
+            if (it) {
+                binding.bottomNavView.getOrCreateBadge(R.id.teacherChatFragment).apply {
+                    isVisible = true
+                }
+            } else {
+                binding.bottomNavView.removeBadge(R.id.teacherChatFragment)
+            }
+        }
+    }
+
+    private fun addSocketListener() {
+        socketManager.addHomeListener {
+            homeViewModel.getNewMessageExist()
         }
     }
 
@@ -78,7 +99,7 @@ class TeacherHomeActivity : AppCompatActivity() {
                     null
                 }
             if (!chatId.isNullOrEmpty()) {
-                deepLinkViewModel.chattingId = chatId
+                homeViewModel.chattingId = chatId
                 moveToChatTab()
             }
         }
@@ -94,11 +115,20 @@ class TeacherHomeActivity : AppCompatActivity() {
         binding.bottomNavView.apply {
             setupWithNavController(navController)
             setOnItemSelectedListener {
+                if (it.itemId == R.id.teacherChatFragment) {
+                    hideChatBadge()
+                } else {
+                    homeViewModel.getNewMessageExist()
+                }
                 NavigationUI.onNavDestinationSelected(it, navController)
                 return@setOnItemSelectedListener true
             }
             itemIconTintList = null
         }
+    }
+
+    fun hideChatBadge() {
+        binding.bottomNavView.removeBadge(R.id.teacherChatFragment)
     }
 
     private fun requirePermission() {
