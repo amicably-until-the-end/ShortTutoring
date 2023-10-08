@@ -510,7 +510,6 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun setOfferingTeacherRecyclerView() {
-
         binding.rvOfferingTeacherList.apply {
             offeringTeacherAdapter = ChatRoomListAdapter(
                 onQuestionClick = onQuestionRoomClick,
@@ -596,6 +595,11 @@ abstract class ChatFragment : Fragment() {
 
 
     private fun setOfferingTeacherListItems(teacher: List<ChatRoomVO>) {
+        if (teacher.size == 0) {
+            binding.cvOfferingEmpty.visibility = View.VISIBLE
+        } else {
+            binding.cvOfferingEmpty.visibility = View.GONE
+        }
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher.map { it.id })
         offeringTeacherAdapter.roomInfo = chatRoomVOtoMap(teacher)
@@ -649,8 +653,8 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun setMessageInputBoxVisibility() {
-        binding.containerInputBox.visibility =
-            if (currentChatRoom == null) View.GONE else View.VISIBLE
+        binding.containerChatRoom.visibility =
+            if (currentChatRoom == null) View.INVISIBLE else View.VISIBLE
     }
 
     protected fun setChatRoomRightBtnVisible(b: Boolean) {

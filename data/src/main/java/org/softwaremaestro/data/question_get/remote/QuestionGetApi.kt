@@ -6,6 +6,7 @@ import org.softwaremaestro.data.question_get.model.QuestionsGetResultDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface QuestionGetApi {
     @GET("/teacher/question/list?status=pending")
@@ -13,4 +14,11 @@ interface QuestionGetApi {
 
     @GET("/question/info/{questionId}")
     suspend fun getQuestionInfo(@Path("questionId") questionId: String): Response<WrappedResponse<QuestionsGetResultDto>>
+
+    @GET("/student/question/list/my")
+    suspend fun getMyQuestionList(
+        @Query("status") status: String,
+        @Query("type") type: String
+    ): Response<WrappedListResponse<QuestionsGetResultDto>>
+
 }

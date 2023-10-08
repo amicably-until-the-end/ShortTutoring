@@ -64,7 +64,7 @@ class MessageListAdapter(
             is MessageBodyVO.Text -> TYPE_TEXT
             is MessageBodyVO.ProblemImage -> TYPE_QUESTION
             is MessageBodyVO.AppointRequest -> TYPE_TEXT
-            is MessageBodyVO.RequestDecline -> TYPE_BUTTONS
+            is MessageBodyVO.RequestDecline -> TYPE_TEXT
             is MessageBodyVO.ReserveConfirm -> TYPE_TEXT
             is MessageBodyVO.TutoringFinished -> TYPE_TEXT
             else -> TYPE_TEXT
@@ -195,6 +195,10 @@ class MessageListAdapter(
                         tvText.text =
                             "${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분에 수업이 시작되었습니다.\n" +
                                     "${endAt.monthValue}월 ${endAt.dayOfMonth}일 ${endAt.hour}시 ${endAt.minute}분에 수업이 종료되었습니다."
+                    }
+
+                    is MessageBodyVO.RequestDecline -> {
+                        tvText.text = "이 수업을 진행 할 수 없습니다."
                     }
 
                     else -> {}

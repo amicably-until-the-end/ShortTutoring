@@ -15,6 +15,7 @@ import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
+import org.softwaremaestro.domain.chat.entity.QuestionType
 import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
@@ -64,7 +65,38 @@ class ChatRepositoryImpl @Inject constructor(
             val groups: MutableList<ChatRoomVO> = mutableListOf()
             if (!isTeacher) {
                 //학생이면 그룹화
-                proposedNormal.groupBy { it.questionId }.forEach { group ->
+                val group = proposedNormal.groupBy { it.questionId }
+                try {
+                    val questions = questionApi.getMyQuestionList(
+                        QuestionState.PROPOSED.value,
+                        QuestionType.NORMAL.value
+                    ).body()?.data
+                    questions?.forEach {
+                        // 해당 question Id로 group이 있는지 확인
+                        if (!group.containsKey(it.id)) {
+                            val questionRoom = ChatRoomVO(
+                                id = it.id!!,
+                                roomType = RoomType.QUESTION,
+                                roomImage = it.problemDto?.mainImage,
+                                title = it.problemDto?.description,
+                                schoolLevel = it.problemDto?.schoolLevel,
+                                schoolSubject = it.problemDto?.schoolSubject,
+                                isSelect = false,
+                                questionId = it.id,
+                                questionState = QuestionState.PROPOSED,
+                                description = it.problemDto?.description ?: "",
+                                subTitle = "${it.problemDto?.schoolLevel} ${it.problemDto?.schoolSubject}",
+                                teachers = listOf(),
+                            )
+                            groups.add(questionRoom)
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.d("ChatRepositoryImpl", e.toString())
+                }
+
+
+                group.forEach { group ->
                     val questionInfo = questionApi.getQuestionInfo(group.key).body()?.data
                     questionInfo?.let {
                         val questionRoom = ChatRoomVO(
@@ -84,6 +116,9 @@ class ChatRepositoryImpl @Inject constructor(
                         groups.add(questionRoom)
                     }
                 }
+                //선생님의 응답이 하나도 없는 것들을 위해 빈방 만들기
+
+
                 Log.d("ChatRepositoryImpl group", groups.toString())
             }
             return ChatRoomListVO(
