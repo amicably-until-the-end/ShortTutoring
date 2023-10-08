@@ -538,8 +538,7 @@
                         android:minHeight="40dp"
                         android:paddingVertical="4dp"
                         android:paddingLeft="15dp"
-                        android:paddingRight="4dp"
-                        android:visibility="gone">
+                        android:paddingRight="4dp">
 
                         <EditText
                             android:id="@+id/et_message"
