@@ -87,7 +87,6 @@ abstract class ChatFragment : Fragment() {
         observeMessages()
         observeSocket()
         observeCurrentRoom()
-
         clearChatRoomState()
 
 
@@ -134,6 +133,8 @@ abstract class ChatFragment : Fragment() {
         setMessageInputBoxVisibility()
         binding.tvChatRoomTitle.text = ""
         binding.btnChatRoomRight.visibility = View.GONE
+        binding.btnChatRoomLeft.visibility = View.GONE
+        binding.cnNoti.visibility = View.GONE
         messageListAdapter.setItem(emptyList())
     }
 
@@ -338,6 +339,7 @@ abstract class ChatFragment : Fragment() {
     private fun setQuestionTypeSelectToggle() {
         binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
             setSelectedRoomId(null)
+            clearChatRoomState()
 
             when (checkId) {
                 R.id.rb_normal_question -> {
@@ -502,6 +504,7 @@ abstract class ChatFragment : Fragment() {
         messageListAdapter.setItem(
             messages
         )
+        binding.rvMsgs.scrollToPosition(messages.size - 1)
         messageListAdapter.notifyDataSetChanged()
         scrollMessageToBottom()
     }
@@ -696,4 +699,10 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    protected fun enableChatting(b: Boolean) {
+        binding.etMessage.apply {
+            isFocusable = b
+            isFocusableInTouchMode = b
+        }
+    }
 }

@@ -7,15 +7,14 @@ import org.softwaremaestro.data.profile.model.asDomain
 import org.softwaremaestro.data.profile.remote.ProfileApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.profile.ProfileRepository
-import org.softwaremaestro.domain.profile.entity.MyProfileGetResponseVO
-import org.softwaremaestro.domain.profile.entity.ProfileGetResponseVO
-import org.softwaremaestro.domain.profile.entity.ProfileUpdateResponseVO
+import org.softwaremaestro.domain.profile.entity.MyProfileResVO
+import org.softwaremaestro.domain.profile.entity.ProfileResVO
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(private val profileApi: ProfileApi) :
     ProfileRepository {
 
-    override suspend fun getProfile(userId: String): Flow<BaseResult<ProfileGetResponseVO, String>> {
+    override suspend fun getProfile(userId: String): Flow<BaseResult<ProfileResVO, String>> {
         return flow {
             val response = profileApi.getProfile(userId)
             val body = response.body()!!
@@ -32,7 +31,7 @@ class ProfileRepositoryImpl @Inject constructor(private val profileApi: ProfileA
         }
     }
 
-    override suspend fun updateProfile(): Flow<BaseResult<ProfileUpdateResponseVO, String>> {
+    override suspend fun updateProfile(): Flow<BaseResult<MyProfileResVO, String>> {
         return flow {
             val response = profileApi.updateProfile()
             val body = response.body()!!
@@ -49,7 +48,7 @@ class ProfileRepositoryImpl @Inject constructor(private val profileApi: ProfileA
         }
     }
 
-    override suspend fun getMyProfile(): Flow<BaseResult<MyProfileGetResponseVO, String>> {
+    override suspend fun getMyProfile(): Flow<BaseResult<MyProfileResVO, String>> {
         return flow {
             val response = profileApi.getMyProfile()
             val body = response.body()!!

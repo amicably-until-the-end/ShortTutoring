@@ -29,6 +29,7 @@ class RegisterRepositoryImpl @Inject constructor(
                     vendor = token.vendor!!,
                     schoolLevel = studentRegisterVO.schoolLevel,
                     schoolGrade = studentRegisterVO.schoolGrade,
+                    profileImg = studentRegisterVO.profileImg
                 )
             )
             if (response.isSuccessful && response.body()?.success == true) {
@@ -48,14 +49,13 @@ class RegisterRepositoryImpl @Inject constructor(
             val token = savedToken.getTokenInfo()
             val response = registerApi.registerTeacher(
                 TeacherRegisterReqDto(
-                    teacherRegisterVO.bio,
-                    teacherRegisterVO.name,
-                    token.token!!,
-                    token.vendor!!,
-                    teacherRegisterVO.schoolName,
-                    teacherRegisterVO.schoolDivision,
-                    teacherRegisterVO.schoolDepartment,
-                    teacherRegisterVO.schoolGrade
+                    vendor = token.vendor!!,
+                    accessToken = token.token!!,
+                    name = teacherRegisterVO.name,
+                    bio = teacherRegisterVO.bio,
+                    profileImg = teacherRegisterVO.profileImg,
+                    schoolName = teacherRegisterVO.schoolName,
+                    schoolDepartment = teacherRegisterVO.schoolDepartment
                 )
             )
             val body = response.body()!!

@@ -15,6 +15,8 @@ import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
@@ -147,6 +149,12 @@ fun Bitmap.toBase64(): String {
     this.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
     val data = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
     return "data:image/png;base64,$data"
+}
+
+fun Fragment.moveBack() {
+    if (!findNavController().popBackStack()) {
+        requireActivity().finish()
+    }
 }
 
 /**

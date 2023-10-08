@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.login
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteTeacherProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
@@ -27,11 +29,12 @@ class CompleteTeacherProfileFragment : Fragment() {
     private lateinit var binding: FragmentCompleteTeacherProfileBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
     private lateinit var dialog: ProfileImageSelectBottomDialog
+    private var isBtnCompleteEnabled = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCompleteTeacherProfileBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -115,7 +118,12 @@ class CompleteTeacherProfileFragment : Fragment() {
 
     private fun setBtnComplete() {
         binding.btnComplete.setOnClickListener {
-            viewModel.registerTeacher()
+            if (isBtnCompleteEnabled) {
+                viewModel.registerTeacher()
+            } else {
+                Toast.makeText(requireContext(), "닉네임, 한줄소개와 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 
@@ -140,7 +148,16 @@ class CompleteTeacherProfileFragment : Fragment() {
 
     private fun observeInputProper() {
         viewModel.teacherInputProper.observe(viewLifecycleOwner) {
-            binding.btnComplete.setEnabledAndChangeColor(it)
+            with(binding.btnComplete) {
+                if (it) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
+            isBtnCompleteEnabled = it
         }
     }
 
@@ -156,7 +173,7 @@ class CompleteTeacherProfileFragment : Fragment() {
 
                 is UIState.Success -> {
                     loadingDialog.dismiss()
-                    findNavController().navigate(R.id.action_completeStudentProfileFragment_to_loginFrament)
+                    startActivity(Intent(requireActivity(), TeacherHomeActivity::class.java))
                 }
 
                 else -> {

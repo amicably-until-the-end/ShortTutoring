@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.my_page.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,20 +38,19 @@ class ProfileViewModel @Inject constructor(
     private val _schoolLevel = MutableLiveData<String>()
     val schoolLevel: LiveData<String> get() = _schoolLevel
 
-    private val _schoolGrade = MutableLiveData<String>()
-    val schoolGrade: LiveData<String> get() = _schoolGrade
+    private val _schoolGrade = MutableLiveData<Int>()
+    val schoolGrade: LiveData<Int> get() = _schoolGrade
 
     private val _image: MutableLiveData<String> = MutableLiveData()
     val image: LiveData<String> get() = _image
 
-    private val _followersCount: MutableLiveData<Int> = MutableLiveData()
-    val followersCount: LiveData<Int> get() = _followersCount
+    private val _followers: MutableLiveData<List<String>> = MutableLiveData()
+    val followers: LiveData<List<String>> get() = _followers
 
     private val _followingCount: MutableLiveData<Int> = MutableLiveData()
     val followingCount: LiveData<Int> get() = _followingCount
 
     fun getMyProfile() {
-        Log.d("hhcc", "hc")
         viewModelScope.launch {
             myProfileGetUseCase.execute()
                 .catch { exception ->
@@ -66,11 +64,12 @@ class ProfileViewModel @Inject constructor(
                                 name?.let { _name.postValue(it) }
                                 bio?.let { _bio.postValue(it) }
                                 schoolName?.let { _univName.postValue(it) }
-//                                major?.let { _major.postValue(it) }
+                                schoolDepartment?.let { _major.postValue(it) }
                                 schoolLevel?.let { _schoolLevel.postValue(it) }
-//                                schoolGrade?.let { _schoolGrade.postValue(it) }
+                                schoolGrade?.let { _schoolGrade.postValue(it) }
                                 profileImage?.let { _image.postValue(it) }
-                                followers?.let { _followersCount.postValue(it.size) }
+                                followers?.let { _followers.postValue(it) }
+                                following?.let { _followingCount.postValue(it.size) }
                             }
                         }
 
@@ -97,10 +96,12 @@ class ProfileViewModel @Inject constructor(
                                 name?.let { _name.postValue(it) }
                                 bio?.let { _bio.postValue(it) }
                                 schoolName?.let { _univName.postValue(it) }
-//                                major?.let { _major.postValue(it) }
-                                level?.let { _schoolLevel.postValue(it) }
-//                                grade?.let { _schoolGrade.postValue(it) }
-                                profileImageBase64?.let { _image.postValue(it) }
+                                schoolDepartment?.let { _major.postValue(it) }
+                                schoolLevel?.let { _schoolLevel.postValue(it) }
+                                schoolGrade?.let { _schoolGrade.postValue(it) }
+                                profileImage?.let { _image.postValue(it) }
+                                followers?.let { _followers.postValue(it) }
+                                following?.let { _followingCount.postValue(it.size) }
                             }
                         }
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/bg_radius_20_20_0_0"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="40dp"
+    android:paddingBottom="30dp">
+
+    <NumberPicker
+        android:id="@+id/np_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_select"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_radius_10_grad_blue"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:text="선택하기"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

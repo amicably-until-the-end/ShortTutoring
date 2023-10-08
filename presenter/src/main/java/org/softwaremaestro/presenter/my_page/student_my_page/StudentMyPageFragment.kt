@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.FragmentStudentMyPageBinding
@@ -60,17 +59,17 @@ class StudentMyPageFragment : Fragment() {
     }
 
     private fun observeLectures() {
-        lecturesViewModel.lectures.observe(requireActivity()) {
-            binding.containerClipEmpty.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.GONE
-
-            lectureAdapter.apply {
-                setItem(it)
-                notifyDataSetChanged()
-            }
-
-            binding.tvNumOfClip.text = it.size.toString()
-        }
+//        lecturesViewModel.lectures.observe(requireActivity()) {
+//            binding.containerClipEmpty.visibility =
+//                if (it.isEmpty()) View.VISIBLE else View.GONE
+//
+//            lectureAdapter.apply {
+//                setItem(it)
+//                notifyDataSetChanged()
+//            }
+//
+//            binding.tvNumOfClip.text = it.size.toString()
+//        }
     }
 
     private fun observeProfile() {
@@ -84,15 +83,15 @@ class StudentMyPageFragment : Fragment() {
         }
 
         profileViewModel.schoolGrade.observe(viewLifecycleOwner) {
-            binding.tvStudentSchoolGrade.text = it
+            binding.tvStudentSchoolGrade.text = "${it}학년"
         }
 
         profileViewModel.image.observe(viewLifecycleOwner) {
             Glide.with(requireContext()).load(it).circleCrop().into(binding.ivStudentImg)
         }
 
-        profileViewModel.followersCount.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "찜한 선생님 ${it}명"
+        profileViewModel.followers.observe(viewLifecycleOwner) {
+            binding.btnFollow.text = "찜한 선생님 ${it.size}명"
         }
     }
 
@@ -103,11 +102,11 @@ class StudentMyPageFragment : Fragment() {
             it
         }
 
-        binding.rvClip.apply {
-            adapter = lectureAdapter
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
+//        binding.rvClip.apply {
+//            adapter = lectureAdapter
+//            layoutManager =
+//                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+//        }
 
         lecturesViewModel.getLectures()
     }

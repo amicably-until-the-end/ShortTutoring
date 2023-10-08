@@ -1,77 +1,52 @@
 package org.softwaremaestro.data.profile.model
 
-import org.softwaremaestro.domain.profile.entity.MyProfileGetResponseVO
-import org.softwaremaestro.domain.profile.entity.ProfileGetResponseVO
-import org.softwaremaestro.domain.profile.entity.ProfileUpdateResponseVO
+import org.softwaremaestro.domain.profile.entity.MyProfileResVO
+import org.softwaremaestro.domain.profile.entity.ProfileResVO
 
 object ProfileMapper {
-    fun asDomain(profileGetResponseDto: ProfileGetResponseDto): ProfileGetResponseVO {
-        with(profileGetResponseDto) {
-            return ProfileGetResponseVO(
-                id,
-                name,
-                bio,
-                profileImage,
-                role,
-                school?.level,
-                school?.grade,
-                school?.schoolDivision,
-                school?.schoolName,
-                school?.schoolDepartment,
-                followersCount,
-                followingCount
+    fun asDomain(profileResDto: ProfileResDto): ProfileResVO {
+        with(profileResDto) {
+            return ProfileResVO(
+                id = id,
+                name = name,
+                bio = bio,
+                profileImage = profileImage,
+                role = role,
+                schoolLevel = school?.level,
+                schoolGrade = school?.grade,
+                schoolName = school?.schoolName,
+                schoolDepartment = school?.schoolDepartment,
+                followers = followers,
+                followingCnt = followingCnt
             )
         }
     }
 
-    fun asDomain(profileUpdateResponseDto: ProfileUpdateResponseDto): ProfileUpdateResponseVO {
-        with(profileUpdateResponseDto) {
-            return ProfileUpdateResponseVO(
-                id,
-                name,
-                bio,
-                profileImageBase64,
-                profileImageFormat,
-                role,
-                school?.level,
-                school?.grade,
-                school?.schoolDivision,
-                school?.schoolName,
-                school?.schoolDepartment,
-                followersCount,
-                followingCount
-            )
-        }
-    }
-
-    fun asDomain(myProfileGetResponseDto: MyProfileGetResponseDto): MyProfileGetResponseVO {
-        with(myProfileGetResponseDto) {
-            return MyProfileGetResponseVO(
-                following,
-                school?.level,
-                school?.grade,
-                school?.schoolDivision,
-                school?.schoolName,
-                school?.schoolDepartment,
-                role,
-                followers,
-                bio,
-                id,
-                name,
-                profileImage
+    fun asDomain(myProfileResDto: MyProfileResDto): MyProfileResVO {
+        with(myProfileResDto) {
+            return MyProfileResVO(
+                id = id,
+                name = name,
+                bio = bio,
+                profileImage = profileImage,
+                role = role,
+                schoolLevel = school?.level,
+                schoolGrade = school?.grade,
+                schoolName = school?.schoolName,
+                schoolDepartment = school?.schoolDepartment,
+                followers = followers,
+                following = following,
+                amount = coin?.amount,
+                lastReceivedFreeCoinAt = coin?.lastReceivedFreeCoinAt
             )
         }
     }
 }
 
-fun ProfileGetResponseDto.asDomain(): ProfileGetResponseVO {
+fun ProfileResDto.asDomain(): ProfileResVO {
     return ProfileMapper.asDomain(this)
 }
 
-fun ProfileUpdateResponseDto.asDomain(): ProfileUpdateResponseVO {
-    return ProfileMapper.asDomain(this)
-}
-
-fun MyProfileGetResponseDto.asDomain(): MyProfileGetResponseVO {
+fun MyProfileResDto.asDomain(): MyProfileResVO {
     return ProfileMapper.asDomain(this)
 }

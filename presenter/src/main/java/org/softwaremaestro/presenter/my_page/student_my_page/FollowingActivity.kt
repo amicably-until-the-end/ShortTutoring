@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.follow.entity.FollowingGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ActivityFollowingBinding
-import org.softwaremaestro.presenter.student_home.viewmodel.FollowingViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.util.Util
@@ -98,8 +98,7 @@ class FollowingActivity : AppCompatActivity() {
                         schoolDivision = "",
                         schoolName = it.univ,
                         schoolDepartment = "",
-                        schoolGrade = -1,
-                        followersCount = -1,
+                        followers = it.followers,
                         followingCount = it.followers?.size
                     )
                 }.let {

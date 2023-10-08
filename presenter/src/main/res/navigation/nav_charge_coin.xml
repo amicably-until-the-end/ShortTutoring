@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_charge_coin"
-    app:startDestination="@id/chargeFragment">
+    app:startDestination="@id/chargeCoinFragment">
 
     <fragment
-        android:id="@+id/chargeFragment"
+        android:id="@+id/chargeCoinFragment"
         android:name="org.softwaremaestro.presenter.coin.ChargeCoinFragment"
-        android:label="fragment_charge"
+        android:label="fragment_charge_coin"
         tools:layout="@layout/fragment_charge_coin" />
 </navigation>

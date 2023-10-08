@@ -14,6 +14,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.Ques
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.CapturePreviewAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
+import org.softwaremaestro.presenter.util.moveBack
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,9 +115,7 @@ class QuestionCameraFragment : Fragment() {
 
     private fun setCloseBtn() {
         binding.btnClose.setOnClickListener {
-            if (!findNavController().popBackStack()) {
-                activity?.finish()
-            }
+            moveBack()
         }
     }
 

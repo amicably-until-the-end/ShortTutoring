@@ -61,9 +61,7 @@ class QuestionAdapter(
                 else {
                     tvTime.visibility = View.VISIBLE
                     ivCheck.visibility = View.GONE
-                    val times = "${if (item.hopeImmediately == true) "지금 바로, " else ""} ${
-                        item.hopeTutoringTime?.joinToString(", ") ?: "undefined"
-                    }"
+                    val times = "${item.hopeTutoringTime?.joinToString(", ") ?: ""}"
                     tvTimeText.text = times
                 }
 

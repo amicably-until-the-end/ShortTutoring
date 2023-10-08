@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.question_upload.question_normal_upload
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,24 +15,34 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionNormalFormBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.TimeSelectAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel.QuestionUploadViewModel
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolLevel
+import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 @AndroidEntryPoint
 class QuestionNormalFormFragment : Fragment() {
 
     private lateinit var loadingDialog: LoadingDialog
+    private lateinit var dialogSchoolLevel: DialogSchoolLevel
+    private lateinit var dialogSchoolSubject: DialogSchoolSubject
 
     lateinit var binding: FragmentQuestionNormalFormBinding
     private val viewModel: QuestionUploadViewModel by activityViewModels()
@@ -51,7 +60,7 @@ class QuestionNormalFormFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentQuestionNormalFormBinding.inflate(layoutInflater)
         return binding.root
@@ -60,7 +69,7 @@ class QuestionNormalFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        initDialog()
         parseMathSubjectJson()
         setObserver()
         setToolBar()
@@ -69,6 +78,24 @@ class QuestionNormalFormFragment : Fragment() {
         checkAndEnableSubjectBtn()
         setSubmitButton()
         setFields()
+    }
+
+    private fun initDialog() {
+        initSchoolLevelDialog()
+        initSchoolSubjectDialog()
+    }
+
+    private fun initSchoolLevelDialog() {
+        dialogSchoolLevel = DialogSchoolLevel {
+            viewModel._school.value = it
+            dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+        }
+    }
+
+    private fun initSchoolSubjectDialog() {
+        dialogSchoolSubject = DialogSchoolSubject {
+            viewModel._subject.value = it
+        }
     }
 
     /**
@@ -102,37 +129,16 @@ class QuestionNormalFormFragment : Fragment() {
     }
 
     private fun showSchoolSelectDialog() {
-        AlertDialog.Builder(requireContext())
-            .setItems(mathSubjects.keys.toTypedArray()) { _, which ->
-                val selectedSchool = mathSubjects.keys.toTypedArray()[which]
-                viewModel._school.value = selectedSchool
-                showSubjectSelectDialog()
-            }
-            .setTitle("학교")
-            .setPositiveButton("확인", null)
-            .setNegativeButton("취소", null)
-            .create().show()
-
+        dialogSchoolLevel.show(parentFragmentManager, "dialogSchoolLevel")
     }
 
     private fun showSubjectSelectDialog() {
-        var subjects =
-            mathSubjects[viewModel.school.value]?.keys?.toTypedArray()!!
-
-        AlertDialog.Builder(requireContext())
-            .setItems(subjects) { _, which ->
-                val selectedSchool = subjects[which]
-                viewModel._subject.value = selectedSchool
-            }
-            .setTitle("교과 과정")
-            .setPositiveButton("확인", null)
-            .setNegativeButton("취소", null)
-            .create().show()
+        dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
     }
 
 
     private fun setImageRecyclerView() {
-        imageAdapter = FormImageAdapter() {
+        imageAdapter = FormImageAdapter {
             navigateToCamera()
         }
 
@@ -148,7 +154,7 @@ class QuestionNormalFormFragment : Fragment() {
         var currentTime = System.currentTimeMillis()
         var hour: Int = SimpleDateFormat("HH").format(currentTime).toInt()
         var time: Int = SimpleDateFormat("mm").format(currentTime).toInt()
-        timeSelectAdapter = TimeSelectAdapter() {
+        timeSelectAdapter = TimeSelectAdapter {
             val picker = TimePickerBottomDialog {
                 timeSelectAdapter?.items?.add(it)
                 checkAndEnableSubjectBtn()
@@ -177,6 +183,9 @@ class QuestionNormalFormFragment : Fragment() {
     private fun observeImages() {
         viewModel.images.observe(viewLifecycleOwner) {
             imageAdapter.setItem(it!!)
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel._imagesBase64.postValue(it.map { it.toBase64() })
+            }
             checkAndEnableSubjectBtn()
         }
     }
@@ -245,13 +254,24 @@ class QuestionNormalFormFragment : Fragment() {
                 if (isAllFieldsEntered()) {
                     //버튼 여러번 눌러지는 거 방지
                     val questionUploadVO = QuestionUploadVO(
-                        images = viewModel.images.value!!.map { it.toBase64() },
+                        images = viewModel.imagesBase64.value!!,
                         description = binding.etQuestionDesc.text.toString(),
                         schoolLevel = binding.tvSchoolSelected.text.toString(),
                         schoolSubject = binding.tvSubjectSelected.text.toString(),
                         hopeImmediate = binding.toggleAnswerNow.isChecked,
                         hopeTutoringTime = timeSelectAdapter!!.items.map {
                             it.toString()
+                        }.let {
+                            if (binding.toggleAnswerNow.isChecked) {
+                                mutableListOf(
+                                    LocalTime.now()
+                                        .format(DateTimeFormatter.ofPattern("hh시 mm분"))
+                                ).apply {
+                                    addAll(it)
+                                }
+                            } else {
+                                it
+                            }
                         },
                         mainImageIndex = 0
                     )
@@ -293,7 +313,7 @@ class QuestionNormalFormFragment : Fragment() {
 
     private fun setToolBar() {
         binding.btnToolbarBack.setOnClickListener {
-            activity?.finish()
+            moveBack()
         }
     }
 

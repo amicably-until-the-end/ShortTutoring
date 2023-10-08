@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.profile.entity.MyProfileGetResponseVO
 import org.softwaremaestro.domain.profile.usecase.MyProfileGetUseCase
 import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
@@ -17,8 +16,8 @@ import javax.inject.Inject
 class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: MyProfileGetUseCase) :
     ViewModel() {
 
-    private val _myProfile: MutableLiveData<MyProfileGetResponseVO> = MutableLiveData()
-    val myProfile: LiveData<MyProfileGetResponseVO> get() = _myProfile
+    private val _amount: MutableLiveData<Int> = MutableLiveData()
+    val amount: LiveData<Int> get() = _amount
 
     fun getMyProfile() {
         viewModelScope.launch {
@@ -28,7 +27,7 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _myProfile.postValue(result.data)
+                        is BaseResult.Success -> result.data.amount?.let { _amount.postValue(it) }
                         is BaseResult.Error -> logError(
                             this@MyProfileViewModel::class.java,
                             result.toString()

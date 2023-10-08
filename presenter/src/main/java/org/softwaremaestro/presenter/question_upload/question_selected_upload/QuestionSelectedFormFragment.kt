@@ -24,6 +24,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.adap
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
@@ -271,7 +272,7 @@ class QuestionSelectedFormFragment : Fragment() {
 
     private fun setToolBar() {
         binding.btnToolbarBack.setOnClickListener {
-            activity?.finish()
+            moveBack()
         }
     }
 

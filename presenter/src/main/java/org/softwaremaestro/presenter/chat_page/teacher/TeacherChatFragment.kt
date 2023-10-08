@@ -82,6 +82,7 @@ class TeacherChatFragment : ChatFragment() {
 
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
+        enableChatting(true)
         if (chatRoomVO.isSelect) {
             // 지정 질문 이면
             when (chatRoomVO.questionState) {

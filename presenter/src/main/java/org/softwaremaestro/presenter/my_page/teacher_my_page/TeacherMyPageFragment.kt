@@ -90,7 +90,7 @@ class TeacherMyPageFragment : Fragment() {
                 setItem(it)
                 notifyDataSetChanged()
             }
-            binding.tvNumOfClip.text = it.size.toString()
+//            binding.tvNumOfClip.text = it.size.toString()
         }
     }
 
@@ -138,8 +138,8 @@ class TeacherMyPageFragment : Fragment() {
             Glide.with(requireContext()).load(it).circleCrop().into(binding.ivTeacherImg)
         }
 
-        profileViewModel.followersCount.observe(viewLifecycleOwner) {
-            binding.btnFollow.text = "찜한 학생 ${it}명"
+        profileViewModel.followers.observe(viewLifecycleOwner) {
+            binding.btnFollow.text = "찜한 학생 ${it.size}명"
         }
     }
 
@@ -186,24 +186,24 @@ class TeacherMyPageFragment : Fragment() {
 
                 tvReview.setTextColor(resources.getColor(R.color.black, null))
                 tvNumOfReview.setTextColor(resources.getColor(R.color.primary_blue, null))
-                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+//                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+//                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
             }
         }
     }
 
     private fun setTvClip() {
-        binding.tvClip.setOnClickListener {
-            with(binding) {
-                containerReview.visibility = View.GONE
-                containerClip.visibility = View.VISIBLE
-
-                tvClip.setTextColor(resources.getColor(R.color.black, null))
-                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
-                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            }
-        }
+//        binding.tvClip.setOnClickListener {
+//            with(binding) {
+//                containerReview.visibility = View.GONE
+//                containerClip.visibility = View.VISIBLE
+//
+//                tvClip.setTextColor(resources.getColor(R.color.black, null))
+//                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
+//                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+//                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+//            }
+//        }
     }
 
     private fun setFollowerMenu() {

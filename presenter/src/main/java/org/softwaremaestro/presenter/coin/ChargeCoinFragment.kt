@@ -28,9 +28,7 @@ class ChargeCoinFragment : Fragment() {
         initContainers()
         setContainers()
         setToolbar()
-
-        // Todo: 나중에 api로 코인 받아오기
-        binding.cbMyCoin.coin = 100
+        setCoin()
 
         // Todo: 코인 구매 api 연동하기
         binding.btnChargeCoin.setOnClickListener {
@@ -116,5 +114,9 @@ class ChargeCoinFragment : Fragment() {
         binding.btnToolbarBack.setOnClickListener {
             activity?.finish()
         }
+    }
+
+    private fun setCoin() {
+        binding.cbMyCoin.coin = requireActivity().intent.getIntExtra("my-coin", 0)
     }
 }

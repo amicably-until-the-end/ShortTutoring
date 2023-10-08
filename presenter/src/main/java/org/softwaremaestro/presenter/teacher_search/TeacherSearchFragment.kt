@@ -119,6 +119,7 @@ class TeacherSearchFragment : Fragment() {
         teacherSearchViewModel.searchedResult.observe(viewLifecycleOwner) {
             it?.map {
                 FollowingGetResponseVO(
+                    // Todo 추후에 수정하기
                     id = it.teacherId,
                     name = it.nickname,
                     bio = it.bio,
@@ -127,8 +128,7 @@ class TeacherSearchFragment : Fragment() {
                     schoolDivision = "학부 설정 안되어있음",
                     schoolName = it.univ,
                     schoolDepartment = "학부 설정 안되어있음",
-                    schoolGrade = -1,
-                    followersCount = -1,
+                    followers = it.followers,
                     followingCount = -1
                 )
             }?.let {

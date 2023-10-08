@@ -61,22 +61,10 @@
         android:id="@+id/completeStudentProfileFragment"
         android:name="org.softwaremaestro.presenter.login.CompleteStudentProfileFragment"
         android:label="fragment_complete_student_profile"
-        tools:layout="@layout/fragment_complete_student_profile">
-        <action
-            android:id="@+id/action_completeStudentProfileFragment_to_loginFrament"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_complete_student_profile" />
     <fragment
         android:id="@+id/completeTeacherProfileFragment"
         android:name="org.softwaremaestro.presenter.login.CompleteTeacherProfileFragment"
         android:label="fragment_complete_teacher_profile"
-        tools:layout="@layout/fragment_complete_teacher_profile">
-        <action
-            android:id="@+id/action_completeTeacherProfileFragment_to_loginFrament"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_complete_teacher_profile" />
 </navigation>

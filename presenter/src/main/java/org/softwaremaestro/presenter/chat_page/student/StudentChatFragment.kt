@@ -52,6 +52,7 @@ class StudentChatFragment : ChatFragment() {
     }
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
+        enableChatting(true)
         if (chatRoomVO.isSelect) {
             when (chatRoomVO.questionState) {
                 QuestionState.PROPOSED -> {

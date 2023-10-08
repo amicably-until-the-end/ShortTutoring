@@ -54,7 +54,7 @@ class TeacherAdapter(
                 tvTeacherUniv.text = item.schoolName
                 tvTeacherBio.text = item.bio
 //                tvTeacherRating.text = item.rating.toString()
-                btnFollow.text = "찜한 학생 ${item.followersCount}"
+                btnFollow.text = "찜한 학생 ${item.followers?.size ?: 0}"
             }
 
             itemView.setOnClickListener {
