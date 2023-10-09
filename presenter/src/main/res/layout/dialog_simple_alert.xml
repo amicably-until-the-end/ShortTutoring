@@ -7,8 +7,9 @@
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="240dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="240dp"
         android:padding="15dp">
 
         <TextView
@@ -16,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_bold"
+            android:paddingRight="30dp"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -28,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/pretendard_medium"
+            android:paddingRight="30dp"
             android:text="이 기능은 곧 업데이트 될 예정입니다."
             android:textColor="@color/sub_text_grey"
             android:textSize="12sp"

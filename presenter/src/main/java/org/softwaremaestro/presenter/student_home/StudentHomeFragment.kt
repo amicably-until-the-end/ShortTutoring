@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -29,6 +28,7 @@ import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -199,7 +199,14 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
-            startQuestionUploadActivity()
+            if (myProfileViewModel.amount.value!! < 100) {
+                SimpleAlertDialog().apply {
+                    title = "코인이 부족합니다"
+                    description = "코인을 충전한 후 다시 질문해주세요"
+                }.show(parentFragmentManager, "coin is insufficient")
+            } else {
+                startQuestionUploadActivity()
+            }
         }
     }
 

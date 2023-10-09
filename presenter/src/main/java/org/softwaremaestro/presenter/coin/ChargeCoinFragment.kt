@@ -30,7 +30,6 @@ class ChargeCoinFragment : Fragment() {
         setToolbar()
         setCoin()
 
-        // Todo: 코인 구매 api 연동하기
         binding.btnChargeCoin.setOnClickListener {
             selectedContainer?.let {
                 when (containers.indexOf(selectedContainer)) {

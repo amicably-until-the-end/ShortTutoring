@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,8 +12,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
 import org.softwaremaestro.presenter.util.moveBack
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -22,14 +23,16 @@ import java.time.LocalTime
 class ReservationFormFragment : Fragment() {
 
     private lateinit var binding: FragmentReservationFormBinding
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val questionReservationViewModel: QuestionReservationViewModel by activityViewModels()
+    private var cost: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentReservationFormBinding.inflate(layoutInflater)
-
+        myProfileViewModel.getMyProfile()
         resetViewModelValue()
         setDatePicker()
         setTimeRangePicker()
@@ -48,7 +51,6 @@ class ReservationFormFragment : Fragment() {
             setOnDateSelectListener { year, month, day ->
                 questionReservationViewModel.setRequestDate(LocalDate.of(year, month, day))
                 binding.containerTimePicker.visibility = View.VISIBLE
-                Toast.makeText(requireContext(), "$year-$month-$day", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -75,7 +77,8 @@ class ReservationFormFragment : Fragment() {
                     val timeDuration = end.plusMinute(10).toTime() - start.toTime()
                     binding.tvSelectedTime.text =
                         "${start} ~ ${end.plusMinute(10)} (${timeDuration}분)"
-                    binding.tvQuestionCost.text = "${timeDuration * 10}"
+                    cost = timeDuration * 10
+                    binding.tvQuestionCost.text = "${cost}"
                 })
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
@@ -85,17 +88,21 @@ class ReservationFormFragment : Fragment() {
         questionReservationViewModel.inputProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
                 setBtnSubmit(true)
-                binding.btnSubmit.moveToCameraFragmentWhenClicked()
+                binding.btnSubmit.setOnClickListener {
+                    // 보유한 코인이 부족한 경우
+                    if (cost > myProfileViewModel.amount.value!!) {
+                        SimpleAlertDialog().apply {
+                            title = "코인이 부족합니다"
+                            description = "코인을 충전한 후 다시 질문해주세요"
+                        }.show(parentFragmentManager, "coin is insufficient")
+                    } else {
+                        findNavController().navigate(R.id.action_reservationFormFragment_to_questionCameraFragment)
+                    }
+                }
             } else {
                 setBtnSubmit(false)
                 binding.btnSubmit.setOnClickListener(null)
             }
-        }
-    }
-
-    private fun View.moveToCameraFragmentWhenClicked() {
-        setOnClickListener {
-            findNavController().navigate(R.id.action_reservationFormFragment_to_questionCameraFragment)
         }
     }
 
@@ -106,7 +113,6 @@ class ReservationFormFragment : Fragment() {
                 tvSubmit.setTextColor(resources.getColor(R.color.white, null))
 
                 containerTimeDuration.visibility = View.VISIBLE
-
                 cvQuestionCost.visibility = View.VISIBLE
 
             } else {
@@ -114,7 +120,6 @@ class ReservationFormFragment : Fragment() {
                 tvSubmit.setTextColor(resources.getColor(R.color.sub_text_grey, null))
 
                 containerTimeDuration.visibility = View.INVISIBLE
-
                 cvQuestionCost.visibility = View.GONE
             }
         }
