@@ -4,18 +4,15 @@ import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 
 object Mapper {
-    fun asDomain(follwerGetResponseDto: FollowerGetResponseDto): FollowerGetResponseVO {
-        with(follwerGetResponseDto) {
+    fun asDomain(followerGetResponseDto: FollowerGetResponseDto): FollowerGetResponseVO {
+        with(followerGetResponseDto) {
             return FollowerGetResponseVO(
-                id,
-                name,
-                bio,
-                profileImage,
-                role,
-                school?.level,
-                school?.grade,
-                followersCount,
-                followingCount
+                id = id,
+                name = name,
+                profileImage = profileImage,
+                role = role,
+                schoolLevel = schoolLevel,
+                grade = grade
             )
         }
     }
