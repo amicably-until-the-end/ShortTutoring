@@ -112,7 +112,7 @@ class SocketManager @Inject constructor(
     }
 
     companion object {
-        private const val uri = "http://shorttutoring-493721324.ap-northeast-2.elb.amazonaws.com/"
+        private const val uri = "https://api.short-tutoring.com/"
 
         //private const val uri = "http://10.0.2.2:3000/"
 

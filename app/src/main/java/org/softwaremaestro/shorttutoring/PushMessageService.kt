@@ -64,7 +64,9 @@ class PushMessageService :
         when (remoteMessage.data["type"]) {
             PayloadType.CHAT_MESSAGE.value -> {
                 insertChatMessage(remoteMessage.data)
-                sendChatMessageNotification(remoteMessage.data)
+                if (remoteMessage.data["sender"] != SocketManager.userId) {
+                    sendChatMessageNotification(remoteMessage.data)
+                }
             }
 
             PayloadType.ALERT.value -> {
