@@ -173,9 +173,9 @@ class TeacherMyPageFragment : Fragment() {
     }
 
     private fun setTvSettingTimeAndCost() {
-        binding.containerSettingTimeAndCost.setOnClickListener {
-            startActivity(Intent(requireContext(), SettingTimeAndCostActivity::class.java))
-        }
+//        binding.containerSettingTimeAndCost.setOnClickListener {
+//            startActivity(Intent(requireContext(), SettingTimeAndCostActivity::class.java))
+//        }
     }
 
     private fun setTvReview() {

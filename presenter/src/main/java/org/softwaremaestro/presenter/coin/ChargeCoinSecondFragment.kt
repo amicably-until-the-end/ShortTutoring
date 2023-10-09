@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.coin
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,8 @@ import androidx.fragment.app.activityViewModels
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.coin.viewModel.CoinViewModel
 import org.softwaremaestro.presenter.databinding.FragmentChargeCoinSecondBinding
-import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -139,8 +139,8 @@ class ChargeCoinSecondFragment : Fragment() {
     }
 
     private fun observeCoin() {
-        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
-            it.amount?.let { binding.cbMyCoin.coin = it * 100 }
+        myProfileViewModel.amount.observe(viewLifecycleOwner) {
+            binding.cbMyCoin.coin = it * 100
         }
     }
 
@@ -149,12 +149,18 @@ class ChargeCoinSecondFragment : Fragment() {
             it?.let {
                 // 무료 코인 받기 성공
                 if (it) {
-                    Toast.makeText(requireContext(), "오늘의 코인을 받았습니다", Toast.LENGTH_SHORT).show()
                     // 코인을 업데이트하기 위해 getMyProfile() 호출
                     myProfileViewModel.getMyProfile()
+                    SimpleAlertDialog().apply {
+                        title = "오늘의 코인을 받았습니다"
+                        description = "현재 ${myProfileViewModel.amount.value!! * 100}개의 코인을 보유하고 있어요"
+                    }.show(parentFragmentManager, "receive free coin success")
+                    
                 } else {
-                    Log.d("hhcc", "failed")
-                    Toast.makeText(requireContext(), "이미 오늘의 코인을 받았습니다.", Toast.LENGTH_SHORT).show()
+                    SimpleAlertDialog().apply {
+                        title = "이미 오늘의 코인을 받았습니다"
+                        description = "코인은 매일 200개씩 기본 지급돼요"
+                    }.show(parentFragmentManager, "receive free coin fail")
                 }
                 // UI 업데이트
                 listOf(
