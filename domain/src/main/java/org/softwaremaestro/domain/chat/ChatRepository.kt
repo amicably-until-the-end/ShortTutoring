@@ -17,7 +17,8 @@ interface ChatRepository {
         body: String,
         format: String,
         sendAt: String,
-        isMyMsg: Boolean
+        isMyMsg: Boolean,
+        isRead: Boolean,
     )
 
     suspend fun getChatRoomInfo(chatRoomId: String): Flow<BaseResult<ChatRoomVO, String>>

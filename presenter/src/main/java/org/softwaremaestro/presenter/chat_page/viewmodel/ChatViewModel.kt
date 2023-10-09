@@ -244,6 +244,7 @@ class ChatViewModel @Inject constructor(
                 gson.toJson(MessageBody(body)),
                 "text",
                 LocalDateTime.now().toString(),
+                true,
                 true
             )
             getMessages(chattingId)

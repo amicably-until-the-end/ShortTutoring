@@ -36,7 +36,7 @@ class StudentHomeActivity : AppCompatActivity() {
 
         binding = ActivityStudentHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setUpBottomNavigationBar() //반드시 첫번째로dfg 실행
+        setUpBottomNavigationBar() //반드시 첫번째로 실행
         initSocket()
 
     }

@@ -112,6 +112,11 @@ abstract class ChatFragment : Fragment() {
         chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
     }
 
+    override fun onStop() {
+        super.onStop()
+        socketManager.setChatRoomId(null)
+    }
+
     private fun observeCurrentRoom() {
         chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
             it?.let {
@@ -621,20 +626,12 @@ abstract class ChatFragment : Fragment() {
             setOfferingTeacherMode()
             setSelectedRoomId(null)
             proposedIconAdapter.changeSelectedQuestionId(questionId)
-            currentChatRoom?.let {
-                chatViewModel.markAsRead(it.id)
-            }
             setNotiVisible(false)
             setChatRoomBtnsVisible(false)
         }
     private val onTeacherRoomClick: (ChatRoomVO, RecyclerView.Adapter<*>) -> Unit =
         { chatRoom, caller ->
-            currentChatRoom?.let {
-                chatViewModel.markAsRead(it.id)
-            }
             enterChatRoom(chatRoom)
-            chatViewModel.getChatRoomList(isTeacher(), chatRoom.id)
-
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
@@ -649,6 +646,7 @@ abstract class ChatFragment : Fragment() {
         scrollMessageToBottom()
         setMessageInputBoxVisibility()
         setNoNewMessageRoom(chatRoomVO.id)
+        socketManager.setChatRoomId(chatRoomVO.id)
     }
 
     private fun setNoNewMessageRoom(roomId: String) {

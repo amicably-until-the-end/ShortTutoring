@@ -106,6 +106,7 @@ class PushMessageService :
                         get("format") ?: "text",
                         get("createdAt") ?: LocalDateTime.now().toString(),
                         get("sender") == SocketManager.userId,
+                        get("sender") == SocketManager.userId,
                     )
                 }
             }
