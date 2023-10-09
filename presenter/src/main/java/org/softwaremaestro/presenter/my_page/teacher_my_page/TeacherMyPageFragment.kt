@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
