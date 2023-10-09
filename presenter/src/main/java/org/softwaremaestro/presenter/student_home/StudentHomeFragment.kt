@@ -27,6 +27,7 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
+import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
