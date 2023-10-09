@@ -102,12 +102,14 @@
 
                             </androidx.cardview.widget.CardView>
 
+                            <!--
                             <ImageView
                                 android:id="@+id/iv_edit_profile"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:layout_gravity="end|bottom"
                                 android:background="@drawable/ic_btn_profile_edit" />
+                                -->
 
                         </FrameLayout>
 
