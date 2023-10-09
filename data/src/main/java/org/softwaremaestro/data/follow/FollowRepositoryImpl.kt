@@ -48,7 +48,9 @@ class FollowRepositoryImpl @Inject constructor(private val followApi: FollowApi)
             val body = response.body()!!
             if (body.success == true) {
                 body.data
-                    ?.map { it.asDomain() }
+                    ?.map {
+                        it.asDomain()
+                    }
                     ?.let {
                         emit(BaseResult.Success(it))
                     }
