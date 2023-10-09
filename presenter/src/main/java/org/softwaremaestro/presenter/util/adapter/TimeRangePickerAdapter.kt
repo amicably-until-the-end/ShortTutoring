@@ -142,6 +142,14 @@ class TimeRangePickerAdapter(
         }
 
         fun toTime() = hour * 60 + minute
+
+        fun plusMinute(i: Int): TimeRangePickerAdapter.TimeItem {
+            return if (minute + i >= 60) {
+                TimeItem(hour + 1, minute - (60 - i), isAvailable)
+            } else {
+                TimeItem(hour, minute + i, isAvailable)
+            }
+        }
     }
 
 
