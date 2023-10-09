@@ -34,8 +34,7 @@ import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 import java.text.SimpleDateFormat
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
 
 
 @AndroidEntryPoint
@@ -256,6 +255,13 @@ class QuestionNormalFormFragment : Fragment() {
         binding.btnSubmit.apply {
             setOnClickListener {
                 if (isAllFieldsEntered()) {
+                    val hopeTutoringTime = mutableListOf<LocalDateTime>()
+                    if (binding.toggleAnswerNow.isChecked) {
+                        hopeTutoringTime.add(LocalDateTime.now())
+                    }
+                    hopeTutoringTime.addAll(timeSelectAdapter!!.items.map {
+                        LocalDateTime.now().withHour(it.hour).withMinute(it.minute)
+                    })
                     //버튼 여러번 눌러지는 거 방지
                     val questionUploadVO = QuestionUploadVO(
                         images = viewModel.imagesBase64.value!!,
@@ -263,20 +269,7 @@ class QuestionNormalFormFragment : Fragment() {
                         schoolLevel = binding.tvSchoolSelected.text.toString(),
                         schoolSubject = binding.tvSubjectSelected.text.toString(),
                         hopeImmediate = binding.toggleAnswerNow.isChecked,
-                        hopeTutoringTime = timeSelectAdapter!!.items.map {
-                            it.toString()
-                        }.let {
-                            if (binding.toggleAnswerNow.isChecked) {
-                                mutableListOf(
-                                    LocalTime.now()
-                                        .format(DateTimeFormatter.ofPattern("hh시 mm분"))
-                                ).apply {
-                                    addAll(it)
-                                }
-                            } else {
-                                it
-                            }
-                        },
+                        hopeTutoringTime = hopeTutoringTime,
                         mainImageIndex = 0
                     )
                     viewModel.uploadQuestion(questionUploadVO)
