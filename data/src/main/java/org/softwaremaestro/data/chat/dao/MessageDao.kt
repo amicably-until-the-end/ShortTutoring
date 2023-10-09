@@ -17,4 +17,7 @@ interface MessageDao {
     @Query("UPDATE MessageEntity SET isRead = 1 WHERE roomId = :chatRoomId")
     fun markAsRead(chatRoomId: String): Int
 
+    @Query("SELECT EXISTS (SELECT 1 FROM MessageEntity WHERE isRead = 0 LIMIT 1)")
+    suspend fun hasUnreadMessages(): Boolean
+
 }

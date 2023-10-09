@@ -17,7 +17,8 @@ interface ChatRepository {
         body: String,
         format: String,
         sendAt: String,
-        isMyMsg: Boolean
+        isMyMsg: Boolean,
+        isRead: Boolean,
     )
 
     suspend fun getChatRoomInfo(chatRoomId: String): Flow<BaseResult<ChatRoomVO, String>>
@@ -25,4 +26,6 @@ interface ChatRepository {
     suspend fun getMessages(chatRoomId: String): Flow<BaseResult<List<MessageVO>, String>>
 
     suspend fun markAsRead(chatRoomId: String)
+
+    suspend fun hasUnreadMessages(): Boolean
 }

@@ -21,6 +21,7 @@ class SocketManager @Inject constructor(
     private val userRepository: LoginRepository,
 ) {
 
+
     fun init() {
         if (mSocket != null) return // 이미 초기화 되어있으면 return
         println("socket  init")
@@ -56,6 +57,10 @@ class SocketManager @Inject constructor(
 
     }
 
+    fun addHomeListener(listener: () -> Unit) {
+        homeMessageAppendListener = listener
+    }
+
     fun close() {
         mSocket?.disconnect()
         mSocket?.close()
@@ -68,6 +73,10 @@ class SocketManager @Inject constructor(
 
     fun addOnMessageReceiveListener(listener: (String) -> Unit) {
         messageAppendListener = listener
+    }
+
+    fun setChatRoomId(chattingId: String?) {
+        currentChatRoom = chattingId
     }
 
 
@@ -85,8 +94,10 @@ class SocketManager @Inject constructor(
                         message.message.format,
                         message.message.createdAt,
                         message.message.sender == userId,
+                        (message.message.sender == userId) || (currentChatRoom == message.chattingId)
                     )
                     messageAppendListener?.let { it(message.chattingId) }
+                    homeMessageAppendListener?.let { it() }
                 } catch (e: Exception) {
                     println("socket message error: ${e.message}")
                 }
@@ -108,5 +119,7 @@ class SocketManager @Inject constructor(
         var mSocket: Socket? = null
         var userId: String? = null
         private var messageAppendListener: ((String) -> Unit)? = null
+        private var homeMessageAppendListener: (() -> Unit)? = null
+        var currentChatRoom: String? = null
     }
 }

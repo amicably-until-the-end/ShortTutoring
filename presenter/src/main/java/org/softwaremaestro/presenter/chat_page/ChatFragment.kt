@@ -32,7 +32,7 @@ import org.softwaremaestro.presenter.classroom.ClassroomFragment
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
-import org.softwaremaestro.presenter.student_home.viewmodel.DeepLinkViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
@@ -57,7 +57,7 @@ abstract class ChatFragment : Fragment() {
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     protected val chatViewModel: ChatViewModel by activityViewModels()
-    private val deepLinkViewModel: DeepLinkViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -112,6 +112,11 @@ abstract class ChatFragment : Fragment() {
         chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
     }
 
+    override fun onStop() {
+        super.onStop()
+        socketManager.setChatRoomId(null)
+    }
+
     private fun observeCurrentRoom() {
         chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
             it?.let {
@@ -121,9 +126,9 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun checkDeepLinkArgs() {
-        if (!deepLinkViewModel.chattingId.isNullOrEmpty()) {
-            Log.d("deeplink chat", "checkDeepLinkArgs ${deepLinkViewModel.chattingId}")
-            focusChatRoom(deepLinkViewModel.chattingId!!)
+        if (!homeViewModel.chattingId.isNullOrEmpty()) {
+            Log.d("deeplink chat", "checkDeepLinkArgs ${homeViewModel.chattingId}")
+            focusChatRoom(homeViewModel.chattingId!!)
         }
     }
 
@@ -302,6 +307,7 @@ abstract class ChatFragment : Fragment() {
 
     private fun setCloseOfferingTeacherButton() {
         binding.btnCloseOfferingTeacher.setOnClickListener {
+            chatViewModel.getChatRoomList(isTeacher(), currentChatRoom?.id)
             unSetOfferingTeacherMode()
         }
     }
@@ -411,7 +417,7 @@ abstract class ChatFragment : Fragment() {
                     unSetOfferingTeacherMode()
                 }
                 enterChatRoom(it)
-                deepLinkViewModel.chattingId = null
+                homeViewModel.chattingId = null
                 return
             }
         }
@@ -434,7 +440,7 @@ abstract class ChatFragment : Fragment() {
             tvReservedCount.text = list.size.toString()
             cvQuestionReservedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             reservedAdapter.setItem(list.map { it.id })
-            reservedAdapter.roomInfo = chatRoomVOtoMap(list)
+            reservedAdapter.setRoomInfo(chatRoomVOtoMap(list))
             reservedAdapter.notifyDataSetChanged()
         }
     }
@@ -444,7 +450,7 @@ abstract class ChatFragment : Fragment() {
             tvApplyCount.text = list.size.toString()
             cvQuestionProposedEmpty.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
             proposedAdapter.setItem(list.map { it.id })
-            proposedAdapter.roomInfo = chatRoomVOtoMap(list)
+            proposedAdapter.setRoomInfo(chatRoomVOtoMap(list))
             proposedAdapter.notifyDataSetChanged()
         }
     }
@@ -602,7 +608,7 @@ abstract class ChatFragment : Fragment() {
         }
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher.map { it.id })
-        offeringTeacherAdapter.roomInfo = chatRoomVOtoMap(teacher)
+        offeringTeacherAdapter.setRoomInfo(chatRoomVOtoMap(teacher))
         offeringTeacherAdapter.notifyDataSetChanged()
     }
 
@@ -640,6 +646,7 @@ abstract class ChatFragment : Fragment() {
         scrollMessageToBottom()
         setMessageInputBoxVisibility()
         setNoNewMessageRoom(chatRoomVO.id)
+        socketManager.setChatRoomId(chatRoomVO.id)
     }
 
     private fun setNoNewMessageRoom(roomId: String) {

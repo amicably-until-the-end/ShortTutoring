@@ -15,7 +15,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ActivityStudentHomeBinding
 import org.softwaremaestro.presenter.login.SplashActivity
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
-import org.softwaremaestro.presenter.student_home.viewmodel.DeepLinkViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,7 +24,8 @@ class StudentHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStudentHomeBinding
     private lateinit var navController: NavController
 
-    private val deepLinkViewModel: DeepLinkViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
+
 
     @Inject
     lateinit var socketManager: SocketManager
@@ -35,15 +36,20 @@ class StudentHomeActivity : AppCompatActivity() {
 
         binding = ActivityStudentHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setUpBottomNavigationBar() //반드시 첫번째로dfg 실행
+        setUpBottomNavigationBar() //반드시 첫번째로 실행
         initSocket()
+
     }
 
     override fun onStart() {
         super.onStart()
         getIntentExtra()
         requirePermission()
+        observeNewMessage()
+        addSocketListener()
+        homeViewModel.getNewMessageExist()
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -52,12 +58,30 @@ class StudentHomeActivity : AppCompatActivity() {
             try {
                 val chatId = getStringExtra(SplashActivity.APP_LINK_ARGS_CHAT_ID)
                 if (!chatId.isNullOrEmpty()) {
-                    deepLinkViewModel.chattingId = chatId
+                    homeViewModel.chattingId = chatId
                     moveToChatTab()
                 }
             } catch (e: Exception) {
                 Log.w(this@StudentHomeActivity::class.java.name, "onNewIntent: $e")
             }
+        }
+    }
+
+    private fun observeNewMessage() {
+        homeViewModel.newMessageExist.observe(this) {
+            if (it) {
+                binding.bottomNavView.getOrCreateBadge(R.id.studentChatFragment).apply {
+                    isVisible = true
+                }
+            } else {
+                binding.bottomNavView.removeBadge(R.id.studentChatFragment)
+            }
+        }
+    }
+
+    private fun addSocketListener() {
+        socketManager.addHomeListener {
+            homeViewModel.getNewMessageExist()
         }
     }
 
@@ -72,7 +96,7 @@ class StudentHomeActivity : AppCompatActivity() {
                     null
                 }
             if (!chatId.isNullOrEmpty()) {
-                deepLinkViewModel.chattingId = chatId
+                homeViewModel.chattingId = chatId
                 moveToChatTab()
             }
         }
@@ -99,6 +123,11 @@ class StudentHomeActivity : AppCompatActivity() {
                     startActivity(intent)
                     return@setOnItemSelectedListener false
                 }
+                if (it.itemId == R.id.studentChatFragment) {
+                    hideChatBadge()
+                } else {
+                    homeViewModel.getNewMessageExist()
+                }
                 NavigationUI.onNavDestinationSelected(it, navController)
                 return@setOnItemSelectedListener true
             }
@@ -121,6 +150,10 @@ class StudentHomeActivity : AppCompatActivity() {
     private fun requirePermission() {
         val permission = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
         requestPermissions(permission, 0)
+    }
+
+    fun hideChatBadge() {
+        binding.bottomNavView.removeBadge(R.id.studentChatFragment)
     }
 
     fun moveToCoinTab() {

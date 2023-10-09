@@ -199,7 +199,8 @@ class ChatRepositoryImpl @Inject constructor(
         body: String,
         format: String,
         sendAt: String,
-        isMyMsg: Boolean
+        isMyMsg: Boolean,
+        isRead: Boolean,
     ) {
         try {
             Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
@@ -216,7 +217,7 @@ class ChatRepositoryImpl @Inject constructor(
                     roomId = roomId,
                     body = body,
                     format = format,
-                    isRead = isMyMsg,
+                    isRead = isRead,
                     sendAt = now,
                     isMyMsg = isMyMsg
                 )
@@ -242,6 +243,10 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun markAsRead(chatRoomId: String) {
         chatDatabase.messageDao().markAsRead(chatRoomId)
+    }
+
+    override suspend fun hasUnreadMessages(): Boolean {
+        return chatDatabase.messageDao().hasUnreadMessages()
     }
 
 }
