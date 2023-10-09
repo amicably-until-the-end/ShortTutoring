@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.coin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ class ChargeCoinSecondFragment : Fragment() {
         setObserver()
 
 
+        // Todo: 코인 구매 api 연동하기
         binding.btnChargeCoin.setOnClickListener {
             if (chargeable) {
                 selectedContainer?.let {

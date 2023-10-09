@@ -34,6 +34,8 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     }
 
     private fun getJWT(role: String?): String {
+        prefs.clearJWT()
+        prefs.saveJWT("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZW5kb3IiOiJrYWthbyIsImF1dGhJZCI6bnVsbCwidXNlcklkIjoiaGMtdGVhY2hlci1pZCIsInJvbGUiOiJ0ZWFjaGVyIiwiaWF0IjoxNjk1NjM0NTgzLCJleHAiOjE2OTU3MjA5ODN9.EvDgOXH7V3A-QB3lT2BSbTrmdPeek4Rhc6WM5iVQ_5k")
         return prefs.getJWT()
     }
 }
