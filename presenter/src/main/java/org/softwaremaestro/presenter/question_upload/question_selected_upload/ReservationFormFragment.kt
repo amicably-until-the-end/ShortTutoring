@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.question_upload.question_selected_upload
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,34 +65,19 @@ class ReservationFormFragment : Fragment() {
                     )
                 },
                 onRangeChange = { start, end ->
-                    with(start) {
-                        questionReservationViewModel.setRequestTutoringStartTime(
-                            LocalTime.of(hour, minute)
-                        )
-                        Log.d(
-                            "onRangeChange",
-                            "start: ${questionReservationViewModel.requestTutoringStartTime.value}"
-                        )
-                    }
-                    with(end) {
-                        questionReservationViewModel.setRequestTutoringEndTime(
-                            LocalTime.of(hour, minute)
-                        )
-                        Log.d(
-                            "onRangeChange",
-                            "end: ${questionReservationViewModel.requestTutoringEndTime}"
-                        )
-                    }
-                    Log.d("onRangeChange", "start: $start, end: $end")
-                    val timeDuration = end.toTime() - start.toTime()
+                    questionReservationViewModel.setRequestTutoringStartTime(
+                        LocalTime.of(start.hour, start.minute)
+                    )
+
+                    questionReservationViewModel.setRequestTutoringEndTime(
+                        LocalTime.of(end.hour, end.minute)
+                    )
+                    val timeDuration = end.plusMinute(10).toTime() - start.toTime()
                     binding.tvSelectedTime.text =
-                        "${start} ~ ${end} (${timeDuration}분)"
-                    binding.tvQuestionCost.text =
-                        (timeDuration * TEACHER_ANSWER_COST / 1_000).toString()
+                        "${start} ~ ${end.plusMinute(10)} (${timeDuration}분)"
+                    binding.tvQuestionCost.text = "${timeDuration * 10}"
                 })
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-
         }
     }
 
@@ -140,9 +124,5 @@ class ReservationFormFragment : Fragment() {
         binding.btnToolbarBack.setOnClickListener {
             moveBack()
         }
-    }
-
-    companion object {
-        private const val TEACHER_ANSWER_COST = 2000
     }
 }
