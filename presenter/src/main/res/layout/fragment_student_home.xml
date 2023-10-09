@@ -269,137 +269,139 @@
 
 
                 </LinearLayout>
+                <!--
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/container_lecture_section"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingVertical="30dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_lecture_section"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="30dp">
+                                    <TextView
+                                        android:id="@+id/tv_lecture_desc"
+                                        style="@style/section_title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginBottom="15dp"
+                                        android:text="지난 수업을 복습해봐요"
+                                        android:textColor="@color/black"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_lecture_desc"
-                        style="@style/section_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginBottom="15dp"
-                        android:text="지난 수업을 복습해봐요"
-                        android:textColor="@color/black"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="170dp"
+                                        android:layout_marginTop="15dp"
+                                        app:layout_constraintTop_toBottomOf="@id/tv_lecture_desc">
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="170dp"
-                        android:layout_marginTop="15dp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_lecture_desc">
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/rv_lecture"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:clipToPadding="false"
+                                            android:paddingLeft="20dp" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_lecture"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:clipToPadding="false"
-                            android:paddingLeft="20dp" />
+                                        <LinearLayout
+                                            android:id="@+id/container_lecture_empty"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginLeft="20dp"
+                                            android:background="@drawable/bg_radius_11_stroke_bright_grey"
+                                            android:gravity="center"
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
 
-                        <LinearLayout
-                            android:id="@+id/container_lecture_empty"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="20dp"
-                            android:background="@drawable/bg_radius_11_stroke_bright_grey"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/pretendard_medium"
+                                                android:text="꾸준한 학습을 위해 매일 코인을 제공해요"
+                                                android:textColor="@color/black"
+                                                android:textSize="14sp" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/pretendard_medium"
-                                android:text="꾸준한 학습을 위해 매일 코인을 제공해요"
-                                android:textColor="@color/black"
-                                android:textSize="14sp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="2dp"
+                                                android:drawableRight="@drawable/ic_arrow_right_blue"
+                                                android:drawablePadding="6dp"
+                                                android:fontFamily="@font/pretendard_medium"
+                                                android:text="오늘의 코인 받기"
+                                                android:textColor="@color/primary_blue"
+                                                android:textSize="14sp" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:drawableRight="@drawable/ic_arrow_right_blue"
-                                android:drawablePadding="6dp"
-                                android:fontFamily="@font/pretendard_medium"
-                                android:text="오늘의 코인 받기"
-                                android:textColor="@color/primary_blue"
-                                android:textSize="14sp" />
+                                        </LinearLayout>
+                                    </FrameLayout>
+                                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        </LinearLayout>
-                    </FrameLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                                <View
+                                    android:id="@+id/dv_ranking"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="5dp"
+                                    android:background="@color/background_grey" />
 
-                <View
-                    android:id="@+id/dv_ranking"
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:background="@color/background_grey" />
+                                <LinearLayout
+                                    android:id="@+id/container_best_teacher_section"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingTop="30dp">
 
-                <LinearLayout
-                    android:id="@+id/container_best_teacher_section"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="30dp">
+                                    <androidx.constraintlayout.widget.ConstraintLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="@dimen/section_horizontal_padding_default">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="@dimen/section_horizontal_padding_default">
+                                        <TextView
+                                            android:id="@+id/tv_best_teacher_desc"
+                                            style="@style/section_title"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="학생들이 평가한 최고의 선생님"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintLeft_toLeftOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/tv_best_teacher_desc"
-                            style="@style/section_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="학생들이 평가한 최고의 선생님"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                                        <LinearLayout
+                                            android:id="@+id/container_more_teacher"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_vertical"
+                                            android:orientation="horizontal"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintRight_toRightOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent">
 
-                        <LinearLayout
-                            android:id="@+id/container_more_teacher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/pretendard_medium"
+                                                android:text="더보기"
+                                                android:textColor="@color/sub_text_grey"
+                                                android:textSize="13sp" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/pretendard_medium"
-                                android:text="더보기"
-                                android:textColor="@color/sub_text_grey"
-                                android:textSize="13sp" />
+                                            <ImageView
+                                                android:layout_width="16dp"
+                                                android:layout_height="16dp"
+                                                android:layout_marginLeft="4dp"
+                                                android:src="@drawable/ic_arrow_right_more" />
 
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_marginLeft="4dp"
-                                android:src="@drawable/ic_arrow_right_more" />
+                                        </LinearLayout>
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        </LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rv_teacher"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:clipToPadding="false"
+                                        android:nestedScrollingEnabled="false"
+                                        android:paddingLeft="@dimen/section_horizontal_padding_default" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_teacher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:paddingLeft="@dimen/section_horizontal_padding_default" />
+                                </LinearLayout>
 
-                </LinearLayout>
+                                -->
 
             </LinearLayout>
 
