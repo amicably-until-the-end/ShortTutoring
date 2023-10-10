@@ -36,6 +36,14 @@ class SimpleConfirmDialog(
         return binding.root
     }
 
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            super.show(manager, tag)
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

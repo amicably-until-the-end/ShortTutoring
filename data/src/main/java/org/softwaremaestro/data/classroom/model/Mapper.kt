@@ -19,15 +19,16 @@ class Mapper {
         }
     }
 
-    fun asDomain(classroomInfoDto: ClassroomInfoDto, questionId: String): ClassroomInfoVO {
+    fun asDomain(classroomInfoDto: ClassroomInfoDto): ClassroomInfoVO {
         classroomInfoDto.apply {
             return ClassroomInfoVO(
                 boardAppId = id,
                 boardUUID = studentId,
                 boardToken = status,
-                rtcToken = teacherId,
-                rtcChannel = questionId,
+                rtcToken = rtcToken,
+                rtcChannel = rtcChannel,
                 rtcAppId = rtcAppId,
+                rtcUID = rtcUID,
             )
         }
     }
@@ -37,6 +38,6 @@ fun TutoringInfoDto.asDomain(): TutoringInfoVO {
     return Mapper().asDomain(this)
 }
 
-fun ClassroomInfoDto.asDomain(questionId: String): ClassroomInfoVO {
-    return Mapper().asDomain(this, questionId)
+fun ClassroomInfoDto.asDomain(): ClassroomInfoVO {
+    return Mapper().asDomain(this)
 }
