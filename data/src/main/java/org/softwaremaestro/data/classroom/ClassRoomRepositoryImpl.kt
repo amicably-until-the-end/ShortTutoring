@@ -47,7 +47,7 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
             }
 
             if (result.isSuccessful && result.body()?.success == true) {
-                emit(BaseResult.Success(result.body()?.data!!.asDomain(tutoringId)))
+                emit(BaseResult.Success(result.body()?.data!!.asDomain()))
             } else {
                 emit(BaseResult.Error(ClassroomInfoVO.NOT_YET_START))
             }
@@ -59,7 +59,7 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
             val result = classRoomApi.startClassroom(tutoringId)
 
             if (result.isSuccessful && result.body()?.success == true) {
-                emit(BaseResult.Success(result.body()?.data!!.asDomain(tutoringId)))
+                emit(BaseResult.Success(result.body()?.data!!.asDomain()))
             } else {
                 emit(BaseResult.Error("Error"))
             }
