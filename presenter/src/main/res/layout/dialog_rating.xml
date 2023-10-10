@@ -6,15 +6,17 @@
     android:background="@drawable/bg_radius_10_white">
 
     <LinearLayout
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:minWidth="360dp"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:paddingHorizontal="20dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_teacher_profile"
@@ -80,11 +82,12 @@
                 app:starSize="24" />
 
             <TextView
+                android:id="@+id/tv_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="이해가 잘 됐어요"
+                android:text="다음에 또 질문하고 싶어요!"
                 android:textColor="@color/sub_text_grey"
                 android:textSize="12sp" />
 

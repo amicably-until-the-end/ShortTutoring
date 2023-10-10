@@ -331,5 +331,6 @@ class StudentHomeFragment : Fragment() {
 
     companion object {
         private val QUESTION_UPLOAD_RESULT = 1001
+        val CLASSROOM_END_RESULT = 1002
     }
 }

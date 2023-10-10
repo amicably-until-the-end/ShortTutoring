@@ -20,7 +20,7 @@ class StarRatingBar(private val context: Context, private val attrs: AttributeSe
 
     private var numOfStars = -1
     private var starSize = -1
-    var numOfFilled = -1
+    lateinit var onClick: (Int) -> Unit
 
     init {
         setAttrs()
@@ -45,6 +45,7 @@ class StarRatingBar(private val context: Context, private val attrs: AttributeSe
                     layoutParams =
                         LinearLayout.LayoutParams(toPx(starSize, context), toPx(starSize, context))
                     background = resources.getDrawable(R.drawable.ic_star, null)
+                    id = i
                 })
             }
         }
@@ -55,7 +56,7 @@ class StarRatingBar(private val context: Context, private val attrs: AttributeSe
             child.setOnClickListener { clicked ->
                 getIdx(clicked)?.let { idx ->
                     fillStars(idx)
-                    numOfFilled = idx + 1
+                    onClick(idx)
                 }
             }
         }

@@ -243,7 +243,7 @@ class TeacherChatFragment : ChatFragment() {
                     tutoringId?.let { chatViewModel.startClassroom(it) }
                 }.apply {
                     title = "강의실에 입장합니다"
-                    description = "학생에게 수업 시작을 알립니다. 학생이 들어오면 수업을 시작해주세요!"
+                    description = "학생에게 수업 시작을 알립니다.\n학생이 들어오면 수업을 시작해주세요!"
                 }.show(parentFragmentManager, "enterClassroomDialog")
             }
         }

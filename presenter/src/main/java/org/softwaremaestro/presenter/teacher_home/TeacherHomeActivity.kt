@@ -128,6 +128,12 @@ class TeacherHomeActivity : AppCompatActivity() {
         }
     }
 
+    fun moveToTeacherHomeTab() {
+        val item = binding.bottomNavView.menu.findItem(R.id.teacherHomeFragment)
+        // Return true only if the destination we've navigated to matches the MenuItem
+        NavigationUI.onNavDestinationSelected(item, navController)
+    }
+
     fun hideChatBadge() {
         binding.bottomNavView.removeBadge(R.id.teacherChatFragment)
     }

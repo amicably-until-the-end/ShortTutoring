@@ -147,6 +147,12 @@ class StudentHomeActivity : AppCompatActivity() {
         NavigationUI.onNavDestinationSelected(item, navController)
     }
 
+    fun moveToStudentHomeTab() {
+        val item = binding.bottomNavView.menu.findItem(R.id.studentHomeFragment)
+        // Return true only if the destination we've navigated to matches the MenuItem
+        NavigationUI.onNavDestinationSelected(item, navController)
+    }
+
     private fun requirePermission() {
         val permission = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
         requestPermissions(permission, 0)

@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.chat_page
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -29,9 +30,12 @@ import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
 import org.softwaremaestro.presenter.chat_page.widget.AnsweringTeacherSelectDialog
 import org.softwaremaestro.presenter.classroom.ClassroomActivity
 import org.softwaremaestro.presenter.classroom.ClassroomFragment
+import org.softwaremaestro.presenter.classroom.ReviewDialog
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
+import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
+import org.softwaremaestro.presenter.student_home.StudentHomeFragment.Companion.CLASSROOM_END_RESULT
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
@@ -58,6 +62,7 @@ abstract class ChatFragment : Fragment() {
 
     protected val chatViewModel: ChatViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private val reviewViewModel: ReviewViewModel by activityViewModels()
 
     protected var currentChatRoom: ChatRoomVO? = null
 
@@ -276,7 +281,6 @@ abstract class ChatFragment : Fragment() {
     }
 
     abstract fun isTeacher(): Boolean
-
 
     private fun observeChatRoomList() {
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
@@ -594,7 +598,6 @@ abstract class ChatFragment : Fragment() {
                 roomToken = it.boardToken,
                 uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}",
                 questionId = currentChatRoom?.questionId ?: "",
-                roomTitle = "${currentChatRoom?.title} ${if (isTeacher()) "학생과" else "선생님과"} 수업 중",
                 roomProfileImage = currentChatRoom?.roomImage ?: "",
                 opponentName = currentChatRoom?.title ?: "",
                 isTeacher = isTeacher(),
@@ -611,7 +614,7 @@ abstract class ChatFragment : Fragment() {
                 putExtra("whiteBoardInfo", whiteBoardRoomInfo)
                 putExtra("voiceRoomInfo", voiceRoomInfo)
             }
-            startActivity(intent)
+            startActivityForResult(intent, CLASSROOM_END_RESULT)
         }
     }
 
@@ -738,6 +741,29 @@ abstract class ChatFragment : Fragment() {
         binding.etMessage.apply {
             isFocusable = b
             isFocusableInTouchMode = b
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                CLASSROOM_END_RESULT -> {
+                    if (isTeacher()) return
+                    val opponentName = data?.getStringExtra("opponentName")
+                    val tutoringId = data?.getStringExtra("tutoringId")
+                    if (tutoringId != null) {
+                        ReviewDialog(opponentName) { rating, comment ->
+                            reviewViewModel.createReview(
+                                tutoringId = tutoringId,
+                                rating = rating,
+                                comment = comment
+                            )
+                        }.show(parentFragmentManager, "reviewDialog")
+                    }
+                }
+            }
         }
     }
 }

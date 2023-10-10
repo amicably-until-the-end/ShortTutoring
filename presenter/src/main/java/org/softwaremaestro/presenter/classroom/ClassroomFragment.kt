@@ -1,8 +1,10 @@
 package org.softwaremaestro.presenter.classroom
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Rect
@@ -51,7 +53,6 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
-import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
@@ -78,7 +79,6 @@ class ClassroomFragment : Fragment() {
     private lateinit var voiceInfo: SerializedVoiceRoomInfo
 
     private lateinit var dialogLectureEnd: SimpleConfirmDialog
-    private lateinit var reviewDialog: reviewDialog
     private lateinit var loadingDialog: LoadingDialog
 
 
@@ -92,7 +92,6 @@ class ClassroomFragment : Fragment() {
     private var whiteBoardRoom: Room? = null
 
     private val viewModel: ClassroomViewModel by viewModels()
-    private val reviewViewModel: ReviewViewModel by viewModels()
 
     private var currentApplianceName: ApplianceName = ApplianceName.PENCIL
 
@@ -120,32 +119,22 @@ class ClassroomFragment : Fragment() {
 
     private fun initDialog() {
         iniLectureEndDialog()
-        initReviewDialog()
     }
 
     private fun iniLectureEndDialog() {
         dialogLectureEnd = SimpleConfirmDialog {
-            if (!whiteBoardInfo.isTeacher) {
-                reviewDialog.show(parentFragmentManager, "reviewDialog")
-            } else {
-                viewModel.finishClass(voiceInfo.channelId)
-                activity?.finish()
+            viewModel.finishClass(voiceInfo.channelId)
+            requireActivity().apply {
+                val mIntent = Intent().apply {
+                    putExtra("opponentName", whiteBoardInfo.opponentName)
+                    putExtra("tutoringId", whiteBoardInfo.tutoringId)
+                }
+                setResult(RESULT_OK, mIntent)
+                finish()
             }
         }.apply {
             title = "수업을 종료할까요?"
             description = "과외 영상이 자동으로 저장됩니다"
-        }
-    }
-
-    private fun initReviewDialog() {
-        reviewDialog = reviewDialog(whiteBoardInfo.opponentName) { rating, comment ->
-            reviewViewModel.createReview(
-                tutoringId = whiteBoardInfo.tutoringId,
-                rating = rating,
-                comment = comment
-            )
-            viewModel.finishClass(voiceInfo.channelId)
-            activity?.finish()
         }
     }
 
@@ -310,8 +299,15 @@ class ClassroomFragment : Fragment() {
             override fun onPhaseChanged(phase: RoomPhase?) {
                 if (phase == RoomPhase.disconnected) {
                     setOnlineStatus(false)
-                    classFinshed()
-                    activity?.finish()
+                    classFinished()
+                    requireActivity().apply {
+                        val mIntent = Intent().apply {
+                            putExtra("opponentName", whiteBoardInfo.opponentName)
+                            putExtra("tutoringId", whiteBoardInfo.tutoringId)
+                        }
+                        setResult(RESULT_OK, mIntent)
+                        finish()
+                    }
                 }
                 if (phase == RoomPhase.connected) {
                     loadingDialog.dismiss()
@@ -570,7 +566,7 @@ class ClassroomFragment : Fragment() {
 
     }
 
-    private fun classFinshed() {
+    private fun classFinished() {
         loadingDialog.dismiss()
         val dialog = SimpleAlertDialog().apply {
             title = "수업이 종료되었습니다."

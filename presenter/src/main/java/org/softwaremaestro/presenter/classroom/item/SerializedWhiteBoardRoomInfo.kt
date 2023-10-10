@@ -8,7 +8,6 @@ data class SerializedWhiteBoardRoomInfo(
     val roomToken: String,
     val uid: String,
     val questionId: String,
-    val roomTitle: String,
     val roomProfileImage: String,
     val opponentName: String,
     val isTeacher: Boolean,
