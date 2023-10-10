@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import org.softwaremaestro.data.chat.model.ChatRoomDto
 import org.softwaremaestro.data.common.utils.parseToLocalDateTime
+import org.softwaremaestro.domain.chat.entity.ChatRoomState
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageBodyVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
@@ -25,6 +26,7 @@ class Mapper {
                 isSelect = isSelect,
                 startDateTime = startDateTime,
                 description = description ?: "undefined",
+                chatRoomState = chatRoomState,
                 questionState =
                 if (status == ChatRoomType.PROPOSED_NORMAL.type ||
                     status == ChatRoomType.PROPOSED_SELECT.type
@@ -52,6 +54,7 @@ class Mapper {
                 messages = unReadCnt,
                 opponentId = opponentId,
                 description = description ?: "undefined",
+                chatRoomState = chatRoomState,
             )
         }
     }
@@ -114,6 +117,7 @@ class Mapper {
                 messages = 0,
                 opponentId = chatRoomEntity.opponentId,
                 description = chatRoomEntity.description ?: "undefined",
+                chatRoomState = chatRoomEntity.chatRoomState,
             )
         }
     }
@@ -138,7 +142,7 @@ class Mapper {
         Log.d("ChatRoomDto", "to entity Mapper${dto} ${status}")
 
         return ChatRoomEntity(
-            id = dto.id ?: dto.questionId,
+            id = dto.id,
             title = dto.title!!,
             image = dto.roomImage,
             status = status,
@@ -151,6 +155,7 @@ class Mapper {
             else "${dto.reservedStart?.parseToLocalDateTime()?.toKoreanString()}",
             isSelect = dto.isSelect ?: false,
             description = dto.questionInfo?.problem?.description ?: "undefined",
+            chatRoomState = ChatRoomState.values().find { it.value == dto.questionState }!!,
         )
     }
 }

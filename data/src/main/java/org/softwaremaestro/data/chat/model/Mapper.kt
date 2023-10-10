@@ -34,6 +34,7 @@ class Mapper {
                 isSelect = isSelect ?: false,
                 questionId = questionId,
                 description = questionInfo?.problem?.description ?: "",
+                startDateTime = ISOParser(reservedStart ?: ""),
             )
         }
     }
@@ -76,6 +77,7 @@ class Mapper {
                 isSelect = true,
                 description = description ?: "undefined",
                 startDateTime = startDateTime,
+                chatRoomState = chatRoomState,
                 questionState =
                 if (status == 1 || status == 2)
                     QuestionState.PROPOSED else QuestionState.RESERVED,
