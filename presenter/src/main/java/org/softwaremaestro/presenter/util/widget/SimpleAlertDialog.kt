@@ -14,6 +14,8 @@ class SimpleAlertDialog : DialogFragment() {
     var title: String? = null
     var description: String? = null
 
+    var onDismiss: (() -> Unit)? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +33,11 @@ class SimpleAlertDialog : DialogFragment() {
         }
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return binding.root
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        onDismiss?.let { it() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

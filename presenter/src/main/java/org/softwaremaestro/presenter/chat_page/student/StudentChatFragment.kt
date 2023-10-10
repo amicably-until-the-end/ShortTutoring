@@ -228,7 +228,7 @@ class StudentChatFragment : ChatFragment() {
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
-                    setChatNoti(null, null)
+                    //setChatNoti(null, null)
                     Toast.makeText(requireContext(), "예약 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                         .show()
                 }

@@ -123,15 +123,7 @@ class ClassroomFragment : Fragment() {
 
     private fun iniLectureEndDialog() {
         dialogLectureEnd = SimpleConfirmDialog {
-            viewModel.finishClass(voiceInfo.channelId)
-            requireActivity().apply {
-                val mIntent = Intent().apply {
-                    putExtra("opponentName", whiteBoardInfo.opponentName)
-                    putExtra("tutoringId", whiteBoardInfo.tutoringId)
-                }
-                setResult(RESULT_OK, mIntent)
-                finish()
-            }
+            viewModel.finishClass(whiteBoardInfo.tutoringId)
         }.apply {
             title = "수업을 종료할까요?"
             description = "과외 영상이 자동으로 저장됩니다"
@@ -245,12 +237,10 @@ class ClassroomFragment : Fragment() {
                 requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
             voiceInfo =
                 requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
-            Log.d("agora.io", voiceInfo.toString())
         } catch (e: Exception) {
-            Log.e("ClassroomFragment", e.toString())
+            Log.e("${this@ClassroomFragment::class.java}", e.toString())
             showFinishClassDialog()
         }
-//        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
     private fun setAgora() {
@@ -312,7 +302,6 @@ class ClassroomFragment : Fragment() {
                             putExtra("tutoringId", whiteBoardInfo.tutoringId)
                         }
                         setResult(RESULT_OK, mIntent)
-                        finish()
                     }
                 }
                 if (phase == RoomPhase.connected) {
@@ -400,15 +389,12 @@ class ClassroomFragment : Fragment() {
     private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
         // Listen for the remote user joining the channel.
         override fun onUserJoined(uid: Int, elapsed: Int) {
-            setOnlineStatus(true)
         }
 
         override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
-            Log.d("agora.io", "onJoinChannelSuccess")
         }
 
         override fun onUserOffline(uid: Int, reason: Int) {
-            setOnlineStatus(false)
         }
 
         override fun onLeaveChannel(stats: RtcStats) {
@@ -576,6 +562,9 @@ class ClassroomFragment : Fragment() {
         loadingDialog.dismiss()
         val dialog = SimpleAlertDialog().apply {
             title = "수업이 종료되었습니다."
+            onDismiss = {
+                activity?.finish()
+            }
         }
         dialog.show(requireActivity().supportFragmentManager, "classFinished")
     }
