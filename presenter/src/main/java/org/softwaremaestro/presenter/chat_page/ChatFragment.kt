@@ -178,6 +178,20 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    fun disableSendMessage() {
+        binding.btnSendMessage.isEnabled = false
+        binding.containerInputBox.alpha = 0.5f
+        binding.etMessage.hint = "거절되었습니다."
+        binding.etMessage.isEnabled = false
+    }
+
+    fun enableSendMessage() {
+        binding.btnSendMessage.isEnabled = true
+        binding.containerInputBox.alpha = 1f
+        binding.etMessage.hint = "메시지를 입력하세요"
+        binding.etMessage.isEnabled = true
+    }
+
     private fun refreshProposedRoomList() {
         if (binding.rbNormalQuestion.isChecked) {
             chatViewModel.proposedNormalChatRoomList.value?.let {

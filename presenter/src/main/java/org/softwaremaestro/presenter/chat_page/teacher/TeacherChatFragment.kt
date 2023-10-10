@@ -96,7 +96,7 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
                 ChatRoomState.DECLINED -> {
-                    Log.d("onChatRoomStateChange", "onChatRoomStateChange:DECLINED ")
+                    onDeclinedRoomEnter()
                     //선생님 자신이 지정 질문 거절한 경우
                 }
 
@@ -118,6 +118,7 @@ class TeacherChatFragment : ChatFragment() {
 
                 ChatRoomState.DECLINED -> {
                     //학생이 일반 질문 거절한 경우
+                    onDeclinedRoomEnter()
                 }
 
                 else -> {
@@ -130,6 +131,7 @@ class TeacherChatFragment : ChatFragment() {
     private fun onProposedNormalRoomEnter() {
         setNotiVisible(false)
         setChatRoomBtnsVisible(false)
+        enableSendMessage()
     }
 
 
@@ -147,8 +149,16 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
+    private fun onDeclinedRoomEnter() {
+        setNotiVisible(false)
+        setChatRoomRightBtnVisible(false)
+        binding.btnChatRoomLeft.visibility = View.GONE
+        disableSendMessage()
+    }
+
     private fun onProposedSelectRoomEnter() {
         setNotiVisible(false)
+        enableSendMessage()
         setChatRoomBtnsVisible(false)
         enablePickStudentBtn()
         enableDeclineBtn()
@@ -176,6 +186,7 @@ class TeacherChatFragment : ChatFragment() {
         currentChatRoom?.questionId?.let { chatViewModel.getTutoringInfo(it) }
         setNotiVisible(true)
         binding.btnChatRoomRight.visibility = View.GONE
+        enableSendMessage()
     }
 
     private fun observeClassroomInfo() {
