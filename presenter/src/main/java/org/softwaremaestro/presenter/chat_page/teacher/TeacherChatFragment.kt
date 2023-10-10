@@ -117,7 +117,6 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
                 ChatRoomState.DECLINED -> {
-                    Log.d("onChatRoomStateChange", "onChatRoomStateChange:DECLINED ")
                     //학생이 일반 질문 거절한 경우
                 }
 

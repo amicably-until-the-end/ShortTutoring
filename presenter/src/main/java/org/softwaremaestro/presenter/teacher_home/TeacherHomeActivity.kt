@@ -54,6 +54,7 @@ class TeacherHomeActivity : AppCompatActivity() {
         intent?.apply {
             try {
                 val chatId = getStringExtra(SplashActivity.APP_LINK_ARGS_CHAT_ID)
+                Log.d("deepLink", "chatId: $chatId")
                 if (!chatId.isNullOrEmpty()) {
                     homeViewModel.chattingId = chatId
                     moveToChatTab()
