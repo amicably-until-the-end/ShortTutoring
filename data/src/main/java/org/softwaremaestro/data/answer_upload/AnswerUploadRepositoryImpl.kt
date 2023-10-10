@@ -8,7 +8,7 @@ import org.softwaremaestro.data.answer_upload.model.asDomain
 import org.softwaremaestro.data.answer_upload.remote.AnswerUploadApi
 import org.softwaremaestro.data.common.utils.toStringWithTimeZone
 import org.softwaremaestro.domain.answer_upload.AnswerUploadRepository
-import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadResultVO
+import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadResVO
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.domain.answer_upload.entity.StudentPickResultVO
 import org.softwaremaestro.domain.common.BaseResult
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi: AnswerUploadApi) :
     AnswerUploadRepository {
-    override suspend fun uploadAnswer(answerUploadVO: AnswerUploadVO): Flow<BaseResult<AnswerUploadResultVO, String>> {
+    override suspend fun uploadAnswer(answerUploadVO: AnswerUploadVO): Flow<BaseResult<AnswerUploadResVO, String>> {
         return flow {
             val dto = AnswerUploadRequestDto(
                 answerUploadVO.requestId
@@ -25,9 +25,7 @@ class AnswerUploadRepositoryImpl @Inject constructor(private val answerUploadApi
             val response = answerUploadApi.uploadAnswer(dto.id)
             val body = response.body()!!
             if (body.success == true) {
-                response.body()!!.data?.asDomain()?.let {
-                    emit(BaseResult.Success(it))
-                }
+                body.data?.chatRoomId?.let { emit(BaseResult.Success(AnswerUploadResVO(it))) }
             } else {
                 val errorString =
                     "error in ${this@AnswerUploadRepositoryImpl::class.java.name}\n" +

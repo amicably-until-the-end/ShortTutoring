@@ -17,23 +17,16 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
-import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
-import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 
 private const val REFRESHING_TIME_INTERVAL = 10000L
-
-const val IMAGE = "image"
-const val SUBJECT = "subject"
-const val DIFFICULTY = "difficulty"
-const val DESCRIPTION = "description"
-const val QUESTION_ID = "questionId"
-const val HOPE_TIME = "hopeTime"
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -41,7 +34,6 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var binding: FragmentTeacherHomeBinding
     private val questionsViewModel: QuestionsViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
-    private val answerViewModel: AnswerViewModel by viewModels()
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
 
     private lateinit var questionAdapter: QuestionAdapter
@@ -122,8 +114,11 @@ class TeacherHomeFragment : Fragment() {
                     HOPE_TIME,
                     if (!hopeTime.isNullOrEmpty()) hopeTime else "시간을 선택하지 않았어요."
                 )
+                if (SocketManager.userId != null && question.offerTeachers != null) {
+                    putExtra(OFFERED_ALREADY, SocketManager.userId!! in question.offerTeachers!!)
+                }
             }
-            startActivity(intent)
+            startActivityForResult(intent, QUESTION_DETAIL_ACTIVITY)
         }
 
         questionAdapter =
@@ -151,7 +146,6 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observe() {
         observeQuestions()
-        observeAnswer()
         observeOfferRemove()
         observeMyProfile()
     }
@@ -166,11 +160,6 @@ class TeacherHomeFragment : Fragment() {
             binding.tvNumOfQuestions.text =
                 if (questions.isNotEmpty()) "${questions.size}명의 학생이 선생님을 기다리고 있어요"
                 else "아직 질문이 올라오지 않았어요"
-        }
-    }
-
-    private fun observeAnswer() {
-        answerViewModel.answer.observe(viewLifecycleOwner) {
         }
     }
 
@@ -195,5 +184,35 @@ class TeacherHomeFragment : Fragment() {
                 delay(timeInterval)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            QUESTION_DETAIL_ACTIVITY -> {
+                when (resultCode) {
+                    OFFER_SUCCESS -> {
+                        SimpleAlertDialog().apply {
+                            title = "수업 요청에 성공했습니다"
+                            description = "채팅 페이지에서 수업 내용을 협의할 수 있어요"
+                        }.show(parentFragmentManager, "simpleAlertDialog")
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val QUESTION_DETAIL_ACTIVITY = 0
+        const val OFFER_SUCCESS = 1
+        const val OFFER_FAIL = 2
+
+        const val IMAGE = "image"
+        const val SUBJECT = "subject"
+        const val DESCRIPTION = "description"
+        const val QUESTION_ID = "questionId"
+        const val HOPE_TIME = "hopeTime"
+        const val OFFERED_ALREADY = "offeredAlready"
     }
 }

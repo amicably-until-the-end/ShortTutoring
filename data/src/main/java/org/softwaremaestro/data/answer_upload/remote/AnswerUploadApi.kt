@@ -1,6 +1,6 @@
 package org.softwaremaestro.data.answer_upload.remote
 
-import org.softwaremaestro.data.answer_upload.model.AnswerUploadResultDto
+import org.softwaremaestro.data.answer_upload.model.AnswerUploadResDto
 import org.softwaremaestro.data.answer_upload.model.StudentPickReqDto
 import org.softwaremaestro.data.answer_upload.model.StudentPickResultDto
 import org.softwaremaestro.data.common.utils.WrappedResponse
@@ -14,7 +14,7 @@ interface AnswerUploadApi {
     @GET("/teacher/offer/append/{questionId}")
     suspend fun uploadAnswer(
         @Path("questionId") requestId: String
-    ): Response<WrappedResponse<AnswerUploadResultDto>>
+    ): Response<WrappedResponse<AnswerUploadResDto>>
 
     @POST("/tutoring/appoint/{questionId}")
     suspend fun pickStudent(
