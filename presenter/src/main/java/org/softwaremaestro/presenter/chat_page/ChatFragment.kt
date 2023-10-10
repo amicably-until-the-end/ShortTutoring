@@ -760,6 +760,7 @@ abstract class ChatFragment : Fragment() {
                                 rating = rating,
                                 comment = comment
                             )
+
                         }.show(parentFragmentManager, "reviewDialog")
                     }
                 }
