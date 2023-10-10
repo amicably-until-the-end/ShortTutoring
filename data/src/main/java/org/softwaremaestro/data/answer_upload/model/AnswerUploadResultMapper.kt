@@ -5,7 +5,7 @@ import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadResultVO
 object AnswerUploadResultMapper {
     fun asDomain(answerUploadResultDto: AnswerUploadResultDto): AnswerUploadResultVO {
         return AnswerUploadResultVO(
-            answerUploadResultDto.exampleData
+            chatRoomId = answerUploadResultDto.chatRoomId
         )
     }
 }

@@ -56,8 +56,7 @@ class TeacherHomeActivity : AppCompatActivity() {
                 val chatId = getStringExtra(SplashActivity.APP_LINK_ARGS_CHAT_ID)
                 Log.d("deepLink", "chatId: $chatId")
                 if (!chatId.isNullOrEmpty()) {
-                    homeViewModel.chattingId = chatId
-                    moveToChatTab()
+                    moveToChatTab(chatId)
                 }
             } catch (e: Exception) {
                 Log.w(this@TeacherHomeActivity::class.java.name, "onNewIntent: $e")
@@ -83,11 +82,13 @@ class TeacherHomeActivity : AppCompatActivity() {
         }
     }
 
-    fun moveToChatTab() {
+    fun moveToChatTab(chatId: String? = null) {
+        chatId?.let { homeViewModel.chattingId = it }
         val item = binding.bottomNavView.menu.findItem(R.id.teacherChatFragment)
         // Return true only if the destination we've navigated to matches the MenuItem
         NavigationUI.onNavDestinationSelected(item, navController)
     }
+
 
     private fun getIntentExtra() {
         val args = intent.extras
@@ -101,7 +102,7 @@ class TeacherHomeActivity : AppCompatActivity() {
                 }
             if (!chatId.isNullOrEmpty()) {
                 homeViewModel.chattingId = chatId
-                moveToChatTab()
+                moveToChatTab(chatId)
             }
         }
     }
