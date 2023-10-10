@@ -100,6 +100,7 @@ class StudentChatFragment : ChatFragment() {
         hideLeftButton()
         setNotiVisible(false)
         hideRightButton()
+        disableSendMessage()
     }
 
     private fun initWaitingTeacherDialog() {
@@ -113,6 +114,7 @@ class StudentChatFragment : ChatFragment() {
         hideLeftButton()
         setNotiVisible(false)
         hideRightButton()
+        enableSendMessage()
     }
 
     private fun hideLeftButton() {
@@ -196,6 +198,7 @@ class StudentChatFragment : ChatFragment() {
 
     private fun onProposedNormalQuestionSelect() {
         setNotiVisible(false)
+        enableSendMessage()
         enablePickTeacherButton()
     }
 
@@ -206,6 +209,7 @@ class StudentChatFragment : ChatFragment() {
             observeTutoringInfo()
         }
         hideRightButton()
+        enableSendMessage()
         unSetOfferingTeacherMode() // 채팅 보고 있을 때 선택 했을 경우에 대비해서 offeringTeacherMode 해제하고 해당 방으로 이동
     }
 
