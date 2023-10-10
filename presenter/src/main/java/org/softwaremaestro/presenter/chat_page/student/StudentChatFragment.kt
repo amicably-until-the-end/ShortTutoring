@@ -142,7 +142,7 @@ class StudentChatFragment : ChatFragment() {
                             moveToClassRoom(it._data)
                         }.apply {
                             title = "강의실에 입장합니다"
-                            description = "강의실에 들어가면 바로 수업이 시작됩니다. 수업 가능한 환경을 준비해주세요."
+                            description = "강의실에 들어가면 바로 수업이 시작됩니다.\n수업 가능한 환경을 준비해주세요."
                         }.show(parentFragmentManager, "enterClassroomDialog")
                     } else {
                         waitingTeacherDialog.show(parentFragmentManager, "waitingTeacherDialog")
@@ -222,6 +222,7 @@ class StudentChatFragment : ChatFragment() {
                     loadingDialog.dismiss()
                     it._data?.let { tutoringInfo ->
                         setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
+                        tutoringId = tutoringInfo.id
                     }
                 }
 

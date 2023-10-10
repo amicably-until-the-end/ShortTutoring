@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelectedUploadVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionSelectedFormBinding
@@ -150,7 +153,10 @@ class QuestionSelectedFormFragment : Fragment() {
 
     private fun observeImages() {
         questionSelectedUploadViewModel.images.observe(viewLifecycleOwner) {
-            it?.let { imageAdapter.setItem(it) }
+            imageAdapter.setItem(it!!)
+            CoroutineScope(Dispatchers.IO).launch {
+                questionSelectedUploadViewModel.setImagesBase64(it.map { it.toBase64() })
+            }
         }
     }
 
@@ -230,9 +236,7 @@ class QuestionSelectedFormFragment : Fragment() {
                     schoolLevel = questionSelectedUploadViewModel.schoolLevel.value!!,
                     schoolSubject = questionSelectedUploadViewModel.schoolSubject.value!!,
                     mainImageIndex = 0,
-                    images = questionSelectedUploadViewModel.images.value!!.map {
-                        it.toBase64()
-                    },
+                    images = questionSelectedUploadViewModel.imagesBase64.value!!,
                     requestTutoringStartTime = LocalDateTime.of(
                         questionReservationViewModel.requestDate.value!!,
                         questionReservationViewModel.requestTutoringStartTime.value!!

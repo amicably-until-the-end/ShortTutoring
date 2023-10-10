@@ -50,6 +50,9 @@ class ProfileViewModel @Inject constructor(
     private val _followingCount: MutableLiveData<Int> = MutableLiveData()
     val followingCount: LiveData<Int> get() = _followingCount
 
+    private val _rating: MutableLiveData<Float> = MutableLiveData()
+    val rating: LiveData<Float> get() = _rating
+
     fun getMyProfile() {
         viewModelScope.launch {
             myProfileGetUseCase.execute()
@@ -70,6 +73,7 @@ class ProfileViewModel @Inject constructor(
                                 profileImage?.let { _image.postValue(it) }
                                 followers?.let { _followers.postValue(it) }
                                 following?.let { _followingCount.postValue(it.size) }
+                                rating?.let { _rating.postValue(it) }
                             }
                         }
 

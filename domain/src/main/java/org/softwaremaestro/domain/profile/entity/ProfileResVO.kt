@@ -11,5 +11,6 @@ data class ProfileResVO(
     val bio: String?,
     val id: String?,
     val name: String?,
-    val profileImage: String?
+    val profileImage: String?,
+    val rating: Float?
 )

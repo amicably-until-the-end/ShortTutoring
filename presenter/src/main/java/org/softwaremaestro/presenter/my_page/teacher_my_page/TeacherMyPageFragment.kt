@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,10 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
-import org.softwaremaestro.presenter.my_page.viewmodel.ReviewsViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
 @AndroidEntryPoint
@@ -25,7 +27,7 @@ class TeacherMyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherMyPageBinding
 
-    private val reviewsViewModel: ReviewsViewModel by viewModels()
+    private val reviewViewModel: ReviewViewModel by viewModels()
     private val lecturesViewModel: LecturesViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()
@@ -67,16 +69,16 @@ class TeacherMyPageFragment : Fragment() {
     }
 
     private fun observeReview() {
-        reviewsViewModel.reviews.observe(requireActivity()) {
-            binding.containerReviewEmpty.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.GONE
-
-            reviewAdapter.apply {
-                setItem(it)
-                notifyDataSetChanged()
-            }
-            binding.tvNumOfReview.text = it.size.toString()
-        }
+//        reviewsViewModel.reviews.observe(requireActivity()) {
+//            binding.containerReviewEmpty.visibility =
+//                if (it.isEmpty()) View.VISIBLE else View.GONE
+//
+//            reviewAdapter.apply {
+//                setItem(it)
+//                notifyDataSetChanged()
+//            }
+//            binding.tvNumOfReview.text = it.size.toString()
+//        }
     }
 
     private fun observeLecture() {
@@ -128,9 +130,9 @@ class TeacherMyPageFragment : Fragment() {
             binding.tvTeacherMajor.text = it
         }
 
-//        myProfileViewModel.rating.observe(viewLifecycleOwner) {
-//            binding.tvTeacherRating.text = it
-//        }
+        profileViewModel.rating.observe(viewLifecycleOwner) {
+            binding.tvTeacherRating.text = it.toRating()
+        }
 
         profileViewModel.image.observe(viewLifecycleOwner) {
             Glide.with(requireContext()).load(it).circleCrop().into(binding.ivTeacherImg)
@@ -143,15 +145,15 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun initReviewRecyclerView() {
 
-        reviewAdapter = ReviewAdapter()
-
-        binding.rvReview.apply {
-            adapter = reviewAdapter
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        reviewsViewModel.getReviews()
+//        reviewAdapter = ReviewAdapter()
+//
+//        binding.rvReview.apply {
+//            adapter = reviewAdapter
+//            layoutManager =
+//                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+//        }
+//
+//        reviewsViewModel.getReviews()
     }
 
     private fun initLectureRecyclerView() {

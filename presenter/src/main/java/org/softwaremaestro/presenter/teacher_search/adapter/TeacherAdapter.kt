@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
+import org.softwaremaestro.presenter.util.toRating
 import java.lang.Integer.min
 
 class TeacherAdapter(
@@ -49,11 +50,11 @@ class TeacherAdapter(
         fun onBind(item: TeacherVO) {
 
             with(binding) {
-                item.profileUrl.let { ivTeacherImg.setImageURI(Uri.parse(it)) }
-                tvTeacherName.text = item.nickname
-                tvTeacherUniv.text = item.univ
-                tvTeacherBio.text = item.bio
-                tvTeacherRating.text = String.format("%.1f", item.rating)
+                item.profileUrl?.let { ivTeacherImg.setImageURI(Uri.parse(it)) }
+                item.nickname?.let { tvTeacherName.text }
+                item.univ?.let { tvTeacherUniv.text }
+                item.bio?.let { tvTeacherBio.text }
+                item.rating?.let { tvTeacherRating.text = it.toRating() }
                 btnFollow.text = "찜한 학생 ${item.followers?.size ?: 0}"
             }
 

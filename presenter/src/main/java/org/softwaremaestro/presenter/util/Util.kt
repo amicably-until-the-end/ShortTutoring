@@ -52,6 +52,8 @@ object Util {
     }
 }
 
+fun Float.toRating() = String.format("%.1f", this)
+
 fun View.decreaseWidth(
     l: Int,
     duration: Long,

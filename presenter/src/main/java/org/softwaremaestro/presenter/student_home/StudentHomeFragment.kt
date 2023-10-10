@@ -24,10 +24,10 @@ import org.softwaremaestro.presenter.student_home.viewmodel.LectureViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
-import org.softwaremaestro.presenter.teacher_profile.TeacherProfileActivity
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
+import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -79,16 +79,16 @@ class StudentHomeFragment : Fragment() {
     private fun initTeacherProfileDialog() {
         dialogTeacherProfile = TeacherProfileDialog(
             onProfileClick = { teacherId ->
-                startActivityForResult(
-                    Intent(
-                        requireActivity(),
-                        TeacherProfileActivity::class.java
-                    ).apply {
-                        putExtra("teacher-id", teacherId)
-                    }, QUESTION_UPLOAD_RESULT
-                )
-
-                dialogTeacherProfile.dismiss()
+//                startActivityForResult(
+//                    Intent(
+//                        requireActivity(),
+//                        TeacherProfileActivity::class.java
+//                    ).apply {
+//                        putExtra("teacher-id", teacherId)
+//                    }, QUESTION_UPLOAD_RESULT
+//                )
+//
+//                dialogTeacherProfile.dismiss()
             },
             onUnfollow = { teacherId ->
                 followUserViewModel.unfollowUser(teacherId)
@@ -331,5 +331,6 @@ class StudentHomeFragment : Fragment() {
 
     companion object {
         private val QUESTION_UPLOAD_RESULT = 1001
+        val CLASSROOM_END_RESULT = 1002
     }
 }

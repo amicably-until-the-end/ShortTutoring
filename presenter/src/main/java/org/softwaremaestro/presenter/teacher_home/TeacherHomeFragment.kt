@@ -16,9 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
-import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
@@ -27,14 +25,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
-import java.text.DecimalFormat
 
-// TODO: 추후 수정
-private const val TEACHER_ID = "test-teacher-id"
-private const val TEACHER_NAME = "김민수수학"
-private const val TEACHER_RATING = 4.8989897f
-private const val TEACHER_TEMPERATURE = 48
-private const val TEACHER_ANSWER_COST = 2500
 private const val REFRESHING_TIME_INTERVAL = 10000L
 
 const val IMAGE = "image"
@@ -52,11 +43,11 @@ class TeacherHomeFragment : Fragment() {
     private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val answerViewModel: AnswerViewModel by viewModels()
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
-    private val checkViewModel: CheckViewModel by viewModels()
 
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var waitingSnackbar: Snackbar
+    private var isCalledFirstTime = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,41 +70,19 @@ class TeacherHomeFragment : Fragment() {
         initReviewRecyclerView()
 
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
-        keepCheckingQuestionAfterSelect(REFRESHING_TIME_INTERVAL)
 
         observe()
-
-        // mockup
-        setItemToReviewAdapter()
     }
 
     private fun setTexts() {
 
 
-        binding.tvRatingAndTemperature.text =
-            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
+//        binding.tvRatingAndTemperature.text =
+//            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
+//
+//        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
 
-        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
 
-
-    }
-
-    private fun setItemToReviewAdapter() {
-        val review = ReviewVO(
-            "김민수",
-            "2023.7.19",
-            "선생님 너무 잘 가르치세요",
-            2,
-            0,
-            null
-        )
-        reviewAdapter.setItem(
-            mutableListOf<ReviewVO>().apply {
-                (0..10).forEach {
-                    add(review)
-                }
-            }
-        )
     }
 
     private fun initWaitingSnackbar() {
@@ -184,14 +153,16 @@ class TeacherHomeFragment : Fragment() {
         observeQuestions()
         observeAnswer()
         observeOfferRemove()
-        //observeCheck()
         observeMyProfile()
     }
 
     private fun observeQuestions() {
         questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
             questionAdapter.submitList(questions)
-
+            if (isCalledFirstTime) {
+                isCalledFirstTime = false
+                binding.rvQuestion.scrollToPosition(0)
+            }
             binding.tvNumOfQuestions.text =
                 if (questions.isNotEmpty()) "${questions.size}명의 학생이 선생님을 기다리고 있어요"
                 else "아직 질문이 올라오지 않았어요"
@@ -221,21 +192,6 @@ class TeacherHomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 questionsViewModel.getQuestions()
-                delay(timeInterval)
-            }
-        }
-    }
-
-    private fun keepCheckingQuestionAfterSelect(timeInterval: Long) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            while (NonCancellable.isActive) {
-                // 학생의 선택을 기다리는 스낵바가 떠있을때
-                if (waitingSnackbar.isShown && questionAdapter.selectedQuestionId != null) {
-                    checkViewModel.checkQuestion(
-                        questionAdapter.selectedQuestionId!!,
-                        QuestionCheckRequestVO(TEACHER_ID)
-                    )
-                }
                 delay(timeInterval)
             }
         }

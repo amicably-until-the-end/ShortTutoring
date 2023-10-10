@@ -24,9 +24,6 @@ class FollowingActivity : AppCompatActivity() {
         }
 
         setTeacherRecyclerView()
-
-        // mock up
-        //addItemToStudentAdapter()
     }
 
     private fun setTeacherRecyclerView() {
@@ -41,5 +38,4 @@ class FollowingActivity : AppCompatActivity() {
                 LinearLayoutManager(this@FollowingActivity, LinearLayoutManager.VERTICAL, false)
         }
     }
-
 }

@@ -15,6 +15,7 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherProfileBinding
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 
 class TeacherProfileFragment : Fragment() {
@@ -103,12 +104,11 @@ class TeacherProfileFragment : Fragment() {
     private fun observeProfile() {
         profileViewModel.profile.observe(requireActivity()) {
             with(binding) {
-                tvTeacherName.text = it.name
-                tvTeacherBio.text = it.bio
-                tvTeacherUniv.text = it.schoolName
-                tvTeacherMajor.text = it.schoolDepartment
-                // Todo: api에서 가져오기
-//                tvTeacherRating.text = it.rating
+                it.name?.let { tvTeacherName.text = it }
+                it.bio?.let { tvTeacherBio.text = it }
+                it.schoolName?.let { tvTeacherUniv.text = it }
+                it.schoolDepartment?.let { tvTeacherMajor.text = it }
+                it.rating?.let { tvTeacherRating.text = it.toRating() }
                 Glide.with(this@TeacherProfileFragment).load(it.profileImage).circleCrop()
                     .into(ivTeacherImg)
                 btnFollow.text = "찜한 학생 ${it.followers?.size ?: 0}명"

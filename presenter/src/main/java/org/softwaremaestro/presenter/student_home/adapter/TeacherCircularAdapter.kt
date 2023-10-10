@@ -38,7 +38,6 @@ class TeacherCircularAdapter(private val onItemClickListener: (TeacherVO) -> Uni
 
         fun onBind(item: TeacherVO) {
             binding.tvName.text = item.nickname
-            binding
             Glide.with(binding.root.context).load(item.profileUrl).centerCrop()
                 .into(binding.ivPhoto)
             binding.ivPhoto.setOnClickListener {

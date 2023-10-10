@@ -17,7 +17,8 @@ object ProfileMapper {
                 schoolName = school?.schoolName,
                 schoolDepartment = school?.schoolDepartment,
                 followers = followers,
-                followingCnt = followingCnt
+                followingCnt = followingCnt,
+                rating = rating
             )
         }
     }
@@ -37,7 +38,8 @@ object ProfileMapper {
                 followers = followers,
                 following = following,
                 amount = coin?.amount,
-                lastReceivedFreeCoinAt = coin?.lastReceivedFreeCoinAt
+                lastReceivedFreeCoinAt = coin?.lastReceivedFreeCoinAt,
+                rating = rating
             )
         }
     }

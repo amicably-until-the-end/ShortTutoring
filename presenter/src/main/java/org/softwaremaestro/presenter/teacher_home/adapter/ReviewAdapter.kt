@@ -3,7 +3,7 @@ package org.softwaremaestro.presenter.teacher_home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.domain.review_get.ReviewVO
+import org.softwaremaestro.domain.review_create.entity.ReviewVO
 import org.softwaremaestro.presenter.databinding.ItemReviewBinding
 
 private const val EMPTY_STRING = "-"
@@ -36,11 +36,11 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
 
             with(binding) {
 
-                tvName.text = item.name ?: EMPTY_STRING
-                tvCreatedAt.text =
-                    item.createdAt ?: EMPTY_STRING
-                tvComment.text =
-                    item.content ?: EMPTY_STRING
+//                tvName.text = item.name ?: EMPTY_STRING
+//                tvCreatedAt.text =
+//                    item.createdAt ?: EMPTY_STRING
+//                tvComment.text =
+//                    item.content ?: EMPTY_STRING
             }
         }
     }
