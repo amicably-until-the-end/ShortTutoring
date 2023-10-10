@@ -131,6 +131,7 @@
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
             android:paddingVertical="14dp"
+            android:stateListAnimator="@null"
             android:text="수업 신청하기"
             android:textColor="@color/white"
             android:textSize="14sp"
