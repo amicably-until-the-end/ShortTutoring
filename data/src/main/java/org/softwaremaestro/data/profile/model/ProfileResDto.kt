@@ -11,4 +11,5 @@ data class ProfileResDto(
     @SerializedName("school") val school: SchoolDto?,
     @SerializedName("followers") val followers: List<String>?,
     @SerializedName("followingCnt") val followingCnt: Int?,
+    @SerializedName("rating") val rating: Float?
 )

@@ -141,6 +141,8 @@
                     android:clipToPadding="false" />
             </LinearLayout>
 
+            <!--
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -181,13 +183,15 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+-->
 
             <LinearLayout
                 android:id="@+id/container_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="30dp">
+                android:paddingTop="30dp"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/section_title"

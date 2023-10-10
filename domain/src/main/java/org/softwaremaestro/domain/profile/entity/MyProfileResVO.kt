@@ -13,5 +13,6 @@ data class MyProfileResVO(
     val followers: List<String>?,
     val following: List<String>?,
     val amount: Int?,
-    val lastReceivedFreeCoinAt: String?
+    val lastReceivedFreeCoinAt: String?,
+    val rating: Float?
 )

@@ -18,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
-import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
@@ -27,7 +26,6 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
-import java.text.DecimalFormat
 
 // TODO: 추후 수정
 private const val TEACHER_ID = "test-teacher-id"
@@ -82,38 +80,17 @@ class TeacherHomeFragment : Fragment() {
         keepCheckingQuestionAfterSelect(REFRESHING_TIME_INTERVAL)
 
         observe()
-
-        // mockup
-        setItemToReviewAdapter()
     }
 
     private fun setTexts() {
 
 
-        binding.tvRatingAndTemperature.text =
-            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
+//        binding.tvRatingAndTemperature.text =
+//            "현재 별점은 %.1f점, 매너 온도는 %d도에요".format(TEACHER_RATING, TEACHER_TEMPERATURE)
+//
+//        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
 
-        binding.btnAnswerCost.text = DecimalFormat("###,###").format(TEACHER_ANSWER_COST) + "원"
 
-
-    }
-
-    private fun setItemToReviewAdapter() {
-        val review = ReviewVO(
-            "김민수",
-            "2023.7.19",
-            "선생님 너무 잘 가르치세요",
-            2,
-            0,
-            null
-        )
-        reviewAdapter.setItem(
-            mutableListOf<ReviewVO>().apply {
-                (0..10).forEach {
-                    add(review)
-                }
-            }
-        )
     }
 
     private fun initWaitingSnackbar() {

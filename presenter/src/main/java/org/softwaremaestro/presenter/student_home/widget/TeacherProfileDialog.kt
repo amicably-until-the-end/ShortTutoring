@@ -14,6 +14,7 @@ import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
 import org.softwaremaestro.presenter.util.Util.logError
+import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 
 @AndroidEntryPoint
@@ -69,13 +70,12 @@ class TeacherProfileDialog(
         with(binding) {
             Glide.with(root.context).load(mItem?.profileUrl).centerCrop()
                 .into(ivTeacherImg)
-            tvTeacherName.text = mItem?.nickname ?: "undefined"
-            tvTeacherUniv.text = "${mItem?.univ} ${mItem?.major}"
-            tvTeacherBio.text = mItem?.bio ?: "undefined"
-            tvTeacherRating.text = mItem?.rating.toString()
-            // Todo: 추후에 api로 수정
-            btnFollow.text = "찜한 학생 ${mItem?.followers?.size ?: 0}"
-            tvReservationCnt.text = "${mItem?.reservationCnt ?: 0}"
+            mItem!!.nickname?.let { tvTeacherName.text = it }
+            tvTeacherUniv.text = "${mItem!!.univ} ${mItem?.major}"
+            mItem!!.bio?.let { tvTeacherBio.text = it }
+            mItem!!.rating?.let { tvTeacherRating.text = it.toRating() }
+            btnFollow.text = "찜한 학생 ${mItem!!.followers?.size ?: 0}"
+            tvReservationCnt.text = "${mItem!!.reservationCnt ?: 0}"
         }
     }
 
