@@ -4,6 +4,7 @@ import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.softwaremaestro.data.infra.SharedPrefs
+import java.lang.Integer.min
 
 
 data class TokenInfo(
@@ -13,7 +14,6 @@ data class TokenInfo(
 
 class RequestInterceptor constructor(private val prefs: SharedPrefs) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        Log.d("retrofit", "intercept chain is ${chain.request().url.pathSegments[0]}")
         val jwt = getJWT(chain.request().url.pathSegments[0])
 
         var newRequest = if (jwt != null) {
@@ -24,11 +24,24 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
             chain.request()
         }
 
-        Log.d("retrofit", "intercept request is $newRequest ")
-        val response = chain.proceed(newRequest)
+
+        val request = newRequest.toString()
         Log.d(
             "retrofit",
-            "intercept response is $response ${response.peekBody(Long.MAX_VALUE).string()}"
+            "intercept request is ${request.slice(0..min(request.length - 1, 1000))} "
+        )
+        val response = chain.proceed(newRequest)
+        val responseString = response.peekBody(Long.MAX_VALUE).string()
+        Log.d(
+            "retrofit",
+            "intercept response is $response ${
+                responseString.slice(
+                    0..min(
+                        responseString.length - 1,
+                        1000
+                    )
+                )
+            }"
         )
         return response
     }

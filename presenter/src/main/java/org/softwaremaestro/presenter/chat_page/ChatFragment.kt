@@ -599,7 +599,7 @@ abstract class ChatFragment : Fragment() {
                 appId = it.rtcAppId,
                 token = it.rtcToken,
                 channelId = it.rtcChannel,
-                uid = if (isTeacher()) (ClassroomFragment.RTC_TEACHER_UID) else (ClassroomFragment.RTC_STUDENT_UID)
+                uid = it.rtcUID,
             )
             // 교실 액티비티로 이동한다
             intent.apply {

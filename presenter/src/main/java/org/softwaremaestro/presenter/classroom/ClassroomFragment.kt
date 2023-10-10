@@ -214,10 +214,16 @@ class ClassroomFragment : Fragment() {
 
 
     fun setTutoringArgument() {
-        whiteBoardInfo =
-            requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
-        voiceInfo =
-            requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
+        try {
+            whiteBoardInfo =
+                requireActivity().intent.getSerializableExtra("whiteBoardInfo") as SerializedWhiteBoardRoomInfo
+            voiceInfo =
+                requireActivity().intent.getSerializableExtra("voiceRoomInfo") as SerializedVoiceRoomInfo
+            Log.d("agora.io", voiceInfo.toString())
+        } catch (e: Exception) {
+            Log.e("ClassroomFragment", e.toString())
+            showFinishClassDialog()
+        }
 //        if (!whiteBoardInfo.uuid.isNullOrEmpty()) binding.tvTutoringId.text = "과외를 진행해주세요"
     }
 
@@ -365,7 +371,7 @@ class ClassroomFragment : Fragment() {
         }
 
         override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
-            showMessage("onJoinChannelSuccess")
+            Log.d("agora.io", "onJoinChannelSuccess")
         }
 
         override fun onUserOffline(uid: Int, reason: Int) {
