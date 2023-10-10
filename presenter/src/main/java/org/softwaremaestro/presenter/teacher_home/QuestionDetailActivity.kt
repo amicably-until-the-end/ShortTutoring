@@ -1,7 +1,7 @@
 package org.softwaremaestro.presenter.teacher_home
 
+import android.content.RestrictionsManager.RESULT_ERROR
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,19 +66,17 @@ class QuestionDetailActivity : AppCompatActivity() {
 
     private fun setObserver() {
         viewModel.answer.observe(this) {
-            Log.d("Question Detail", it.toString())
             if (it != null) {
                 val intent = intent
                 intent.putExtra(OFFER_RESULT, OFFER_SUCCESS)
                 intent.putExtra(CHAT_ID, it.chatRoomId)
                 setResult(RESULT_OK, intent)
-                finish()
             } else {
                 val intent = intent
                 intent.putExtra(OFFER_RESULT, OFFER_FAIL)
-                setResult(RESULT_OK, intent)
-                finish()
+                setResult(RESULT_ERROR, intent)
             }
+            finish()
         }
     }
 

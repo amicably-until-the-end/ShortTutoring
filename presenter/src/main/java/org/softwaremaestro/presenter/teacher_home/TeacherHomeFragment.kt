@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,6 +26,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.CHAT_ID
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.OFFER_RESULT
+import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.OFFER_SUCCESS
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
@@ -51,6 +53,7 @@ class TeacherHomeFragment : Fragment() {
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private lateinit var requestActivity: ActivityResultLauncher<Intent>
 
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var reviewAdapter: ReviewAdapter
@@ -63,6 +66,7 @@ class TeacherHomeFragment : Fragment() {
     ): View {
 
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
+        registerOfferResult()
         return binding.root
     }
 
@@ -93,6 +97,26 @@ class TeacherHomeFragment : Fragment() {
 
     }
 
+    private fun registerOfferResult() {
+        requestActivity =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK && it.data?.getIntExtra(
+                        OFFER_RESULT,
+                        0
+                    ) == OFFER_SUCCESS
+                ) {
+                    Toast.makeText(requireActivity(), "수업을 제안했습니다.", Toast.LENGTH_SHORT)
+                        .show()
+                    val chatId = it.data?.getStringExtra(CHAT_ID)
+                    (activity as TeacherHomeActivity).moveToChatTab(chatId)
+                } else {
+                    Toast.makeText(requireActivity(), "수업 제안에 실패했습니다.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
+
+
     private fun initWaitingSnackbar() {
         waitingSnackbar =
             Snackbar.make(requireView(), "학생의 선택을 확인하고 있습니다.", Snackbar.LENGTH_INDEFINITE).apply {
@@ -116,20 +140,6 @@ class TeacherHomeFragment : Fragment() {
         hopeTime: String?
     ) {
 
-        val requestActivity =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK && it.data?.getIntExtra(OFFER_RESULT, 0)
-                    == OFFER_SUCCESS
-                ) {
-                    Toast.makeText(requireActivity(), "수업을 제안했습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                    val chatId = it.data?.getStringExtra(CHAT_ID)
-                    (activity as TeacherHomeActivity).moveToChatTab(chatId)
-                } else {
-                    Toast.makeText(requireActivity(), "수업 제안에 실패했습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
 
         val intent = Intent(requireActivity(), QuestionDetailActivity::class.java).apply {
             putStringArrayListExtra(IMAGE, question.images as ArrayList<String>)
