@@ -201,42 +201,40 @@ class ChatRepositoryImpl @Inject constructor(
         sendAt: String,
         isMyMsg: Boolean,
         isRead: Boolean,
-    ) {
-        try {
-            Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
-            var result = chatApi.getRoom(roomId)
-            Log.d(
-                "ChatRepositoryImpl",
-                "insert ${result.body()?.data?.questionState} ${result.body()?.data?.asEntity()}"
-            )
-            if (!chatDatabase.chatRoomDao().isIdExist(roomId)) {
-                result.body()?.data?.let { chatDatabase.chatRoomDao().insert(it.asEntity()) }
-            } else {
-                result.body()?.data?.let { chatDatabase.chatRoomDao().update(it.asEntity()) }
-            }
-            val now = java.time.LocalDateTime.now()
-            chatDatabase.messageDao().insert(
-                MessageEntity(
-                    id = roomId + sendAt,
-                    roomId = roomId,
-                    body = body,
-                    format = format,
-                    isRead = isRead,
-                    sendAt = now,
-                    isMyMsg = isMyMsg
+    ): Flow<BaseResult<Boolean, String>> {
+        return flow {
+            try {
+                var result = chatApi.getRoom(roomId)
+                if (!chatDatabase.chatRoomDao().isIdExist(roomId)) {
+                    result.body()?.data?.let { chatDatabase.chatRoomDao().insert(it.asEntity()) }
+                } else {
+                    result.body()?.data?.let { chatDatabase.chatRoomDao().update(it.asEntity()) }
+                }
+                val now = java.time.LocalDateTime.now()
+                chatDatabase.messageDao().insert(
+                    MessageEntity(
+                        id = roomId + sendAt,
+                        roomId = roomId,
+                        body = body,
+                        format = format,
+                        isRead = isRead,
+                        sendAt = now,
+                        isMyMsg = isMyMsg
+                    )
                 )
-            )
-            chatDatabase.chatRoomDao().updateLastMessageTime(roomId, now)
-
-        } catch (e: Exception) {
-            Log.d("ChatRepositoryImpl insertMessage", e.toString())
+                chatDatabase.chatRoomDao().updateLastMessageTime(roomId, now)
+                emit(BaseResult.Success(true))
+            } catch (e: Exception) {
+                Log.e("${this@ChatRepositoryImpl::class.java}", e.toString())
+                emit(BaseResult.Error("error"))
+            }
         }
+
     }
 
     override suspend fun getChatRoomInfo(chatRoomId: String): Flow<BaseResult<ChatRoomVO, String>> {
         return flow {
             var result = getOneRoomFromDB(chatRoomId)
-            Log.d("ChatRepositoryImpl", "chatroomId $chatRoomId $result")
             if (result == null) {
                 emit(BaseResult.Error("error"))
             } else {

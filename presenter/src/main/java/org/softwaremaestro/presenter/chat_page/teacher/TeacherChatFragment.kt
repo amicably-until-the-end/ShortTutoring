@@ -186,6 +186,7 @@ class TeacherChatFragment : ChatFragment() {
         currentChatRoom?.questionId?.let { chatViewModel.getTutoringInfo(it) }
         setNotiVisible(true)
         binding.btnChatRoomRight.visibility = View.GONE
+        binding.btnChatRoomLeft.visibility = View.GONE
         enableSendMessage()
     }
 
@@ -206,12 +207,14 @@ class TeacherChatFragment : ChatFragment() {
                         Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                             .show()
                     }
+                    chatViewModel._classroomInfo.value = UIState.Empty
                 }
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
                     Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
                         .show()
+                    chatViewModel._classroomInfo.value = UIState.Empty
                 }
 
                 else -> {
@@ -219,7 +222,7 @@ class TeacherChatFragment : ChatFragment() {
                 }
 
             }
-            chatViewModel._classroomInfo.value = UIState.Empty
+
             //액티비티 종료되어 돌아오는 경우에 대비해서 초기화
         }
     }

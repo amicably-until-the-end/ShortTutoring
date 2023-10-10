@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -166,12 +167,10 @@ class ChatViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            Log.d("TeacherChatViewModel", "startClassroom: ${result.data}")
                             _classroomInfo.value = UIState.Success(result.data)
                         }
 
                         is BaseResult.Error -> {
-                            Log.d("TeacherChatViewModel", "startClassroom: ${result}")
 
                         }
                     }
@@ -218,10 +217,6 @@ class ChatViewModel @Inject constructor(
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
-                    Log.d(
-                        "ChatViewModel getMessages",
-                        "chattindId $chattingId $result"
-                    )
                     when (result) {
                         is BaseResult.Success -> {
                             _messages.postValue(UIState.Success(result.data))
@@ -237,7 +232,6 @@ class ChatViewModel @Inject constructor(
         var jsonBody = gson.toJson(MessageBody(body))
         var payload = JSONObject(gson.toJson(Message("text", jsonBody, receiverId, chattingId)))
         socketManager.getSocket().emit("message", payload)
-        Log.d("ChatViewModel", "send ${payload}")
         viewModelScope.launch(Dispatchers.IO) {
             insertMessageUseCase.execute(
                 chattingId,
@@ -246,7 +240,7 @@ class ChatViewModel @Inject constructor(
                 LocalDateTime.now().toString(),
                 true,
                 true
-            )
+            ).collect()
             getMessages(chattingId)
         }
     }

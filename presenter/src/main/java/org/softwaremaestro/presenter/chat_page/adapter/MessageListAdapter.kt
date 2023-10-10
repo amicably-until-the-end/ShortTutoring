@@ -193,8 +193,8 @@ class MessageListAdapter(
                         var endAt =
                             body.endAt?.parseToLocalDateTime() ?: LocalDateTime.now()
                         tvText.text =
-                            "${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분에 수업이 시작되었습니다.\n" +
-                                    "${endAt.monthValue}월 ${endAt.dayOfMonth}일 ${endAt.hour}시 ${endAt.minute}분에 수업이 종료되었습니다."
+                            "수업이 종료 되었습니다.\n ${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분 ~.\n" +
+                                    " ${endAt.monthValue}월 ${endAt.dayOfMonth}일 ${endAt.hour}시 ${endAt.minute}분"
                     }
 
                     is MessageBodyVO.RequestDecline -> {

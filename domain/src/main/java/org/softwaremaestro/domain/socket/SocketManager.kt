@@ -95,9 +95,10 @@ class SocketManager @Inject constructor(
                         message.message.createdAt,
                         message.message.sender == userId,
                         (message.message.sender == userId) || (currentChatRoom == message.chattingId)
-                    )
-                    messageAppendListener?.let { it(message.chattingId) }
-                    homeMessageAppendListener?.let { it() }
+                    ).collect {
+                        messageAppendListener?.let { it(message.chattingId) }
+                        homeMessageAppendListener?.let { it() }
+                    }
                 } catch (e: Exception) {
                     println("socket message error: ${e.message}")
                 }
