@@ -41,6 +41,9 @@ class QuestionSelectedUploadViewModel @Inject constructor(
     private var _images = MutableLiveData<List<Bitmap>?>()
     val images: LiveData<List<Bitmap>?> get() = _images
 
+    private val _imagesBase64: MutableLiveData<List<String>?> = MutableLiveData()
+    val imagesBase64: LiveData<List<String>?> get() = _imagesBase64
+
     private val inputs = listOf(
         _description,
         _schoolLevel,
@@ -95,6 +98,8 @@ class QuestionSelectedUploadViewModel @Inject constructor(
     fun setMainImageIndex(mainImageIndex: Int) = _mainImageIndex.postValue(mainImageIndex)
 
     fun setImages(images: List<Bitmap>?) = _images.postValue(images)
+
+    fun setImagesBase64(images: List<String>?) = _imagesBase64.postValue(images)
 
     fun setTeacherId(teacherId: String?) = _teacherId.postValue(teacherId)
 
