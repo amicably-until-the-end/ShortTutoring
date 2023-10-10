@@ -2,6 +2,7 @@ package org.softwaremaestro.data.chat.model
 
 import org.softwaremaestro.data.chat.entity.ChatRoomEntity
 import org.softwaremaestro.domain.chat.entity.ChatRoomListVO
+import org.softwaremaestro.domain.chat.entity.ChatRoomState
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.domain.chat.entity.RoomType
@@ -25,7 +26,7 @@ class Mapper {
         chatRoomDto.apply {
             return ChatRoomVO(
                 id = id,
-                questionState = if (questionState == "pending") QuestionState.PROPOSED else QuestionState.RESERVED,
+                questionState = if (questionState == "reserved") QuestionState.RESERVED else QuestionState.PROPOSED,
                 opponentId = opponentId,
                 title = title,
                 messages = 0,
@@ -35,6 +36,7 @@ class Mapper {
                 questionId = questionId,
                 description = questionInfo?.problem?.description ?: "",
                 startDateTime = ISOParser(reservedStart ?: ""),
+                chatRoomState = ChatRoomState.values().find { it.value == questionState }
             )
         }
     }

@@ -83,7 +83,7 @@ class TeacherHomeActivity : AppCompatActivity() {
     }
 
     fun moveToChatTab() {
-        val item = binding.bottomNavView.menu.findItem(R.id.studentChatFragment)
+        val item = binding.bottomNavView.menu.findItem(R.id.teacherChatFragment)
         // Return true only if the destination we've navigated to matches the MenuItem
         NavigationUI.onNavDestinationSelected(item, navController)
     }
