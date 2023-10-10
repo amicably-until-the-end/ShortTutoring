@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import org.softwaremaestro.domain.chat.entity.ChatRoomState
 import java.time.LocalDateTime
 
 @Entity
@@ -18,6 +19,7 @@ data class ChatRoomEntity(
     var subTitle: String?,
     var isSelect: Boolean,
     var description: String?,
+    var chatRoomState: ChatRoomState,
     var lastMessageTime: LocalDateTime? = LocalDateTime.now(),
 )
 
@@ -43,6 +45,7 @@ data class ChatRoomWithUnReadMessageCnt(
     var isSelect: Boolean,
     var description: String?,
     val unReadCnt: Int,
+    val chatRoomState: ChatRoomState,
 )
 
 enum class ChatRoomType(val type: Int) {
