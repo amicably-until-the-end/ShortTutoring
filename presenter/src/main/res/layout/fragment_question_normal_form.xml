@@ -237,9 +237,9 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/selector_safe_button_bg"
-        android:enabled="false"
         android:gravity="center"
         android:padding="17dp"
+        android:stateListAnimator="@null"
         android:text="제출하기"
         android:textColor="@color/white"
         android:textSize="14sp" />

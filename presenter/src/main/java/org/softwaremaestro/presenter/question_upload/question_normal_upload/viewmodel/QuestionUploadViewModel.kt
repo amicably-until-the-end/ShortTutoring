@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.question_upload.question_normal_upload.vie
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.usecase.QuestionUploadUseCase
 import org.softwaremaestro.presenter.util.UIState
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -29,7 +31,8 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val _description: MutableLiveData<String?> = MutableLiveData()
     val _school: MutableLiveData<String?> = MutableLiveData()
     val _subject: MutableLiveData<String?> = MutableLiveData()
-    val _difficulty: MutableLiveData<String?> = MutableLiveData()
+    var _hopeNow = MutableLiveData<Boolean?>()
+    var _hopeTutoringTime = MutableLiveData<MutableList<LocalDateTime>?>(mutableListOf())
     val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData()
     val _imagesBase64: MutableLiveData<List<String>?> = MutableLiveData()
 
@@ -37,16 +40,54 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val description: LiveData<String?> get() = _description
     val school: LiveData<String?> get() = _school
     val subject: LiveData<String?> get() = _subject
-    val difficulty: LiveData<String?> get() = _difficulty
+    val hopeNow: LiveData<Boolean?> get() = _hopeNow
+    val hopeTutoringTime: LiveData<MutableList<LocalDateTime>?> get() = _hopeTutoringTime
     val images: LiveData<List<Bitmap>?> get() = _images
     val imagesBase64: LiveData<List<String>?> get() = _imagesBase64
 
+    private var _inputProper = MediatorLiveData<Boolean>()
+    val inputProper: MediatorLiveData<Boolean> get() = _inputProper
 
     init {
         _images.postValue(listOf())
+
+        val inputs =
+            listOf(_description, _school, _subject, _hopeNow, _hopeTutoringTime, _imagesBase64)
+
+        val mInputProper = {
+            !_description.value.isNullOrEmpty()
+                    && !_school.value.isNullOrEmpty()
+                    && !_subject.value.isNullOrEmpty()
+                    && (_hopeNow.value == true || !_hopeTutoringTime.value.isNullOrEmpty())
+                    && !_imagesBase64.value.isNullOrEmpty()
+        }
+
+        with(_inputProper) {
+            inputs.forEach { input ->
+                addSource(input) {
+                    postValue(mInputProper())
+                }
+            }
+        }
     }
 
-    fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
+    fun uploadQuestion() {
+
+        val mHopeTutoringTime = mutableListOf<LocalDateTime>()
+        if (hopeNow.value!!) {
+            mHopeTutoringTime.add(LocalDateTime.now())
+        }
+        mHopeTutoringTime.addAll(hopeTutoringTime.value!!)
+
+        val questionUploadVO = QuestionUploadVO(
+            images = imagesBase64.value!!,
+            description = description.value!!,
+            schoolLevel = school.value!!,
+            schoolSubject = subject.value!!,
+            hopeImmediate = hopeNow.value!!,
+            hopeTutoringTime = mHopeTutoringTime,
+            mainImageIndex = 0
+        )
 
         viewModelScope.launch {
             questionUploadUseCase.execute(questionUploadVO)

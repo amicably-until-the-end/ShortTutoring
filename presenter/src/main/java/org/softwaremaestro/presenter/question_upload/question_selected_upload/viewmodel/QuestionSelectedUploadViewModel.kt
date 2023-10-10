@@ -57,6 +57,8 @@ class QuestionSelectedUploadViewModel @Inject constructor(
     val questionUploadState: LiveData<UIState<QuestionSelectedUploadResultVO>> get() = _questionUploadState
 
     init {
+        _images.postValue(listOf())
+
         with(_inputProper) {
             val allOfInputsNotNull = { !inputs.map { it.value != null }.contains(false) }
 
