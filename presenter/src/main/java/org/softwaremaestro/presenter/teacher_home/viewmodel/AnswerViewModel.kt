@@ -30,12 +30,12 @@ class AnswerViewModel @Inject constructor(private val answerUploadUseCase: Answe
                 }
                 .catch { exception ->
                     _answer.value = null
-                    Log.d("Error", exception.message.toString())
+                    Log.e("${this@AnswerViewModel::class.java}", exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> _answer.value = result.data
-                        is BaseResult.Error -> Log.d("Error", result.toString())
+                        is BaseResult.Error -> _answer.value = null
                     }
                 }
         }

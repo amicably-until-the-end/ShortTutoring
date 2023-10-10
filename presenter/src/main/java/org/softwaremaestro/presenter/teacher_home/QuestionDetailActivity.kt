@@ -1,7 +1,7 @@
 package org.softwaremaestro.presenter.teacher_home
 
+import android.content.RestrictionsManager.RESULT_ERROR
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,14 +67,18 @@ class QuestionDetailActivity : AppCompatActivity() {
     private fun setObserver() {
         viewModel.answer.observe(this) {
             if (it != null) {
-                Toast.makeText(this, "요청이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                finish()
+                val intent = intent
+                intent.putExtra(OFFER_RESULT, OFFER_SUCCESS)
+                intent.putExtra(CHAT_ID, it.chatRoomId)
+                setResult(RESULT_OK, intent)
             } else {
-                Toast.makeText(this, "이미 등록한 문제입니다.", Toast.LENGTH_SHORT).show()
+                val intent = intent
+                intent.putExtra(OFFER_RESULT, OFFER_FAIL)
+                setResult(RESULT_ERROR, intent)
             }
+            finish()
         }
     }
-
 
     private fun setImageRecyclerView() {
         val adapter = QuestionDetailImagesAdapter()
@@ -89,6 +93,7 @@ class QuestionDetailActivity : AppCompatActivity() {
         adapter.setItem(images as List<String>)
         adapter.notifyDataSetChanged()
     }
+
     /*
     try {
             Glide.with(this).load(image).transform().sizeMultiplier(0.1f).centerCrop()
@@ -105,4 +110,10 @@ class QuestionDetailActivity : AppCompatActivity() {
             // 에러 처리
         }
      */
+    companion object {
+        const val OFFER_RESULT = "offer_result"
+        const val OFFER_SUCCESS = 100
+        const val OFFER_FAIL = 200
+        const val CHAT_ID = "chat_id"
+    }
 }

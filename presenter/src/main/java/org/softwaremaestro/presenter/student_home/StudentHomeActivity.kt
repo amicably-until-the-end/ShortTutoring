@@ -53,7 +53,6 @@ class StudentHomeActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d("deepLink", "onNewIntent ${this::class.java} ${this.hashCode()}")
         intent?.apply {
             try {
                 val chatId = getStringExtra(SplashActivity.APP_LINK_ARGS_CHAT_ID)
@@ -87,7 +86,6 @@ class StudentHomeActivity : AppCompatActivity() {
 
     private fun getIntentExtra() {
         val args = intent.extras
-        Log.d("deepLink@StudentHome", "args: $args")
         args?.apply {
             val chatId =
                 try {
