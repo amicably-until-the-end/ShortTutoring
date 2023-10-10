@@ -4,10 +4,12 @@
         android:id="@+id/teacherHomeFragment"
         android:icon="@drawable/selector_ic_home"
         android:title="홈" />
+    <!--
     <item
         android:id="@+id/teacherSearchFragment"
         android:icon="@drawable/selector_ic_shorts"
         android:title="숏츠" />
+        -->
     <item
         android:id="@+id/teacherChatFragment"
         android:icon="@drawable/selector_ic_chat"

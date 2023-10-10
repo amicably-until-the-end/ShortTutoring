@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.coin
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,8 @@ import androidx.fragment.app.activityViewModels
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.coin.viewModel.CoinViewModel
 import org.softwaremaestro.presenter.databinding.FragmentChargeCoinSecondBinding
-import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -41,7 +41,6 @@ class ChargeCoinSecondFragment : Fragment() {
         setObserver()
 
 
-        // Todo: 코인 구매 api 연동하기
         binding.btnChargeCoin.setOnClickListener {
             if (chargeable) {
                 selectedContainer?.let {
@@ -50,10 +49,23 @@ class ChargeCoinSecondFragment : Fragment() {
                         0 -> {
                             coinViewModel.receiveCoinFree()
                         }
-                        // 1개 충전 버튼
-                        1 -> {}
-                        // 5개 충전 버튼
-                        else -> {}
+                        // 1개 충전 버튼, 5개 충전 버튼
+                        else -> {
+                            SimpleAlertDialog().apply {
+                                title = "아직 지원하지 않는 기능입니다"
+                                description = "12월 이후 서비스가 정규 운영될 예정입니다"
+                            }.show(parentFragmentManager, "unimplemented function")
+                            // UI 업데이트
+                            listOf(
+                                binding.ivRightArrow,
+                                binding.cbMyCoinAfterCharge
+                            ).forEach {
+                                it.visibility = View.INVISIBLE
+                            }
+                            resetContainers()
+                            chargeable = false
+                            coinViewModel.resetCoinFreeReceiveState()
+                        }
                     }
                 }
             } else {
@@ -139,8 +151,8 @@ class ChargeCoinSecondFragment : Fragment() {
     }
 
     private fun observeCoin() {
-        myProfileViewModel.myProfile.observe(viewLifecycleOwner) {
-            it.amount?.let { binding.cbMyCoin.coin = it * 100 }
+        myProfileViewModel.amount.observe(viewLifecycleOwner) {
+            binding.cbMyCoin.coin = it * 100
         }
     }
 
@@ -149,12 +161,18 @@ class ChargeCoinSecondFragment : Fragment() {
             it?.let {
                 // 무료 코인 받기 성공
                 if (it) {
-                    Toast.makeText(requireContext(), "오늘의 코인을 받았습니다", Toast.LENGTH_SHORT).show()
                     // 코인을 업데이트하기 위해 getMyProfile() 호출
                     myProfileViewModel.getMyProfile()
+                    SimpleAlertDialog().apply {
+                        title = "오늘의 코인을 받았습니다"
+                        description = "현재 ${myProfileViewModel.amount.value!! * 100}개의 코인을 보유하고 있어요"
+                    }.show(parentFragmentManager, "receive free coin success")
+
                 } else {
-                    Log.d("hhcc", "failed")
-                    Toast.makeText(requireContext(), "이미 오늘의 코인을 받았습니다.", Toast.LENGTH_SHORT).show()
+                    SimpleAlertDialog().apply {
+                        title = "이미 오늘의 코인을 받았습니다"
+                        description = "코인은 매일 200개씩 기본 지급돼요"
+                    }.show(parentFragmentManager, "receive free coin fail")
                 }
                 // UI 업데이트
                 listOf(
@@ -163,9 +181,9 @@ class ChargeCoinSecondFragment : Fragment() {
                 ).forEach {
                     it.visibility = View.INVISIBLE
                 }
+                resetContainers()
                 chargeable = false
-                binding.btnChargeCoin.setBackgroundResource(R.drawable.bg_radius_100_background_grey)
-                binding.btnChargeCoin.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                coinViewModel.resetCoinFreeReceiveState()
             }
         }
     }

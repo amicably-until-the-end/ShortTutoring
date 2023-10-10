@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.my_page.student_my_page
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
-import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
 @AndroidEntryPoint
@@ -112,20 +110,20 @@ class StudentMyPageFragment : Fragment() {
     }
 
     private fun setBtnEditTeacherImg() {
-        binding.containerStudentImg.setOnClickListener {
-            dialog = ProfileImageSelectBottomDialog(
-                onImageChanged = { image ->
-                    binding.ivStudentImg.setBackgroundResource(image)
-                },
-                onSelect = { res ->
-                    val image = BitmapFactory.decodeResource(resources, res).toBase64()
-                    profileViewModel.setImage(image)
-//                    profileViewModel.updateProfile()
-                    dialog.dismiss()
-                },
-            )
-            dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
-        }
+//        binding.containerStudentImg.setOnClickListener {
+//            dialog = ProfileImageSelectBottomDialog(
+//                onImageChanged = { image ->
+//                    binding.ivStudentImg.setBackgroundResource(image)
+//                },
+//                onSelect = { res ->
+//                    val image = BitmapFactory.decodeResource(resources, res).toBase64()
+//                    profileViewModel.setImage(image)
+////                    profileViewModel.updateProfile()
+//                    dialog.dismiss()
+//                },
+//            )
+//            dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
+//        }
     }
 
     private fun setFollowingMenu() {

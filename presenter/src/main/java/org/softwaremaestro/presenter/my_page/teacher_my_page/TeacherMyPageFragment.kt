@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,6 @@ import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ReviewsViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
-import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
 @AndroidEntryPoint
@@ -95,21 +93,21 @@ class TeacherMyPageFragment : Fragment() {
     }
 
     private fun setBtnEditTeacherImg() {
-        binding.containerTeacherImg.setOnClickListener {
-            dialog = ProfileImageSelectBottomDialog(
-                onImageChanged = { image ->
-                    binding.ivTeacherImg.setBackgroundResource(image)
-                },
-                onSelect = { res ->
-                    val image = BitmapFactory.decodeResource(resources, res).toBase64()
-                    profileViewModel.setImage(image)
-//                    profileViewModel.updateProfile()
-
-                    dialog.dismiss()
-                },
-            )
-            dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
-        }
+//        binding.containerTeacherImg.setOnClickListener {
+//            dialog = ProfileImageSelectBottomDialog(
+//                onImageChanged = { image ->
+//                    binding.ivTeacherImg.setBackgroundResource(image)
+//                },
+//                onSelect = { res ->
+//                    val image = BitmapFactory.decodeResource(resources, res).toBase64()
+//                    profileViewModel.setImage(image)
+////                    profileViewModel.updateProfile()
+//
+//                    dialog.dismiss()
+//                },
+//            )
+//            dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
+//        }
     }
 
     private fun observeProfile() {
@@ -173,9 +171,9 @@ class TeacherMyPageFragment : Fragment() {
     }
 
     private fun setTvSettingTimeAndCost() {
-        binding.containerSettingTimeAndCost.setOnClickListener {
-            startActivity(Intent(requireContext(), SettingTimeAndCostActivity::class.java))
-        }
+//        binding.containerSettingTimeAndCost.setOnClickListener {
+//            startActivity(Intent(requireContext(), SettingTimeAndCostActivity::class.java))
+//        }
     }
 
     private fun setTvReview() {

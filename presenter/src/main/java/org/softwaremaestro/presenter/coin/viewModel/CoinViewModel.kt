@@ -16,8 +16,8 @@ import javax.inject.Inject
 class CoinViewModel @Inject constructor(private val coinFreeReceive: CoinFreeReceiveUseCase) :
     ViewModel() {
 
-    private val _coinFreeReceiveState: MutableLiveData<Boolean> = MutableLiveData()
-    val coinFreeReceiveState: LiveData<Boolean> get() = _coinFreeReceiveState
+    private val _coinFreeReceiveState: MutableLiveData<Boolean?> = MutableLiveData()
+    val coinFreeReceiveState: LiveData<Boolean?> get() = _coinFreeReceiveState
 
     fun receiveCoinFree() {
         viewModelScope.launch {
@@ -41,5 +41,9 @@ class CoinViewModel @Inject constructor(private val coinFreeReceive: CoinFreeRec
                     }
                 }
         }
+    }
+
+    fun resetCoinFreeReceiveState() {
+        _coinFreeReceiveState.postValue(null)
     }
 }

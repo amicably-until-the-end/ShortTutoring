@@ -39,8 +39,10 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
 
             with(binding) {
                 item.profileImage?.let { ivProfile.setImageURI(Uri.parse(it)) }
-                tvNickname.text = "${item.name}"
-                tvGrade.text = "${item.grade}"
+                item.name?.let { tvNickname.text = "${it}" }
+                if (item.schoolLevel != null && item.grade != null) {
+                    tvStudentInfo.text = "${item.schoolLevel} ${item.grade}학년"
+                }
 //                tvRecentDate.text = "${item.recentDate}"
             }
         }

@@ -20,11 +20,11 @@ import org.softwaremaestro.domain.question_check.entity.QuestionCheckRequestVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.review_get.ReviewVO
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
+import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
-import org.softwaremaestro.presenter.teacher_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 import java.text.DecimalFormat
@@ -185,6 +185,7 @@ class TeacherHomeFragment : Fragment() {
         observeAnswer()
         observeOfferRemove()
         //observeCheck()
+        observeMyProfile()
     }
 
     private fun observeQuestions() {
@@ -210,6 +211,11 @@ class TeacherHomeFragment : Fragment() {
         }
     }
 
+    private fun observeMyProfile() {
+        myProfileViewModel.amount.observe(viewLifecycleOwner) {
+            binding.cbCoin.coin = it * 100
+        }
+    }
 
     private fun keepGettingQuestions(timeInterval: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
