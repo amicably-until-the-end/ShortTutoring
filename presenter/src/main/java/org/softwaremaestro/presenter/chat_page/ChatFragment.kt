@@ -82,7 +82,6 @@ abstract class ChatFragment : Fragment() {
         setCloseOfferingTeacherButton()
         observeChatRoomList()
         makeAdapterList()
-        getRoomList()
         setSendMessageButton()
         observeMessages()
         observeSocket()
@@ -98,6 +97,11 @@ abstract class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = LoadingDialog(requireContext())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getRoomList()
     }
 
 
@@ -393,6 +397,7 @@ abstract class ChatFragment : Fragment() {
             chatViewModel.reservedSelectedChatRoomList.value?._data,
             chatViewModel.reservedNormalChatRoomList.value?._data,
             chatViewModel.proposedSelectedChatRoomList.value?._data,
+            chatViewModel.proposedNormalChatRoomList.value?._data,
         )
         chatViewModel.proposedNormalChatRoomList.value?._data?.forEach {
             it.teachers?.forEach { room ->
