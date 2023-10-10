@@ -21,6 +21,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
@@ -35,13 +36,6 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 
 private const val REFRESHING_TIME_INTERVAL = 10000L
-
-const val IMAGE = "image"
-const val SUBJECT = "subject"
-const val DIFFICULTY = "difficulty"
-const val DESCRIPTION = "description"
-const val QUESTION_ID = "questionId"
-const val HOPE_TIME = "hopeTime"
 
 @AndroidEntryPoint
 class TeacherHomeFragment : Fragment() {
@@ -150,6 +144,9 @@ class TeacherHomeFragment : Fragment() {
                 HOPE_TIME,
                 if (!hopeTime.isNullOrEmpty()) hopeTime else "시간을 선택하지 않았어요."
             )
+            if (SocketManager.userId != null && question.offerTeachers != null) {
+                putExtra(OFFERED_ALREADY, SocketManager.userId!! in question.offerTeachers!!)
+            }
         }
         requestActivity.launch(intent)
     }
@@ -237,5 +234,15 @@ class TeacherHomeFragment : Fragment() {
                 delay(timeInterval)
             }
         }
+    }
+
+    companion object {
+        const val IMAGE = "image"
+        const val SUBJECT = "subject"
+        const val DIFFICULTY = "difficulty"
+        const val DESCRIPTION = "description"
+        const val QUESTION_ID = "questionId"
+        const val HOPE_TIME = "hopeTime"
+        const val OFFERED_ALREADY = "offeredAlready"
     }
 }
