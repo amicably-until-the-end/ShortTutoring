@@ -401,7 +401,6 @@ abstract class ChatFragment : Fragment() {
                 list.add(listOf(room))
             }
         }
-        Log.d("focus chat", "rooms: $list")
         list.forEach { rooms ->
 
             rooms?.find { it.id == chattingId }?.let {
