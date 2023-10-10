@@ -192,6 +192,7 @@ class StudentChatFragment : ChatFragment() {
                     loadingDialog.dismiss()
                     it._data?.let { tutoringInfo ->
                         setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
+                        tutoringId = tutoringInfo.id
                     }
                 }
 

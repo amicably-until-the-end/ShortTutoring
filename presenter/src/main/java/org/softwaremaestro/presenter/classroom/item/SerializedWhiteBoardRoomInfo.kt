@@ -10,5 +10,8 @@ data class SerializedWhiteBoardRoomInfo(
     val questionId: String,
     val roomTitle: String,
     val roomProfileImage: String,
+    val opponentName: String,
+    val isTeacher: Boolean,
+    val tutoringId: String
 ) : Serializable
 

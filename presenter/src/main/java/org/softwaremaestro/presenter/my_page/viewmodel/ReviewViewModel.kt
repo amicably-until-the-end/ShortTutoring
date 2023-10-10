@@ -12,13 +12,13 @@ import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
 @HiltViewModel
-class ReviewsViewModel @Inject constructor(private val reviewCreateUseCase: ReviewCreateUseCase) :
+class ReviewViewModel @Inject constructor(private val reviewCreateUseCase: ReviewCreateUseCase) :
     ViewModel() {
 
     fun createReview(
         tutoringId: String,
-        rating: Float,
-        comment: String = ""
+        rating: Int,
+        comment: String
     ) {
         viewModelScope.launch {
 
@@ -30,13 +30,13 @@ class ReviewsViewModel @Inject constructor(private val reviewCreateUseCase: Revi
                 )
             )
                 .catch { exception ->
-                    logError(this@ReviewsViewModel::class.java, exception.message.toString())
+                    logError(this@ReviewViewModel::class.java, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {}
                         is BaseResult.Error -> logError(
-                            this@ReviewsViewModel::class.java,
+                            this@ReviewViewModel::class.java,
                             result.rawResponse
                         )
                     }

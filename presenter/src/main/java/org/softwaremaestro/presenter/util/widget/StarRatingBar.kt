@@ -18,8 +18,9 @@ class StarRatingBar(private val context: Context, private val attrs: AttributeSe
     private val binding =
         WidgetStarRatingBarBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private var numOfStars = 5
-    private var starSize = 24
+    private var numOfStars = -1
+    private var starSize = -1
+    var numOfFilled = -1
 
     init {
         setAttrs()
@@ -54,6 +55,7 @@ class StarRatingBar(private val context: Context, private val attrs: AttributeSe
             child.setOnClickListener { clicked ->
                 getIdx(clicked)?.let { idx ->
                     fillStars(idx)
+                    numOfFilled = idx + 1
                 }
             }
         }

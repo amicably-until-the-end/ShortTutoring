@@ -12,7 +12,10 @@ import org.softwaremaestro.presenter.databinding.DialogRatingBinding
 
 private const val NUM_STAR = 5
 
-class RatingDialog : DialogFragment() {
+class reviewDialog(
+    private val teacherName: String,
+    private val onConfirm: (Int, String) -> Unit
+) : DialogFragment() {
 
     private lateinit var binding: DialogRatingBinding
 
@@ -20,7 +23,7 @@ class RatingDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogRatingBinding.inflate(layoutInflater)
 
         dialog?.window?.apply {
@@ -33,5 +36,16 @@ class RatingDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tvMain.text = "${teacherName} 선생님과의 수업은 어땠나요?"
+        binding.srbRating.setOnClickListener {
+            if (binding.srbRating.numOfFilled >= 4) {
+                binding.containerReview.visibility = View.VISIBLE
+            } else {
+                binding.containerReview.visibility = View.GONE
+            }
+        }
+        binding.containerLeaveReview.setOnClickListener {
+            onConfirm(binding.srbRating.numOfFilled, binding.etReview.text?.toString() ?: "")
+        }
     }
 }

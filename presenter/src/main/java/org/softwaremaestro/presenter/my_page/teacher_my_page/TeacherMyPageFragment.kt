@@ -15,7 +15,7 @@ import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
-import org.softwaremaestro.presenter.my_page.viewmodel.ReviewsViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.toRating
@@ -26,7 +26,7 @@ class TeacherMyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherMyPageBinding
 
-    private val reviewsViewModel: ReviewsViewModel by viewModels()
+    private val reviewViewModel: ReviewViewModel by viewModels()
     private val lecturesViewModel: LecturesViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()

@@ -57,6 +57,7 @@ class TeacherChatFragment : ChatFragment() {
                 is UIState.Success -> {
                     it._data?.let { tutoringInfo ->
                         setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
+                        tutoringId = tutoringInfo.id
                     }
                 }
 

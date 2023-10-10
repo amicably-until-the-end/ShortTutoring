@@ -66,6 +66,8 @@ abstract class ChatFragment : Fragment() {
     @Inject
     lateinit var socketManager: SocketManager
 
+    protected lateinit var tutoringId: String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -574,7 +576,10 @@ abstract class ChatFragment : Fragment() {
                 uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}",
                 questionId = currentChatRoom?.questionId ?: "",
                 roomTitle = "${currentChatRoom?.title} ${if (isTeacher()) "학생과" else "선생님과"} 수업 중",
-                roomProfileImage = currentChatRoom?.roomImage ?: ""
+                roomProfileImage = currentChatRoom?.roomImage ?: "",
+                opponentName = currentChatRoom?.title ?: "",
+                isTeacher = isTeacher(),
+                tutoringId = tutoringId
             )
             val voiceRoomInfo = SerializedVoiceRoomInfo(
                 appId = it.rtcAppId,

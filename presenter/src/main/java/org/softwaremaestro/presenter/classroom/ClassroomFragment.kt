@@ -51,6 +51,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
+import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
@@ -76,6 +77,8 @@ class ClassroomFragment : Fragment() {
     private lateinit var whiteBoardInfo: SerializedWhiteBoardRoomInfo
     private lateinit var voiceInfo: SerializedVoiceRoomInfo
 
+    private lateinit var dialogLectureEnd: SimpleConfirmDialog
+    private lateinit var reviewDialog: reviewDialog
     private lateinit var loadingDialog: LoadingDialog
 
 
@@ -89,6 +92,7 @@ class ClassroomFragment : Fragment() {
     private var whiteBoardRoom: Room? = null
 
     private val viewModel: ClassroomViewModel by viewModels()
+    private val reviewViewModel: ReviewViewModel by viewModels()
 
     private var currentApplianceName: ApplianceName = ApplianceName.PENCIL
 
@@ -106,11 +110,43 @@ class ClassroomFragment : Fragment() {
         setTutoringArgument() // Extra Argument 반드시 맨 처음에 실행
         permissionCheck()
         setAgora()
+        initDialog()
         setClassroomInfoUI()
         viewModel.getQuestionInfo(whiteBoardInfo.questionId)
         observeQuestionInfo()
         initLoadingDialog()
         return binding.root
+    }
+
+    private fun initDialog() {
+        iniLectureEndDialog()
+        initReviewDialog()
+    }
+
+    private fun iniLectureEndDialog() {
+        dialogLectureEnd = SimpleConfirmDialog {
+            if (!whiteBoardInfo.isTeacher) {
+                reviewDialog.show(parentFragmentManager, "reviewDialog")
+            } else {
+                viewModel.finishClass(voiceInfo.channelId)
+                activity?.finish()
+            }
+        }.apply {
+            title = "수업을 종료할까요?"
+            description = "과외 영상이 자동으로 저장됩니다"
+        }
+    }
+
+    private fun initReviewDialog() {
+        reviewDialog = reviewDialog(whiteBoardInfo.opponentName) { rating, comment ->
+            reviewViewModel.createReview(
+                tutoringId = whiteBoardInfo.tutoringId,
+                rating = rating,
+                comment = comment
+            )
+            viewModel.finishClass(voiceInfo.channelId)
+            activity?.finish()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -165,7 +201,8 @@ class ClassroomFragment : Fragment() {
 
 
     private fun setClassroomInfoUI() {
-        binding.tvRoomTitle.text = whiteBoardInfo.roomTitle
+        binding.tvRoomTitle.text =
+            "${whiteBoardInfo.opponentName} ${if (whiteBoardInfo.isTeacher) "학생과" else "선생님과"} 수업 중"
         Glide.with(requireContext())
             .load(whiteBoardInfo.roomProfileImage)
             .into(binding.ivProfileImage)
@@ -529,13 +566,6 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun showFinishClassDialog() {
-        val dialogLectureEnd = SimpleConfirmDialog {
-            viewModel.finishClass(voiceInfo.channelId)
-            activity?.finish()
-        }.apply {
-            title = "수업을 종료할까요?"
-            description = "과외 영상이 자동으로 저장됩니다"
-        }
         dialogLectureEnd.show(requireActivity().supportFragmentManager, "lectureEnd")
 
     }
