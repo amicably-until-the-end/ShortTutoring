@@ -205,6 +205,10 @@ class ChatRepositoryImpl @Inject constructor(
         try {
             Log.d("ChatRepositoryImpl", "insert ${roomId} $body")
             var result = chatApi.getRoom(roomId)
+            Log.d(
+                "ChatRepositoryImpl",
+                "insert ${result.body()?.data?.questionState} ${result.body()?.data?.asEntity()}"
+            )
             if (!chatDatabase.chatRoomDao().isIdExist(roomId)) {
                 result.body()?.data?.let { chatDatabase.chatRoomDao().insert(it.asEntity()) }
             } else {

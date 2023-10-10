@@ -17,6 +17,7 @@ data class ChatRoomVO(
     val roomType: RoomType,
     val roomImage: String?,
     val questionState: QuestionState,
+    val chatRoomState: ChatRoomState? = null,
     val questionId: String,
     val opponentId: String? = null,
     val title: String?,
@@ -41,6 +42,12 @@ data class TeacherInfoVO(
     val name: String,
     val profileImageUrl: String,
 )
+
+enum class ChatRoomState(val value: String) {
+    PROPOSED("proposed"),
+    RESERVED("reserved"),
+    DECLINED("declined"),
+}
 
 data class MessageVO(
     val time: LocalDateTime,

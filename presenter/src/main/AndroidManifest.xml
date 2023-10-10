@@ -18,7 +18,7 @@
         <activity
             android:name=".login.SplashActivity"
             android:exported="true"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +53,7 @@
         <activity
             android:name=".teacher_home.TeacherHomeActivity"
             android:exported="false"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".classroom.ClassroomActivity"
             android:exported="false" />
@@ -66,6 +66,7 @@
             android:noHistory="true" />
         <activity
             android:name=".login.LoginActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".student_home.StudentHomeActivity"

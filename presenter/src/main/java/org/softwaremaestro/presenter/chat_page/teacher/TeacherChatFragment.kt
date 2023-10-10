@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import org.softwaremaestro.domain.chat.entity.ChatRoomState
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.TeacherChatViewModel
@@ -85,31 +85,43 @@ class TeacherChatFragment : ChatFragment() {
         enableChatting(true)
         if (chatRoomVO.isSelect) {
             // 지정 질문 이면
-            when (chatRoomVO.questionState) {
-                QuestionState.PROPOSED -> {
+            when (chatRoomVO.chatRoomState) {
+                ChatRoomState.PROPOSED -> {
                     onProposedSelectRoomEnter()
                 }
 
-                QuestionState.RESERVED -> {
+                ChatRoomState.RESERVED -> {
                     onReservedRoomEnter()
                 }
 
+                ChatRoomState.DECLINED -> {
+                    onDeclinedRoomEnter()
+                    //선생님 자신이 지정 질문 거절한 경우
+                }
+
+
                 else -> {
+                    Log.e("${this@TeacherChatFragment::class.java}", "invalid question state")
                 }
             }
         } else {
             //일반 질문 일때
-            when (chatRoomVO.questionState) {
-                QuestionState.PROPOSED -> {
+            when (chatRoomVO.chatRoomState) {
+                ChatRoomState.PROPOSED -> {
                     onProposedNormalRoomEnter()
                 }
 
-                QuestionState.RESERVED -> {
+                ChatRoomState.RESERVED -> {
                     onReservedRoomEnter()
                 }
 
-                else -> {
+                ChatRoomState.DECLINED -> {
+                    //학생이 일반 질문 거절한 경우
+                    onDeclinedRoomEnter()
+                }
 
+                else -> {
+                    Log.e("${this@TeacherChatFragment::class.java}", "invalid ChatRoomState")
                 }
             }
         }
@@ -118,6 +130,7 @@ class TeacherChatFragment : ChatFragment() {
     private fun onProposedNormalRoomEnter() {
         setNotiVisible(false)
         setChatRoomBtnsVisible(false)
+        enableSendMessage()
     }
 
 
@@ -135,8 +148,16 @@ class TeacherChatFragment : ChatFragment() {
         }
     }
 
+    private fun onDeclinedRoomEnter() {
+        setNotiVisible(false)
+        setChatRoomRightBtnVisible(false)
+        binding.btnChatRoomLeft.visibility = View.GONE
+        disableSendMessage()
+    }
+
     private fun onProposedSelectRoomEnter() {
         setNotiVisible(false)
+        enableSendMessage()
         setChatRoomBtnsVisible(false)
         enablePickStudentBtn()
         enableDeclineBtn()
@@ -164,6 +185,7 @@ class TeacherChatFragment : ChatFragment() {
         currentChatRoom?.questionId?.let { chatViewModel.getTutoringInfo(it) }
         setNotiVisible(true)
         binding.btnChatRoomRight.visibility = View.GONE
+        enableSendMessage()
     }
 
     private fun observeClassroomInfo() {

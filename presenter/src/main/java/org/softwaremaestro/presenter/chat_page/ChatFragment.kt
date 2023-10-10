@@ -82,7 +82,6 @@ abstract class ChatFragment : Fragment() {
         setCloseOfferingTeacherButton()
         observeChatRoomList()
         makeAdapterList()
-        getRoomList()
         setSendMessageButton()
         observeMessages()
         observeSocket()
@@ -98,6 +97,11 @@ abstract class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = LoadingDialog(requireContext())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getRoomList()
     }
 
 
@@ -170,6 +174,20 @@ abstract class ChatFragment : Fragment() {
                 receiverId = it.opponentId!!,
             )
         }
+    }
+
+    fun disableSendMessage() {
+        binding.btnSendMessage.isEnabled = false
+        binding.containerInputBox.alpha = 0.5f
+        binding.etMessage.hint = "거절되었습니다."
+        binding.etMessage.isEnabled = false
+    }
+
+    fun enableSendMessage() {
+        binding.btnSendMessage.isEnabled = true
+        binding.containerInputBox.alpha = 1f
+        binding.etMessage.hint = "메시지를 입력하세요"
+        binding.etMessage.isEnabled = true
     }
 
     private fun refreshProposedRoomList() {
@@ -299,6 +317,7 @@ abstract class ChatFragment : Fragment() {
     private fun makeAdapterList() {
         recyclerViewAdapters.apply {
             add(reservedAdapter)
+            add(proposedAdapter)
             add(messageListAdapter)
             add(offeringTeacherAdapter)
             add(proposedIconAdapter)
@@ -392,13 +411,13 @@ abstract class ChatFragment : Fragment() {
             chatViewModel.reservedSelectedChatRoomList.value?._data,
             chatViewModel.reservedNormalChatRoomList.value?._data,
             chatViewModel.proposedSelectedChatRoomList.value?._data,
+            chatViewModel.proposedNormalChatRoomList.value?._data,
         )
         chatViewModel.proposedNormalChatRoomList.value?._data?.forEach {
             it.teachers?.forEach { room ->
                 list.add(listOf(room))
             }
         }
-        Log.d("focus chat", "rooms: $list")
         list.forEach { rooms ->
 
             rooms?.find { it.id == chattingId }?.let {

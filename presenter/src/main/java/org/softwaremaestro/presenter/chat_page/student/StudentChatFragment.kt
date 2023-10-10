@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.chat.entity.ChatRoomState
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
-import org.softwaremaestro.domain.chat.entity.QuestionState
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.StudentChatViewModel
@@ -54,26 +54,53 @@ class StudentChatFragment : ChatFragment() {
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         enableChatting(true)
         if (chatRoomVO.isSelect) {
-            when (chatRoomVO.questionState) {
-                QuestionState.PROPOSED -> {
+            when (chatRoomVO.chatRoomState) {
+                ChatRoomState.PROPOSED -> {
                     onProposedSelectQuestionSelect()
                 }
 
-                else -> {
-                    onReservedRoomSelect()
+                ChatRoomState.DECLINED -> {
+                    //지정 질문을 선생님이 거절
+                    Log.d("onChatRoomStateChange", "onChatRoomStateChange: DECLINED")
+                    onDeclinedRoomSelect()
                 }
-            }
-        } else {
-            when (chatRoomVO.questionState) {
-                QuestionState.PROPOSED -> {
-                    onProposedNormalQuestionSelect()
+
+                ChatRoomState.RESERVED -> {
+                    onReservedRoomSelect()
                 }
 
                 else -> {
+                    onProposedSelectQuestionSelect()
+                    Log.e("${this@StudentChatFragment::class.java}", "invalid question state")
+                }
+            }
+        } else {
+            when (chatRoomVO.chatRoomState) {
+                ChatRoomState.PROPOSED -> {
+                    onProposedNormalQuestionSelect()
+                }
+
+                ChatRoomState.RESERVED -> {
                     onReservedRoomSelect()
+                }
+
+                ChatRoomState.DECLINED -> {
+                    //지정 질문을 선생님이 거절
+                    onDeclinedRoomSelect()
+                }
+
+                else -> {
+                    Log.e("${this@StudentChatFragment::class.java}", "invalid ChatRoomState ")
                 }
             }
         }
+    }
+
+    private fun onDeclinedRoomSelect() {
+        hideLeftButton()
+        setNotiVisible(false)
+        hideRightButton()
+        disableSendMessage()
     }
 
     private fun initWaitingTeacherDialog() {
@@ -87,6 +114,7 @@ class StudentChatFragment : ChatFragment() {
         hideLeftButton()
         setNotiVisible(false)
         hideRightButton()
+        enableSendMessage()
     }
 
     private fun hideLeftButton() {
@@ -170,6 +198,7 @@ class StudentChatFragment : ChatFragment() {
 
     private fun onProposedNormalQuestionSelect() {
         setNotiVisible(false)
+        enableSendMessage()
         enablePickTeacherButton()
     }
 
@@ -180,6 +209,7 @@ class StudentChatFragment : ChatFragment() {
             observeTutoringInfo()
         }
         hideRightButton()
+        enableSendMessage()
         unSetOfferingTeacherMode() // 채팅 보고 있을 때 선택 했을 경우에 대비해서 offeringTeacherMode 해제하고 해당 방으로 이동
     }
 
