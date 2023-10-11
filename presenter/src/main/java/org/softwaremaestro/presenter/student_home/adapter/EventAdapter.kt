@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import org.softwaremaestro.domain.event.entity.EventVO
 import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.presenter.databinding.ItemEventBinding
@@ -35,7 +38,12 @@ class EventAdapter(private val onClick: (String) -> Unit) :
 
         fun onBind(item: EventVO) {
             Glide.with(binding.root.context).load(item.image)
-                .centerCrop()
+                .apply(
+                    RequestOptions().transform(
+                        CenterCrop(),
+                        RoundedCorners(20)
+                    )
+                )
                 .into(binding.ivEvent)
             binding.ivEvent.setOnClickListener {
                 item.url?.let { onClick(it) }

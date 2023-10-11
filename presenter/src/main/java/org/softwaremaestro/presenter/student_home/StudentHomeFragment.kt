@@ -13,8 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.event.entity.EventVO
-import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
@@ -25,6 +23,7 @@ import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
+import org.softwaremaestro.presenter.student_home.viewmodel.EventViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.LectureViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
@@ -44,6 +43,7 @@ class StudentHomeFragment : Fragment() {
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val teacherRecommendViewModel: TeacherRecommendViewModel by activityViewModels()
     private val lectureViewModel: LectureViewModel by activityViewModels()
+    private val eventViewModel: EventViewModel by activityViewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
@@ -75,6 +75,7 @@ class StudentHomeFragment : Fragment() {
         lectureViewModel.getLectures()
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         teacherOnlineViewModel.getTeacherOnlines()
+        eventViewModel.getEvents()
     }
 
     private fun initTeacherProfileDialog() {
@@ -188,24 +189,6 @@ class StudentHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-
-        eventAdapter.setItems(
-            EventsVO(
-                count = 0,
-                events = mutableListOf<EventVO>().apply {
-                    repeat(5) {
-                        add(
-                            EventVO(
-                                createdAt = "",
-                                id = "",
-                                url = "www.naver.com",
-                                image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
-                            )
-                        )
-                    }
-                }
-            )
-        )
     }
 
     private fun setMoreTeacherBtn() {
@@ -335,7 +318,9 @@ class StudentHomeFragment : Fragment() {
         observeTeachers()
         observeLectures()
         observeTeacherOnlines()
+        observeEvents()
     }
+
 
     private fun observeLectures() {
 //        lectureViewModel.lectures.observe(viewLifecycleOwner) {
@@ -371,6 +356,15 @@ class StudentHomeFragment : Fragment() {
                 }
                 teacherOnlineAdapter.notifyDataSetChanged()
 
+            }
+        }
+    }
+
+    private fun observeEvents() {
+        eventViewModel.events.observe(viewLifecycleOwner) {
+            it?.let {
+                eventAdapter.setItems(it)
+                eventAdapter.notifyDataSetChanged()
             }
         }
     }

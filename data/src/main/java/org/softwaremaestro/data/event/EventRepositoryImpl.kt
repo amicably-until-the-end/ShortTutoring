@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.event.model.asDomain
 import org.softwaremaestro.data.event.remote.EventApi
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.event.entity.EventRepository
+import org.softwaremaestro.domain.event.EventRepository
 import org.softwaremaestro.domain.event.entity.EventsVO
 import javax.inject.Inject
 

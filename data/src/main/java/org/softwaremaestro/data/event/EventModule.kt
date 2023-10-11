@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.softwaremaestro.data.common.module.NetworkModule
 import org.softwaremaestro.data.event.remote.EventApi
-import org.softwaremaestro.domain.event.entity.EventRepository
+import org.softwaremaestro.domain.event.EventRepository
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
