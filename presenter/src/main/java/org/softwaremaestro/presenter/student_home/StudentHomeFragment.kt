@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.student_home
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.event.entity.EventVO
+import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
+import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
@@ -27,7 +32,6 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
-import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -45,6 +49,7 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
+    private lateinit var eventAdapter: EventAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
 
     override fun onCreateView(
@@ -57,11 +62,7 @@ class StudentHomeFragment : Fragment() {
         initTeacherProfileDialog()
         setCoinButton()
         setQuestionButton()
-        setTeacherFollowingRecyclerView()
-        setTeacherOnlineRecyclerView()
-        setOthersQuestionRecyclerView()
-        setLectureRecyclerView()
-        setTeacherRecyclerView()
+        setRecyclerViews()
         setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
@@ -121,6 +122,15 @@ class StudentHomeFragment : Fragment() {
         return
     }
 
+    private fun setRecyclerViews() {
+        setTeacherFollowingRecyclerView()
+        setTeacherOnlineRecyclerView()
+        setOthersQuestionRecyclerView()
+        setLectureRecyclerView()
+        setTeacherRecyclerView()
+        setEventAdapter()
+    }
+
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
             dialogTeacherProfile.setItem(it)
@@ -160,6 +170,42 @@ class StudentHomeFragment : Fragment() {
 //            layoutManager =
 //                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
 //        }
+    }
+
+    private fun setEventAdapter() {
+        eventAdapter = EventAdapter { url ->
+            val intent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(url)
+            }
+            startActivity(intent)
+        }
+        PagerSnapHelper().attachToRecyclerView(binding.rvEvent)
+
+        binding.rvEvent.apply {
+            adapter = eventAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        eventAdapter.setItems(
+            EventsVO(
+                count = 0,
+                events = mutableListOf<EventVO>().apply {
+                    repeat(5) {
+                        add(
+                            EventVO(
+                                createdAt = "",
+                                id = "",
+                                url = "www.naver.com",
+                                image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
+                            )
+                        )
+                    }
+                }
+            )
+        )
     }
 
     private fun setMoreTeacherBtn() {

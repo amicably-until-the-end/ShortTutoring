@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.teacher_home
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +16,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.softwaremaestro.domain.event.entity.EventVO
+import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
+import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.CHAT_ID
@@ -51,6 +56,7 @@ class TeacherHomeFragment : Fragment() {
 
     private lateinit var questionAdapter: QuestionAdapter
     private lateinit var reviewAdapter: ReviewAdapter
+    private lateinit var eventAdapter: EventAdapter
     private lateinit var waitingSnackbar: Snackbar
     private var isCalledFirstTime = true
 
@@ -74,6 +80,7 @@ class TeacherHomeFragment : Fragment() {
         initWaitingSnackbar()
         initQuestionRecyclerView()
         initReviewRecyclerView()
+        initEventAdapter()
 
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
 
@@ -185,6 +192,41 @@ class TeacherHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+    }
+
+    private fun initEventAdapter() {
+        eventAdapter = EventAdapter { url ->
+            val intent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse(url)
+            }
+            startActivity(intent)
+        }
+        PagerSnapHelper().attachToRecyclerView(binding.rvEvent)
+
+        binding.rvEvent.apply {
+            adapter = eventAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        eventAdapter.setItems(
+            EventsVO(
+                count = 0,
+                events = mutableListOf<EventVO>().apply {
+                    repeat(5) {
+                        add(
+                            EventVO(
+                                createdAt = "",
+                                id = "",
+                                url = "https://photos.google.com/share/AF1QipPgFsxf8cZdiGhW7JEAUcvBUIQvUeZXjM7tTusvoSAVsak8VcQn30eUBFxfezF5sQ/photo/AF1QipOyWYStr7IY9-UEh-K2RrpVPJXm1paB8DPCx_JM?key=TEZWU2RXTGRNdWlPdDlrYmNHekdadGd0U1BDdURn",
+                                image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
+                            )
+                        )
+                    }
+                }
+            )
+        )
     }
 
     private fun observe() {
