@@ -415,7 +415,7 @@
                     android:paddingVertical="20dp">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_banner"
+                        android:id="@+id/rv_event"
                         android:layout_width="match_parent"
                         android:layout_height="150dp" />
 

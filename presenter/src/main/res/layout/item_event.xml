@@ -4,4 +4,9 @@
     android:layout_height="150dp"
     android:background="@drawable/bg_shadow_1_stroke_background_grey">
 
+    <ImageView
+        android:id="@+id/iv_event"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
