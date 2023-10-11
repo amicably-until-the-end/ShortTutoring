@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import org.softwaremaestro.presenter.databinding.DialogRatingBinding
 
 private const val NUM_STAR = 5
 
 class ReviewDialog(
     private val teacherName: String?,
+    private val teacherImg: String?,
     private val onConfirm: (Int, String) -> Unit
 ) : DialogFragment() {
 
@@ -44,6 +46,7 @@ class ReviewDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvMain.text = "${teacherName ?: ""} 선생님과의 수업은 어땠나요?"
+        Glide.with(binding.root).load(teacherImg).centerCrop().into(binding.ivTeacherImg)
         var mNumOfFilled = 5
         binding.srbRating.onClick = { numOfFilled ->
             mNumOfFilled = numOfFilled + 1

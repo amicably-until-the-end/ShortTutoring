@@ -300,6 +300,7 @@ class ClassroomFragment : Fragment() {
                         val mIntent = Intent().apply {
                             putExtra("opponentName", whiteBoardInfo.opponentName)
                             putExtra("tutoringId", whiteBoardInfo.tutoringId)
+                            putExtra("teacherImg", whiteBoardInfo.roomProfileImage)
                         }
                         setResult(RESULT_OK, mIntent)
                     }

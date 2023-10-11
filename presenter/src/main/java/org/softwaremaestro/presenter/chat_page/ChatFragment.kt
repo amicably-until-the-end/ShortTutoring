@@ -753,8 +753,9 @@ abstract class ChatFragment : Fragment() {
                     if (isTeacher()) return
                     val opponentName = data?.getStringExtra("opponentName")
                     val tutoringId = data?.getStringExtra("tutoringId")
+                    val teacherImg = data?.getStringExtra("teacherImg")
                     if (tutoringId != null) {
-                        ReviewDialog(opponentName) { rating, comment ->
+                        ReviewDialog(opponentName, teacherImg) { rating, comment ->
                             reviewViewModel.createReview(
                                 tutoringId = tutoringId,
                                 rating = rating,
