@@ -8,11 +8,9 @@ import org.softwaremaestro.domain.event.entity.EventVO
 import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.presenter.databinding.ItemEventBinding
 
-
 class EventAdapter(private val onClick: (String) -> Unit) :
     RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
-    private lateinit var binding: ItemEventBinding
     private var items: EventsVO = EventsVO(0, emptyList())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventAdapter.ViewHolder {
@@ -26,6 +24,10 @@ class EventAdapter(private val onClick: (String) -> Unit) :
 
     override fun getItemCount(): Int {
         return items.events?.size ?: 0
+    }
+
+    fun setItems(items: EventsVO) {
+        this.items = items
     }
 
     inner class ViewHolder(private val binding: ItemEventBinding) :

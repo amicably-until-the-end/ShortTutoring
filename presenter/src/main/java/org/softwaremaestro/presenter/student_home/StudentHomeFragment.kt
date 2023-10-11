@@ -13,6 +13,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.event.entity.EventVO
+import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
@@ -186,6 +188,24 @@ class StudentHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
+
+        eventAdapter.setItems(
+            EventsVO(
+                count = 0,
+                events = mutableListOf<EventVO>().apply {
+                    repeat(5) {
+                        add(
+                            EventVO(
+                                createdAt = "",
+                                id = "",
+                                url = "www.naver.com",
+                                image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
+                            )
+                        )
+                    }
+                }
+            )
+        )
     }
 
     private fun setMoreTeacherBtn() {
