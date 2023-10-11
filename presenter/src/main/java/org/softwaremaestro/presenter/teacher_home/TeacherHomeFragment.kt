@@ -219,7 +219,7 @@ class TeacherHomeFragment : Fragment() {
                             EventVO(
                                 createdAt = "",
                                 id = "",
-                                url = "https://goodgoodminki.tistory.com/entry",
+                                url = "https://photos.google.com/share/AF1QipPgFsxf8cZdiGhW7JEAUcvBUIQvUeZXjM7tTusvoSAVsak8VcQn30eUBFxfezF5sQ/photo/AF1QipOyWYStr7IY9-UEh-K2RrpVPJXm1paB8DPCx_JM?key=TEZWU2RXTGRNdWlPdDlrYmNHekdadGd0U1BDdURn",
                                 image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
                             )
                         )
