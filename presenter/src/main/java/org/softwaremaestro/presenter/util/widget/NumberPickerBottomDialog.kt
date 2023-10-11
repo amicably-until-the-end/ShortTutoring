@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogNumberPickerBinding
@@ -21,14 +22,18 @@ class NumberPickerBottomDialog(private val onReturnClick: ((Int) -> Unit)) :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogNumberPickerBinding.inflate(layoutInflater)
-
+        setDurationPicker()
         setDialogTitle()
         setDialogBtnText()
         setReturnButton()
         setDefaultTime()
         return binding.root
+    }
+
+    private fun setDurationPicker() {
+        binding.npDuration.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
     }
 
     fun setTitle(title: String) {
