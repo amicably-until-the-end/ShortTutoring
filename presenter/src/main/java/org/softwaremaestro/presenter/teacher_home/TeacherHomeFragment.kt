@@ -198,7 +198,6 @@ class TeacherHomeFragment : Fragment() {
         eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
-                addCategory(Intent.CATEGORY_BROWSABLE)
                 data = Uri.parse(url)
             }
             startActivity(intent)
@@ -220,7 +219,7 @@ class TeacherHomeFragment : Fragment() {
                             EventVO(
                                 createdAt = "",
                                 id = "",
-                                url = "www.naver.com",
+                                url = "https://goodgoodminki.tistory.com/entry",
                                 image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
                             )
                         )
