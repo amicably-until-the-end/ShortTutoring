@@ -160,9 +160,12 @@ class ChatViewModel @Inject constructor(
     fun startClassroom(tutoringId: String) {
         viewModelScope.launch {
             startClassUseCase.execute(tutoringId)
-                .onStart { }
+                .onStart {
+                    _classroomInfo.value = UIState.Loading
+                }
                 .catch { exception ->
                     Log.e(this@ChatViewModel::class.java.name, exception.message.toString())
+                    _classroomInfo.value = UIState.Failure
                 }
                 .collect { result ->
                     when (result) {
@@ -171,7 +174,7 @@ class ChatViewModel @Inject constructor(
                         }
 
                         is BaseResult.Error -> {
-
+                            _classroomInfo.value = UIState.Failure
                         }
                     }
                 }

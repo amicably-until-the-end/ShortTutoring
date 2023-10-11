@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.classroom
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.classroom.model.asDomain
@@ -56,12 +57,16 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
 
     override suspend fun startClassroom(tutoringId: String): Flow<BaseResult<ClassroomInfoVO, String>> {
         return flow {
-            val result = classRoomApi.startClassroom(tutoringId)
+            try {
+                val result = classRoomApi.startClassroom(tutoringId)
 
-            if (result.isSuccessful && result.body()?.success == true) {
-                emit(BaseResult.Success(result.body()?.data!!.asDomain()))
-            } else {
-                emit(BaseResult.Error("Error"))
+                if (result.isSuccessful && result.body()?.success == true) {
+                    emit(BaseResult.Success(result.body()?.data!!.asDomain()))
+                } else {
+                    emit(BaseResult.Error("Error"))
+                }
+            } catch (e: Exception) {
+                Log.e("${this@ClassRoomRepositoryImpl::class.java}}", "startClassroom: $e")
             }
         }
     }

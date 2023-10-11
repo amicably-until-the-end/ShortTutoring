@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.student_home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,6 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
-import org.softwaremaestro.presenter.teacher_search.TeacherSearchActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -264,8 +264,9 @@ class StudentHomeFragment : Fragment() {
                 QUESTION_UPLOAD_RESULT -> {
                     val questionId =
                         data?.getStringExtra(QuestionNormalFormFragment.QUESTION_UPLOAD_RESULT)
+                    Log.d("StudentHome Link", questionId.toString())
                     (activity as StudentHomeActivity).apply {
-                        moveToChatTab()
+                        moveToChatTab(questionId)
                     }
                 }
             }

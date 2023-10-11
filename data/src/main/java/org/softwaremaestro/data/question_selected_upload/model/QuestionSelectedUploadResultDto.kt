@@ -10,5 +10,6 @@ data class QuestionSelectedUploadResultDto(
     @SerializedName("teacherIds") val teacherIds: List<String>?,
     @SerializedName("problem") val problem: ProblemVO?,
     @SerializedName("hopeTutorialTime") val hopeTutorialTime: List<String>?,
-    @SerializedName("hopeImmediately") val hopeImmediately: Boolean?
+    @SerializedName("hopeImmediately") val hopeImmediately: Boolean?,
+    @SerializedName("chattingId") val chattingId: String?,
 )

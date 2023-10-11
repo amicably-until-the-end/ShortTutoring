@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.chat.entity.QuestionState
+import org.softwaremaestro.domain.chat.entity.RoomType
 import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
@@ -138,7 +139,6 @@ abstract class ChatFragment : Fragment() {
 
     private fun checkDeepLinkArgs() {
         if (!homeViewModel.chattingId.isNullOrEmpty()) {
-            Log.d("deeplink chat", "checkDeepLinkArgs ${homeViewModel.chattingId}")
             focusChatRoom(homeViewModel.chattingId!!)
         }
     }
@@ -296,7 +296,6 @@ abstract class ChatFragment : Fragment() {
                     chatViewModel.proposedNormalChatRoomList.value?._data?.find { room ->
                         room.questionId == it
                     }?.let { room ->
-                        Log.d("mymymymy", "room: ${room.teachers}")
                         setOfferingTeacherListItems(room.teachers ?: emptyList())
                         offeringTeacherAdapter.notifyDataSetChanged()
                     }
@@ -441,7 +440,9 @@ abstract class ChatFragment : Fragment() {
                 } else {
                     unSetOfferingTeacherMode()
                 }
-                enterChatRoom(it)
+                if (it.roomType == RoomType.TEACHER) {
+                    enterChatRoom(it)
+                }
                 homeViewModel.chattingId = null
                 return
             }
