@@ -175,7 +175,7 @@ class QuestionSelectedFormFragment : Fragment() {
 
 
     private fun observeQuestionUploadState() {
-        questionSelectedUploadViewModel.questionUploadState.observe(viewLifecycleOwner) {
+        questionSelectedUploadViewModel.uploadedQuestionChatId.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
                     loadingDialog = LoadingDialog(requireContext())
@@ -186,7 +186,7 @@ class QuestionSelectedFormFragment : Fragment() {
                 is UIState.Success -> {
                     loadingDialog.dismiss()
                     val intent = Intent()
-                    intent.putExtra(QUESTION_UPLOAD_RESULT, QUESTION_ID)
+                    intent.putExtra(QUESTION_UPLOAD_RESULT, it.data)
                     requireActivity().setResult(Activity.RESULT_OK, intent)
                     requireActivity().finish()
                 }

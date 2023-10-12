@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelectedUploadResultVO
 import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelectedUploadVO
 import org.softwaremaestro.domain.question_selected_upload.usecase.QuestionSelectedUploadUseCase
 import org.softwaremaestro.presenter.util.UIState
@@ -53,8 +52,8 @@ class QuestionSelectedUploadViewModel @Inject constructor(
     private var _inputProper = MediatorLiveData<Boolean>()
     val inputProper: MediatorLiveData<Boolean> get() = _inputProper
 
-    private val _questionUploadState = MutableLiveData<UIState<QuestionSelectedUploadResultVO>>()
-    val questionUploadState: LiveData<UIState<QuestionSelectedUploadResultVO>> get() = _questionUploadState
+    private val _uploadedQuestionChatId = MutableLiveData<UIState<String>>()
+    val uploadedQuestionChatId: LiveData<UIState<String>> get() = _uploadedQuestionChatId
 
     init {
         with(_inputProper) {
@@ -70,18 +69,18 @@ class QuestionSelectedUploadViewModel @Inject constructor(
         viewModelScope.launch {
             questionSelectedUploadUseCase.execute(questionSelectedUploadVO)
                 .onStart {
-                    _questionUploadState.value = UIState.Loading
+                    _uploadedQuestionChatId.value = UIState.Loading
                 }
                 .catch { _ ->
-                    _questionUploadState.value = UIState.Failure
+                    _uploadedQuestionChatId.value = UIState.Failure
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            _questionUploadState.value = UIState.Success(result.data)
+                            _uploadedQuestionChatId.value = UIState.Success(result.data)
                         }
 
-                        is BaseResult.Error -> _questionUploadState.value = UIState.Failure
+                        is BaseResult.Error -> _uploadedQuestionChatId.value = UIState.Failure
                     }
                 }
         }

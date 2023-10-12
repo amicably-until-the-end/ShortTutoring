@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -310,8 +311,9 @@ class StudentHomeFragment : Fragment() {
                 QUESTION_UPLOAD_RESULT -> {
                     val questionId =
                         data?.getStringExtra(QuestionNormalFormFragment.QUESTION_UPLOAD_RESULT)
+                    Log.d("StudentHome Link", questionId.toString())
                     (activity as StudentHomeActivity).apply {
-                        moveToChatTab()
+                        moveToChatTab(questionId)
                     }
                 }
             }
