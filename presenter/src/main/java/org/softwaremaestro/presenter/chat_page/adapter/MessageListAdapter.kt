@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.chat_page.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -13,6 +14,7 @@ import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -101,6 +103,7 @@ class MessageListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: MessageVO) {
+            Log.d("message adapter", "Item ${item}")
             binding.apply {
                 if (item.isMyMsg) {
                     //set colors
@@ -181,7 +184,7 @@ class MessageListAdapter(
                     is MessageBodyVO.ReserveConfirm -> {
                         var body = item.bodyVO as MessageBodyVO.ReserveConfirm
                         var time =
-                            body.startDateTime?.parseToLocalDateTime() ?: LocalDateTime.now()
+                            body.startTime?.parseToLocalDateTime() ?: LocalDateTime.now()
                         tvText.text =
                             "${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 예약이 완료되었습니다."
                     }
@@ -381,12 +384,15 @@ class MessageListAdapter(
     }
 
     fun String.parseToLocalDateTime(): LocalDateTime? {
-        return try {
+        try {
+            Log.d("parseToLocalDateTime", this)
             val formatter = DateTimeFormatter.ISO_DATE_TIME
             val zonedDateTime = ZonedDateTime.parse(this, formatter)
-            zonedDateTime.toLocalDateTime()
+            val kstZoneId = ZoneId.of("Asia/Seoul")
+            return zonedDateTime.withZoneSameInstant(kstZoneId).toLocalDateTime()
         } catch (e: Exception) {
-            null
+            Log.e("parseToLocalDateTime", e.toString())
+            return null
         }
     }
 

@@ -16,6 +16,7 @@ import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.chat.ChatRepository
 import org.softwaremaestro.domain.login.usecase.LoginUseCase
@@ -100,6 +101,7 @@ class PushMessageService :
 
     private fun insertChatMessage(data: Map<String, String>) {
         try {
+            Log.d("PushMessageService", "insertChatMessage $data")
             with(data) {
                 CoroutineScope(Dispatchers.IO).launch {
                     chatRepository.insertMessage(
@@ -109,7 +111,7 @@ class PushMessageService :
                         get("createdAt") ?: LocalDateTime.now().toString(),
                         get("sender") == SocketManager.userId,
                         get("sender") == SocketManager.userId,
-                    )
+                    ).collect()
                 }
             }
         } catch (e: Exception) {

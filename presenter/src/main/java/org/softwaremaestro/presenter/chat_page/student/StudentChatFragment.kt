@@ -247,6 +247,7 @@ class StudentChatFragment : ChatFragment() {
                         .withMonth(monthValue)
                         .withDayOfMonth(dayOfMonth)
                 )
+                Log.d("date picker", "initDatePickerDialog: ${studentViewModel.tutoringTime.value}")
             }
             timePickerDialog.show(parentFragmentManager, "timePicker")
         }.apply {
@@ -288,6 +289,7 @@ class StudentChatFragment : ChatFragment() {
                     )
                 }
             )
+            Log.d("test date", "initTimePickerDialog: ${studentViewModel.tutoringTime.value}")
             numberPickerDialog.show(parentFragmentManager, "numberPicker")
         }.apply {
             setTitle("수업 시작 시간을 선택해주세요")

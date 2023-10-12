@@ -81,7 +81,7 @@ sealed class MessageBodyVO {
 
     @Serializable
     data class ReserveConfirm(
-        val startDateTime: String?,
+        val startTime: String?,
     ) : MessageBodyVO()
 
     @Serializable

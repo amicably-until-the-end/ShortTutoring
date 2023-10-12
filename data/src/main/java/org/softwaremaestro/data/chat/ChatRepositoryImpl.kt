@@ -28,7 +28,6 @@ class ChatRepositoryImpl @Inject constructor(
 ) :
     ChatRepository {
 
-
     private fun getOneRoomFromDB(roomId: String): ChatRoomVO? {
         return try {
             var result = chatDatabase.chatRoomDao().getChatRoomWithMessages(roomId)
