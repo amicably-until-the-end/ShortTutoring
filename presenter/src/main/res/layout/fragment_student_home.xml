@@ -97,7 +97,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:text="오늘 오후 14:00에 강해린 선생님과 함께 수업이 진행예정이에요." />
+                            android:text="매일 2개의 무료 코인이 제공됩니다" />
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
