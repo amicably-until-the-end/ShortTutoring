@@ -31,6 +31,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewMod
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
+import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 
 @AndroidEntryPoint
@@ -67,6 +68,13 @@ class StudentHomeFragment : Fragment() {
         setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
+
+        val displayWidth = resources.displayMetrics.heightPixels
+        val viewWidth = toPx(360, requireContext())
+        val padding = (displayWidth - viewWidth) / 2
+//        Log.d("hhcc", "${toDp(padding, requireContext())}")
+        binding.rvEvent.setPadding(toPx(300, requireContext()), 0, padding, 0)
+
         return binding.root
     }
 
@@ -130,7 +138,7 @@ class StudentHomeFragment : Fragment() {
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
-        setEventAdapter()
+        setEventRecyclerView()
     }
 
     private fun setTeacherFollowingRecyclerView() {
@@ -174,7 +182,7 @@ class StudentHomeFragment : Fragment() {
 //        }
     }
 
-    private fun setEventAdapter() {
+    private fun setEventRecyclerView() {
         eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
