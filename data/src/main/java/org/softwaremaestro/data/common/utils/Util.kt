@@ -18,7 +18,8 @@ fun String.parseToLocalDateTime(): LocalDateTime? {
     try {
         val formatter = DateTimeFormatter.ISO_DATE_TIME
         val zonedDateTime = ZonedDateTime.parse(this, formatter)
-        return zonedDateTime.toLocalDateTime()
+        val kstZoneId = ZoneId.of("Asia/Seoul")
+        return zonedDateTime.withZoneSameInstant(kstZoneId).toLocalDateTime()
     } catch (e: Exception) {
         Log.e("parseToLocalDateTime", e.toString())
         return null

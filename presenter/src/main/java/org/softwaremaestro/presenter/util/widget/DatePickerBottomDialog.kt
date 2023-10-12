@@ -23,7 +23,7 @@ class DatePickerBottomDialog(private val onReturnClick: ((LocalDate) -> Unit)) :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogDatePickerBinding.inflate(layoutInflater)
 
         setDialogTitle()
@@ -60,7 +60,7 @@ class DatePickerBottomDialog(private val onReturnClick: ((LocalDate) -> Unit)) :
     private fun setReturnButton() {
         binding.btnReturn.setOnClickListener {
             with(binding.dpStart) {
-                onReturnClick(LocalDate.of(year, month, dayOfMonth))
+                onReturnClick(LocalDate.of(year, month + 1, dayOfMonth))
             }
             dismiss()
         }

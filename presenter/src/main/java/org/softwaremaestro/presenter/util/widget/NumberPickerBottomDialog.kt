@@ -65,7 +65,7 @@ class NumberPickerBottomDialog(private val onReturnClick: ((Int) -> Unit)) :
 
     private fun setReturnButton() {
         binding.btnReturn.setOnClickListener {
-            onReturnClick(binding.npDuration.value)
+            onReturnClick(binding.npDuration.value * STEP + MIN_VALUE)
             dismiss()
         }
     }
