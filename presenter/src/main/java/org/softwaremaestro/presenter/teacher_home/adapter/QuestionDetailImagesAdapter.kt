@@ -42,9 +42,7 @@ class QuestionDetailImagesAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: String?) {
-            Log.d("my url", item.toString())
-            Glide.with(binding.root).load(item).transform().sizeMultiplier(0.1f).centerCrop()
-                .into(binding.ivImage)
+            Glide.with(binding.root).load(item).centerCrop().into(binding.ivImage)
         }
     }
 
