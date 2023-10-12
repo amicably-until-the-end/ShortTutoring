@@ -22,12 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.event.entity.EventVO
-import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
+import org.softwaremaestro.presenter.student_home.viewmodel.EventViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.CHAT_ID
@@ -52,6 +51,7 @@ class TeacherHomeFragment : Fragment() {
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
     private val checkViewModel: CheckViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private val eventViewModel: EventViewModel by activityViewModels()
     private lateinit var requestActivity: ActivityResultLauncher<Intent>
 
     private lateinit var questionAdapter: QuestionAdapter
@@ -73,8 +73,7 @@ class TeacherHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        myProfileViewModel.getMyProfile()
-
+        getRemoteData()
         setTexts()
 
         initWaitingSnackbar()
@@ -85,6 +84,11 @@ class TeacherHomeFragment : Fragment() {
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
 
         observe()
+    }
+
+    private fun getRemoteData() {
+        myProfileViewModel.getMyProfile()
+        eventViewModel.getEvents()
     }
 
     private fun setTexts() {
@@ -209,24 +213,6 @@ class TeacherHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-
-        eventAdapter.setItems(
-            EventsVO(
-                count = 0,
-                events = mutableListOf<EventVO>().apply {
-                    repeat(5) {
-                        add(
-                            EventVO(
-                                createdAt = "",
-                                id = "",
-                                url = "https://photos.google.com/share/AF1QipPgFsxf8cZdiGhW7JEAUcvBUIQvUeZXjM7tTusvoSAVsak8VcQn30eUBFxfezF5sQ/photo/AF1QipOyWYStr7IY9-UEh-K2RrpVPJXm1paB8DPCx_JM?key=TEZWU2RXTGRNdWlPdDlrYmNHekdadGd0U1BDdURn",
-                                image = "https://fastly.picsum.photos/id/715/200/300.jpg?hmac=jMgGkNrRGTz5pgw27YMTCyozftm33Rw2fPKQU2FypW4"
-                            )
-                        )
-                    }
-                }
-            )
-        )
     }
 
     private fun observe() {
@@ -235,6 +221,7 @@ class TeacherHomeFragment : Fragment() {
         observeOfferRemove()
         //observeCheck()
         observeMyProfile()
+        observeEvents()
     }
 
     private fun observeQuestions() {
@@ -266,6 +253,15 @@ class TeacherHomeFragment : Fragment() {
     private fun observeMyProfile() {
         myProfileViewModel.amount.observe(viewLifecycleOwner) {
             binding.cbCoin.coin = it * 100
+        }
+    }
+
+    private fun observeEvents() {
+        eventViewModel.events.observe(viewLifecycleOwner) {
+            it?.let {
+                eventAdapter.setItems(it)
+                eventAdapter.notifyDataSetChanged()
+            }
         }
     }
 
