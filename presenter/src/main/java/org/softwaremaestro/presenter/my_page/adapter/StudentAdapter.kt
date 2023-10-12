@@ -1,9 +1,9 @@
 package org.softwaremaestro.presenter.my_page.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemStudentBinding
 
@@ -38,7 +38,7 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
         fun onBind(item: FollowerGetResponseVO) {
 
             with(binding) {
-                item.profileImage?.let { ivProfile.setImageURI(Uri.parse(it)) }
+                Glide.with(root).load(item.profileImage).centerCrop().into(ivProfile)
                 item.name?.let { tvNickname.text = "${it}" }
                 if (item.schoolLevel != null && item.grade != null) {
                     tvStudentInfo.text = "${item.schoolLevel} ${item.grade}학년"
