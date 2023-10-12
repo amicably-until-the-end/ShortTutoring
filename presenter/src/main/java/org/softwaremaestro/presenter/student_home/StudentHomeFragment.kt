@@ -228,7 +228,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
-            if (myProfileViewModel.amount.value!! < 100) {
+            if (myProfileViewModel.amount.value!! < 1) {
                 SimpleAlertDialog().apply {
                     title = "코인이 부족합니다"
                     description = "코인을 충전한 후 다시 질문해주세요"
