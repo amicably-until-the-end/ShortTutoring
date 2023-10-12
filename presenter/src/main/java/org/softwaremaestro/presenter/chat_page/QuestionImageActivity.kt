@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.chat_page
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,7 +40,6 @@ class QuestionImageActivity : AppCompatActivity() {
 
     private fun observeQuestionInfo() {
         viewModel.questionInfo.observe(this) {
-            Log.d("mymymy", it.toString())
             if (it != null) {
                 setImageRecyclerViewItem(it.images ?: listOf())
                 binding.tvSubject.text = it.problemSubject

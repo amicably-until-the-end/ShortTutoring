@@ -200,9 +200,9 @@ class StudentHomeFragment : Fragment() {
 
     private fun setNofiBtn() {
         binding.btnToolbarNotification.setOnClickListener {
-            showNoti("제목", "본문") {
-                // when confirm clicked
-            }
+//            showNoti("제목", "본문") {
+//                // when confirm clicked
+//            }
         }
     }
 
