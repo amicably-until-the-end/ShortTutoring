@@ -1,9 +1,9 @@
 package org.softwaremaestro.presenter.teacher_search.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import org.softwaremaestro.presenter.util.toRating
@@ -48,12 +48,11 @@ class TeacherAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: TeacherVO) {
-
             with(binding) {
-                item.profileUrl?.let { ivTeacherImg.setImageURI(Uri.parse(it)) }
-                item.nickname?.let { tvTeacherName.text }
-                item.univ?.let { tvTeacherUniv.text }
-                item.bio?.let { tvTeacherBio.text }
+                Glide.with(binding.root).load(item.profileUrl).centerCrop().into(ivTeacherImg)
+                item.nickname?.let { tvTeacherName.text = it }
+                item.univ?.let { tvTeacherUniv.text = it }
+                item.bio?.let { tvTeacherBio.text = it }
                 item.rating?.let { tvTeacherRating.text = it.toRating() }
                 btnFollow.text = "찜한 학생 ${item.followers?.size ?: 0}"
             }
