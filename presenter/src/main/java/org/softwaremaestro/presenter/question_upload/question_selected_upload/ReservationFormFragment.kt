@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,6 +18,7 @@ import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 @AndroidEntryPoint
@@ -49,6 +51,13 @@ class ReservationFormFragment : Fragment() {
     private fun setDatePicker() {
         binding.dpQuestionReserve.apply {
             setOnDateSelectListener { year, month, day ->
+                val adapter = binding.trpTutoringTime.rvTimePicker.adapter as TimeRangePickerAdapter
+                adapter.rangeStart = null
+                adapter.rangeEnd = null
+                adapter.notifyDataSetChanged()
+                questionReservationViewModel.setRequestTutoringStartTime(null)
+                questionReservationViewModel.setRequestTutoringEndTime(null)
+
                 questionReservationViewModel.setRequestDate(LocalDate.of(year, month, day))
                 binding.containerTimePicker.visibility = View.VISIBLE
             }
@@ -70,7 +79,6 @@ class ReservationFormFragment : Fragment() {
                     questionReservationViewModel.setRequestTutoringStartTime(
                         LocalTime.of(start.hour, start.minute)
                     )
-
                     questionReservationViewModel.setRequestTutoringEndTime(
                         LocalTime.of(end.hour, end.minute)
                     )
@@ -85,6 +93,24 @@ class ReservationFormFragment : Fragment() {
     }
 
     private fun observe() {
+        observeIsReqDateAfterToday()
+        observeInputProper()
+    }
+
+    private fun observeIsReqDateAfterToday() {
+        questionReservationViewModel.isReqDateAfterToday.observe(viewLifecycleOwner) {
+            if (!it && questionReservationViewModel.inputNotNull.value == true) {
+                val now = LocalDateTime.now()
+                Toast.makeText(
+                    requireContext(),
+                    "${now.hour}시 ${now.minute}분 이후의 시간을 선택해주세요",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun observeInputProper() {
         questionReservationViewModel.inputProper.observe(viewLifecycleOwner) { proper ->
             if (proper) {
                 setBtnSubmit(true)
