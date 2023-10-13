@@ -8,13 +8,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -31,6 +36,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewMod
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
+import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 
 @AndroidEntryPoint
@@ -67,6 +73,7 @@ class StudentHomeFragment : Fragment() {
         setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
+
         return binding.root
     }
 
@@ -130,7 +137,7 @@ class StudentHomeFragment : Fragment() {
         setOthersQuestionRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
-        setEventAdapter()
+        setEventRecyclerView()
     }
 
     private fun setTeacherFollowingRecyclerView() {
@@ -174,7 +181,7 @@ class StudentHomeFragment : Fragment() {
 //        }
     }
 
-    private fun setEventAdapter() {
+    private fun setEventRecyclerView() {
         eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
@@ -183,13 +190,65 @@ class StudentHomeFragment : Fragment() {
             }
             startActivity(intent)
         }
+
         PagerSnapHelper().attachToRecyclerView(binding.rvEvent)
 
         binding.rvEvent.apply {
             adapter = eventAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setEventButton()
         }
+
+        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
+    }
+
+    private fun setEventButton() {
+        binding.rvEvent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    resetEventButton()
+                    val pos =
+                        (binding.rvEvent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    setFocusedToEventButtonAt(pos)
+                }
+            }
+        })
+    }
+
+    private fun resetEventButton() {
+        binding.containerEventBtn.children.forEach { child ->
+            child.layoutParams = LinearLayout.LayoutParams(
+                toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext()),
+                toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+            ).apply {
+                marginStart = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                marginEnd = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+            }
+        }
+    }
+
+    private fun setFocusedToEventButtonAt(pos: Int) {
+        binding.containerEventBtn.getChildAt(pos)?.let {
+            it.layoutParams = LinearLayout.LayoutParams(
+                toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext()),
+                toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+            ).apply {
+                marginStart = toPx(2, requireContext())
+                marginEnd = toPx(2, requireContext())
+            }
+        }
+    }
+
+    /**
+     * 이벤트 배너가 중앙에 오도록 좌우 패딩을 조정
+     */
+    private fun setHorizontalPaddingTo(rv: RecyclerView, viewWidthDP: Int) {
+        val displayWidth = resources.displayMetrics.widthPixels
+        val viewWidthPx = toPx(viewWidthDP, requireContext())
+        val padding = (displayWidth - viewWidthPx) / 2
+        rv.setPadding(padding, 0, padding, 0)
     }
 
     private fun setMoreTeacherBtn() {
@@ -368,11 +427,38 @@ class StudentHomeFragment : Fragment() {
                 eventAdapter.setItems(it)
                 eventAdapter.notifyDataSetChanged()
             }
+            it.events?.let {
+                initEventButton(it.size)
+            }
+        }
+    }
+
+    private fun initEventButton(numEvent: Int) {
+        repeat(numEvent) {
+            binding.containerEventBtn.addView(
+                AppCompatButton(requireContext()).apply {
+                    val size = if (it == 0) {
+                        toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                    } else {
+                        toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                    }
+                    layoutParams = LinearLayout.LayoutParams(size, size).apply {
+                        marginStart = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                        marginEnd = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                    }
+                    setBackgroundResource(R.drawable.bg_radius_100_primary_blue)
+                    stateListAnimator = null
+                }
+            )
         }
     }
 
     companion object {
-        private val QUESTION_UPLOAD_RESULT = 1001
-        val CLASSROOM_END_RESULT = 1002
+        private const val QUESTION_UPLOAD_RESULT = 1001
+        const val CLASSROOM_END_RESULT = 1002
+        private const val EVENT_ITEM_WIDTH = 360
+        private const val FOCUSED_EVENT_BUTTON_SIZE = 12
+        private const val NORMAL_EVENT_BUTTON_SIZE = 9
+        private const val EVENT_BUTTON_SIZE_MARGIN = 6
     }
 }

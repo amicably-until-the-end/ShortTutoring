@@ -11,7 +11,7 @@ import org.softwaremaestro.domain.event.entity.EventVO
 import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.presenter.databinding.ItemEventBinding
 
-class EventAdapter(private val onClick: (String) -> Unit) :
+class EventAdapter(private val onItemClick: (String) -> Unit) :
     RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     private var items: EventsVO = EventsVO(0, emptyList())
@@ -46,7 +46,7 @@ class EventAdapter(private val onClick: (String) -> Unit) :
                 )
                 .into(binding.ivEvent)
             binding.ivEvent.setOnClickListener {
-                item.url?.let { onClick(it) }
+                item.url?.let { onItemClick(it) }
             }
         }
     }
