@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.softwaremaestro.shorttutoring">
 
+    <supports-screens android:requiresSmallestWidthDp="800" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -19,6 +21,7 @@
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
 
     <application
         android:name=".ShortTutoringApplication"
