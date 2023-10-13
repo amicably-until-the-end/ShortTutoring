@@ -31,5 +31,16 @@
         android:text="고등학교"
         android:textColor="@color/black" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_dont_know"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_radius_18_background_grey"
+        android:fontFamily="@font/pretendard_medium"
+        android:gravity="center"
+        android:stateListAnimator="@null"
+        android:text="모르겠어요"
+        android:textColor="@color/black" />
 
 </LinearLayout>

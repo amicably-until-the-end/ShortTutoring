@@ -93,7 +93,13 @@ class QuestionNormalFormFragment : Fragment() {
         dialogSchoolLevel = DialogSchoolLevel {
             viewModel._school.value = it
             initSchoolSubjectDialog(it)
-            dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+            if (it == "모르겠어요") {
+                viewModel._subject.postValue(" ")
+                binding.containerSubject.visibility = View.GONE
+            } else {
+                dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+                binding.containerSubject.visibility = View.VISIBLE
+            }
         }
     }
 
