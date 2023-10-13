@@ -2,10 +2,12 @@ package org.softwaremaestro.presenter.util.widget
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogNumberPickerBinding
@@ -67,6 +69,14 @@ class NumberPickerBottomDialog(private val onReturnClick: ((Int) -> Unit)) :
         binding.btnReturn.setOnClickListener {
             onReturnClick(binding.npDuration.value * STEP + MIN_VALUE)
             dismiss()
+        }
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            super.show(manager, tag)
+        } catch (e: IllegalStateException) {
+            Log.w("NumberPickerBottomDialog", "Exception", e)
         }
     }
 

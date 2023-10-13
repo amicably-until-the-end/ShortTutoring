@@ -408,6 +408,7 @@ abstract class ChatFragment : Fragment() {
             setSelectedRoomId(null)
             clearChatRoomState()
             setRoomListToSelected()
+            isNormalQuestionTab = false
             it.background = requireContext().getDrawable(R.drawable.bg_radius_5_white)
             binding.rbNormalQuestion.background =
                 requireContext().getDrawable(R.drawable.bg_radius_10_transparent)
@@ -416,6 +417,7 @@ abstract class ChatFragment : Fragment() {
             setSelectedRoomId(null)
             clearChatRoomState()
             setRoomListToNormal()
+            isNormalQuestionTab = true
             it.background = requireContext().getDrawable(R.drawable.bg_radius_5_white)
             binding.rbSelectedQuestion.background =
                 requireContext().getDrawable(R.drawable.bg_radius_10_transparent)
@@ -463,12 +465,14 @@ abstract class ChatFragment : Fragment() {
      */
 
     private fun focusChatRoom(chattingId: String) {
-        val list = mutableListOf<List<ChatRoomVO>?>(
-            chatViewModel.reservedSelectedChatRoomList.value?._data,
-            chatViewModel.reservedNormalChatRoomList.value?._data,
-            chatViewModel.proposedSelectedChatRoomList.value?._data,
-            chatViewModel.proposedNormalChatRoomList.value?._data,
+        val liveDatas = mutableListOf(
+            chatViewModel.reservedSelectedChatRoomList,
+            chatViewModel.reservedNormalChatRoomList,
+            chatViewModel.proposedSelectedChatRoomList,
+            chatViewModel.proposedNormalChatRoomList,
         )
+        val list = liveDatas.mapNotNull { it.value?._data }.toMutableList()
+
         chatViewModel.proposedNormalChatRoomList.value?._data?.forEach {
             it.teachers?.forEach { room ->
                 list.add(listOf(room))
@@ -476,7 +480,8 @@ abstract class ChatFragment : Fragment() {
         }
         list.forEach { rooms ->
 
-            rooms?.find { it.id == chattingId }?.let {
+            rooms.find { it.id == chattingId }?.let {
+                Log.d("checkDeepLinkArgs", "find ${it}")
                 if (it.isSelect) {
                     toggleQuestionType(true)
                 } else {
