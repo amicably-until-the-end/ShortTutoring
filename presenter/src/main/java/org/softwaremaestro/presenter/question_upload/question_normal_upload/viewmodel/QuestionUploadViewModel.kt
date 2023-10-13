@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.question_upload.question_normal_upload.vie
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +23,6 @@ import javax.inject.Inject
 class QuestionUploadViewModel @Inject constructor(private val questionUploadUseCase: QuestionUploadUseCase) :
     ViewModel() {
 
-
     private val _questionUploadState: MutableLiveData<UIState<QuestionUploadResultVO>> =
         MutableLiveData()
     val questionUploadState: LiveData<UIState<QuestionUploadResultVO>> get() = _questionUploadState
@@ -35,6 +35,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
         MutableLiveData(mutableListOf())
     val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData()
     val _imagesBase64: MutableLiveData<List<String>?> = MutableLiveData()
+    private var _inputProper = MediatorLiveData<Boolean>()
 
 
     val description: LiveData<String?> get() = _description
@@ -44,10 +45,28 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val hopeTutoringTime: LiveData<MutableList<SpecificTime>?> get() = _hopeTutoringTime
     val images: LiveData<List<Bitmap>?> get() = _images
     val imagesBase64: LiveData<List<String>?> get() = _imagesBase64
+    val inputProper: MediatorLiveData<Boolean> get() = _inputProper
 
+    val inputs = listOf(
+        _description, _school, _subject, _imagesBase64, _hopeTutoringTime
+    )
 
     init {
         _images.postValue(listOf())
+
+        with(_inputProper) {
+            val allOfInputsNotNull = {
+                !description.value.isNullOrEmpty()
+                        && !school.value.isNullOrEmpty()
+                        && !subject.value.isNullOrEmpty()
+                        && !imagesBase64.value.isNullOrEmpty()
+                        && !hopeTutoringTime.value.isNullOrEmpty()
+            }
+
+            inputs.forEach {
+                addSource(it) { postValue(allOfInputsNotNull()) }
+            }
+        }
     }
 
     fun uploadQuestion(questionUploadVO: QuestionUploadVO) {
