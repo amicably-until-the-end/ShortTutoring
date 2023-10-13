@@ -33,7 +33,6 @@ import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 
 
@@ -54,6 +53,11 @@ class QuestionNormalFormFragment : Fragment() {
 
 
     private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
+
+    // 질문 업로드 시간동안 분이 달라지는 경우를 방지하기 위해
+    // now의 값을 프래그먼트 생성 시점의 시간으로 고정
+    private val now = LocalDateTime.now()
+    private val nowTime = TimePickerBottomDialog {}.SpecificTime(now.hour, now.minute)
 
 
     override fun onCreateView(
@@ -151,19 +155,32 @@ class QuestionNormalFormFragment : Fragment() {
     }
 
     private fun setDesiredTimeRecyclerView() {
-        var currentTime = System.currentTimeMillis()
-        var hour: Int = SimpleDateFormat("HH").format(currentTime).toInt()
-        var time: Int = SimpleDateFormat("mm").format(currentTime).toInt()
-        timeSelectAdapter = TimeSelectAdapter {
-            val picker = TimePickerBottomDialog {
-                timeSelectAdapter?.items?.add(it)
-                checkAndEnableSubjectBtn()
-                timeSelectAdapter?.notifyDataSetChanged()
-            }.apply {
-                setTitle("희망 수업 시간을 선택해주세요")
+        timeSelectAdapter = TimeSelectAdapter(
+            onAddClick = {
+                val items = viewModel.hopeTutoringTime.value ?: return@TimeSelectAdapter
+                if (items.size < 3) {
+                    val picker = TimePickerBottomDialog { time ->
+                        viewModel.addHopeTutoringTime(time) {
+                            Toast.makeText(requireContext(), "이미 추가된 시간입니다", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        checkAndEnableSubjectBtn()
+                    }.apply {
+                        setTitle("희망 수업 시간을 선택해주세요")
+                    }
+                    picker.show(parentFragmentManager, "timePicker")
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            onViewClick = {
+                viewModel.removeHopeTutoringTime(it)
             }
-            picker.show(parentFragmentManager, "timePicker")
-        }
+        )
 
         binding.rvDesiredTime.apply {
             adapter = timeSelectAdapter
@@ -175,8 +192,25 @@ class QuestionNormalFormFragment : Fragment() {
     }
 
     private fun setAnswerNowToggleBtn() {
-        binding.toggleAnswerNow.setOnClickListener {
-            checkAndEnableSubjectBtn()
+        val times = viewModel.hopeTutoringTime.value ?: return
+        binding.toggleAnswerNow.setOnCheckedChangeListener { btn, checked ->
+            if (checked) {
+                if (times.size >= 3) {
+                    Toast.makeText(
+                        requireContext(),
+                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    btn.isChecked = false
+                } else {
+                    viewModel.addHopeTutoringTime(nowTime) {
+                        Toast.makeText(requireContext(), "이미 추가된 시간입니다", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } else {
+                viewModel.removeHopeTutoringTime(nowTime)
+            }
         }
     }
 
@@ -236,12 +270,26 @@ class QuestionNormalFormFragment : Fragment() {
         checkAndEnableSubjectBtn()
     }
 
+    private fun observeHopeTutoringTime() {
+        viewModel.hopeTutoringTime.observe(viewLifecycleOwner) { mTimes ->
+            val adapter = timeSelectAdapter ?: return@observe
+            val times = mTimes ?: return@observe
+            adapter.items = times.map { time ->
+                TimePickerBottomDialog {}.SpecificTime(time.hour, time.minute)
+            }.toMutableList()
+            adapter.notifyDataSetChanged()
+
+            if (!times.contains(nowTime)) binding.toggleAnswerNow.isChecked = false
+        }
+    }
+
 
     private fun setObserver() {
         observeImages()
         observeSchoolLevel()
         observeSubject()
         observeQuestionId()
+        observeHopeTutoringTime()
     }
 
     private fun navigateToCamera() {
@@ -255,13 +303,6 @@ class QuestionNormalFormFragment : Fragment() {
         binding.btnSubmit.apply {
             setOnClickListener {
                 if (isAllFieldsEntered()) {
-                    val hopeTutoringTime = mutableListOf<LocalDateTime>()
-                    if (binding.toggleAnswerNow.isChecked) {
-                        hopeTutoringTime.add(LocalDateTime.now())
-                    }
-                    hopeTutoringTime.addAll(timeSelectAdapter!!.items.map {
-                        LocalDateTime.now().withHour(it.hour).withMinute(it.minute)
-                    })
                     //버튼 여러번 눌러지는 거 방지
                     val questionUploadVO = QuestionUploadVO(
                         images = viewModel.imagesBase64.value!!,
@@ -269,7 +310,7 @@ class QuestionNormalFormFragment : Fragment() {
                         schoolLevel = binding.tvSchoolSelected.text.toString(),
                         schoolSubject = binding.tvSubjectSelected.text.toString(),
                         hopeImmediate = binding.toggleAnswerNow.isChecked,
-                        hopeTutoringTime = hopeTutoringTime,
+                        hopeTutoringTime = timeSelectAdapter!!.items.map { it.toLocalDateTime() },
                         mainImageIndex = 0
                     )
                     viewModel.uploadQuestion(questionUploadVO)

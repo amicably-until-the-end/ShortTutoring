@@ -14,6 +14,7 @@ import org.softwaremaestro.domain.question_upload.entity.QuestionUploadResultVO
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.domain.question_upload.usecase.QuestionUploadUseCase
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog.SpecificTime
 import javax.inject.Inject
 
 
@@ -30,6 +31,8 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val _school: MutableLiveData<String?> = MutableLiveData()
     val _subject: MutableLiveData<String?> = MutableLiveData()
     val _difficulty: MutableLiveData<String?> = MutableLiveData()
+    private val _hopeTutoringTime: MutableLiveData<MutableList<SpecificTime>?> =
+        MutableLiveData(mutableListOf())
     val _images: MutableLiveData<List<Bitmap>?> = MutableLiveData()
     val _imagesBase64: MutableLiveData<List<String>?> = MutableLiveData()
 
@@ -38,6 +41,7 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val school: LiveData<String?> get() = _school
     val subject: LiveData<String?> get() = _subject
     val difficulty: LiveData<String?> get() = _difficulty
+    val hopeTutoringTime: LiveData<MutableList<SpecificTime>?> get() = _hopeTutoringTime
     val images: LiveData<List<Bitmap>?> get() = _images
     val imagesBase64: LiveData<List<String>?> get() = _imagesBase64
 
@@ -70,4 +74,19 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
         }
     }
 
+    fun addHopeTutoringTime(time: SpecificTime, onDuplicate: () -> Unit) {
+        val times = _hopeTutoringTime.value ?: return
+        if (times.contains(time)) {
+            onDuplicate()
+        } else {
+            times.add(time)
+        }
+        _hopeTutoringTime.postValue(times)
+    }
+
+    fun removeHopeTutoringTime(time: SpecificTime) {
+        val times = _hopeTutoringTime.value ?: return
+        times.remove(time)
+        _hopeTutoringTime.postValue(times)
+    }
 }
