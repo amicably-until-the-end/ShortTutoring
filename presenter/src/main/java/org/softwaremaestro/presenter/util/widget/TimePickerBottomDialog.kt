@@ -2,11 +2,13 @@ package org.softwaremaestro.presenter.util.widget
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogTimePickerBinding
@@ -85,6 +87,13 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         }
     }
 
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            super.show(manager, tag)
+        } catch (e: IllegalStateException) {
+            Log.w("TimePickerBottomDialog", "Exception", e)
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
