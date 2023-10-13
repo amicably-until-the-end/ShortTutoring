@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
@@ -68,12 +69,6 @@ class StudentHomeFragment : Fragment() {
         setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
-
-        val displayWidth = resources.displayMetrics.heightPixels
-        val viewWidth = toPx(360, requireContext())
-        val padding = (displayWidth - viewWidth) / 2
-//        Log.d("hhcc", "${toDp(padding, requireContext())}")
-        binding.rvEvent.setPadding(toPx(300, requireContext()), 0, padding, 0)
 
         return binding.root
     }
@@ -198,6 +193,18 @@ class StudentHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
+
+        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
+    }
+
+    /**
+     * 이벤트 배너가 중앙에 오도록 좌우 패딩을 조정
+     */
+    private fun setHorizontalPaddingTo(rv: RecyclerView, viewWidthDP: Int) {
+        val displayWidth = resources.displayMetrics.widthPixels
+        val viewWidthPx = toPx(viewWidthDP, requireContext())
+        val padding = (displayWidth - viewWidthPx) / 2
+        rv.setPadding(padding, 0, padding, 0)
     }
 
     private fun setMoreTeacherBtn() {
@@ -380,7 +387,8 @@ class StudentHomeFragment : Fragment() {
     }
 
     companion object {
-        private val QUESTION_UPLOAD_RESULT = 1001
-        val CLASSROOM_END_RESULT = 1002
+        private const val QUESTION_UPLOAD_RESULT = 1001
+        const val CLASSROOM_END_RESULT = 1002
+        private const val EVENT_ITEM_WIDTH = 360
     }
 }
