@@ -260,7 +260,6 @@ class TeacherChatFragment : ChatFragment() {
                     //로딩
                     loadingDialog.show()
                     with(binding.btnChatRoomRight) {
-                        setBackgroundResource(R.drawable.bg_radius_100_background_grey)
                         isEnabled = false
                         setTextColor(resources.getColor(R.color.sub_text_grey, null))
                     }
@@ -269,13 +268,17 @@ class TeacherChatFragment : ChatFragment() {
                 is UIState.Success -> {
                     disableChatRoomBtn()
                     loadingDialog.dismiss()
+                    binding.btnChatRoomRight.isEnabled = false
                     // 채팅룸의 상태가 변경됐으므로 서버로부터 roomList를 다시 호출
                     //chatViewModel.getChatRoomList(isTeacher())
                 }
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
-                    //선생님 선택 실패
+                    with(binding.btnChatRoomRight) {
+                        isEnabled = true
+                        setTextColor(resources.getColor(R.color.white, null))
+                    }
                 }
 
                 else -> {}

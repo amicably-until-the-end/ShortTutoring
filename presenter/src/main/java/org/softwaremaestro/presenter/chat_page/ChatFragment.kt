@@ -69,6 +69,8 @@ abstract class ChatFragment : Fragment() {
 
     lateinit var loadingDialog: LoadingDialog
 
+    private var isNormalQuestionTab: Boolean = true
+
     @Inject
     lateinit var socketManager: SocketManager
 
@@ -129,6 +131,9 @@ abstract class ChatFragment : Fragment() {
         socketManager.setChatRoomId(null)
     }
 
+    /**
+     * 현재 보고있는 채팅방의 정보가 바뀌었을때 UI를 새로고침한다.
+     */
     private fun observeCurrentRoom() {
         chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
             it?.let {
@@ -144,7 +149,6 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun clearChatRoomState() {
-        Log.d("chat", "clearChatRoomState")
         currentChatRoom = null
         setMessageInputBoxVisibility()
         binding.tvChatRoomTitle.text = ""
@@ -198,7 +202,7 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun refreshProposedRoomList() {
-        if (binding.rbNormalQuestion.isChecked) {
+        if (isNormalQuestionTab) {
             chatViewModel.proposedNormalChatRoomList.value?.let {
                 when (chatViewModel.proposedNormalChatRoomList.value) {
                     is UIState.Success -> {
@@ -256,7 +260,7 @@ abstract class ChatFragment : Fragment() {
 
 
     private fun refreshReservedRoomList() {
-        if (binding.rbNormalQuestion.isChecked) {
+        if (isNormalQuestionTab) {
             chatViewModel.reservedNormalChatRoomList.value?.let {
                 when (chatViewModel.reservedNormalChatRoomList.value) {
                     is UIState.Success -> {
@@ -282,10 +286,15 @@ abstract class ChatFragment : Fragment() {
 
     abstract fun isTeacher(): Boolean
 
+    /**
+     * 변화되는 채팅 목록을 observe
+     */
     private fun observeChatRoomList() {
+
         chatViewModel.proposedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
             checkDeepLinkArgs()
+            refreshTabBadge()
         }
         chatViewModel.proposedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshProposedRoomList()
@@ -302,16 +311,44 @@ abstract class ChatFragment : Fragment() {
                 }
             }
             checkDeepLinkArgs()
+            refreshTabBadge()
         }
         chatViewModel.reservedSelectedChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
             checkDeepLinkArgs()
+            refreshTabBadge()
 
         }
         chatViewModel.reservedNormalChatRoomList.observe(viewLifecycleOwner) {
             refreshReservedRoomList()
             checkDeepLinkArgs()
+            refreshTabBadge()
 
+        }
+    }
+
+    private fun refreshTabBadge() {
+        val normalRooms = listOf(
+            chatViewModel.reservedNormalChatRoomList.value?._data,
+            chatViewModel.proposedNormalChatRoomList.value?._data,
+        )
+        val selectedRooms = listOf(
+            chatViewModel.reservedSelectedChatRoomList.value?._data,
+            chatViewModel.proposedSelectedChatRoomList.value?._data,
+        )
+        binding.tvNormalBadge.visibility = View.GONE
+        binding.tvSelectedBadge.visibility = View.GONE
+        normalRooms.forEach { rooms ->
+            rooms?.find { (it.messages ?: 0) > 0 }?.let {
+                binding.tvNormalBadge.visibility = View.VISIBLE
+                return@forEach
+            }
+        }
+        selectedRooms.forEach { rooms ->
+            rooms?.find { (it.messages ?: 0) > 0 }?.let {
+                binding.tvSelectedBadge.visibility = View.VISIBLE
+                return@forEach
+            }
         }
     }
 
@@ -367,28 +404,38 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun setQuestionTypeSelectToggle() {
-        binding.rgTutoringList.setOnCheckedChangeListener { _, checkId ->
+        binding.rbSelectedQuestion.setOnClickListener {
             setSelectedRoomId(null)
             clearChatRoomState()
-
-            when (checkId) {
-                R.id.rb_normal_question -> {
-                    setRoomListToNormal()
-                }
-
-                R.id.rb_selected_question -> {
-                    setRoomListToSelected()
-                }
-            }
+            setRoomListToSelected()
+            it.background = requireContext().getDrawable(R.drawable.bg_radius_5_white)
+            binding.rbNormalQuestion.background =
+                requireContext().getDrawable(R.drawable.bg_radius_10_transparent)
+        }
+        binding.rbNormalQuestion.setOnClickListener {
+            setSelectedRoomId(null)
+            clearChatRoomState()
+            setRoomListToNormal()
+            it.background = requireContext().getDrawable(R.drawable.bg_radius_5_white)
+            binding.rbSelectedQuestion.background =
+                requireContext().getDrawable(R.drawable.bg_radius_10_transparent)
         }
     }
 
     private fun toggleQuestionType(isSelect: Boolean) {
         if (isSelect) {
-            binding.rbSelectedQuestion.isChecked = true
+            isNormalQuestionTab = false
+            binding.rbNormalQuestion.background =
+                requireContext().getDrawable(R.drawable.bg_radius_10_transparent)
+            binding.rbSelectedQuestion.background =
+                requireContext().getDrawable(R.drawable.bg_radius_5_white)
             setRoomListToSelected()
         } else {
-            binding.rbNormalQuestion.isChecked = true
+            isNormalQuestionTab = true
+            binding.rbNormalQuestion.background =
+                requireContext().getDrawable(R.drawable.bg_radius_5_white)
+            binding.rbSelectedQuestion.background =
+                requireContext().getDrawable(R.drawable.bg_radius_10_transparent)
             setRoomListToNormal()
         }
     }
@@ -410,6 +457,10 @@ abstract class ChatFragment : Fragment() {
             chatViewModel.proposedSelectedChatRoomList.value?._data ?: emptyList()
         )
     }
+
+    /**
+     * chattingId를 가진 방으로 UI를 전환한다.
+     */
 
     private fun focusChatRoom(chattingId: String) {
         val list = mutableListOf<List<ChatRoomVO>?>(
@@ -437,6 +488,7 @@ abstract class ChatFragment : Fragment() {
                             room.questionId == it.questionId
                         }?.teachers
                     onQuestionRoomClick(teachers ?: emptyList(), it.questionId, proposedAdapter)
+                    setOfferingTeacherMode()
                 } else {
                     unSetOfferingTeacherMode()
                 }
@@ -570,6 +622,9 @@ abstract class ChatFragment : Fragment() {
     }
 
 
+    /**
+     * 학생이 일반질문에서 문제를 클릭하면 보게되는 이중탭을 보이게 한다.
+     */
     fun setOfferingTeacherMode() {
         binding.containerTutoringList.visibility = View.GONE
         binding.containerIconSideSection.visibility = View.VISIBLE
@@ -580,6 +635,9 @@ abstract class ChatFragment : Fragment() {
 
     }
 
+    /**
+     * 학생이 일반질문에서 문제를 클릭하면 보게되는 이중탭을 숨긴다.
+     */
     fun unSetOfferingTeacherMode() {
         binding.containerTutoringList.visibility = View.VISIBLE
         binding.containerIconSideSection.visibility = View.GONE
@@ -589,6 +647,10 @@ abstract class ChatFragment : Fragment() {
         }
         //resetMsgTab()
     }
+
+    /**
+     * 강의실로 이동
+     */
 
     protected fun moveToClassRoom(classroomInfoVO: ClassroomInfoVO) {
         val intent = Intent(requireContext(), ClassroomActivity::class.java)
@@ -649,7 +711,6 @@ abstract class ChatFragment : Fragment() {
 
     private val onQuestionRoomClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit =
         { teacherList, questionId, caller ->
-            Log.d("chat", "onQuestionRoomClick: $teacherList")
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             setSelectedRoomId(null)
@@ -674,6 +735,7 @@ abstract class ChatFragment : Fragment() {
         scrollMessageToBottom()
         setMessageInputBoxVisibility()
         setNoNewMessageRoom(chatRoomVO.id)
+        refreshTabBadge()
         socketManager.setChatRoomId(chatRoomVO.id)
     }
 
