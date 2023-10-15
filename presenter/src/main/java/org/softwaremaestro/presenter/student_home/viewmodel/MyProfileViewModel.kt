@@ -16,6 +16,9 @@ import javax.inject.Inject
 class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: MyProfileGetUseCase) :
     ViewModel() {
 
+    private val _following: MutableLiveData<List<String>?> = MutableLiveData()
+    val following: LiveData<List<String>?> get() = _following
+
     private val _amount: MutableLiveData<Int> = MutableLiveData()
     val amount: LiveData<Int> get() = _amount
 
@@ -27,7 +30,11 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> result.data.amount?.let { _amount.postValue(it) }
+                        is BaseResult.Success -> {
+                            result.data.amount?.let { _amount.postValue(it) }
+                            result.data.following?.let { _following.postValue(it) }
+                        }
+
                         is BaseResult.Error -> logError(
                             this@MyProfileViewModel::class.java,
                             result.toString()
