@@ -31,5 +31,9 @@ class DialogSchoolLevel(private val onSchoolClick: ((String) -> Unit)) :
             onSchoolClick("고등학교")
             dismiss()
         }
+        binding.btnDontKnow.setOnClickListener {
+            onSchoolClick("모르겠어요")
+            dismiss()
+        }
     }
 }
