@@ -8,15 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
@@ -24,6 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherHomeBinding
 import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.EventViewModel
@@ -38,6 +43,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
+import org.softwaremaestro.presenter.util.Util
 
 private const val REFRESHING_TIME_INTERVAL = 10000L
 
@@ -79,7 +85,7 @@ class TeacherHomeFragment : Fragment() {
         initWaitingSnackbar()
         initQuestionRecyclerView()
         initReviewRecyclerView()
-        initEventAdapter()
+        setEventRecyclerView()
 
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
 
@@ -198,21 +204,76 @@ class TeacherHomeFragment : Fragment() {
         }
     }
 
-    private fun initEventAdapter() {
+    private fun setEventRecyclerView() {
         eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
+                addCategory(Intent.CATEGORY_BROWSABLE)
                 data = Uri.parse(url)
             }
             startActivity(intent)
         }
+
         PagerSnapHelper().attachToRecyclerView(binding.rvEvent)
 
         binding.rvEvent.apply {
             adapter = eventAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setEventButton()
         }
+
+        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
+    }
+
+    private fun setEventButton() {
+        binding.rvEvent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    resetEventButton()
+                    val pos =
+                        (binding.rvEvent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    setFocusedToEventButtonAt(pos)
+                }
+            }
+        })
+    }
+
+    private fun resetEventButton() {
+        binding.containerEventBtn.children.forEach { child ->
+            child.layoutParams = LinearLayout.LayoutParams(
+                Util.toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext()),
+                Util.toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+            ).apply {
+                marginStart =
+                    Util.toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                marginEnd =
+                    Util.toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+            }
+        }
+    }
+
+    private fun setFocusedToEventButtonAt(pos: Int) {
+        binding.containerEventBtn.getChildAt(pos)?.let {
+            it.layoutParams = LinearLayout.LayoutParams(
+                Util.toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext()),
+                Util.toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+            ).apply {
+                marginStart = Util.toPx(2, requireContext())
+                marginEnd = Util.toPx(2, requireContext())
+            }
+        }
+    }
+
+    /**
+     * 이벤트 배너가 중앙에 오도록 좌우 패딩을 조정
+     */
+    private fun setHorizontalPaddingTo(rv: RecyclerView, viewWidthDP: Int) {
+        val displayWidth = resources.displayMetrics.widthPixels
+        val viewWidthPx = Util.toPx(viewWidthDP, requireContext())
+        val padding = (displayWidth - viewWidthPx) / 2
+        rv.setPadding(padding, 0, padding, 0)
     }
 
     private fun observe() {
@@ -262,6 +323,35 @@ class TeacherHomeFragment : Fragment() {
                 eventAdapter.setItems(it)
                 eventAdapter.notifyDataSetChanged()
             }
+            it.events?.let {
+                initEventButton(it.size)
+            }
+        }
+    }
+
+    private fun initEventButton(numEvent: Int) {
+        repeat(numEvent) {
+            binding.containerEventBtn.addView(
+                AppCompatButton(requireContext()).apply {
+                    val size = if (it == 0) {
+                        Util.toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                    } else {
+                        Util.toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                    }
+                    layoutParams = LinearLayout.LayoutParams(size, size).apply {
+                        marginStart = Util.toPx(
+                            EVENT_BUTTON_SIZE_MARGIN,
+                            requireContext()
+                        )
+                        marginEnd = Util.toPx(
+                            EVENT_BUTTON_SIZE_MARGIN,
+                            requireContext()
+                        )
+                    }
+                    setBackgroundResource(R.drawable.bg_radius_100_primary_blue)
+                    stateListAnimator = null
+                }
+            )
         }
     }
 
@@ -282,5 +372,11 @@ class TeacherHomeFragment : Fragment() {
         const val QUESTION_ID = "questionId"
         const val HOPE_TIME = "hopeTime"
         const val OFFERED_ALREADY = "offeredAlready"
+
+
+        private const val EVENT_ITEM_WIDTH = 360
+        private const val FOCUSED_EVENT_BUTTON_SIZE = 12
+        private const val NORMAL_EVENT_BUTTON_SIZE = 9
+        private const val EVENT_BUTTON_SIZE_MARGIN = 6
     }
 }
