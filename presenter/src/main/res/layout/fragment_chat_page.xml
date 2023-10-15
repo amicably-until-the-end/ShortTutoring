@@ -571,7 +571,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/container_input_box"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/bg_radius_20_white"
                         android:minHeight="40dp"
                         android:paddingVertical="4dp"
