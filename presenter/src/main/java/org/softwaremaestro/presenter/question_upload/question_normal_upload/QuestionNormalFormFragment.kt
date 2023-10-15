@@ -28,7 +28,6 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.widg
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.moveBack
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
@@ -238,8 +237,11 @@ class QuestionNormalFormFragment : Fragment() {
         viewModel.questionUploadState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
+                    with(binding.btnSubmit) {
+                        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                        setTextColor(resources.getColor(R.color.white, null))
+                    }
                     loadingDialog = LoadingDialog(requireContext())
-                    binding.btnSubmit.setEnabledAndChangeColor(false)
                     loadingDialog.show()
                 }
 
@@ -253,7 +255,10 @@ class QuestionNormalFormFragment : Fragment() {
 
                 else -> {
                     loadingDialog.dismiss()
-                    binding.btnSubmit.setEnabledAndChangeColor(true)
+                    with(binding.btnSubmit) {
+                        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                        setTextColor(resources.getColor(R.color.white, null))
+                    }
                     SimpleAlertDialog().apply {
                         title = "질문 등록에 실패했습니다"
                         description = "잠시 후 다시 시도해주세요"
@@ -308,24 +313,20 @@ class QuestionNormalFormFragment : Fragment() {
      * 제출 버튼을 클릭하면 과외 요청을 보낸다.
      */
     private fun setSubmitButton() {
-        binding.btnSubmit.apply {
-            setOnClickListener {
-                if (submitBtnEnabled) {
-                    val questionUploadVO = with(viewModel) {
-                        QuestionUploadVO(
-                            images = imagesBase64.value!!,
-                            description = description.value!!,
-                            schoolLevel = school.value!!,
-                            schoolSubject = subject.value!!,
-                            hopeImmediate = binding.toggleAnswerNow.isChecked,
-                            hopeTutoringTime = hopeTutoringTime.value!!.map { it.toLocalDateTime() },
-                            mainImageIndex = 0
-                        )
-                    }
-                    viewModel.uploadQuestion(questionUploadVO)
-                } else {
-                    alertEmptyField()
-                }
+        binding.btnSubmit.setOnClickListener {
+            if (submitBtnEnabled) {
+                val questionUploadVO = QuestionUploadVO(
+                    images = viewModel.imagesBase64.value!!,
+                    description = viewModel.description.value!!,
+                    schoolLevel = viewModel.school.value!!,
+                    schoolSubject = viewModel.subject.value!!,
+                    hopeImmediate = binding.toggleAnswerNow.isChecked,
+                    hopeTutoringTime = viewModel.hopeTutoringTime.value!!.map { it.toLocalDateTime() },
+                    mainImageIndex = 0
+                )
+                viewModel.uploadQuestion(questionUploadVO)
+            } else {
+                alertEmptyField()
             }
         }
     }

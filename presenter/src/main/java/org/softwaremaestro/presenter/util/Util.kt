@@ -131,8 +131,8 @@ fun View.increaseWidth(
 fun Button.setEnabledAndChangeColor(enabled: Boolean) {
 
     if (enabled) {
-        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
         this.isEnabled = true
+        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
         setTextColor(resources.getColor(R.color.white, null))
     } else {
         this.isEnabled = false
