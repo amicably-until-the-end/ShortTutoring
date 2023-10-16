@@ -192,11 +192,12 @@
 
                         </androidx.core.widget.NestedScrollView>
 
-                        <com.google.android.material.divider.MaterialDivider
+                        <View
                             android:id="@+id/dv_teacher"
                             android:layout_width="1dp"
                             android:layout_height="50dp"
                             android:layout_marginRight="20dp"
+                            android:background="@color/bright_grey"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toRightOf="@id/ns_teacher_following"
                             app:layout_constraintRight_toLeftOf="@id/ns_teacher_online"
@@ -412,6 +413,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:background="@color/background_light_blue"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
                     android:paddingVertical="20dp">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -419,6 +422,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false" />
+
+                    <LinearLayout
+                        android:id="@+id/container_event_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

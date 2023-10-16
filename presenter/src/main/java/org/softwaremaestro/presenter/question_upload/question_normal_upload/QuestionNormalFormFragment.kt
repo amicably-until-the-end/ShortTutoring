@@ -28,12 +28,10 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.widg
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.moveBack
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 
 
@@ -55,6 +53,13 @@ class QuestionNormalFormFragment : Fragment() {
 
     private var mathSubjects = HashMap<String, HashMap<String, HashMap<String, Int>>>()
 
+    // 질문 업로드 시간동안 분이 달라지는 경우를 방지하기 위해
+    // now의 값을 프래그먼트 생성 시점의 시간으로 고정
+    private val now = LocalDateTime.now()
+    private val nowTime = TimePickerBottomDialog {}.SpecificTime(now.hour, now.minute)
+
+    private var submitBtnEnabled = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +80,6 @@ class QuestionNormalFormFragment : Fragment() {
         setToolBar()
         setImageRecyclerView()
         setDesiredTimeRecyclerView()
-        checkAndEnableSubjectBtn()
         setSubmitButton()
         setFields()
     }
@@ -88,22 +92,19 @@ class QuestionNormalFormFragment : Fragment() {
         dialogSchoolLevel = DialogSchoolLevel {
             viewModel._school.value = it
             initSchoolSubjectDialog(it)
-            dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+            if (it == "모르겠어요") {
+                viewModel._subject.postValue(" ")
+                binding.containerSubject.visibility = View.GONE
+            } else {
+                dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+                binding.containerSubject.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun initSchoolSubjectDialog(schoolLevel: String) {
         dialogSchoolSubject = DialogSchoolSubject(schoolLevel) {
             viewModel._subject.value = it
-        }
-    }
-
-    /**
-     *  모든 내용이 입력되었으면 제출 버튼을 활성화한다
-     */
-    private fun checkAndEnableSubjectBtn() {
-        isAllFieldsEntered().let {
-            binding.btnSubmit.setEnabledAndChangeColor(it)
         }
     }
 
@@ -151,19 +152,31 @@ class QuestionNormalFormFragment : Fragment() {
     }
 
     private fun setDesiredTimeRecyclerView() {
-        var currentTime = System.currentTimeMillis()
-        var hour: Int = SimpleDateFormat("HH").format(currentTime).toInt()
-        var time: Int = SimpleDateFormat("mm").format(currentTime).toInt()
-        timeSelectAdapter = TimeSelectAdapter {
-            val picker = TimePickerBottomDialog {
-                timeSelectAdapter?.items?.add(it)
-                checkAndEnableSubjectBtn()
-                timeSelectAdapter?.notifyDataSetChanged()
-            }.apply {
-                setTitle("희망 수업 시간을 선택해주세요")
+        timeSelectAdapter = TimeSelectAdapter(
+            onAddClick = {
+                val items = viewModel.hopeTutoringTime.value ?: return@TimeSelectAdapter
+                if (items.size < 3) {
+                    val picker = TimePickerBottomDialog { time ->
+                        viewModel.addHopeTutoringTime(time) {
+                            Toast.makeText(requireContext(), "이미 추가된 시간입니다", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }.apply {
+                        setTitle("희망 수업 시간을 선택해주세요")
+                    }
+                    picker.show(parentFragmentManager, "timePicker")
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            onViewClick = {
+                viewModel.removeHopeTutoringTime(it)
             }
-            picker.show(parentFragmentManager, "timePicker")
-        }
+        )
 
         binding.rvDesiredTime.apply {
             adapter = timeSelectAdapter
@@ -175,8 +188,25 @@ class QuestionNormalFormFragment : Fragment() {
     }
 
     private fun setAnswerNowToggleBtn() {
-        binding.toggleAnswerNow.setOnClickListener {
-            checkAndEnableSubjectBtn()
+        val times = viewModel.hopeTutoringTime.value ?: return
+        binding.toggleAnswerNow.setOnCheckedChangeListener { btn, checked ->
+            if (checked) {
+                if (times.size >= 3) {
+                    Toast.makeText(
+                        requireContext(),
+                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    btn.isChecked = false
+                } else {
+                    viewModel.addHopeTutoringTime(nowTime) {
+                        Toast.makeText(requireContext(), "이미 추가된 시간입니다", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } else {
+                viewModel.removeHopeTutoringTime(nowTime)
+            }
         }
     }
 
@@ -186,7 +216,6 @@ class QuestionNormalFormFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 viewModel._imagesBase64.postValue(it.map { it.toBase64() })
             }
-            checkAndEnableSubjectBtn()
         }
     }
 
@@ -194,14 +223,12 @@ class QuestionNormalFormFragment : Fragment() {
     private fun observeSchoolLevel() {
         viewModel.school.observe(viewLifecycleOwner) {
             binding.tvSchoolSelected.text = it
-            checkAndEnableSubjectBtn()
         }
     }
 
     private fun observeSubject() {
         viewModel.subject.observe(viewLifecycleOwner) {
             binding.tvSubjectSelected.text = it
-            checkAndEnableSubjectBtn()
         }
     }
 
@@ -210,8 +237,11 @@ class QuestionNormalFormFragment : Fragment() {
         viewModel.questionUploadState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
+                    with(binding.btnSubmit) {
+                        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                        setTextColor(resources.getColor(R.color.white, null))
+                    }
                     loadingDialog = LoadingDialog(requireContext())
-                    binding.btnSubmit.setEnabledAndChangeColor(false)
                     loadingDialog.show()
                 }
 
@@ -225,7 +255,10 @@ class QuestionNormalFormFragment : Fragment() {
 
                 else -> {
                     loadingDialog.dismiss()
-                    binding.btnSubmit.setEnabledAndChangeColor(true)
+                    with(binding.btnSubmit) {
+                        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                        setTextColor(resources.getColor(R.color.white, null))
+                    }
                     SimpleAlertDialog().apply {
                         title = "질문 등록에 실패했습니다"
                         description = "잠시 후 다시 시도해주세요"
@@ -233,15 +266,43 @@ class QuestionNormalFormFragment : Fragment() {
                 }
             }
         }
-        checkAndEnableSubjectBtn()
     }
 
+    private fun observeHopeTutoringTime() {
+        viewModel.hopeTutoringTime.observe(viewLifecycleOwner) { mTimes ->
+            val adapter = timeSelectAdapter ?: return@observe
+            val times = mTimes ?: return@observe
+            adapter.items = times.map { time ->
+                TimePickerBottomDialog {}.SpecificTime(time.hour, time.minute)
+            }.toMutableList()
+            adapter.notifyDataSetChanged()
+
+            if (!times.contains(nowTime)) binding.toggleAnswerNow.isChecked = false
+        }
+    }
+
+    private fun observeInputProper() {
+        viewModel.inputProper.observe(viewLifecycleOwner) { proper ->
+            submitBtnEnabled = proper
+            with(binding.btnSubmit) {
+                if (proper) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
+        }
+    }
 
     private fun setObserver() {
         observeImages()
         observeSchoolLevel()
         observeSubject()
         observeQuestionId()
+        observeHopeTutoringTime()
+        observeInputProper()
     }
 
     private fun navigateToCamera() {
@@ -252,30 +313,20 @@ class QuestionNormalFormFragment : Fragment() {
      * 제출 버튼을 클릭하면 과외 요청을 보낸다.
      */
     private fun setSubmitButton() {
-        binding.btnSubmit.apply {
-            setOnClickListener {
-                if (isAllFieldsEntered()) {
-                    val hopeTutoringTime = mutableListOf<LocalDateTime>()
-                    if (binding.toggleAnswerNow.isChecked) {
-                        hopeTutoringTime.add(LocalDateTime.now())
-                    }
-                    hopeTutoringTime.addAll(timeSelectAdapter!!.items.map {
-                        LocalDateTime.now().withHour(it.hour).withMinute(it.minute)
-                    })
-                    //버튼 여러번 눌러지는 거 방지
-                    val questionUploadVO = QuestionUploadVO(
-                        images = viewModel.imagesBase64.value!!,
-                        description = binding.etQuestionDesc.text.toString(),
-                        schoolLevel = binding.tvSchoolSelected.text.toString(),
-                        schoolSubject = binding.tvSubjectSelected.text.toString(),
-                        hopeImmediate = binding.toggleAnswerNow.isChecked,
-                        hopeTutoringTime = hopeTutoringTime,
-                        mainImageIndex = 0
-                    )
-                    viewModel.uploadQuestion(questionUploadVO)
-                } else {
-                    alertEmptyField()
-                }
+        binding.btnSubmit.setOnClickListener {
+            if (submitBtnEnabled) {
+                val questionUploadVO = QuestionUploadVO(
+                    images = viewModel.imagesBase64.value!!,
+                    description = viewModel.description.value!!,
+                    schoolLevel = viewModel.school.value!!,
+                    schoolSubject = viewModel.subject.value!!,
+                    hopeImmediate = binding.toggleAnswerNow.isChecked,
+                    hopeTutoringTime = viewModel.hopeTutoringTime.value!!.map { it.toLocalDateTime() },
+                    mainImageIndex = 0
+                )
+                viewModel.uploadQuestion(questionUploadVO)
+            } else {
+                alertEmptyField()
             }
         }
     }
@@ -296,15 +347,6 @@ class QuestionNormalFormFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun isAllFieldsEntered(): Boolean {
-        with(binding) {
-            return (viewModel.images.value != null &&
-                    etQuestionDesc.text != null && tvSchoolSelected.text != null
-                    && tvSubjectSelected.text != null && (
-                    toggleAnswerNow.isChecked || !timeSelectAdapter?.items.isNullOrEmpty()))
         }
     }
 

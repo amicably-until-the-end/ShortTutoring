@@ -88,13 +88,20 @@ class QuestionSelectedFormFragment : Fragment() {
         dialogSchoolLevel = DialogSchoolLevel {
             questionSelectedUploadViewModel.setSchoolLevel(it)
             initSchoolSubjectDialog(it)
-            dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+            if (it == "모르겠어요") {
+                questionSelectedUploadViewModel.setSchoolSubject(" ")
+                binding.containerSubject.visibility = View.GONE
+            } else {
+                dialogSchoolSubject.show(parentFragmentManager, "dialogSchoolSubject")
+                binding.containerSubject.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun initSchoolSubjectDialog(schoolLevel: String) {
         dialogSchoolSubject = DialogSchoolSubject(schoolLevel) {
-            questionSelectedUploadViewModel.setSchoolSubject(it)
+            val subject = if (it == "모르겠어요") " " else it
+            questionSelectedUploadViewModel.setSchoolSubject(subject)
         }
     }
 

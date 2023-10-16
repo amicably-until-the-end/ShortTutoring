@@ -549,7 +549,7 @@ class ClassroomFragment : Fragment() {
     }
 
     private fun setUpFinishButton() {
-        binding.btnToolbarBack.setOnClickListener {
+        binding.btnFinishClass.setOnClickListener {
             showFinishClassDialog()
         }
     }

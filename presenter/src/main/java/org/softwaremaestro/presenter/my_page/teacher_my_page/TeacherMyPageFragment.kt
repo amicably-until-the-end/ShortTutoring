@@ -1,7 +1,7 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
+import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
@@ -58,6 +59,8 @@ class TeacherMyPageFragment : Fragment() {
         setTvReview()
         setTvClip()
         setFollowerMenu()
+        setServiceCenterMenu()
+        setLogOutContainer()
 
         observe()
     }
@@ -209,6 +212,30 @@ class TeacherMyPageFragment : Fragment() {
     private fun setFollowerMenu() {
         binding.containerFollower.setOnClickListener {
             startActivity(Intent(requireActivity(), FollowerActivity::class.java))
+        }
+    }
+
+    private fun setServiceCenterMenu() {
+        binding.containerServiceCenter.setOnClickListener {
+            val intent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(SERVICE_CENTER_URL)
+            }
+            startActivity(intent)
+        }
+    }
+
+    companion object {
+        private const val SERVICE_CENTER_URL = "https://www.form.short-tutoring.com"
+    }
+
+    private fun setLogOutContainer() {
+        binding.containerLogOut.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
     }
 }

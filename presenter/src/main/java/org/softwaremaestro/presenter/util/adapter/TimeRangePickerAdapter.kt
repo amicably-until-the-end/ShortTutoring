@@ -15,8 +15,8 @@ class TimeRangePickerAdapter(
 
     private lateinit var items: MutableList<TimeItem>
 
-    private var rangeStart: TimeItem? = null
-    private var rangeEnd: TimeItem? = null
+    var rangeStart: TimeItem? = null
+    var rangeEnd: TimeItem? = null
 
 
     private fun initializeDateItem() {

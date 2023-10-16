@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.databinding.ItemDesiredClassTimeBinding
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
 
-class TimeSelectAdapter(private val onAddClick: () -> Unit) :
+class TimeSelectAdapter(
+    private val onAddClick: () -> Unit,
+    private val onViewClick: (TimePickerBottomDialog.SpecificTime) -> Unit
+) :
     RecyclerView.Adapter<TimeSelectAdapter.ViewHolder>() {
 
     var items: MutableList<TimePickerBottomDialog.SpecificTime> = mutableListOf()
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -41,8 +43,7 @@ class TimeSelectAdapter(private val onAddClick: () -> Unit) :
                 binding.tvTime.text = item.toString()
                 binding.tvAddTime.visibility = ViewGroup.GONE
                 binding.root.setOnClickListener {
-                    items.remove(item)
-                    notifyDataSetChanged()
+                    onViewClick(item)
                 }
             } else {
                 binding.tvTime.text = ""

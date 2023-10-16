@@ -2,14 +2,18 @@ package org.softwaremaestro.presenter.util.widget
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogTimePickerBinding
 import org.softwaremaestro.presenter.util.nowInKorea
+import java.time.LocalDateTime
 
 class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)) :
     BottomSheetDialogFragment() {
@@ -34,6 +38,18 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     }
 
     private fun setTimePicker() {
+        val now = LocalDateTime.now()
+        binding.timePicker.setOnTimeChangedListener { tp, hour, minute ->
+            val isTimeValid = now.hour < hour || (now.hour == hour && now.minute <= minute)
+            if (!isTimeValid) {
+                Toast.makeText(
+                    context,
+                    "${now.hour}:${now.minute} 이후의 시간을 설정해주세요",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         binding.timePicker.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
     }
 
@@ -71,6 +87,13 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         }
     }
 
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            super.show(manager, tag)
+        } catch (e: IllegalStateException) {
+            Log.w("TimePickerBottomDialog", "Exception", e)
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -86,6 +109,14 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
     ) {
         override fun toString(): String {
             return "${hour}시 ${minute}분"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return other is SpecificTime && hour == other.hour && minute == other.minute
+        }
+
+        fun toLocalDateTime(): LocalDateTime {
+            return LocalDateTime.now().withHour(hour).withMinute(minute)
         }
     }
 

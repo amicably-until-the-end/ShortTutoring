@@ -2,9 +2,11 @@ package org.softwaremaestro.presenter.util.widget
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogDatePickerBinding
@@ -63,6 +65,15 @@ class DatePickerBottomDialog(private val onReturnClick: ((LocalDate) -> Unit)) :
                 onReturnClick(LocalDate.of(year, month + 1, dayOfMonth))
             }
             dismiss()
+        }
+    }
+
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            super.show(manager, tag)
+        } catch (e: IllegalStateException) {
+            Log.w("DatePickerBottomDialog", "Exception", e)
         }
     }
 
