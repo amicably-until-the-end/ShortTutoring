@@ -49,6 +49,8 @@ class StudentMyPageFragment : Fragment() {
 
         setBtnEditTeacherImg()
         setFollowingMenu()
+        setServiceCenterMenu()
+        setLogOutContainer()
 
         observe()
     }
