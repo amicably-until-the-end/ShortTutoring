@@ -1,5 +1,6 @@
 package org.softwaremaestro.presenter.student_home.widget
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,12 +24,14 @@ class TeacherProfileDialog(
     private val onUnfollow: (String) -> Unit,
     private val onFollow: (String) -> Unit,
     private val onReserve: (String) -> Unit,
+    private val onDismiss: () -> Unit,
 ) :
     BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogTeacherProfileBinding
-    private var mItem: TeacherVO? = null
+    private lateinit var mItem: TeacherVO
     private var following = false
+    private var followerCnt = 0
     private lateinit var unfollowDialog: DetailAlertDialog
 
     override fun onCreateView(
@@ -49,72 +52,83 @@ class TeacherProfileDialog(
         bind()
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss()
+    }
+
     /**
     this method initializes the property mItem.
     this MUST be called when creating this dialog.
      */
     fun setItem(item: TeacherVO) {
-        Log.d("TeacherProfileDialog", "setItem $item ${SocketManager.userId}")
-        if (SocketManager.userId == null || item.followers == null) return
+        SocketManager.userId ?: return
+        item.followers ?: return
         mItem = item
-        following = SocketManager.userId!! in item.followers!!
+        following = SocketManager.userId in item.followers!!
+        followerCnt = item.followers!!.size
     }
 
     private fun bind() {
-        if (mItem == null) {
-            logError(this::class.java, "mItem is null in bind()")
-            dismiss()
-            Toast.makeText(requireContext(), "선생님 정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show()
-            return
-        }
         with(binding) {
-            Glide.with(root.context).load(mItem?.profileUrl).centerCrop()
+            Glide.with(root.context).load(mItem.profileUrl).centerCrop()
                 .into(ivTeacherImg)
-            mItem!!.nickname?.let { tvTeacherName.text = it }
-            tvTeacherUniv.text = "${mItem!!.univ} ${mItem?.major}"
-            mItem!!.bio?.let { tvTeacherBio.text = it }
-            mItem!!.rating?.let { tvTeacherRating.text = it.toRating() }
-            btnFollow.text = "찜한 학생 ${mItem!!.followers?.size ?: 0}"
-            tvReservationCnt.text = "${mItem!!.reservationCnt ?: 0}"
+            mItem.nickname?.let { tvTeacherName.text = it }
+            tvTeacherUniv.text = "${mItem.univ} ${mItem.major}"
+            mItem.bio?.let { tvTeacherBio.text = it }
+            mItem.rating?.let { tvTeacherRating.text = it.toRating() }
+            btnFollow.text = "찜한 학생 ${followerCnt}"
+            tvReservationCnt.text = "${mItem.reservationCnt ?: 0}"
         }
     }
 
     private fun setProfileContainer() {
         binding.containerContent.setOnClickListener {
-            mItem?.teacherId?.let { onProfileClick(it) }
+            mItem.teacherId?.let { onProfileClick(it) }
         }
     }
 
     private fun setFollowBtn() {
-        mItem?.apply {
-            if (teacherId != null) {
-                binding.btnFollow.setOnClickListener {
-                    if (following) {
-                        unfollowDialog.show(parentFragmentManager, "unfollowDialog")
-                    } else {
-                        following = true
-                        onFollow(teacherId!!)
-                        with(binding.btnFollow) {
-                            setBackgroundResource(R.drawable.bg_radius_5_background_light_blue)
-                            setTextColor(resources.getColor(R.color.primary_blue, null))
-                            mItem?.followers?.let { text = "찜한 학생 ${it.size + 1}" }
-                        }
-                    }
-                }
+        mItem.teacherId ?: run {
+            Toast.makeText(requireContext(), "선생님의 아이디가 확인되지 않습니다", Toast.LENGTH_SHORT)
+            logError(
+                this@TeacherProfileDialog::class.java,
+                "teacherId == null in setFollowBtn()"
+            )
+        }
+
+        if (following) {
+            with(binding.btnFollow) {
+                Log.d("hhcc", "following and ui changed")
+                setBackgroundResource(R.drawable.bg_radius_5_background_light_blue)
+                setTextColor(resources.getColor(R.color.primary_blue, null))
+            }
+        }
+
+        binding.btnFollow.setOnClickListener {
+            if (following) {
+                unfollowDialog.show(parentFragmentManager, "unfollowDialog")
             } else {
-                // 에러 처리
-                Toast.makeText(requireContext(), "선생님의 아이디가 확인되지 않습니다", Toast.LENGTH_SHORT)
-                logError(
-                    this@TeacherProfileDialog::class.java,
-                    "teacherId == null in setFollowBtn()"
-                )
+                mItem.teacherId ?: run {
+                    Toast.makeText(requireContext(), "선생님 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                following = true
+                onFollow(mItem.teacherId!!)
+                with(binding.btnFollow) {
+                    setBackgroundResource(R.drawable.bg_radius_5_background_light_blue)
+                    setTextColor(resources.getColor(R.color.primary_blue, null))
+                    followerCnt++
+                    mItem.followers?.let { text = "찜한 학생 ${followerCnt}" }
+                }
             }
         }
     }
 
     private fun setReserveBtn() {
         binding.containerReserve.setOnClickListener {
-            mItem?.teacherId?.let { onReserve(it) }
+            mItem.teacherId?.let { onReserve(it) }
         }
     }
 
@@ -123,12 +137,13 @@ class TeacherProfileDialog(
             title = "선생님 찜하기를 취소할까요?",
             description = "선생님에게 예약 질문을 할 수 없게 됩니다"
         ) {
-            onUnfollow(mItem?.teacherId ?: "undefined")
+            onUnfollow(mItem.teacherId ?: "undefined")
             following = false
             with(binding.btnFollow) {
                 setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
                 setTextColor(resources.getColor(R.color.white, null))
-                mItem?.followers?.let { text = "찜한 학생 ${it.size}" }
+                followerCnt--
+                mItem.followers?.let { text = "찜한 학생 ${followerCnt}" }
             }
         }
     }

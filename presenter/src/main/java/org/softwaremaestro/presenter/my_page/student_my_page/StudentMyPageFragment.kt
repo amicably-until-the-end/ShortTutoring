@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.my_page.student_my_page
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +49,6 @@ class StudentMyPageFragment : Fragment() {
 
         setBtnEditTeacherImg()
         setFollowingMenu()
-        setLogOutContainer()
 
         observe()
     }
@@ -132,6 +132,21 @@ class StudentMyPageFragment : Fragment() {
         binding.containerFollowing.setOnClickListener {
             startActivity(Intent(requireActivity(), FollowingActivity::class.java))
         }
+    }
+
+    private fun setServiceCenterMenu() {
+        binding.containerServiceCenter.setOnClickListener {
+            val intent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(SERVICE_CENTER_URL)
+            }
+            startActivity(intent)
+        }
+    }
+
+    companion object {
+        private const val SERVICE_CENTER_URL = "https://www.form.short-tutoring.com"
     }
 
     private fun setLogOutContainer() {

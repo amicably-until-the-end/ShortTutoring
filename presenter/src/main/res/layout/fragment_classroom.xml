@@ -16,20 +16,14 @@
         android:background="@color/background_grey"
         tools:ignore="MissingConstraints">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_toolbar_back"
-            style="@style/ToolBarBackButton"
-            tools:ignore="MissingConstraints" />
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_profile"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_marginLeft="2dp"
             app:cardCornerRadius="13dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/btn_toolbar_back"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -134,6 +128,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_report"
             app:layout_constraintTop_toTopOf="parent" />-->
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_finish_class"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/selector_grad_blue_button"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:text="수업 종료"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

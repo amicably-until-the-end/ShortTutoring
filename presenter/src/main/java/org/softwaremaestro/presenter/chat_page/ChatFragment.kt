@@ -703,6 +703,7 @@ abstract class ChatFragment : Fragment() {
         }
         offeringTeacherAdapter.setSelectedChattingRoomId(null)
         offeringTeacherAdapter.setItem(teacher.map { it.id })
+        binding.tvOfferingTeacherCount.text = "${teacher.size}"
         offeringTeacherAdapter.setRoomInfo(chatRoomVOtoMap(teacher))
         offeringTeacherAdapter.notifyDataSetChanged()
     }
