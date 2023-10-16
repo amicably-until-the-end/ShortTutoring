@@ -38,6 +38,7 @@ import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewMod
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
+import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -73,6 +74,9 @@ class StudentHomeFragment : Fragment() {
         setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
+        binding.ivLogo.setOnClickListener {
+            startActivity(Intent(requireContext(), VideoPlayerActivity::class.java))
+        }
 
         return binding.root
     }

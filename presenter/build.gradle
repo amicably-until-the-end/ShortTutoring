@@ -113,5 +113,9 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
+
+    // exo player
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
 }
 
