@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
+import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
@@ -59,6 +60,7 @@ class TeacherMyPageFragment : Fragment() {
         setTvClip()
         setFollowerMenu()
         setServiceCenterMenu()
+        setLogOutContainer()
 
         observe()
     }
@@ -226,5 +228,14 @@ class TeacherMyPageFragment : Fragment() {
 
     companion object {
         private const val SERVICE_CENTER_URL = "https://www.form.short-tutoring.com"
+    }
+
+    private fun setLogOutContainer() {
+        binding.containerLogOut.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 }
