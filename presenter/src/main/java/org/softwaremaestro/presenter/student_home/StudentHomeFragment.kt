@@ -123,6 +123,13 @@ class StudentHomeFragment : Fragment() {
                 )
 
                 dialogTeacherProfile.dismiss()
+            },
+            onDismiss = {
+                // 선생님 뷰의 followers를 갱신하기 위해 ViewModel의 메서드 호출
+                teacherOnlineViewModel.getTeacherOnlines()
+                SocketManager.userId?.let {
+                    followingViewModel.getFollowing(it)
+                }
             }
         )
     }
@@ -308,6 +315,9 @@ class StudentHomeFragment : Fragment() {
             if (it.isNotEmpty()) {
                 binding.containerMyTeacherSection.visibility = View.VISIBLE
                 binding.nsTeacherFollowing.visibility = View.VISIBLE
+                if (!teacherOnlineViewModel.teacherOnlines.value.isNullOrEmpty()) {
+                    binding.dvTeacher.visibility = View.VISIBLE
+                }
             } else {
                 binding.dvTeacher.visibility = View.GONE
                 binding.nsTeacherFollowing.visibility = View.GONE
@@ -403,10 +413,14 @@ class StudentHomeFragment : Fragment() {
         teacherOnlineViewModel.teacherOnlines.observe(viewLifecycleOwner) {
 
             teacherOnlineAdapter.setItem(it)
+            teacherOnlineAdapter.notifyDataSetChanged()
 
             if (it.isNotEmpty()) {
                 binding.containerMyTeacherSection.visibility = View.VISIBLE
                 binding.nsTeacherOnline.visibility = View.VISIBLE
+                if (!followingViewModel.following.value.isNullOrEmpty()) {
+                    binding.dvTeacher.visibility = View.VISIBLE
+                }
             } else {
                 binding.dvTeacher.visibility = View.GONE
                 binding.nsTeacherOnline.visibility = View.GONE
@@ -415,8 +429,6 @@ class StudentHomeFragment : Fragment() {
                 } else {
                     binding.containerMyTeacherSection.visibility = View.VISIBLE
                 }
-                teacherOnlineAdapter.notifyDataSetChanged()
-
             }
         }
     }

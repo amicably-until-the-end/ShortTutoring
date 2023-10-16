@@ -97,6 +97,28 @@
         app:layout_constraintLeft_toRightOf="@id/container_icon_side_section"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/sub_text_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:text="답변 가능한 선생님"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_offering_teacher_count"
+                style="@style/sub_text_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0" />
+        </LinearLayout>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_offering_empty"
             android:layout_width="match_parent"
@@ -571,7 +593,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/container_input_box"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/bg_radius_20_white"
                         android:minHeight="40dp"
                         android:paddingVertical="4dp"

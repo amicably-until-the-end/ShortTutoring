@@ -684,7 +684,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:text="고객센터"
+                        android:text="숏과외에게 바란다"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
