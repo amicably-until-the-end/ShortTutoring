@@ -159,33 +159,36 @@ class ChargeCoinSecondFragment : Fragment() {
 
     private fun observeCoinFreeReceiveState() {
         coinViewModel.coinFreeReceiveState.observe(viewLifecycleOwner) {
-            it?.let {
-                // 무료 코인 받기 성공
-                if (it) {
-                    // 코인을 업데이트하기 위해 getMyProfile() 호출
-                    myProfileViewModel.getMyProfile()
-                    SimpleAlertDialog().apply {
-                        title = "오늘의 코인을 받았습니다"
-                        description = "현재 ${myProfileViewModel.amount.value!! * 100}개의 코인을 보유하고 있어요"
-                    }.show(parentFragmentManager, "receive free coin success")
+            Log.d("hhcc", "observed")
+            it ?: return@observe
 
-                } else {
-                    SimpleAlertDialog().apply {
-                        title = "이미 오늘의 코인을 받았습니다"
-                        description = "코인은 매일 200개씩 기본 지급돼요"
-                    }.show(parentFragmentManager, "receive free coin fail")
-                }
-                // UI 업데이트
-                listOf(
-                    binding.ivRightArrow,
-                    binding.cbMyCoinAfterCharge
-                ).forEach {
-                    it.visibility = View.INVISIBLE
-                }
-                resetContainers()
-                chargeable = false
-                coinViewModel.resetCoinFreeReceiveState()
+            // 무료 코인 받기 성공
+            if (it) {
+                Log.d("hhcc", "succeed")
+                // 코인을 업데이트하기 위해 getMyProfile() 호출
+                myProfileViewModel.getMyProfile()
+                SimpleAlertDialog().apply {
+                    title = "오늘의 코인을 받았습니다"
+                    description = "현재 ${myProfileViewModel.amount.value!! * 100}개의 코인을 보유하고 있어요"
+                }.show(parentFragmentManager, "receive free coin success")
+
+            } else {
+                Log.d("hhcc", "failed")
+                SimpleAlertDialog().apply {
+                    title = "이미 오늘의 코인을 받았습니다"
+                    description = "코인은 매일 200개씩 기본 지급돼요"
+                }.show(parentFragmentManager, "receive free coin fail")
             }
+            // UI 업데이트
+            listOf(
+                binding.ivRightArrow,
+                binding.cbMyCoinAfterCharge
+            ).forEach {
+                it.visibility = View.INVISIBLE
+            }
+            resetContainers()
+            chargeable = false
+            coinViewModel.resetCoinFreeReceiveState()
         }
     }
 }
