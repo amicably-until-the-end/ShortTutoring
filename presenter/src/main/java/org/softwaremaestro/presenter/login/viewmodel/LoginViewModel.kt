@@ -150,5 +150,8 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun clearJWT() {
+        loginUseCase.clearFCMToken()
+    }
 
 }

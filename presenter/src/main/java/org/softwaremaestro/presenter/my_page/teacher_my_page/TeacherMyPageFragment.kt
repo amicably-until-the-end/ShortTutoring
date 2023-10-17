@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.login.LoginActivity
+import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
@@ -32,6 +33,7 @@ class TeacherMyPageFragment : Fragment() {
     private val lecturesViewModel: LecturesViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -232,9 +234,11 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun setLogOutContainer() {
         binding.containerLogOut.setOnClickListener {
-            val intent = Intent(activity, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val intent = Intent(activity, LoginActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            loginViewModel.clearJWT()
             startActivity(intent)
         }
     }
