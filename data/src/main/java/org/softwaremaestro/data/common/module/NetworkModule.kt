@@ -21,7 +21,7 @@ object NetworkModule {
     fun provideRetrofit(okHttp: OkHttpClient): Retrofit {
         return Retrofit.Builder().apply {
             addConverterFactory(GsonConverterFactory.create())
-            baseUrl("https://dev.short-tutoring.com/")
+            baseUrl("https://api.short-tutoring.com/")
             client(okHttp)
         }.build()
     }
