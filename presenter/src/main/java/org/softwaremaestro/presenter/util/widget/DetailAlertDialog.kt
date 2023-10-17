@@ -12,6 +12,7 @@ import org.softwaremaestro.presenter.databinding.DialogDetailAlertBinding
 class DetailAlertDialog(
     private val title: String,
     private val description: String,
+    private val confirm: String = "",
     private val onConfirm: () -> Unit,
 ) : DialogFragment() {
 
@@ -32,6 +33,7 @@ class DetailAlertDialog(
 
         binding.tvTitle.text = title
         binding.tvDesciption.text = description
+        binding.btnConfirm.text = confirm
         binding.btnConfirm.setOnClickListener {
             onConfirm()
             dismiss()

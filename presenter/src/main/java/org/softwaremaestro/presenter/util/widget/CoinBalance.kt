@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.WidgetCoinBalanceBinding
 import java.text.DecimalFormat
 
@@ -19,6 +20,15 @@ class CoinBalance(context: Context, attrs: AttributeSet?) : ConstraintLayout(con
             _coin = value
             binding.tvCoin.text = coinFormatter.format(_coin)
         }
+
+    init {
+        attrs?.let {
+            context.obtainStyledAttributes(it, R.styleable.CoinBalance).apply {
+                coin = getInt(R.styleable.CoinBalance_coin, 0)
+                recycle()
+            }
+        }
+    }
 
     companion object {
         private val coinFormatter = DecimalFormat("#,###")

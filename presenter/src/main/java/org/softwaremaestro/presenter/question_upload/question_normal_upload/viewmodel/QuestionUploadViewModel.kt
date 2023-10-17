@@ -108,4 +108,9 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
         times.remove(time)
         _hopeTutoringTime.postValue(times)
     }
+
+    fun resetInputs() {
+        inputs.forEach { it.postValue(null) }
+        _hopeTutoringTime.postValue(mutableListOf())
+    }
 }
