@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
 import org.softwaremaestro.presenter.databinding.ActivityTeacherHomeBinding
 import org.softwaremaestro.presenter.login.SplashActivity
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
@@ -23,6 +24,7 @@ class TeacherHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTeacherHomeBinding
     private lateinit var navController: NavController
     private val homeViewModel: HomeViewModel by viewModels()
+    private val chatViewModel: ChatViewModel by viewModels()
 
     @Inject
     lateinit var socketManager: SocketManager
@@ -83,7 +85,10 @@ class TeacherHomeActivity : AppCompatActivity() {
     }
 
     fun moveToChatTab(chatId: String? = null) {
-        chatId?.let { homeViewModel.chattingId = it }
+        chatId?.let {
+            homeViewModel.chattingId = it
+            chatViewModel._changedChatRoom.postValue(null)
+        }
         val item = binding.bottomNavView.menu.findItem(R.id.teacherChatFragment)
         // Return true only if the destination we've navigated to matches the MenuItem
         NavigationUI.onNavDestinationSelected(item, navController)

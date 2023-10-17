@@ -134,8 +134,10 @@ abstract class ChatFragment : Fragment() {
      * 현재 보고있는 채팅방의 정보가 바뀌었을때 UI를 새로고침한다.
      */
     private fun observeCurrentRoom() {
+        chatViewModel._currentChattingRoomVO.postValue(null)
         chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
             it?.let {
+                Log.d("current", "observeCurrentRoom: ${it}")
                 enterChatRoom(it)
             }
         }
