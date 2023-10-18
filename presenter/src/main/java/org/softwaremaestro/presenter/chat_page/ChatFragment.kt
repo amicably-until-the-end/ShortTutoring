@@ -98,7 +98,6 @@ abstract class ChatFragment : Fragment() {
         observeCurrentRoom()
         clearChatRoomState()
 
-
         return binding.root
 
     }
@@ -714,7 +713,6 @@ abstract class ChatFragment : Fragment() {
         proposedIconAdapter.notifyDataSetChanged()
     }
 
-
     private val onQuestionRoomClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit =
         { teacherList, questionId, caller ->
             setOfferingTeacherListItems(teacherList)
@@ -836,5 +834,9 @@ abstract class ChatFragment : Fragment() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val PROPOSED_QUESTION_CONTAINER_MAX_HEIGHT = 200
     }
 }
