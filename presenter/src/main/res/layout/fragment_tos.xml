@@ -170,7 +170,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:stateListAnimator="@null"
-        android:text="입력하기"
+        android:text="동의하기"
         android:textColor="@color/sub_text_grey"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

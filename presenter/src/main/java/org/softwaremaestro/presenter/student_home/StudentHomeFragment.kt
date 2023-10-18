@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
+import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
@@ -74,6 +75,9 @@ class StudentHomeFragment : Fragment() {
         setMoreTeacherBtn()
         setNofiBtn()
         setObserver()
+        binding.ivLogo.setOnClickListener {
+            startActivity(Intent(requireActivity(), LoginActivity::class.java))
+        }
 
         return binding.root
     }

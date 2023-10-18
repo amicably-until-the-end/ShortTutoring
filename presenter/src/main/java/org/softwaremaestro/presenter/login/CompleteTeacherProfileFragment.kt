@@ -117,10 +117,20 @@ class CompleteTeacherProfileFragment : Fragment() {
             if (isBtnCompleteEnabled) {
                 viewModel.registerTeacher()
             } else {
-                Toast.makeText(requireContext(), "닉네임, 한줄소개와 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
-                    .show()
+                alertEmptyField()
             }
         }
+    }
+
+    private fun alertEmptyField() {
+        val msg = if (viewModel.name.value.isNullOrEmpty()) {
+            "닉네임을 입력해주세요"
+        } else if (viewModel.bio.value.isNullOrEmpty()) {
+            "한줄 소개를 입력해주세요"
+        } else {
+            "프로필 이미지를 설정해주세요"
+        }
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun observe() {

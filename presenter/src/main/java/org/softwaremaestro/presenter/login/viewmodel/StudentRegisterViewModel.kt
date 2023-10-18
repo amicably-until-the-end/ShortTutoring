@@ -22,6 +22,19 @@ class StudentRegisterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    // ToSFragment에서 사용하는 변수
+    private val _agreeOnToS = MutableLiveData<Boolean?>()
+    val agreeOnToS: LiveData<Boolean?> get() = _agreeOnToS
+
+    private val _agreeOnPrivacyPolicy = MutableLiveData<Boolean?>()
+    val agreeOnPrivacyPolicy: LiveData<Boolean?> get() = _agreeOnPrivacyPolicy
+
+    val agreeAll = MediatorLiveData<Boolean?>()
+
+    // RegisterRoleFragment에서 사용하는 변수
+    private val _role = MutableLiveData<Int?>()
+    val role: LiveData<Int?> get() = _role
+
     private val _schoolLevel = MutableLiveData<String>()
     val schoolLevel: LiveData<String> get() = _schoolLevel
 
@@ -47,6 +60,16 @@ class StudentRegisterViewModel @Inject constructor(
     val studentNameAndImageProper: MediatorLiveData<Boolean> get() = _studentNameAndImageProper
 
     init {
+        with(agreeAll) {
+            addSource(agreeOnToS) {
+                postValue(agreeOnToS.value == true && agreeOnPrivacyPolicy.value == true)
+            }
+
+            addSource(agreeOnPrivacyPolicy) {
+                postValue(agreeOnToS.value == true && agreeOnPrivacyPolicy.value == true)
+            }
+        }
+
         with(_schoolLevelAndGradeProper) {
             addSource(_schoolLevel) {
                 postValue(!_schoolLevel.value.isNullOrEmpty() && _schoolGrade.value != null)
@@ -96,6 +119,18 @@ class StudentRegisterViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun setAgreeOnToS(b: Boolean) {
+        _agreeOnToS.value = b
+    }
+
+    fun setAgreeOnPrivacyPolicy(b: Boolean) {
+        _agreeOnPrivacyPolicy.value = b
+    }
+
+    fun setRole(role: Int) {
+        _role.value = role
     }
 
     fun setName(name: String) {
