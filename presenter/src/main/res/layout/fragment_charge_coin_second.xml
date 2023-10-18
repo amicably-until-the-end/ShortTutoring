@@ -66,7 +66,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_charge_coin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:background="@drawable/bg_radius_100_background_grey"
                 android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"

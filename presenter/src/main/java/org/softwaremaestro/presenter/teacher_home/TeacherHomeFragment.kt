@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.children
+import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -330,6 +331,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun initEventButton(numEvent: Int) {
+        if (binding.containerEventBtn.isNotEmpty()) return
         repeat(numEvent) {
             binding.containerEventBtn.addView(
                 AppCompatButton(requireContext()).apply {

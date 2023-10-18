@@ -20,15 +20,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_upload.entity.QuestionUploadVO
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.coin.viewModel.CoinViewModel
 import org.softwaremaestro.presenter.databinding.FragmentQuestionNormalFormBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.TimeSelectAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolLevel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
+import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.toBase64
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.TimePickerBottomDialog
@@ -44,6 +47,8 @@ class QuestionNormalFormFragment : Fragment() {
 
     lateinit var binding: FragmentQuestionNormalFormBinding
     private val viewModel: QuestionUploadViewModel by activityViewModels()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
+    private val coinViewModel: CoinViewModel by activityViewModels()
 
 
     //recyclerView adapters
@@ -74,6 +79,8 @@ class QuestionNormalFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        myProfileViewModel.getMyProfile()
+        resetViewModelValue()
         initDialog()
         parseMathSubjectJson()
         setObserver()
@@ -82,6 +89,10 @@ class QuestionNormalFormFragment : Fragment() {
         setDesiredTimeRecyclerView()
         setSubmitButton()
         setFields()
+    }
+
+    private fun resetViewModelValue() {
+        viewModel.resetInputs()
     }
 
     private fun initDialog() {
@@ -237,10 +248,9 @@ class QuestionNormalFormFragment : Fragment() {
         viewModel.questionUploadState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
-                    with(binding.btnSubmit) {
-                        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
-                        setTextColor(resources.getColor(R.color.white, null))
-                    }
+                    binding.btnSubmit.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    binding.tvSubmit.setTextColor(resources.getColor(R.color.white, null))
+                    binding.cbCoin.visibility = View.VISIBLE
                     loadingDialog = LoadingDialog(requireContext())
                     loadingDialog.show()
                 }
@@ -255,10 +265,9 @@ class QuestionNormalFormFragment : Fragment() {
 
                 else -> {
                     loadingDialog.dismiss()
-                    with(binding.btnSubmit) {
-                        setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
-                        setTextColor(resources.getColor(R.color.white, null))
-                    }
+                    binding.btnSubmit.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    binding.tvSubmit.setTextColor(resources.getColor(R.color.white, null))
+                    binding.cbCoin.visibility = View.VISIBLE
                     SimpleAlertDialog().apply {
                         title = "질문 등록에 실패했습니다"
                         description = "잠시 후 다시 시도해주세요"
@@ -284,15 +293,38 @@ class QuestionNormalFormFragment : Fragment() {
     private fun observeInputProper() {
         viewModel.inputProper.observe(viewLifecycleOwner) { proper ->
             submitBtnEnabled = proper
-            with(binding.btnSubmit) {
-                if (proper) {
-                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
-                    setTextColor(resources.getColor(R.color.white, null))
-                } else {
-                    setBackgroundResource(R.drawable.bg_radius_5_grey)
-                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
-                }
+            if (proper) {
+                binding.btnSubmit.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                binding.tvSubmit.setTextColor(resources.getColor(R.color.white, null))
+                binding.cbCoin.visibility = View.VISIBLE
+            } else {
+                binding.btnSubmit.setBackgroundResource(R.drawable.bg_radius_5_grey)
+                binding.tvSubmit.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                binding.cbCoin.visibility = View.INVISIBLE
             }
+        }
+    }
+
+    private fun observeCoinFreeReceiveState() {
+        coinViewModel.coinFreeReceiveState.observe(viewLifecycleOwner) {
+            it ?: return@observe
+
+            // 무료 코인 받기 성공
+            if (it) {
+                SimpleAlertDialog().apply {
+                    title = "오늘의 코인을 받았습니다"
+                    description =
+                        "현재 ${(myProfileViewModel.amount.value!! + 2) * 100}개의 코인을 보유하고 있어요"
+                }.show(parentFragmentManager, "receive free coin success")
+                // 코인을 업데이트하기 위해 getMyProfile() 호출
+                myProfileViewModel.getMyProfile()
+            } else {
+                SimpleAlertDialog().apply {
+                    title = "이미 오늘의 코인을 받았습니다"
+                    description = "기본 코인은 매일 200개씩 제공돼요"
+                }.show(parentFragmentManager, "receive free coin fail")
+            }
+            coinViewModel.resetCoinFreeReceiveState()
         }
     }
 
@@ -303,6 +335,7 @@ class QuestionNormalFormFragment : Fragment() {
         observeQuestionId()
         observeHopeTutoringTime()
         observeInputProper()
+        observeCoinFreeReceiveState()
     }
 
     private fun navigateToCamera() {
@@ -314,20 +347,41 @@ class QuestionNormalFormFragment : Fragment() {
      */
     private fun setSubmitButton() {
         binding.btnSubmit.setOnClickListener {
-            if (submitBtnEnabled) {
-                val questionUploadVO = QuestionUploadVO(
-                    images = viewModel.imagesBase64.value!!,
-                    description = viewModel.description.value!!,
-                    schoolLevel = viewModel.school.value!!,
-                    schoolSubject = viewModel.subject.value!!,
-                    hopeImmediate = binding.toggleAnswerNow.isChecked,
-                    hopeTutoringTime = viewModel.hopeTutoringTime.value!!.map { it.toLocalDateTime() },
-                    mainImageIndex = 0
-                )
-                viewModel.uploadQuestion(questionUploadVO)
-            } else {
+            if (!submitBtnEnabled) {
                 alertEmptyField()
+                return@setOnClickListener
             }
+
+            myProfileViewModel.amount.value ?: run {
+                Toast.makeText(
+                    requireContext(),
+                    "보유한 코인을 가져오는데 실패했습니다.\n잠시 후 다시 시도해주세요.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                myProfileViewModel.getMyProfile()
+                return@setOnClickListener
+            }
+
+            if (myProfileViewModel.amount.value!! * 100 < QUESTION_UPLOAD_COST) {
+                DetailAlertDialog(
+                    title = "코인이 부족합니다",
+                    description = "매일 200코인이 기본 제공돼요.\n오늘의 코인을 받을까요?",
+                    confirm = "코인 받기",
+                    onConfirm = { coinViewModel.receiveCoinFree() }
+                ).show(parentFragmentManager, "coin is insufficient")
+                return@setOnClickListener
+            }
+
+            val questionUploadVO = QuestionUploadVO(
+                images = viewModel.imagesBase64.value!!,
+                description = viewModel.description.value!!,
+                schoolLevel = viewModel.school.value!!,
+                schoolSubject = viewModel.subject.value!!,
+                hopeImmediate = binding.toggleAnswerNow.isChecked,
+                hopeTutoringTime = viewModel.hopeTutoringTime.value!!.map { it.toLocalDateTime() },
+                mainImageIndex = 0
+            )
+            viewModel.uploadQuestion(questionUploadVO)
         }
     }
 
@@ -375,5 +429,6 @@ class QuestionNormalFormFragment : Fragment() {
 
     companion object {
         const val QUESTION_UPLOAD_RESULT = "questionUploadResult"
+        private const val QUESTION_UPLOAD_COST = 100
     }
 }

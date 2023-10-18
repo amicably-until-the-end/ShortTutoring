@@ -19,4 +19,6 @@ interface LoginRepository {
 
     suspend fun registerFCMToken(): Flow<BaseResult<String, String>>
 
+    fun clearFCMToken(): String
+
 }

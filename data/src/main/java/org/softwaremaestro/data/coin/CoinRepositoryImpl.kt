@@ -15,7 +15,7 @@ class CoinRepositoryImpl @Inject constructor(private val coinApi: CoinApi) :
             val response = coinApi.receiveFreeCoin()
             val body = response.body()
             if (body?.success == true) {
-                body.data?.let { emit(BaseResult.Success("오늘의 코인을 얻었습니다.")) }
+                emit(BaseResult.Success("오늘의 코인을 얻었습니다."))
             } else {
                 val errorString = "error in ${this@CoinRepositoryImpl::class.java.name}\n" +
                         "message : ${body?.message}"

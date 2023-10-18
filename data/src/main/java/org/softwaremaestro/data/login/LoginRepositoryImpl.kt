@@ -120,5 +120,9 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun clearFCMToken(): String {
+        prefs.clearJWT()
+        return "clear FCM Token succeeded"
+    }
 
 }

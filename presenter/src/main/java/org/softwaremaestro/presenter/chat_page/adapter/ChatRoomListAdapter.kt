@@ -132,7 +132,6 @@ class ChatRoomListAdapter(
                     tvNewMsgCnt.visibility = View.GONE
                 }
 
-
                 tvTitle.text = item.title
                 tvSubTitle.text = item.subTitle
                 Glide.with(binding.root.context)
