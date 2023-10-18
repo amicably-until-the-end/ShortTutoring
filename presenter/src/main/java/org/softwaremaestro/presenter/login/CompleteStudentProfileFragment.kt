@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.login
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,7 +19,6 @@ import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
-import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -59,9 +57,7 @@ class CompleteStudentProfileFragment : Fragment() {
                     binding.ivStudentImg.setBackgroundResource(image)
                 },
                 onSelect = { image ->
-                    viewModel._image.value = BitmapFactory.decodeResource(
-                        resources, image
-                    ).toBase64()
+                    viewModel._image.value = Animal.values().find { it.resId == image }!!.mName
                     dialog.dismiss()
                 },
             )
