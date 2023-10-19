@@ -319,13 +319,16 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun onRoomStateChanged(modifyState: RoomState?) {
-                modifyState?.roomMembers.let {
-                    if (it?.size == 1) {
-                        setOnlineStatus(false)
+                modifyState?.roomMembers?.let {
+                    // 1 : 학생 , 2: 선생님 모두 있으면
+                    if (it.map { member ->
+                            member.memberId
+                        }.containsAll(listOf(1, 2))) {
+                        setOnlineStatus(true)
                     } else {
                         setOnlineStatus(true)
                     }
-                }
+                } ?: setOnlineStatus(false)
             }
 
             override fun onCanUndoStepsUpdate(canUndoSteps: Long) {
