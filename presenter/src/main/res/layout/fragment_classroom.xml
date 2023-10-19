@@ -129,6 +129,32 @@
             app:layout_constraintEnd_toStartOf="@id/btn_report"
             app:layout_constraintTop_toTopOf="parent" />-->
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_recording_status"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="5dp"
+            app:cardBackgroundColor="@color/sub_text_grey"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_room_title"
+            app:layout_constraintRight_toLeftOf="@id/tv_recording_status"
+            app:layout_constraintTop_toTopOf="@id/tv_room_title" />
+
+        <TextView
+            android:id="@+id/tv_recording_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="15dp"
+            android:text="녹화 준비중"
+            android:textColor="@color/sub_text_grey"
+            app:layout_constraintBottom_toBottomOf="@id/tv_room_title"
+            app:layout_constraintRight_toLeftOf="@id/btn_finish_class"
+            app:layout_constraintTop_toTopOf="@id/tv_room_title" />
+
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_finish_class"
             android:layout_width="wrap_content"

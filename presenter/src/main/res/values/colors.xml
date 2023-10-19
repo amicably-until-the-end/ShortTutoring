@@ -9,7 +9,7 @@
     <color name="black">#FF000000</color>
     <color name="negative_orange">#FFFFAA00</color>
     <color name="grey">#CC000000</color>
-    <color name="hint">#9A000000</color>
+    <color name="hint">#9A000000</color>white
     <color name="light_grey">#4D000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
@@ -29,4 +29,5 @@
     <color name="bright_grey">#E7E8EB</color>
     <color name="background_light_blue">#ECF1FB</color>
     <color name="alert_red">#FF004E</color>
+    <color name="red">#FF0000</color>
 </resources>

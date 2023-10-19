@@ -265,6 +265,7 @@ class ClassroomFragment : Fragment() {
     private fun setVoiceFunctions() {
         //join 을 한 이후에 음성 관련 기능 세팅
         setMicToggleButton()
+        voiceEngine.enableLocalAudio(true)
     }
 
 
@@ -320,13 +321,16 @@ class ClassroomFragment : Fragment() {
 
             override fun onRoomStateChanged(modifyState: RoomState?) {
                 modifyState?.roomMembers?.let {
+                    val ids = it.map { member -> member.memberId }
+
+                    if (ids.contains(3)) {
+                        setRecordingState()
+                    }
                     // 1 : 학생 , 2: 선생님 모두 있으면
-                    if (it.map { member ->
-                            member.memberId
-                        }.containsAll(listOf(1, 2))) {
+                    if (ids.containsAll(listOf(1, 2))) {
                         setOnlineStatus(true)
                     } else {
-                        setOnlineStatus(true)
+                        setOnlineStatus(false)
                     }
                 } ?: setOnlineStatus(false)
             }
@@ -426,6 +430,17 @@ class ClassroomFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+    }
+
+    private fun setRecordingState() {
+        binding.tvRecordingStatus.apply {
+            text = "녹화중"
+            setTextColor(requireContext().getColor(R.color.black))
+        }
+        binding.cvRecordingStatus.apply {
+            setCardBackgroundColor(requireContext().getColor(R.color.red))
+        }
+
     }
 
     private fun observeQuestionInfo() {
