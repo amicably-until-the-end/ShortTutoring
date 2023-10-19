@@ -156,6 +156,11 @@ class StudentChatFragment : ChatFragment() {
                         .show()
                 }
 
+                is UIState.Error -> {
+                    loadingDialog.dismiss()
+                    waitingTeacherDialog.show(parentFragmentManager, "waitingTeacherDialog")
+                }
+
                 else -> {
 
                 }
