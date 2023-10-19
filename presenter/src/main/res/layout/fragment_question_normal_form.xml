@@ -21,6 +21,10 @@
             android:text="질문하기" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:backgroundTint="@color/primary_blue" />
 
     <ScrollView
         android:layout_width="match_parent"

@@ -1,6 +1,8 @@
 package org.softwaremaestro.presenter.question_upload.question_selected_upload
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +62,15 @@ class ReservationFormFragment : Fragment() {
 
                 questionReservationViewModel.setRequestDate(LocalDate.of(year, month, day))
                 binding.containerTimePicker.visibility = View.VISIBLE
+
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        with(binding.svContent) {
+                            isSmoothScrollingEnabled = true
+                            fullScroll(View.FOCUS_DOWN)
+                        }
+                    }, 200L
+                )
             }
         }
     }

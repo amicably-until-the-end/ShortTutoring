@@ -33,7 +33,7 @@ class DetailAlertDialog(
 
         binding.tvTitle.text = title
         binding.tvDesciption.text = description
-        binding.btnConfirm.text = confirm
+        if (confirm.isNotEmpty()) binding.btnConfirm.text = confirm
         binding.btnConfirm.setOnClickListener {
             onConfirm()
             dismiss()
