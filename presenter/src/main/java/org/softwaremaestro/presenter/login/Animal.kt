@@ -9,5 +9,10 @@ enum class Animal(val resId: Int, val mName: String) {
     LION(R.drawable.ic_profile_lion, "lion"),
     PENGUIN(R.drawable.ic_profile_penguin, "penguin"),
     POLAR_BEAR(R.drawable.ic_profile_polar_bear, "polar_bear"),
-    TIGER(R.drawable.ic_profile_tiger, "tiger")
+    TIGER(R.drawable.ic_profile_tiger, "tiger");
+
+    companion object {
+        fun toName(resId: Int) = values().find { it.resId == resId }!!.mName
+        fun toResId(mName: String) = values().find { it.mName == mName }!!.resId
+    }
 }

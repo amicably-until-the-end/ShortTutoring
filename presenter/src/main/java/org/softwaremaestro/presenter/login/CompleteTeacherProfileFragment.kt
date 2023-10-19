@@ -40,6 +40,8 @@ class CompleteTeacherProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideButtonsUponDisplaySize()
+        setViewModelValueToFields()
         setEtProfileTeacherName()
         setBtnEditTeacherImage()
         setTvProfileTeacherUniv()
@@ -51,6 +53,30 @@ class CompleteTeacherProfileFragment : Fragment() {
         observe()
     }
 
+    private fun hideButtonsUponDisplaySize() {
+        val metrics = resources.displayMetrics
+        val screenWidth = metrics.widthPixels
+        if (screenWidth < 1200) {
+            binding.btnFollow.visibility = View.INVISIBLE
+            binding.containerReserve.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setViewModelValueToFields() {
+        viewModel.name.value?.let {
+            binding.etProfileTeacherName.setText(it)
+            binding.etTeacherName.setText(it)
+        }
+        viewModel.bio.value?.let {
+            binding.etProfileTeacherBio.setText(it)
+            binding.etTeacherBio.setText(it)
+        }
+        viewModel._image.value?.let {
+            val resId = Animal.toResId(it)
+            binding.ivTeacherImg.setBackgroundResource(resId)
+        }
+    }
+
     private fun setBtnEditTeacherImage() {
         binding.containerTeacherImg.setOnClickListener {
             dialog = ProfileImageSelectBottomDialog(
@@ -58,7 +84,7 @@ class CompleteTeacherProfileFragment : Fragment() {
                     binding.ivTeacherImg.setBackgroundResource(image)
                 },
                 onSelect = { image ->
-                    viewModel._image.value = Animal.values().find { it.resId == image }!!.mName
+                    viewModel._image.value = Animal.toName(image)
                     dialog.dismiss()
                 },
             )
@@ -136,6 +162,7 @@ class CompleteTeacherProfileFragment : Fragment() {
     private fun observe() {
         observeName()
         observeBio()
+        observeImage()
         observeInputProper()
         observeSignupState()
     }
@@ -149,6 +176,13 @@ class CompleteTeacherProfileFragment : Fragment() {
     private fun observeBio() {
         viewModel.bio.observe(viewLifecycleOwner) {
             binding.etProfileTeacherBio.setText(it)
+        }
+    }
+
+    private fun observeImage() {
+        viewModel.image.observe(viewLifecycleOwner) { image ->
+            val resId = Animal.toResId(image)
+            binding.ivTeacherImg.setBackgroundResource(resId)
         }
     }
 
