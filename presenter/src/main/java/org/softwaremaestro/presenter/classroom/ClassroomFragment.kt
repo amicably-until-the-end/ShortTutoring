@@ -28,6 +28,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
@@ -321,8 +322,11 @@ class ClassroomFragment : Fragment() {
 
             override fun onRoomStateChanged(modifyState: RoomState?) {
                 modifyState?.roomMembers?.let {
-                    val ids = it.map { member -> member.memberId }
+                    val ids = it.map { member ->
+                        objectToMember(member.payload)?.uid
+                    }
 
+                    Log.d("board members", ids.toString())
                     if (ids.contains(3)) {
                         setRecordingState()
                     }
@@ -625,6 +629,16 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun objectToMember(obj: Any): MemberPayload? {
+        try {
+            val gson = Gson()
+            return gson.fromJson(obj.toString(), MemberPayload::class.java)
+        } catch (e: Exception) {
+            Log.e("${this@ClassroomFragment}", e.toString())
+            return null
+        }
+    }
+
     companion object {
         const val RTC_TEACHER_UID = 1
         const val RTC_STUDENT_UID = 2
@@ -635,6 +649,10 @@ class ClassroomFragment : Fragment() {
         ERASER("eraser"),
         SELECTOR("selector"),
     }
+
+    data class MemberPayload(
+        val uid: Int,
+    )
 
 
 }
