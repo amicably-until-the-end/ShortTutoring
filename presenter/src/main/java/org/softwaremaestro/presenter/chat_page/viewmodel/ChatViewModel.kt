@@ -174,6 +174,10 @@ class ChatViewModel @Inject constructor(
                         }
 
                         is BaseResult.Error -> {
+                            if (result.rawResponse == ClassroomInfoVO.NOT_YET_START)
+                                _classroomInfo.value = UIState.Error(ClassroomInfoVO.NOT_YET_START)
+                            else
+                                _classroomInfo.value = UIState.Failure
                             _classroomInfo.value = UIState.Failure
                         }
                     }

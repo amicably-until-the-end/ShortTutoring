@@ -169,6 +169,12 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        chatViewModel._currentChattingRoomVO.postValue(null)
+        currentChatRoom = null
+    }
+
     private fun observeChatRoomChange() {
         //TODO: 채팅방 전체 갱신 안하고 하나씩 새로고침하는 리팩토링 용도
         chatViewModel.changedChatRoom.observe(viewLifecycleOwner) {
@@ -665,7 +671,7 @@ abstract class ChatFragment : Fragment() {
                 appId = it.boardAppId,
                 uuid = it.boardUUID,
                 roomToken = it.boardToken,
-                uid = if (isTeacher()) "${ClassroomFragment.RTC_STUDENT_UID}" else "${ClassroomFragment.RTC_TEACHER_UID}",
+                uid = if (isTeacher()) "${ClassroomFragment.RTC_TEACHER_UID}" else "${ClassroomFragment.RTC_STUDENT_UID}",
                 questionId = currentChatRoom?.questionId ?: "",
                 roomProfileImage = currentChatRoom?.roomImage ?: "",
                 opponentName = currentChatRoom?.title ?: "",

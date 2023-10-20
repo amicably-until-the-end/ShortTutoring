@@ -50,7 +50,10 @@ class ClassRoomRepositoryImpl @Inject constructor(private val classRoomApi: Clas
             if (result.isSuccessful && result.body()?.success == true) {
                 emit(BaseResult.Success(result.body()?.data!!.asDomain()))
             } else {
-                emit(BaseResult.Error(ClassroomInfoVO.NOT_YET_START))
+                if (result.body()?.errorCode == 200)
+                    emit(BaseResult.Error(ClassroomInfoVO.NOT_YET_START))
+                else
+                    emit(BaseResult.Error("Error"))
             }
         }
     }

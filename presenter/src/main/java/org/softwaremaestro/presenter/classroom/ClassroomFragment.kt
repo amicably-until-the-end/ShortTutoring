@@ -28,6 +28,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import com.google.gson.Gson
 import com.herewhite.sdk.Room
 import com.herewhite.sdk.RoomListener
 import com.herewhite.sdk.RoomParams
@@ -265,6 +266,7 @@ class ClassroomFragment : Fragment() {
     private fun setVoiceFunctions() {
         //join 을 한 이후에 음성 관련 기능 세팅
         setMicToggleButton()
+        voiceEngine.enableLocalAudio(true)
     }
 
 
@@ -319,13 +321,22 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun onRoomStateChanged(modifyState: RoomState?) {
-                modifyState?.roomMembers.let {
-                    if (it?.size == 1) {
-                        setOnlineStatus(false)
-                    } else {
-                        setOnlineStatus(true)
+                modifyState?.roomMembers?.let {
+                    val ids = it.map { member ->
+                        objectToMember(member.payload)?.uid
                     }
-                }
+
+                    Log.d("board members", ids.toString())
+                    if (ids.contains(3)) {
+                        setRecordingState()
+                    }
+                    // 1 : 학생 , 2: 선생님 모두 있으면
+                    if (ids.containsAll(listOf(1, 2))) {
+                        setOnlineStatus(true)
+                    } else {
+                        setOnlineStatus(false)
+                    }
+                } ?: setOnlineStatus(false)
             }
 
             override fun onCanUndoStepsUpdate(canUndoSteps: Long) {
@@ -423,6 +434,17 @@ class ClassroomFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+    }
+
+    private fun setRecordingState() {
+        binding.tvRecordingStatus.apply {
+            text = "녹화중"
+            setTextColor(requireContext().getColor(R.color.black))
+        }
+        binding.cvRecordingStatus.apply {
+            setCardBackgroundColor(requireContext().getColor(R.color.red))
+        }
+
     }
 
     private fun observeQuestionInfo() {
@@ -607,6 +629,16 @@ class ClassroomFragment : Fragment() {
         }
     }
 
+    private fun objectToMember(obj: Any): MemberPayload? {
+        try {
+            val gson = Gson()
+            return gson.fromJson(obj.toString(), MemberPayload::class.java)
+        } catch (e: Exception) {
+            Log.e("${this@ClassroomFragment}", e.toString())
+            return null
+        }
+    }
+
     companion object {
         const val RTC_TEACHER_UID = 1
         const val RTC_STUDENT_UID = 2
@@ -617,6 +649,10 @@ class ClassroomFragment : Fragment() {
         ERASER("eraser"),
         SELECTOR("selector"),
     }
+
+    data class MemberPayload(
+        val uid: Int,
+    )
 
 
 }
