@@ -39,6 +39,7 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.util.Util.toPx
+import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -295,7 +296,15 @@ class StudentHomeFragment : Fragment() {
     private fun setLectureRecyclerView() {
 
         lectureAdapter = LectureAdapter {
-
+            val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
+                putExtra(PROFILE_IMAGE, it.opponentProfileImage)
+                putExtra(STUDENT_NAME, it.opponentName)
+                putExtra(SCHOOL_LEVEL, it.schoolLevel)
+                putExtra(SUBJECT, it.schoolSubject)
+                putExtra(DESCRIPTION, it.description)
+                it.recordFileUrl?.get(0)?.let { putExtra(RECORDING_FILE_URL, it) }
+            }
+            startActivity(intent)
         }
 
         binding.rvLecture.apply {
@@ -487,5 +496,12 @@ class StudentHomeFragment : Fragment() {
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
         private const val NORMAL_EVENT_BUTTON_SIZE = 9
         private const val EVENT_BUTTON_SIZE_MARGIN = 6
+
+        const val PROFILE_IMAGE = "profile-image"
+        const val STUDENT_NAME = "student-name"
+        const val SCHOOL_LEVEL = "school-level"
+        const val SUBJECT = "subject"
+        const val DESCRIPTION = "description"
+        const val RECORDING_FILE_URL = "recording-file-url"
     }
 }

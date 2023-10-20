@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
 
-class LectureAdapter(private val onItemClickListener: (String) -> Unit) :
+class LectureAdapter(private val onItemClickListener: (TutoringVO) -> Unit) :
     RecyclerView.Adapter<LectureAdapter.ViewHolder>() {
 
     private var items: List<TutoringVO> = emptyList()
@@ -38,8 +38,7 @@ class LectureAdapter(private val onItemClickListener: (String) -> Unit) :
             binding.tvDesciption.text = item.description
             binding.tvSubject.text = item.schoolSubject
             binding.root.setOnClickListener {
-                // 영상을 재생하기 위해 listener에 url을 넘긴다
-                onItemClickListener("example url")
+                onItemClickListener(item)
             }
         }
     }
