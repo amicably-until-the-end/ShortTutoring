@@ -18,8 +18,8 @@ import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
-import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
+import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog

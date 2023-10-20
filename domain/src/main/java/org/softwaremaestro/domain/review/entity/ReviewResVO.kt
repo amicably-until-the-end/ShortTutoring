@@ -7,6 +7,7 @@ data class ReviewResVO(
     val reviewComment: String?,
     val studentId: String?,
     val studentName: String?,
+    val endedAt: String?,
     val profileImage: String?,
     val role: String?,
     val schoolLevel: String?,

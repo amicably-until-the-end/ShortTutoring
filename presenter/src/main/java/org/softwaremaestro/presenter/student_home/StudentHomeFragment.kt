@@ -31,12 +31,13 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.EventViewModel
-import org.softwaremaestro.presenter.student_home.viewmodel.LectureViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
-import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
 import org.softwaremaestro.presenter.util.Util.toPx
 
 @AndroidEntryPoint
@@ -48,9 +49,11 @@ class StudentHomeFragment : Fragment() {
     private val teacherOnlineViewModel: TeacherOnlineViewModel by activityViewModels()
     private val followUserViewModel: FollowUserViewModel by activityViewModels()
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
-    private val teacherRecommendViewModel: TeacherRecommendViewModel by activityViewModels()
-    private val lectureViewModel: LectureViewModel by activityViewModels()
+    private val bestTeacherViewModel: BestTeacherViewModel by activityViewModels()
+    private val tutoringViewModel: TutoringViewModel by activityViewModels()
     private val eventViewModel: EventViewModel by activityViewModels()
+    private val reviewsViewModel: ReviewViewModel by activityViewModels()
+
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
@@ -58,6 +61,7 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var eventAdapter: EventAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,8 +83,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun getRemoteData() {
         myProfileViewModel.getMyProfile()
-        teacherRecommendViewModel.getTeachers()
-        lectureViewModel.getLectures()
+        bestTeacherViewModel.getTeachers()
+        tutoringViewModel.getTutoring()
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         teacherOnlineViewModel.getTeacherOnlines()
         eventViewModel.getEvents()
@@ -104,13 +108,13 @@ class StudentHomeFragment : Fragment() {
                 followUserViewModel.unfollowUser(teacherId)
                 Toast.makeText(requireContext(), "선생님을 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
-                teacherRecommendViewModel.getTeachers()
+                bestTeacherViewModel.getTeachers()
             },
             onFollow = { teacherId ->
                 followUserViewModel.followUser(teacherId)
                 Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
-                teacherRecommendViewModel.getTeachers()
+                bestTeacherViewModel.getTeachers()
             },
             onReserve = { teacherId ->
                 startActivityForResult(
@@ -150,6 +154,12 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
             dialogTeacherProfile.setItem(it)
+            it.teacherId?.let {
+                reviewsViewModel.getReviews(it)
+                // Todo: 선생님 tutoring 가져올 수 있게 되면 변경
+                // tutoringViewModel.getTutoring()
+            }
+
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -163,6 +173,11 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherOnlineRecyclerView() {
         teacherOnlineAdapter = TeacherCircularAdapter {
             dialogTeacherProfile.setItem(it)
+            it.teacherId?.let {
+                reviewsViewModel.getReviews(it)
+                // Todo: 선생님 tutoring 가져올 수 있게 되면 변경
+                // tutoringViewModel.getTutoring()
+            }
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
@@ -178,14 +193,19 @@ class StudentHomeFragment : Fragment() {
 
         teacherAdapter = TeacherSimpleAdapter { teacherVO ->
             dialogTeacherProfile.setItem(teacherVO)
+            teacherVO.teacherId?.let {
+                reviewsViewModel.getReviews(it)
+                // Todo: 선생님 tutoring 가져올 수 있게 되면 변경
+                // tutoringViewModel.getTutoring()
+            }
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
         }
 
-//        binding.rvTeacher.apply {
-//            adapter = teacherAdapter
-//            layoutManager =
-//                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-//        }
+        binding.rvTeacher.apply {
+            adapter = teacherAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     private fun setEventRecyclerView() {
@@ -274,13 +294,15 @@ class StudentHomeFragment : Fragment() {
 
     private fun setLectureRecyclerView() {
 
-        lectureAdapter = LectureAdapter {}
+        lectureAdapter = LectureAdapter {
 
-//        binding.rvLecture.apply {
-//            adapter = lectureAdapter
-//            layoutManager =
-//                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-//        }
+        }
+
+        binding.rvLecture.apply {
+            adapter = lectureAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     private fun setCoinButton() {
@@ -334,18 +356,25 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun observeTutoring() {
+        tutoringViewModel.tutoring.observe(viewLifecycleOwner) {
+            lectureAdapter.setItem(it)
+            lectureAdapter.notifyDataSetChanged()
+        }
+    }
+
     private fun observeTeachers() {
-//        teacherRecommendViewModel.teacherRecommends.observe(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//                binding.dvRanking.visibility = View.VISIBLE
-//                binding.containerBestTeacherSection.visibility = View.VISIBLE
-//            } else {
-//                binding.dvRanking.visibility = View.GONE
-//                binding.containerBestTeacherSection.visibility = View.GONE
-//            }
-//            teacherAdapter.setItem(it)
-//            teacherAdapter.notifyDataSetChanged()
-//        }
+        bestTeacherViewModel.bestTeachers.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.dvRanking.visibility = View.VISIBLE
+                binding.containerBestTeacherSection.visibility = View.VISIBLE
+            } else {
+                binding.dvRanking.visibility = View.GONE
+                binding.containerBestTeacherSection.visibility = View.GONE
+            }
+            teacherAdapter.setItem(it)
+            teacherAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -379,27 +408,11 @@ class StudentHomeFragment : Fragment() {
     private fun setObserver() {
         observeFollowing()
         observeAmount()
+        observeTutoring()
+        observeReview()
         observeTeachers()
-        observeLectures()
         observeTeacherOnlines()
         observeEvents()
-    }
-
-
-    private fun observeLectures() {
-//        lectureViewModel.lectures.observe(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//                binding.tvLectureDesc.text = "지난 수업을 복습해봐요"
-//                binding.rvLecture.visibility = View.VISIBLE
-//                binding.containerLectureEmpty.visibility = View.GONE
-//            } else {
-//                binding.tvLectureDesc.text = "숏과외에 처음 오신 것을 환영해요!"
-//                binding.rvLecture.visibility = View.GONE
-//                binding.containerLectureEmpty.visibility = View.VISIBLE
-//            }
-//            lectureAdapter.setItem(it)
-//            lectureAdapter.notifyDataSetChanged()
-//        }
     }
 
     private fun observeTeacherOnlines() {
@@ -435,6 +448,14 @@ class StudentHomeFragment : Fragment() {
             it.events?.let {
                 initEventButton(it.size)
             }
+        }
+    }
+
+    private fun observeReview() {
+        reviewsViewModel.reviews.observe(viewLifecycleOwner) { reviews ->
+            val reviewsNotEmpty =
+                reviews.filter { it.reviewComment != null && it.reviewComment!!.length >= 3 }
+            dialogTeacherProfile.setItemToReviewRecyclerView(reviewsNotEmpty)
         }
     }
 

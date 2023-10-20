@@ -35,6 +35,7 @@ import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.EventViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.CHAT_ID
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.OFFER_RESULT
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.OFFER_SUCCESS
@@ -59,6 +60,7 @@ class TeacherHomeFragment : Fragment() {
     private val checkViewModel: CheckViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val eventViewModel: EventViewModel by activityViewModels()
+    private val reviewsViewModel: ReviewViewModel by activityViewModels()
     private lateinit var requestActivity: ActivityResultLauncher<Intent>
 
     private lateinit var questionAdapter: QuestionAdapter
@@ -82,20 +84,18 @@ class TeacherHomeFragment : Fragment() {
 
         getRemoteData()
         setTexts()
-
         initWaitingSnackbar()
         initQuestionRecyclerView()
         initReviewRecyclerView()
         setEventRecyclerView()
-
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
-
         observe()
     }
 
     private fun getRemoteData() {
         myProfileViewModel.getMyProfile()
         eventViewModel.getEvents()
+        SocketManager.userId?.let { reviewsViewModel.getReviews(it) }
     }
 
     private fun setTexts() {
@@ -284,6 +284,7 @@ class TeacherHomeFragment : Fragment() {
         //observeCheck()
         observeMyProfile()
         observeEvents()
+        observeReview()
     }
 
     private fun observeQuestions() {
@@ -327,6 +328,20 @@ class TeacherHomeFragment : Fragment() {
             it.events?.let {
                 initEventButton(it.size)
             }
+        }
+    }
+
+    private fun observeReview() {
+        reviewsViewModel.reviews.observe(viewLifecycleOwner) {
+            val reviews = it.filter {
+                val comments = it.reviewComment
+                comments != null && comments.length >= 3
+            }
+            if (reviews.isEmpty()) {
+                binding.containerReview.visibility = View.GONE
+            }
+            reviewAdapter.setItem(reviews)
+            reviewAdapter.notifyDataSetChanged()
         }
     }
 

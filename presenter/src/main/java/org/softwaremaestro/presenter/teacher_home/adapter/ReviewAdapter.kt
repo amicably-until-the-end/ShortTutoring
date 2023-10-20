@@ -35,12 +35,9 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
         fun onBind(item: ReviewResVO) {
 
             with(binding) {
-
-//                tvName.text = item.name ?: EMPTY_STRING
-//                tvCreatedAt.text =
-//                    item.createdAt ?: EMPTY_STRING
-//                tvComment.text =
-//                    item.content ?: EMPTY_STRING
+                tvName.text = item.studentName ?: EMPTY_STRING
+                tvCreatedAt.text = item.endedAt ?: EMPTY_STRING
+                tvComment.text = item.reviewComment ?: EMPTY_STRING
             }
         }
     }

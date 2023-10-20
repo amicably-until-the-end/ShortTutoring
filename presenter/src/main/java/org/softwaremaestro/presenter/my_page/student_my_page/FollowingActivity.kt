@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ActivityFollowingBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
-import org.softwaremaestro.presenter.teacher_profile.viewmodel.TeacherRecommendViewModel
+import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.util.Util
 
@@ -19,10 +19,10 @@ class FollowingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFollowingBinding
 
-    private val teacherRecommendsViewModel: TeacherRecommendViewModel by viewModels()
+    private val bestTeacherViewModel: BestTeacherViewModel by viewModels()
     private val followingViewModel: FollowingViewModel by viewModels()
     private lateinit var followingAdapter: TeacherAdapter
-    private lateinit var teacherRecommendsAdapter: TeacherAdapter
+    private lateinit var bestTeacherAdapter: TeacherAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +50,12 @@ class FollowingActivity : AppCompatActivity() {
     }
 
     private fun setTeacherRecommendsRecyclerView() {
-        teacherRecommendsAdapter = TeacherAdapter {
+        bestTeacherAdapter = TeacherAdapter {
             // dialog 띄워야 함
         }
 
         binding.rvTeacherRecommend.apply {
-            adapter = teacherRecommendsAdapter
+            adapter = bestTeacherAdapter
             layoutManager =
                 LinearLayoutManager(this@FollowingActivity, LinearLayoutManager.VERTICAL, false)
         }
@@ -85,11 +85,10 @@ class FollowingActivity : AppCompatActivity() {
     }
 
     private fun observeTeacherRecommends() {
-        teacherRecommendsViewModel.teacherRecommends.observe(this) { teachers ->
-            teachers?.let {
-                teacherRecommendsAdapter.setItem(it)
-                teacherRecommendsAdapter.notifyDataSetChanged()
-            }
+        bestTeacherViewModel.bestTeachers.observe(this) { teachers ->
+            teachers ?: return@observe
+            bestTeacherAdapter.setItem(teachers)
+            bestTeacherAdapter.notifyDataSetChanged()
         }
     }
 

@@ -14,6 +14,7 @@ object Mapper {
                 reviewComment = it.reviewComment,
                 studentId = it.studentId,
                 studentName = it.student?.name,
+                endedAt = it.endedAt,
                 profileImage = it.student?.profileImage,
                 role = it.student?.role,
                 schoolLevel = it.student?.school?.level,
