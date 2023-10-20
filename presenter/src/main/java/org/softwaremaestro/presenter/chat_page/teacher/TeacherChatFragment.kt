@@ -56,7 +56,6 @@ class TeacherChatFragment : ChatFragment() {
                 is UIState.Success -> {
                     it._data?.let { tutoringInfo ->
                         setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
-                        Log.d("observeTutoringInfo", "observeTutoringInfo: ${tutoringInfo}")
                         tutoringId = tutoringInfo.id
                         if (tutoringInfo.status == "finished") {
                             setNotiVisible(false)
