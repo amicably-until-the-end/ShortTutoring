@@ -138,7 +138,6 @@ abstract class ChatFragment : Fragment() {
         chatViewModel._currentChattingRoomVO.postValue(null)
         chatViewModel.currentChattingRoomVO.observe(viewLifecycleOwner) {
             it?.let {
-                Log.d("current", "observeCurrentRoom: ${it}")
                 enterChatRoom(it)
             }
         }
