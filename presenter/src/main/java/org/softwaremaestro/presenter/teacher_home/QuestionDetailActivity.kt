@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.answer_upload.entity.AnswerUploadVO
 import org.softwaremaestro.presenter.R
@@ -103,17 +104,22 @@ class QuestionDetailActivity : AppCompatActivity() {
     }
 
     private fun setImageRecyclerView() {
-        val adapter = QuestionDetailImagesAdapter()
+        val mAdapter = QuestionDetailImagesAdapter().apply {
+            setItem(images as List<String>)
+            notifyDataSetChanged()
+        }
+
         binding.rvImages.apply {
-            this.adapter = adapter
+            adapter = mAdapter
             layoutManager = LinearLayoutManager(
                 this@QuestionDetailActivity,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+        }.also {
+            val snapHelper = PagerSnapHelper()
+            snapHelper.attachToRecyclerView(it)
         }
-        adapter.setItem(images as List<String>)
-        adapter.notifyDataSetChanged()
     }
 
     /*

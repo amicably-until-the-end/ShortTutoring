@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.login
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,7 +18,6 @@ import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
-import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -42,6 +40,8 @@ class CompleteTeacherProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideButtonsUponDisplaySize()
+        setViewModelValueToFields()
         setEtProfileTeacherName()
         setBtnEditTeacherImage()
         setTvProfileTeacherUniv()
@@ -53,6 +53,30 @@ class CompleteTeacherProfileFragment : Fragment() {
         observe()
     }
 
+    private fun hideButtonsUponDisplaySize() {
+        val metrics = resources.displayMetrics
+        val screenWidth = metrics.widthPixels
+        if (screenWidth < 1200) {
+            binding.btnFollow.visibility = View.INVISIBLE
+            binding.containerReserve.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setViewModelValueToFields() {
+        viewModel.name.value?.let {
+            binding.etProfileTeacherName.setText(it)
+            binding.etTeacherName.setText(it)
+        }
+        viewModel.bio.value?.let {
+            binding.etProfileTeacherBio.setText(it)
+            binding.etTeacherBio.setText(it)
+        }
+        viewModel._image.value?.let {
+            val resId = Animal.toResId(it)
+            binding.ivTeacherImg.setBackgroundResource(resId)
+        }
+    }
+
     private fun setBtnEditTeacherImage() {
         binding.containerTeacherImg.setOnClickListener {
             dialog = ProfileImageSelectBottomDialog(
@@ -60,9 +84,7 @@ class CompleteTeacherProfileFragment : Fragment() {
                     binding.ivTeacherImg.setBackgroundResource(image)
                 },
                 onSelect = { image ->
-                    viewModel._image.value = BitmapFactory.decodeResource(
-                        resources, image
-                    ).toBase64()
+                    viewModel._image.value = Animal.toName(image)
                     dialog.dismiss()
                 },
             )
@@ -121,15 +143,26 @@ class CompleteTeacherProfileFragment : Fragment() {
             if (isBtnCompleteEnabled) {
                 viewModel.registerTeacher()
             } else {
-                Toast.makeText(requireContext(), "닉네임, 한줄소개와 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT)
-                    .show()
+                alertEmptyField()
             }
         }
+    }
+
+    private fun alertEmptyField() {
+        val msg = if (viewModel.name.value.isNullOrEmpty()) {
+            "닉네임을 입력해주세요"
+        } else if (viewModel.bio.value.isNullOrEmpty()) {
+            "한줄 소개를 입력해주세요"
+        } else {
+            "프로필 이미지를 설정해주세요"
+        }
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun observe() {
         observeName()
         observeBio()
+        observeImage()
         observeInputProper()
         observeSignupState()
     }
@@ -143,6 +176,13 @@ class CompleteTeacherProfileFragment : Fragment() {
     private fun observeBio() {
         viewModel.bio.observe(viewLifecycleOwner) {
             binding.etProfileTeacherBio.setText(it)
+        }
+    }
+
+    private fun observeImage() {
+        viewModel.image.observe(viewLifecycleOwner) { image ->
+            val resId = Animal.toResId(image)
+            binding.ivTeacherImg.setBackgroundResource(resId)
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -11,18 +12,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterStudentInfoBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 
 @AndroidEntryPoint
 class RegisterStudentInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterStudentInfoBinding
     private val viewModel: StudentRegisterViewModel by activityViewModels()
+    private var registerEnabled = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentRegisterStudentInfoBinding.inflate(layoutInflater)
 
         setRgSchoolLevel()
@@ -61,7 +62,11 @@ class RegisterStudentInfoFragment : Fragment() {
 
     private fun setBtnNext() {
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_registerStudentInfoFragment_to_completeStudentProfileFragment)
+            if (registerEnabled) {
+                findNavController().navigate(R.id.action_registerStudentInfoFragment_to_completeStudentProfileFragment)
+            } else {
+                Toast.makeText(requireContext(), "학교와 학년을 선택해주세요", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -84,7 +89,16 @@ class RegisterStudentInfoFragment : Fragment() {
 
     private fun observeSchoolLevelAndGrade() {
         viewModel.schoolLevelAndGradeProper.observe(viewLifecycleOwner) { proper ->
-            binding.btnNext.setEnabledAndChangeColor(proper)
+            with(binding.btnNext) {
+                if (proper) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
+            registerEnabled = proper
         }
     }
 }

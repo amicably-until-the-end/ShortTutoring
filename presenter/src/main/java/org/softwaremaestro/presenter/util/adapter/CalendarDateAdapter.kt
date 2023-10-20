@@ -68,6 +68,8 @@ class CalendarDateAdapter(
         val lastItem = items.last()
         val yearOfNextMonth = lastItem.year + (if (lastItem.monthValue == 12) 1 else 0)
         val nextMonth = if (lastItem.monthValue == 12) 1 else (lastItem.monthValue + 1)
+        // 현재 12월까지만 더하도록 되어있음
+        if (yearOfNextMonth >= 2024) return
         addMonthItems(yearOfNextMonth, nextMonth)
     }
 

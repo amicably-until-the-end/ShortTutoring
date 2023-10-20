@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.login
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,7 +19,6 @@ import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
-import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -43,6 +41,8 @@ class CompleteStudentProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideButtonsUponDisplaySize()
+        setViewModelValueToFields()
         setEtProfileStudentName()
         setBtnEditTeacherImage()
         setTvProfileStudentGrade()
@@ -52,6 +52,26 @@ class CompleteStudentProfileFragment : Fragment() {
         observe()
     }
 
+    private fun hideButtonsUponDisplaySize() {
+        val metrics = resources.displayMetrics
+        val screenWidth = metrics.widthPixels
+        if (screenWidth < 1200) {
+            binding.btnFollow.visibility = View.INVISIBLE
+            binding.containerReserve.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setViewModelValueToFields() {
+        viewModel.name.value?.let {
+            binding.etProfileStudentName.setText(it)
+            binding.etStudentName.setText(it)
+        }
+        viewModel._image.value?.let {
+            val resId = Animal.toResId(it)
+            binding.ivStudentImg.setBackgroundResource(resId)
+        }
+    }
+
     private fun setBtnEditTeacherImage() {
         binding.containerStudentImg.setOnClickListener {
             dialog = ProfileImageSelectBottomDialog(
@@ -59,9 +79,7 @@ class CompleteStudentProfileFragment : Fragment() {
                     binding.ivStudentImg.setBackgroundResource(image)
                 },
                 onSelect = { image ->
-                    viewModel._image.value = BitmapFactory.decodeResource(
-                        resources, image
-                    ).toBase64()
+                    viewModel._image.value = Animal.toName(image)
                     dialog.dismiss()
                 },
             )

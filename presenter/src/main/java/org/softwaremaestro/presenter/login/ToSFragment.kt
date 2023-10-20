@@ -5,17 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTosBinding
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
+import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
 
 @AndroidEntryPoint
 class ToSFragment : Fragment() {
 
     private lateinit var binding: FragmentTosBinding
+    private var agreeAll = false
+    private val viewModel: StudentRegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,15 +34,11 @@ class ToSFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setToolBar()
         setToggleButtons()
+        observe()
         setTexts()
         setNextButton()
-
-        binding.containerTos.setOnClickListener {
-            startActivity(Intent(requireActivity(), ToSNotionActivity::class.java))
-        }
-        binding.containerPrivacyPolicy.setOnClickListener {
-            startActivity(Intent(requireActivity(), PrivacyPolicyNotionActivity::class.java))
-        }
+        setTosContainer()
+        setPrivacyPolicyContainer()
     }
 
     private fun setToolBar() {
@@ -48,14 +48,27 @@ class ToSFragment : Fragment() {
     }
 
     private fun setToggleButtons() {
-        listOf(
-            binding.tbAgreeOnTos,
-            binding.tbAgreeOnPrivacyPolicy
-        ).forEach {
-            it.setOnClickListener {
-                (binding.tbAgreeOnTos.isChecked && binding.tbAgreeOnPrivacyPolicy.isChecked).let {
-                    binding.btnNext.setEnabledAndChangeColor(it)
+        binding.tbAgreeOnTos.setOnCheckedChangeListener { _, checked ->
+            viewModel.setAgreeOnToS(checked)
+        }
+
+        binding.tbAgreeOnPrivacyPolicy.setOnCheckedChangeListener { _, checked ->
+            viewModel.setAgreeOnPrivacyPolicy(checked)
+        }
+    }
+
+    private fun observe() {
+        viewModel.agreeAll.observe(viewLifecycleOwner) {
+            it ?: return@observe
+            with(binding.btnNext) {
+                if (it) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
                 }
+                agreeAll = it
             }
         }
     }
@@ -71,7 +84,23 @@ class ToSFragment : Fragment() {
 
     private fun setNextButton() {
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_toSFragment_to_registerRoleFragment)
+            if (agreeAll) {
+                findNavController().navigate(R.id.action_toSFragment_to_registerRoleFragment)
+            } else {
+                Toast.makeText(requireContext(), "약관에 동의해주세요", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setTosContainer() {
+        binding.containerTos.setOnClickListener {
+            startActivity(Intent(requireActivity(), ToSNotionActivity::class.java))
+        }
+    }
+
+    private fun setPrivacyPolicyContainer() {
+        binding.containerPrivacyPolicy.setOnClickListener {
+            startActivity(Intent(requireActivity(), PrivacyPolicyNotionActivity::class.java))
         }
     }
 }

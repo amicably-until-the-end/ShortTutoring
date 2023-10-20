@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,7 +18,6 @@ import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBind
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
-import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import java.lang.Integer.min
 
 // 회원가입 두 번째 화면.
@@ -27,12 +27,13 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterTeacherInfoBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
+    private var registerEnabled = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentRegisterTeacherInfoBinding.inflate(inflater, container, false)
         return binding.root
@@ -83,7 +84,12 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     private fun setNextButton() {
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_univAuthFragment)
+            if (registerEnabled) {
+//                findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_univAuthFragment)
+                findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_completeTeacherProfileFragment)
+            } else {
+                Toast.makeText(requireContext(), "출신 대학과 학과를 입력해주세요", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -115,7 +121,16 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     private fun observeSchoolNameAndMajorProper() {
         viewModel.schoolNameAndMajorProper.observe(viewLifecycleOwner) { proper ->
-            binding.btnNext.setEnabledAndChangeColor(proper)
+            with(binding.btnNext) {
+                if (proper) {
+                    setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+                    setTextColor(resources.getColor(R.color.white, null))
+                } else {
+                    setBackgroundResource(R.drawable.bg_radius_5_grey)
+                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                }
+            }
+            registerEnabled = proper
         }
     }
 

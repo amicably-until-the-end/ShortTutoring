@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.DialogProfileImageSelectBinding
+import org.softwaremaestro.presenter.login.Animal
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 
 class ProfileImageSelectBottomDialog(
@@ -23,7 +23,7 @@ class ProfileImageSelectBottomDialog(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogProfileImageSelectBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -35,8 +35,7 @@ class ProfileImageSelectBottomDialog(
             child.setOnClickListener {
                 binding.rgProfileImage.children.forEach { it.alpha = 0.3F }
                 child.alpha = 1F
-                selected = RES_LIST[i]
-                selected!!.let {
+                selected = Animal.values()[i].resId.also {
                     onImageChanged(it)
                     binding.btnReturn.setEnabledAndChangeColor(true)
                 }
@@ -46,17 +45,5 @@ class ProfileImageSelectBottomDialog(
         binding.btnReturn.setOnClickListener {
             selected?.let { onSelect(it) }
         }
-    }
-
-    companion object {
-        private val RES_LIST = listOf(
-            R.drawable.ic_profile_dog,
-            R.drawable.ic_profile_fox,
-            R.drawable.ic_profile_duck,
-            R.drawable.ic_profile_lion,
-            R.drawable.ic_profile_penguin,
-            R.drawable.ic_profile_polar_bear,
-            R.drawable.ic_profile_tiger
-        )
     }
 }
