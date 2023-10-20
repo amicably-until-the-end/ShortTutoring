@@ -56,9 +56,6 @@ abstract class ChatFragment : Fragment() {
     private lateinit var offeringTeacherAdapter: ChatRoomListAdapter
     private lateinit var proposedIconAdapter: ChatRoomIconListAdapter
 
-    private var selectedTutoringIndex: Int? = null
-    private var selectedTeacher: Int? = null
-
     private var recyclerViewAdapters: MutableList<RecyclerView.Adapter<*>> = mutableListOf()
 
     protected val chatViewModel: ChatViewModel by activityViewModels()
