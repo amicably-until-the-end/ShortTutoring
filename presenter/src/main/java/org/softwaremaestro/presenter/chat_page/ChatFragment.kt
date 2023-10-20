@@ -129,7 +129,7 @@ abstract class ChatFragment : Fragment() {
     }
 
     /**
-     * 현재 보고있는 채팅방의 정보가 바뀌었을때 UI를 새로고침한다.
+     *  현재 보고있는 채팅방의 정보가 바뀌었을때 UI를 새로고침한다.
      */
     private fun observeCurrentRoom() {
         chatViewModel._currentChattingRoomVO.postValue(null)
@@ -467,7 +467,6 @@ abstract class ChatFragment : Fragment() {
     /**
      * chattingId를 가진 방으로 UI를 전환한다.
      */
-
     private fun focusChatRoom(chattingId: String) {
         val liveDatas = mutableListOf(
             chatViewModel.reservedSelectedChatRoomList,
