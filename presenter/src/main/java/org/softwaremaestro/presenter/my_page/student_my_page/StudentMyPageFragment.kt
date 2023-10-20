@@ -8,24 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.FragmentStudentMyPageBinding
 import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
-import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.student_home.StudentHomeFragment
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
+import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
 @AndroidEntryPoint
 class StudentMyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentMyPageBinding
 
-    private val lecturesViewModel: LecturesViewModel by viewModels()
+    private val tutoringViewModel: TutoringViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
@@ -58,22 +62,22 @@ class StudentMyPageFragment : Fragment() {
     }
 
     private fun observe() {
-        observeLectures()
+        observeTutoring()
         observeProfile()
     }
 
-    private fun observeLectures() {
-//        lecturesViewModel.lectures.observe(requireActivity()) {
-//            binding.containerClipEmpty.visibility =
-//                if (it.isEmpty()) View.VISIBLE else View.GONE
-//
-//            lectureAdapter.apply {
-//                setItem(it)
-//                notifyDataSetChanged()
-//            }
-//
-//            binding.tvNumOfClip.text = it.size.toString()
-//        }
+    private fun observeTutoring() {
+        tutoringViewModel.tutoring.observe(requireActivity()) {
+            binding.containerClipEmpty.visibility =
+                if (it.isEmpty()) View.VISIBLE else View.GONE
+
+            lectureAdapter.apply {
+                setItem(it)
+                notifyDataSetChanged()
+            }
+
+            binding.tvNumOfClip.text = it.size.toString()
+        }
     }
 
     private fun observeProfile() {
@@ -102,17 +106,29 @@ class StudentMyPageFragment : Fragment() {
     private fun initLectureRecyclerView() {
 
         lectureAdapter = LectureAdapter {
-            // url을 이용해 영상 재생
-            it
+            watchRecordFile(it)
         }
 
-//        binding.rvClip.apply {
-//            adapter = lectureAdapter
-//            layoutManager =
-//                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-//        }
+        binding.rvClip.apply {
+            adapter = lectureAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
 
-        lecturesViewModel.getLectures()
+        tutoringViewModel.getTutoring()
+    }
+
+    private fun watchRecordFile(tutoringVO: TutoringVO) {
+        val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
+            putExtra(StudentHomeFragment.PROFILE_IMAGE, tutoringVO.opponentProfileImage)
+            putExtra(StudentHomeFragment.STUDENT_NAME, tutoringVO.opponentName)
+            putExtra(StudentHomeFragment.SCHOOL_LEVEL, tutoringVO.schoolLevel)
+            putExtra(StudentHomeFragment.SUBJECT, tutoringVO.schoolSubject)
+            putExtra(StudentHomeFragment.DESCRIPTION, tutoringVO.description)
+            tutoringVO.recordFileUrl?.get(0)
+                ?.let { putExtra(StudentHomeFragment.RECORDING_FILE_URL, it) }
+        }
+        startActivity(intent)
     }
 
     private fun setBtnEditTeacherImg() {

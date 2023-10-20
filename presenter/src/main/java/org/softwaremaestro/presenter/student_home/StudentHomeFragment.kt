@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.socket.SocketManager
+import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
@@ -157,8 +158,6 @@ class StudentHomeFragment : Fragment() {
             dialogTeacherProfile.setItem(it)
             it.teacherId?.let {
                 reviewsViewModel.getReviews(it)
-                // Todo: 선생님 tutoring 가져올 수 있게 되면 변경
-                // tutoringViewModel.getTutoring()
             }
 
             dialogTeacherProfile.show(parentFragmentManager, "teacherProfile")
@@ -296,15 +295,7 @@ class StudentHomeFragment : Fragment() {
     private fun setLectureRecyclerView() {
 
         lectureAdapter = LectureAdapter {
-            val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
-                putExtra(PROFILE_IMAGE, it.opponentProfileImage)
-                putExtra(STUDENT_NAME, it.opponentName)
-                putExtra(SCHOOL_LEVEL, it.schoolLevel)
-                putExtra(SUBJECT, it.schoolSubject)
-                putExtra(DESCRIPTION, it.description)
-                it.recordFileUrl?.get(0)?.let { putExtra(RECORDING_FILE_URL, it) }
-            }
-            startActivity(intent)
+            watchRecordFile(it)
         }
 
         binding.rvLecture.apply {
@@ -312,6 +303,18 @@ class StudentHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+    }
+
+    private fun watchRecordFile(tutoringVO: TutoringVO) {
+        val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
+            putExtra(PROFILE_IMAGE, tutoringVO.opponentProfileImage)
+            putExtra(STUDENT_NAME, tutoringVO.opponentName)
+            putExtra(SCHOOL_LEVEL, tutoringVO.schoolLevel)
+            putExtra(SUBJECT, tutoringVO.schoolSubject)
+            putExtra(DESCRIPTION, tutoringVO.description)
+            tutoringVO.recordFileUrl?.get(0)?.let { putExtra(RECORDING_FILE_URL, it) }
+        }
+        startActivity(intent)
     }
 
     private fun setCoinButton() {

@@ -3,6 +3,7 @@ package org.softwaremaestro.presenter.student_home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
 
@@ -33,8 +34,8 @@ class LectureAdapter(private val onItemClickListener: (TutoringVO) -> Unit) :
 
         fun onBind(item: TutoringVO) {
 
-            // Todo: 수정 필요함
-            binding.ivPhoto.setImageBitmap(null)
+            Glide.with(binding.root.context).load(item.questionImage).centerCrop()
+                .into(binding.ivThumbNail)
             binding.tvDesciption.text = item.description
             binding.tvSubject.text = item.schoolSubject
             binding.root.setOnClickListener {

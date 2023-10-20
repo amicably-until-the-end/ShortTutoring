@@ -22,6 +22,7 @@ import org.softwaremaestro.presenter.R
 import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 object Util {
     fun toPx(dp: Int, context: Context): Int {
@@ -32,6 +33,13 @@ object Util {
     fun toDp(px: Int, context: Context): Int {
         val metrics = context.resources.displayMetrics
         return px / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+    }
+
+    fun toLocalDateTime(isoString: String): LocalDateTime {
+        val format: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        var dateTime = LocalDateTime.parse(isoString, format)
+        dateTime = dateTime.plusHours(9)
+        return dateTime
     }
 
     fun getBottomSheetDialogDefaultHeight(activity: Activity): Int {

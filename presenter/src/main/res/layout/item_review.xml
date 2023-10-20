@@ -23,6 +23,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/iv_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/light_grey"
@@ -53,6 +54,7 @@
                 android:background="@drawable/ic_star" />
 
             <TextView
+                android:id="@+id/tv_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"

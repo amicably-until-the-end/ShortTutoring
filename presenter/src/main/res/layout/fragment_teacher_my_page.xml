@@ -356,8 +356,6 @@
 
                     </LinearLayout>
 
-                    <!--
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -385,7 +383,7 @@
                             tools:text="12" />
 
                     </LinearLayout>
--->
+
                 </RadioGroup>
 
                 <FrameLayout

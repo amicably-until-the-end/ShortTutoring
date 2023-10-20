@@ -214,81 +214,80 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-            <!--
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="48dp">
 
-                            <LinearLayout
-                                android:id="@+id/container_label_clip"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp">
 
-                                <TextView
-                                    android:id="@+id/tv_clip"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/pretendard_bold"
-                                    android:text="과외 영상"
-                                    android:textColor="@color/black"
-                                    android:textSize="18sp" />
+                <LinearLayout
+                    android:id="@+id/container_label_clip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                                <TextView
-                                    android:id="@+id/tv_num_of_clip"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="4dp"
-                                    android:fontFamily="@font/pretendard_bold"
-                                    android:textColor="@color/primary_blue"
-                                    android:textSize="18sp"
-                                    tools:text="12" />
+                    <TextView
+                        android:id="@+id/tv_clip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:text="과외 영상"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
 
-                            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_num_of_clip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@color/primary_blue"
+                        android:textSize="18sp"
+                        tools:text="12" />
 
-                            <FrameLayout
-                                android:id="@+id/container_clip"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="20dp"
-                                app:layout_constraintTop_toBottomOf="@id/container_label_clip">
+                </LinearLayout>
 
-                                <LinearLayout
-                                    android:id="@+id/container_clip_empty"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="@dimen/margin_horizontal_default"
-                                    android:visibility="gone">
+                <FrameLayout
+                    android:id="@+id/container_clip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/container_label_clip">
 
-                                    <TextView
-                                        style="@style/section_title"
-                                        android:layout_width="240dp"
-                                        android:layout_height="160dp"
-                                        android:background="@drawable/bg_radius_10_stroke_dotted"
-                                        android:gravity="center"
-                                        android:text="진행한 과외 영상이\n여기에 표시돼요"
-                                        android:textColor="@color/hint" />
+                    <LinearLayout
+                        android:id="@+id/container_clip_empty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/margin_horizontal_default"
+                        android:visibility="gone">
 
-                                </LinearLayout>
+                        <TextView
+                            style="@style/section_title"
+                            android:layout_width="240dp"
+                            android:layout_height="160dp"
+                            android:background="@drawable/bg_radius_10_stroke_dotted"
+                            android:gravity="center"
+                            android:text="진행한 과외 영상이\n여기에 표시돼요"
+                            android:textColor="@color/hint" />
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/rv_clip"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:clipToPadding="false"
-                                    android:paddingHorizontal="@dimen/margin_horizontal_default" />
+                    </LinearLayout>
 
-                            </FrameLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_clip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="@dimen/margin_horizontal_default" />
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                        -->
+                </FrameLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:layout_width="match_parent"

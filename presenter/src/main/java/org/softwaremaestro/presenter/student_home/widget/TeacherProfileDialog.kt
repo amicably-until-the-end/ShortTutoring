@@ -83,6 +83,7 @@ class TeacherProfileDialog(
         if (reviews.isEmpty()) {
             binding.containerReviewAndTutoring.visibility = View.GONE
         }
+        binding.tvNumOfReview.text = reviews.size.toString()
         reviewAdapter.setItem(reviews)
         reviewAdapter.notifyDataSetChanged()
     }

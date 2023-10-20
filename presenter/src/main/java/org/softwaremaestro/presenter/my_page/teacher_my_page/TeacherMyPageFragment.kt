@@ -11,18 +11,22 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.socket.SocketManager
+import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
-import org.softwaremaestro.presenter.my_page.viewmodel.LecturesViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
+import org.softwaremaestro.presenter.student_home.StudentHomeFragment
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
 @AndroidEntryPoint
 class TeacherMyPageFragment : Fragment() {
@@ -30,10 +34,11 @@ class TeacherMyPageFragment : Fragment() {
     private lateinit var binding: FragmentTeacherMyPageBinding
 
     private val reviewViewModel: ReviewViewModel by viewModels()
-    private val lecturesViewModel: LecturesViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val tutoringViewModel: TutoringViewModel by viewModels()
+
 
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -51,11 +56,9 @@ class TeacherMyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profileViewModel.getMyProfile()
-
+        getRemoteData()
         initReviewRecyclerView()
         initLectureRecyclerView()
-
         setBtnEditTeacherImg()
         setTvSettingTimeAndCost()
         setTvReview()
@@ -63,39 +66,44 @@ class TeacherMyPageFragment : Fragment() {
         setFollowerMenu()
         setServiceCenterMenu()
         setLogOutContainer()
-
         observe()
+    }
+
+    private fun getRemoteData() {
+        profileViewModel.getMyProfile()
+        SocketManager.userId?.let { reviewViewModel.getReviews(it) }
+        tutoringViewModel.getTutoring()
     }
 
     private fun observe() {
         observeProfile()
         observeReview()
-        observeLecture()
+        observeTutoring()
     }
 
     private fun observeReview() {
-//        reviewsViewModel.reviews.observe(requireActivity()) {
-//            binding.containerReviewEmpty.visibility =
-//                if (it.isEmpty()) View.VISIBLE else View.GONE
-//
-//            reviewAdapter.apply {
-//                setItem(it)
-//                notifyDataSetChanged()
-//            }
-//            binding.tvNumOfReview.text = it.size.toString()
-//        }
+        reviewViewModel.reviews.observe(requireActivity()) { reviews ->
+            val reviewsNotEmpty =
+                reviews.filter { it.reviewComment != null && it.reviewComment!!.length >= 3 }
+
+            binding.containerReviewEmpty.visibility =
+                if (reviewsNotEmpty.isEmpty()) View.VISIBLE else View.GONE
+
+            binding.tvNumOfReview.text = reviewsNotEmpty.size.toString()
+            reviewAdapter.setItem(reviewsNotEmpty)
+            reviewAdapter.notifyDataSetChanged()
+            binding.tvNumOfReview.text = reviewsNotEmpty.size.toString()
+        }
     }
 
-    private fun observeLecture() {
-        lecturesViewModel.lectures.observe(requireActivity()) {
+    private fun observeTutoring() {
+        tutoringViewModel.tutoring.observe(requireActivity()) {
             binding.containerClipEmpty.visibility =
                 if (it.isEmpty()) View.VISIBLE else View.GONE
 
-            lectureAdapter.apply {
-                setItem(it)
-                notifyDataSetChanged()
-            }
-//            binding.tvNumOfClip.text = it.size.toString()
+            lectureAdapter.setItem(it)
+            lectureAdapter.notifyDataSetChanged()
+            binding.tvNumOfClip.text = it.size.toString()
         }
     }
 
@@ -150,22 +158,21 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun initReviewRecyclerView() {
 
-//        reviewAdapter = ReviewAdapter()
-//
-//        binding.rvReview.apply {
-//            adapter = reviewAdapter
-//            layoutManager =
-//                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-//        }
-//
-//        reviewsViewModel.getReviews()
+        reviewAdapter = ReviewAdapter()
+
+        binding.rvReview.apply {
+            adapter = reviewAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        SocketManager.userId?.let { reviewViewModel.getReviews(it) }
     }
 
     private fun initLectureRecyclerView() {
 
         lectureAdapter = LectureAdapter {
-            // url을 이용해 영상 재생
-            it
+            watchRecordFile(it)
         }
 
         binding.rvClip.apply {
@@ -173,8 +180,19 @@ class TeacherMyPageFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+    }
 
-        lecturesViewModel.getLectures()
+    private fun watchRecordFile(tutoringVO: TutoringVO) {
+        val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
+            putExtra(StudentHomeFragment.PROFILE_IMAGE, tutoringVO.opponentProfileImage)
+            putExtra(StudentHomeFragment.STUDENT_NAME, tutoringVO.opponentName)
+            putExtra(StudentHomeFragment.SCHOOL_LEVEL, tutoringVO.schoolLevel)
+            putExtra(StudentHomeFragment.SUBJECT, tutoringVO.schoolSubject)
+            putExtra(StudentHomeFragment.DESCRIPTION, tutoringVO.description)
+            tutoringVO.recordFileUrl?.get(0)
+                ?.let { putExtra(StudentHomeFragment.RECORDING_FILE_URL, it) }
+        }
+        startActivity(intent)
     }
 
     private fun setTvSettingTimeAndCost() {
@@ -191,24 +209,24 @@ class TeacherMyPageFragment : Fragment() {
 
                 tvReview.setTextColor(resources.getColor(R.color.black, null))
                 tvNumOfReview.setTextColor(resources.getColor(R.color.primary_blue, null))
-//                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-//                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvNumOfClip.setTextColor(resources.getColor(R.color.sub_text_grey, null))
             }
         }
     }
 
     private fun setTvClip() {
-//        binding.tvClip.setOnClickListener {
-//            with(binding) {
-//                containerReview.visibility = View.GONE
-//                containerClip.visibility = View.VISIBLE
-//
-//                tvClip.setTextColor(resources.getColor(R.color.black, null))
-//                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
-//                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-//                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-//            }
-//        }
+        binding.tvClip.setOnClickListener {
+            with(binding) {
+                containerReview.visibility = View.GONE
+                containerClip.visibility = View.VISIBLE
+
+                tvClip.setTextColor(resources.getColor(R.color.black, null))
+                tvNumOfClip.setTextColor(resources.getColor(R.color.primary_blue, null))
+                tvReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                tvNumOfReview.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            }
+        }
     }
 
     private fun setFollowerMenu() {
@@ -228,10 +246,6 @@ class TeacherMyPageFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val SERVICE_CENTER_URL = "https://www.form.short-tutoring.com"
-    }
-
     private fun setLogOutContainer() {
         binding.containerLogOut.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java).apply {
@@ -241,5 +255,9 @@ class TeacherMyPageFragment : Fragment() {
             loginViewModel.clearJWT()
             startActivity(intent)
         }
+    }
+
+    companion object {
+        private const val SERVICE_CENTER_URL = "https://www.form.short-tutoring.com"
     }
 }
