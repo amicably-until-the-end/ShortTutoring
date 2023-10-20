@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.teacher_onlines_get.model.asDomain
 import org.softwaremaestro.data.teacher_onlines_get.remote.TeacherOnlinesGetApi
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 import org.softwaremaestro.domain.teacher_onlines_get.TeacherOnlinesGetRepository
 import javax.inject.Inject
 

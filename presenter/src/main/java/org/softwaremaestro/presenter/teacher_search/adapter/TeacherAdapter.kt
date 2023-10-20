@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 import org.softwaremaestro.presenter.databinding.ItemTeacherBinding
 import org.softwaremaestro.presenter.util.toRating
 import java.lang.Integer.min

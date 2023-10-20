@@ -6,8 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.review_create.entity.ReviewVO
-import org.softwaremaestro.domain.review_create.usecase.ReviewCreateUseCase
+import org.softwaremaestro.domain.review.entity.ReviewReqVO
+import org.softwaremaestro.domain.review.usecase.ReviewCreateUseCase
 import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class ReviewViewModel @Inject constructor(private val reviewCreateUseCase: Revie
         viewModelScope.launch {
 
             reviewCreateUseCase.execute(
-                ReviewVO(
+                ReviewReqVO(
                     tutoringId = tutoringId,
                     rating = rating,
                     comment = comment

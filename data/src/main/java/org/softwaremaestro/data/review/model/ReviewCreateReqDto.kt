@@ -1,8 +1,8 @@
-package org.softwaremaestro.data.review_create.model
+package org.softwaremaestro.data.review.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ReviewReqDto(
+data class ReviewCreateReqDto(
     @SerializedName("rating") val rating: Int,
     @SerializedName("comment") val comment: String
 )

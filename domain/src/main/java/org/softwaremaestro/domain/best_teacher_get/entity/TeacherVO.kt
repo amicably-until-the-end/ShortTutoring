@@ -1,4 +1,4 @@
-package org.softwaremaestro.domain.teacher_get.entity
+package org.softwaremaestro.domain.best_teacher_get.entity
 
 data class TeacherVO(
     val profileUrl: String?,

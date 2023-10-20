@@ -1,6 +1,6 @@
 package org.softwaremaestro.data.teacher_onlines_get.model
 
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 
 object Mapper {
     fun asDomain(teacherOnlineDto: TeacherOnlineDto): TeacherVO {

@@ -8,7 +8,7 @@ import org.softwaremaestro.data.follow.remote.FollowApi
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.follow.FollowRepository
 import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 import javax.inject.Inject
 
 class FollowRepositoryImpl @Inject constructor(private val followApi: FollowApi) :

@@ -3,13 +3,13 @@ package org.softwaremaestro.presenter.student_home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.softwaremaestro.domain.lecture_get.entity.LectureVO
+import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
 
 class LectureAdapter(private val onItemClickListener: (String) -> Unit) :
     RecyclerView.Adapter<LectureAdapter.ViewHolder>() {
 
-    private var items: List<LectureVO> = emptyList()
+    private var items: List<TutoringVO> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LectureAdapter.ViewHolder {
         val view = ItemLectureBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,19 +24,19 @@ class LectureAdapter(private val onItemClickListener: (String) -> Unit) :
         return items.size
     }
 
-    fun setItem(items: List<LectureVO>) {
+    fun setItem(items: List<TutoringVO>) {
         this.items = items
     }
 
     inner class ViewHolder(private val binding: ItemLectureBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: LectureVO) {
+        fun onBind(item: TutoringVO) {
 
             // Todo: 수정 필요함
             binding.ivPhoto.setImageBitmap(null)
             binding.tvDesciption.text = item.description
-            binding.tvSubject.text = item.subject
+            binding.tvSubject.text = item.schoolSubject
             binding.root.setOnClickListener {
                 // 영상을 재생하기 위해 listener에 url을 넘긴다
                 onItemClickListener("example url")

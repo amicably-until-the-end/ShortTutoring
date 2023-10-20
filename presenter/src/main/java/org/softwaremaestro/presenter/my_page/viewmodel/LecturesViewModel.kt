@@ -6,30 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.lecture_get.entity.LectureVO
+import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import javax.inject.Inject
 
 @HiltViewModel
 class LecturesViewModel @Inject constructor() : ViewModel() {
 
-    private val _lectures: MutableLiveData<List<LectureVO>> = MutableLiveData()
-    val lectures: LiveData<List<LectureVO>> get() = _lectures
+    private val _lectures: MutableLiveData<List<TutoringVO>> = MutableLiveData()
+    val lectures: LiveData<List<TutoringVO>> get() = _lectures
 
     fun getLectures() {
         viewModelScope.launch {
-            val mockUpLectures = mutableListOf<LectureVO>().apply {
-                (0..5).forEach {
-                    add(
-                        LectureVO(
-                            "문제가 너무 어려워요",
-                            "수학1",
-                            "example url"
-                        )
-                    )
-                }
-            }
-
-            _lectures.postValue(mockUpLectures.toList())
+           
         }
     }
 }
