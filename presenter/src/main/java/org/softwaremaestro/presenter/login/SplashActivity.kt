@@ -23,7 +23,6 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("deepLink", "onViewCreated ${this::class.java} ${this.hashCode()}")
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getPendingIntent()
@@ -35,7 +34,6 @@ class SplashActivity : AppCompatActivity() {
         val args = intent.extras
         args?.apply {
             try {
-                Log.d("deepLink@Splash", "args: $args ${getString(APP_LINK_ARGS_CHAT_ID)}")
                 chatId = getString(APP_LINK_ARGS_CHAT_ID)
             } catch (e: Exception) {
                 Log.w(this@SplashActivity::class.java.name, "getPendingIntent: $e")

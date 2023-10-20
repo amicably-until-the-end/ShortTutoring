@@ -28,4 +28,6 @@ interface ChatRepository {
     suspend fun markAsRead(chatRoomId: String)
 
     suspend fun hasUnreadMessages(): Boolean
+
+    suspend fun deleteChatRoom(chatRoomId: String): Boolean
 }

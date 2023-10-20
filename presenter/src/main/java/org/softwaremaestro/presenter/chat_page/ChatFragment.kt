@@ -97,6 +97,8 @@ abstract class ChatFragment : Fragment() {
         observeSocket()
         observeCurrentRoom()
         clearChatRoomState()
+        observeExitRoomResult()
+
 
         return binding.root
 
@@ -779,6 +781,31 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    protected fun enableExitRoomBtn() {
+        binding.btnChatRoomRight.apply {
+            visibility = View.VISIBLE
+            text = "채팅방 나가기"
+            setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
+            isEnabled = true
+            setTextColor(resources.getColor(R.color.white, null))
+            setOnClickListener {
+                SimpleConfirmDialog {
+                    currentChatRoom?.id?.let { chatViewModel.exitChatRoom(it) }
+                }.apply {
+                    title = "현재 채팅방에서 나갈까요?"
+                    if (isTeacher())
+                        description = "모든 메시지가 삭제됩니다."
+                    else
+                        description = "채팅방에서 나가도 과외 영상은 홈에서 다시 볼 수 있어요."
+                }.show(
+                    parentFragmentManager,
+                    "detailAlertDialog"
+                )
+            }
+        }
+    }
+
+
     protected fun setNotiVisible(b: Boolean) {
         with(binding) {
             if (b) {
@@ -816,6 +843,20 @@ abstract class ChatFragment : Fragment() {
         binding.etMessage.apply {
             isFocusable = b
             isFocusableInTouchMode = b
+        }
+    }
+
+
+    private fun observeExitRoomResult() {
+        chatViewModel.deleteChatRoom.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    clearChatRoomState()
+                    getRoomList()
+                }
+
+                else -> {}
+            }
         }
     }
 

@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
+import org.softwaremaestro.domain.chat.usecase.ChatRoomUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getChatRoomListUseCase: GetChatRoomListUseCase
+    private val chatRoomUseCase: ChatRoomUseCase
 ) : ViewModel() {
     var chattingId: String? = null
 
@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
 
     fun getNewMessageExist() {
         viewModelScope.launch(Dispatchers.IO) {
-            _newMessageExist.postValue(getChatRoomListUseCase.hasUnreadMessages())
+            _newMessageExist.postValue(chatRoomUseCase.hasUnreadMessages())
 
         }
     }

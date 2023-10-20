@@ -50,14 +50,18 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun observeTutoringInfo() {
         chatViewModel.tutoringInfo.observe(viewLifecycleOwner) {
-            Log.d("observeTutoringInfo", "observeTutoringInfo: ${it}")
             when (it) {
                 is UIState.Empty -> return@observe
 
                 is UIState.Success -> {
                     it._data?.let { tutoringInfo ->
                         setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
+                        Log.d("observeTutoringInfo", "observeTutoringInfo: ${tutoringInfo}")
                         tutoringId = tutoringInfo.id
+                        if (tutoringInfo.status == "finished") {
+                            setNotiVisible(false)
+                            enableExitRoomBtn()
+                        }
                     }
                 }
 
@@ -154,6 +158,7 @@ class TeacherChatFragment : ChatFragment() {
         setChatRoomRightBtnVisible(false)
         binding.btnChatRoomLeft.visibility = View.GONE
         disableSendMessage()
+        enableExitRoomBtn()
     }
 
     private fun onProposedSelectRoomEnter() {

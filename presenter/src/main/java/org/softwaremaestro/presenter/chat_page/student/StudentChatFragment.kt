@@ -61,7 +61,6 @@ class StudentChatFragment : ChatFragment() {
 
                 ChatRoomState.DECLINED -> {
                     //지정 질문을 선생님이 거절
-                    Log.d("onChatRoomStateChange", "onChatRoomStateChange: DECLINED")
                     onDeclinedRoomSelect()
                 }
 
@@ -101,6 +100,7 @@ class StudentChatFragment : ChatFragment() {
         setNotiVisible(false)
         hideRightButton()
         disableSendMessage()
+        enableExitRoomBtn()
     }
 
     private fun initWaitingTeacherDialog() {
@@ -228,6 +228,10 @@ class StudentChatFragment : ChatFragment() {
                     it._data?.let { tutoringInfo ->
                         setChatNoti(tutoringInfo.reservedStart, tutoringInfo.id)
                         tutoringId = tutoringInfo.id
+                        if (tutoringInfo.status == "finished") {
+                            enableExitRoomBtn()
+                            setNotiVisible(false)
+                        }
                     }
                 }
 

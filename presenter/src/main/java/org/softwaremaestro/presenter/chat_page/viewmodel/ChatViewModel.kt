@@ -16,8 +16,8 @@ import kotlinx.serialization.Serializable
 import org.json.JSONObject
 import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.chat.entity.MessageVO
+import org.softwaremaestro.domain.chat.usecase.ChatRoomUseCase
 import org.softwaremaestro.domain.chat.usecase.GetChatMessagesUseCase
-import org.softwaremaestro.domain.chat.usecase.GetChatRoomListUseCase
 import org.softwaremaestro.domain.chat.usecase.InsertMessageUseCase
 import org.softwaremaestro.domain.classroom.entity.ClassroomInfoVO
 import org.softwaremaestro.domain.classroom.entity.TutoringInfoVO
@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val getChatRoomListUseCase: GetChatRoomListUseCase,
+    private val chatRoomUseCase: ChatRoomUseCase,
     private val getTutoringInfoUseCase: GetTutoringInfoUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val insertMessageUseCase: InsertMessageUseCase,
@@ -80,6 +80,9 @@ class ChatViewModel @Inject constructor(
     val changedChatRoom: LiveData<ChatRoomVO?>
         get() = _changedChatRoom
 
+    val _deleteChatRoom = MutableLiveData<UIState<Boolean>>()
+    val deleteChatRoom: LiveData<UIState<Boolean>>
+        get() = _deleteChatRoom
 
     val _tutoringInfo = MutableLiveData<UIState<TutoringInfoVO>>()
     val tutoringInfo: LiveData<UIState<TutoringInfoVO>>
@@ -89,7 +92,7 @@ class ChatViewModel @Inject constructor(
 
     fun getChatRoomList(isTeacher: Boolean, currentRoomId: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            getChatRoomListUseCase.execute(isTeacher, currentRoomId)
+            chatRoomUseCase.getRoomList(isTeacher, currentRoomId)
                 .onStart { _reservedNormalChatRoomList.postValue(UIState.Loading) }
                 .catch { exception ->
                     _reservedNormalChatRoomList.postValue(UIState.Failure)
@@ -121,7 +124,7 @@ class ChatViewModel @Inject constructor(
 
     fun getChatRoomInfo(chattingId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            getChatRoomListUseCase.getChatRoom(chattingId).catch { }
+            chatRoomUseCase.getChatRoom(chattingId).catch { }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
@@ -258,7 +261,18 @@ class ChatViewModel @Inject constructor(
 
     fun markAsRead(chatRoomId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            getChatRoomListUseCase.markAsRead(chatRoomId)
+            chatRoomUseCase.markAsRead(chatRoomId)
+        }
+    }
+
+    fun exitChatRoom(chatRoomId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (chatRoomUseCase.deleteChatRoom(chatRoomId)) {
+                _deleteChatRoom.postValue(UIState.Success(true))
+            } else {
+                _deleteChatRoom.postValue(UIState.Failure)
+            }
+
         }
     }
 

@@ -7,8 +7,8 @@ import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.common.BaseResult
 import javax.inject.Inject
 
-class GetChatRoomListUseCase @Inject constructor(private val repository: ChatRepository) {
-    suspend fun execute(
+class ChatRoomUseCase @Inject constructor(private val repository: ChatRepository) {
+    suspend fun getRoomList(
         isTeacher: Boolean,
         currentRoomId: String?
     ): Flow<BaseResult<ChatRoomListVO, String>> =
@@ -20,6 +20,8 @@ class GetChatRoomListUseCase @Inject constructor(private val repository: ChatRep
         repository.getChatRoomInfo(chatRoomId)
 
     suspend fun markAsRead(chatRoomId: String) = repository.markAsRead(chatRoomId)
+
+    suspend fun deleteChatRoom(chatRoomId: String) = repository.deleteChatRoom(chatRoomId)
 
     suspend fun hasUnreadMessages() = repository.hasUnreadMessages()
 }

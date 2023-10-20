@@ -250,4 +250,14 @@ class ChatRepositoryImpl @Inject constructor(
         return chatDatabase.messageDao().hasUnreadMessages()
     }
 
+    override suspend fun deleteChatRoom(chatRoomId: String): Boolean {
+        return try {
+            chatDatabase.chatRoomDao().delete(chatRoomId)
+            true
+        } catch (e: Exception) {
+            Log.e("${this@ChatRepositoryImpl::class.java}", e.toString())
+            false
+        }
+    }
+
 }
