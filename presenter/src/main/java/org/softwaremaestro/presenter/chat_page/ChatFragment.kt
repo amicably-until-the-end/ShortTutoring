@@ -659,7 +659,6 @@ abstract class ChatFragment : Fragment() {
     /**
      * 강의실로 이동
      */
-
     protected fun moveToClassRoom(classroomInfoVO: ClassroomInfoVO) {
         val intent = Intent(requireContext(), ClassroomActivity::class.java)
         classroomInfoVO.let {
