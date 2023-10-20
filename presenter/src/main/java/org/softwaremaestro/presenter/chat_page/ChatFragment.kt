@@ -99,7 +99,6 @@ abstract class ChatFragment : Fragment() {
         clearChatRoomState()
         observeExitRoomResult()
 
-
         return binding.root
 
     }
