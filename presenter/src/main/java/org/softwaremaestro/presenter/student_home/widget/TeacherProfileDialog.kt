@@ -7,13 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.review.entity.ReviewResVO
 import org.softwaremaestro.domain.socket.SocketManager
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
+import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
+import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.Util.logError
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
@@ -34,6 +39,9 @@ class TeacherProfileDialog(
     private var followerCnt = 0
     private lateinit var unfollowDialog: DetailAlertDialog
 
+    private lateinit var tutoringAdapter: LectureAdapter
+    private lateinit var reviewAdapter: ReviewAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,6 +58,7 @@ class TeacherProfileDialog(
         setFollowBtn()
         setReserveBtn()
         bind()
+        setRecyclerViews()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -64,9 +73,24 @@ class TeacherProfileDialog(
     fun setItem(item: TeacherVO) {
         SocketManager.userId ?: return
         item.followers ?: return
+        item.teacherId ?: return
         mItem = item
         following = SocketManager.userId in item.followers!!
         followerCnt = item.followers!!.size
+    }
+
+    fun setItemToReviewRecyclerView(reviews: List<ReviewResVO>) {
+        if (reviews.isEmpty()) {
+            binding.containerReviewAndTutoring.visibility = View.GONE
+        }
+        binding.tvNumOfReview.text = reviews.size.toString()
+        reviewAdapter.setItem(reviews)
+        reviewAdapter.notifyDataSetChanged()
+    }
+
+    fun setItemToTutoringRecyclerView(tutorings: List<TutoringVO>) {
+        tutoringAdapter.setItem(tutorings)
+        tutoringAdapter.notifyDataSetChanged()
     }
 
     private fun bind() {
@@ -82,8 +106,35 @@ class TeacherProfileDialog(
         }
     }
 
+    private fun setRecyclerViews() {
+        setTutoringRecyclerView()
+        setReviewRecyclerView()
+    }
+
+    private fun setTutoringRecyclerView() {
+        tutoringAdapter = LectureAdapter {
+            // 과외 영상 보여주기
+        }
+
+        with(binding.rvClip) {
+            adapter = tutoringAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setReviewRecyclerView() {
+        reviewAdapter = ReviewAdapter()
+
+        with(binding.rvReview) {
+            adapter = reviewAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
     private fun setProfileContainer() {
-        binding.containerContent.setOnClickListener {
+        binding.cvInfoBox.setOnClickListener {
             mItem.teacherId?.let { onProfileClick(it) }
         }
     }

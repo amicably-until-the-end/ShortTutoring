@@ -35,9 +35,9 @@ import org.softwaremaestro.presenter.classroom.ReviewDialog
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.databinding.FragmentChatPageBinding
-import org.softwaremaestro.presenter.my_page.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeFragment.Companion.CLASSROOM_END_RESULT
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus

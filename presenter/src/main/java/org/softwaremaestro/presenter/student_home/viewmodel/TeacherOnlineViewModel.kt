@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 import org.softwaremaestro.domain.teacher_onlines_get.usecase.TeacherOnlinesGetUseCase
 import org.softwaremaestro.presenter.util.Util
 import javax.inject.Inject

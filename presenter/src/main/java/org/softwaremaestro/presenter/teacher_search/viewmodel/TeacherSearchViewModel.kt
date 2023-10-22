@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 import javax.inject.Inject
 
 @HiltViewModel

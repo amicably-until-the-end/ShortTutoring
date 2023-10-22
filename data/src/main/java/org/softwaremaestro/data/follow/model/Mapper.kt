@@ -1,7 +1,7 @@
 package org.softwaremaestro.data.follow.model
 
 import org.softwaremaestro.domain.follow.entity.FollowerGetResponseVO
-import org.softwaremaestro.domain.teacher_get.entity.TeacherVO
+import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
 
 object Mapper {
     fun asDomain(followerGetResponseDto: FollowerGetResponseDto): FollowerGetResponseVO {

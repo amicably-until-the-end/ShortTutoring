@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="220dp"
     android:layout_height="170dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginRight="15dp"
     app:cardCornerRadius="15dp"
     app:cardElevation="0dp"
     app:cardUseCompatPadding="false">
@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/iv_photo"
+            android:id="@+id/iv_thumb_nail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/light_grey" />
