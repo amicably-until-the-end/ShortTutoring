@@ -435,6 +435,57 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/container_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="30dp">
+
+                    <TextView
+                        android:id="@+id/tv_question_reserved"
+                        style="@style/section_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                        android:text="수업이 확정된 질문이에요" />
+
+                    <FrameLayout
+                        android:id="@+id/container_question_reserved"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp">
+
+                        <LinearLayout
+                            android:id="@+id/container_question_reserved_empty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="@dimen/section_horizontal_padding_default">
+
+                            <TextView
+                                style="@style/section_title"
+                                android:layout_width="240dp"
+                                android:layout_height="160dp"
+                                android:background="@drawable/bg_radius_10_stroke_dotted"
+                                android:gravity="center"
+                                android:text="예약된 수업이\n여기에 표시돼요"
+                                android:textColor="@color/hint"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_question_reserved"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="false"
+                            android:paddingHorizontal="@dimen/margin_horizontal_default" />
+
+                    </FrameLayout>
+                </LinearLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/container_lecture_section"
                     android:layout_width="match_parent"
