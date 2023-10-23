@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.student_home.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -41,6 +42,7 @@ class LectureAdapter(private val onItemClickListener: (TutoringVO) -> Unit) :
             binding.root.setOnClickListener {
                 onItemClickListener(item)
             }
+            binding.ivPlay.visibility = if (item.isPlayable) View.VISIBLE else View.GONE
         }
     }
 }

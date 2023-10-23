@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.chat.entity.ChatRoomVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -39,8 +41,10 @@ import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
+import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -55,10 +59,11 @@ class StudentHomeFragment : Fragment() {
     private val tutoringViewModel: TutoringViewModel by activityViewModels()
     private val eventViewModel: EventViewModel by activityViewModels()
     private val reviewsViewModel: ReviewViewModel by activityViewModels()
-
+    private val chatViewModel: ChatViewModel by activityViewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
+    private lateinit var questionReservedAdapter: LectureAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var eventAdapter: EventAdapter
@@ -90,6 +95,7 @@ class StudentHomeFragment : Fragment() {
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         teacherOnlineViewModel.getTeacherOnlines()
         eventViewModel.getEvents()
+        chatViewModel.getChatRoomList(false, null)
     }
 
     private fun initTeacherProfileDialog() {
@@ -148,6 +154,7 @@ class StudentHomeFragment : Fragment() {
         setTeacherFollowingRecyclerView()
         setTeacherOnlineRecyclerView()
         setOthersQuestionRecyclerView()
+        setQuestionReservedRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
         setEventRecyclerView()
@@ -292,6 +299,18 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun setQuestionReservedRecyclerView() {
+        questionReservedAdapter = LectureAdapter {
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.questionId)
+        }
+
+        binding.rvQuestionReserved.apply {
+            adapter = questionReservedAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
     private fun setLectureRecyclerView() {
 
         lectureAdapter = LectureAdapter {
@@ -368,6 +387,40 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
+    private fun observeQuestionReserved() {
+        chatViewModel.reservedNormalChatRoomList.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    val tutorings = it.data.map { toTutoring(it) }
+                    questionReservedAdapter.setItem(tutorings)
+                    questionReservedAdapter.notifyDataSetChanged()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun toTutoring(cr: ChatRoomVO): TutoringVO {
+        return TutoringVO(
+            description = cr.description,
+            tutoringDate = cr.startDateTime?.format(
+                DateTimeFormatter.ofPattern(
+                    "yyyy.MM.dd"
+                )
+            ),
+            schoolSubject = cr.schoolSubject,
+            questionId = cr.id,
+            schoolLevel = cr.schoolLevel,
+            opponentName = cr.title,
+            questionImage = cr.roomImage,
+            isPlayable = false,
+            recordFileUrl = null,
+            tutoringId = null,
+            opponentProfileImage = null
+        )
+    }
+
     private fun observeTutoring() {
         tutoringViewModel.tutoring.observe(viewLifecycleOwner) {
             lectureAdapter.setItem(it)
@@ -420,6 +473,7 @@ class StudentHomeFragment : Fragment() {
     private fun setObserver() {
         observeFollowing()
         observeAmount()
+        observeQuestionReserved()
         observeTutoring()
         observeReview()
         observeTeachers()
