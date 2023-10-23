@@ -453,6 +453,9 @@ class StudentHomeFragment : Fragment() {
         tutoringViewModel.tutoring.observe(viewLifecycleOwner) {
             binding.containerLectureSection.visibility =
                 if (it.isEmpty()) View.GONE else View.VISIBLE
+            lectureAdapter.setItem(it)
+            binding.containerLectureSection.visibility =
+                if (it.isEmpty()) View.GONE else View.VISIBLE
             // 시간순 배열
             val sTutorings = it.sortedWith { t1, t2 ->
                 val d1 = t1.tutoringDate ?: return@sortedWith 1
