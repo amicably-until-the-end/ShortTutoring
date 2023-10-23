@@ -21,6 +21,7 @@ data class ChatRoomEntity(
     var description: String?,
     var chatRoomState: ChatRoomState,
     var lastMessageTime: LocalDateTime? = LocalDateTime.now(),
+    var questionImage: String,
 )
 
 @Entity
@@ -46,6 +47,7 @@ data class ChatRoomWithUnReadMessageCnt(
     var description: String?,
     val unReadCnt: Int,
     val chatRoomState: ChatRoomState,
+    val questionImage: String,
 )
 
 enum class ChatRoomType(val type: Int) {
