@@ -34,9 +34,9 @@ abstract class ChatDatabase : RoomDatabase() {
             }
         }
 
-        private val migration_2_3 = object : Migration(1, 2) {
+        private val migration_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE ChatRoomEntity ADD COLUMN quesetionImage TEXT DEFAULT ''")
+                database.execSQL("ALTER TABLE ChatRoomEntity ADD COLUMN questionImage TEXT DEFAULT ''")
             }
         }
 
