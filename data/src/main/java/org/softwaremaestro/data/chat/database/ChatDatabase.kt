@@ -33,13 +33,7 @@ abstract class ChatDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE ChatRoomEntity ADD COLUMN lastMessageTime TEXT DEFAULT '2021-09-02T14:56:20.669'")
             }
         }
-
-        private val migration_2_3 = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE ChatRoomEntity ADD COLUMN questionImage TEXT DEFAULT ''")
-            }
-        }
-
+        
         @Synchronized
         fun getInstance(context: Context): ChatDatabase? {
             if (instance == null) {
@@ -47,7 +41,7 @@ abstract class ChatDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         ChatDatabase::class.java, "chat.db"
-                    ).addMigrations(migration_1_2).addMigrations(migration_2_3)
+                    ).addMigrations(migration_1_2)
                         .build()
                 }
             }
