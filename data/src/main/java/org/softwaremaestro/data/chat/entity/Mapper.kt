@@ -153,7 +153,6 @@ class Mapper {
             isSelect = dto.isSelect ?: false,
             description = dto.questionInfo?.problem?.description ?: "undefined",
             chatRoomState = ChatRoomState.values().find { it.value == dto.questionState }!!,
-            questionImage = dto.questionInfo?.problem?.mainImage ?: "",
         )
     }
 }
