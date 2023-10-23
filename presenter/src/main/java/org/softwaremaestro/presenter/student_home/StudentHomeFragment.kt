@@ -370,6 +370,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun observeTutoring() {
         tutoringViewModel.tutoring.observe(viewLifecycleOwner) {
+            binding.containerLectureSection.visibility =
+                if (it.isEmpty()) View.GONE else View.VISIBLE
             lectureAdapter.setItem(it)
             lectureAdapter.notifyDataSetChanged()
         }
