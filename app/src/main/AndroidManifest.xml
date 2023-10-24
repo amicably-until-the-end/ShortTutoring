@@ -3,7 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.softwaremaestro.shorttutoring">
 
-    <supports-screens android:requiresSmallestWidthDp="800" />
+    <supports-screens
+        android:largeScreens="false"
+        android:normalScreens="false"
+        android:smallScreens="false"
+        android:xlargeScreens="true" />
+    <compatible-screens>
+        <!-- all xlarge size screens -->
+        <screen
+            android:screenDensity="ldpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="xxhdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="xxxhdpi"
+            android:screenSize="xlarge" />
+        <!-- some of large size screens -->
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="xxhdpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="xxxhdpi"
+            android:screenSize="large" />
+    </compatible-screens>
 
     <uses-feature
         android:name="android.hardware.camera"
