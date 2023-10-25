@@ -56,7 +56,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="30dp">
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -303,28 +304,28 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/container_question"
+                    android:id="@+id/container_my_question_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingTop="30dp">
 
                     <TextView
-                        android:id="@+id/tv_question_reserved"
+                        android:id="@+id/tv_my_question"
                         style="@style/section_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="@dimen/section_horizontal_padding_default"
-                        android:text="수업이 확정된 질문이에요" />
+                        android:text="나의 질문 목록" />
 
                     <FrameLayout
-                        android:id="@+id/container_question_reserved"
+                        android:id="@+id/container_my_question"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp">
 
                         <LinearLayout
-                            android:id="@+id/container_question_reserved_empty"
+                            android:id="@+id/container_my_question_empty"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -337,14 +338,14 @@
                                 android:layout_height="160dp"
                                 android:background="@drawable/bg_radius_10_stroke_dotted"
                                 android:gravity="center"
-                                android:text="예약된 수업이\n여기에 표시돼요"
+                                android:text="신청한 수업이\n여기에 표시돼요"
                                 android:textColor="@color/hint"
                                 android:visibility="gone" />
 
                         </LinearLayout>
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_question_reserved"
+                            android:id="@+id/rv_my_question"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clipToPadding="false"

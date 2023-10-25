@@ -22,6 +22,9 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
     private val _amount: MutableLiveData<Int> = MutableLiveData()
     val amount: LiveData<Int> get() = _amount
 
+    private val _name: MutableLiveData<String?> = MutableLiveData()
+    val name: LiveData<String?> get() = _name
+
     fun getMyProfile() {
         viewModelScope.launch {
             myProfileGetUseCase.execute()
@@ -32,6 +35,7 @@ class MyProfileViewModel @Inject constructor(private val myProfileGetUseCase: My
                     when (result) {
                         is BaseResult.Success -> {
                             result.data.amount?.let { _amount.postValue(it) }
+                            result.data.name?.let { _name.postValue(it) }
                             result.data.following?.let { _following.postValue(it) }
                         }
 

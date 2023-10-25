@@ -333,6 +333,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeReview() {
         reviewsViewModel.reviews.observe(viewLifecycleOwner) {
+            it ?: return@observe
             val reviews = it.filter {
                 val comments = it.reviewComment
                 comments != null && comments.length >= 3

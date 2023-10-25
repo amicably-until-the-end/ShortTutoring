@@ -1,12 +1,13 @@
 package org.softwaremaestro.presenter.student_home.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.ItemLectureBinding
+import org.softwaremaestro.presenter.util.Util.toLocalDateTime
+import java.time.LocalDateTime
 
 class LectureAdapter(private val onItemClickListener: (TutoringVO) -> Unit) :
     RecyclerView.Adapter<LectureAdapter.ViewHolder>() {
@@ -42,7 +43,14 @@ class LectureAdapter(private val onItemClickListener: (TutoringVO) -> Unit) :
             binding.root.setOnClickListener {
                 onItemClickListener(item)
             }
-            binding.ivPlay.visibility = if (item.isPlayable) View.VISIBLE else View.GONE
+            item.tutoringDate?.let { tDate ->
+                val ldt = toLocalDateTime(tDate)
+                val today = LocalDateTime.now().withHour(0).withMinute(0)
+                val date = if (ldt > today) "오늘"
+                else if (ldt > today.plusDays(-1L)) "어제"
+                else "${ldt.monthValue}월 ${ldt.dayOfMonth}일"
+                binding.tvTime.text = date
+            }
         }
     }
 }

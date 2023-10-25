@@ -15,15 +15,15 @@ import androidx.core.view.children
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.softwaremaestro.domain.chat.entity.ChatRoomVO
+import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.chat_page.viewmodel.ChatViewModel
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -31,6 +31,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.Ques
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.QuestionReserveActivity
 import org.softwaremaestro.presenter.student_home.adapter.EventAdapter
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
+import org.softwaremaestro.presenter.student_home.adapter.StudentQuestionAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherCircularAdapter
 import org.softwaremaestro.presenter.student_home.adapter.TeacherSimpleAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.EventViewModel
@@ -39,12 +40,12 @@ import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
-import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util.toLocalDateTime
 import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
-import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -59,11 +60,11 @@ class StudentHomeFragment : Fragment() {
     private val tutoringViewModel: TutoringViewModel by activityViewModels()
     private val eventViewModel: EventViewModel by activityViewModels()
     private val reviewsViewModel: ReviewViewModel by activityViewModels()
-    private val chatViewModel: ChatViewModel by activityViewModels()
+    private val questionsViewModel: QuestionsViewModel by viewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
-    private lateinit var questionReservedAdapter: LectureAdapter
+    private lateinit var questionAdapter: StudentQuestionAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var eventAdapter: EventAdapter
@@ -95,7 +96,7 @@ class StudentHomeFragment : Fragment() {
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         teacherOnlineViewModel.getTeacherOnlines()
         eventViewModel.getEvents()
-        chatViewModel.getChatRoomList(false, null)
+        questionsViewModel.getMyQuestions()
     }
 
     private fun initTeacherProfileDialog() {
@@ -300,12 +301,12 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setQuestionReservedRecyclerView() {
-        questionReservedAdapter = LectureAdapter {
-            (requireActivity() as StudentHomeActivity).moveToChatTab(it.questionId)
+        questionAdapter = StudentQuestionAdapter {
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
         }
 
-        binding.rvQuestionReserved.apply {
-            adapter = questionReservedAdapter
+        binding.rvMyQuestion.apply {
+            adapter = questionAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -387,43 +388,44 @@ class StudentHomeFragment : Fragment() {
         }
     }
 
-    private fun observeQuestionReserved() {
-        chatViewModel.reservedNormalChatRoomList.observe(viewLifecycleOwner) {
-            when (it) {
-                is UIState.Success -> {
-                    val tutorings = it.data.map { toTutoring(it) }
-                    questionReservedAdapter.setItem(tutorings)
-                    questionReservedAdapter.notifyDataSetChanged()
+    private fun observeMyQuestions() {
+        questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
+            // 맨 앞에는 가장 가짜운 일시의 예약된 수업 하나를 보여주고,
+            // 그 뒤에는 모두 예약되지 않은 수업만 보여준다
+            val myQuestions = mutableListOf<QuestionGetResponseVO>()
+            val reserved = questions.filter { it.status == "reserved" }
+                .sortedWith { q1, q2 ->
+                    val d1 = q1.reservedStart ?: return@sortedWith 1
+                    val d2 = q2.reservedStart ?: return@sortedWith -1
+                    return@sortedWith if (toLocalDateTime(d1) < toLocalDateTime(d2)) 1 else -1
                 }
+            reserved.let { myQuestions.addAll(it) }
+            val pendings = questions.filter { it.status == "pending" }
+            myQuestions.addAll(pendings)
 
-                else -> {}
+            if (myQuestions.isEmpty()) {
+                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
+                binding.rvMyQuestion.visibility = View.GONE
+            } else {
+                binding.containerMyQuestionEmpty.visibility = View.GONE
+                binding.rvMyQuestion.visibility = View.VISIBLE
             }
+            questionAdapter.submitList(myQuestions)
+            questionAdapter.notifyDataSetChanged()
         }
-    }
-
-    private fun toTutoring(cr: ChatRoomVO): TutoringVO {
-        return TutoringVO(
-            description = cr.description,
-            tutoringDate = cr.startDateTime?.format(
-                DateTimeFormatter.ofPattern(
-                    "yyyy.MM.dd"
-                )
-            ),
-            schoolSubject = cr.schoolSubject,
-            questionId = cr.id,
-            schoolLevel = cr.schoolLevel,
-            opponentName = cr.title,
-            questionImage = cr.roomImage,
-            isPlayable = false,
-            recordFileUrl = null,
-            tutoringId = null,
-            opponentProfileImage = null
-        )
     }
 
     private fun observeTutoring() {
         tutoringViewModel.tutoring.observe(viewLifecycleOwner) {
-            lectureAdapter.setItem(it)
+            binding.containerLectureSection.visibility =
+                if (it.isEmpty()) View.GONE else View.VISIBLE
+            // 시간순 배열
+            val sTutorings = it.sortedWith { t1, t2 ->
+                val d1 = t1.tutoringDate ?: return@sortedWith 1
+                val d2 = t2.tutoringDate ?: return@sortedWith -1
+                return@sortedWith if (d1 < d2) 1 else -1
+            }
+            lectureAdapter.setItem(sTutorings)
             lectureAdapter.notifyDataSetChanged()
         }
     }
@@ -473,7 +475,7 @@ class StudentHomeFragment : Fragment() {
     private fun setObserver() {
         observeFollowing()
         observeAmount()
-        observeQuestionReserved()
+        observeMyQuestions()
         observeTutoring()
         observeReview()
         observeTeachers()
@@ -519,9 +521,11 @@ class StudentHomeFragment : Fragment() {
 
     private fun observeReview() {
         reviewsViewModel.reviews.observe(viewLifecycleOwner) { reviews ->
+            reviews ?: return@observe
             val reviewsNotEmpty =
                 reviews.filter { it.reviewComment != null && it.reviewComment!!.length >= 3 }
             dialogTeacherProfile.setItemToReviewRecyclerView(reviewsNotEmpty)
+            reviewsViewModel.setReviews(null)
         }
     }
 

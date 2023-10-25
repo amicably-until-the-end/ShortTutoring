@@ -23,8 +23,8 @@ class ReviewViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _reviews = MutableLiveData<List<ReviewResVO>>()
-    val reviews: LiveData<List<ReviewResVO>> get() = _reviews
+    private val _reviews = MutableLiveData<List<ReviewResVO>?>()
+    val reviews: LiveData<List<ReviewResVO>?> get() = _reviews
 
     fun getReviews(teacherId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -74,5 +74,9 @@ class ReviewViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun setReviews(reviews: List<ReviewResVO>?) {
+        _reviews.postValue(reviews)
     }
 }
