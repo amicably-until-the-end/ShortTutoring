@@ -46,6 +46,7 @@ import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewMod
 import org.softwaremaestro.presenter.util.Util.toLocalDateTime
 import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
+import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
@@ -64,7 +65,8 @@ class StudentHomeFragment : Fragment() {
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
-    private lateinit var questionAdapter: StudentQuestionAdapter
+    private lateinit var questionReservedAdapter: StudentQuestionAdapter
+    private lateinit var questionPendingAdapter: StudentQuestionAdapter
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var eventAdapter: EventAdapter
@@ -156,6 +158,7 @@ class StudentHomeFragment : Fragment() {
         setTeacherOnlineRecyclerView()
         setOthersQuestionRecyclerView()
         setQuestionReservedRecyclerView()
+        setQuestionPendingRecyclerView()
         setLectureRecyclerView()
         setTeacherRecyclerView()
         setEventRecyclerView()
@@ -301,12 +304,24 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setQuestionReservedRecyclerView() {
-        questionAdapter = StudentQuestionAdapter {
+        questionReservedAdapter = StudentQuestionAdapter {
             (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
         }
 
-        binding.rvMyQuestion.apply {
-            adapter = questionAdapter
+        binding.rvMyReservedQuestion.apply {
+            adapter = questionReservedAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setQuestionPendingRecyclerView() {
+        questionPendingAdapter = StudentQuestionAdapter {
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
+        }
+
+        binding.rvMyPendingQuestion.apply {
+            adapter = questionPendingAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -390,29 +405,59 @@ class StudentHomeFragment : Fragment() {
 
     private fun observeMyQuestions() {
         questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
-            // 맨 앞에는 가장 가짜운 일시의 예약된 수업 하나를 보여주고,
-            // 그 뒤에는 모두 예약되지 않은 수업만 보여준다
-            val myQuestions = mutableListOf<QuestionGetResponseVO>()
-            val reserved = questions.filter { it.status == "reserved" }
-                .sortedWith { q1, q2 ->
-                    val d1 = q1.reservedStart ?: return@sortedWith 1
-                    val d2 = q2.reservedStart ?: return@sortedWith -1
-                    return@sortedWith if (toLocalDateTime(d1) < toLocalDateTime(d2)) 1 else -1
-                }
-            reserved.let { myQuestions.addAll(it) }
-            val pendings = questions.filter { it.status == "pending" }
-            myQuestions.addAll(pendings)
+            val fastestReserved = getFastestReserved(questions)
+            if (fastestReserved.isNotEmpty()) {
+                binding.containerMyReservedQuestion.visibility = View.VISIBLE
+            } else {
+                binding.containerMyReservedQuestion.visibility = View.GONE
+            }
 
-            if (myQuestions.isEmpty()) {
+            questionReservedAdapter.submitList(fastestReserved)
+            questionPendingAdapter.notifyDataSetChanged()
+
+            val pendings = questions.filter { it.status == "pending" }
+            binding.containerMyPendingQuestion.visibility =
+                if (pendings.isEmpty()) View.GONE else View.VISIBLE
+            binding.tvNumMyPendingQuestion.text = "${pendings.size}"
+
+            questionPendingAdapter.submitList(pendings)
+            questionPendingAdapter.notifyDataSetChanged()
+
+            if (fastestReserved.isEmpty() && pendings.isEmpty()) {
                 binding.containerMyQuestionEmpty.visibility = View.VISIBLE
-                binding.rvMyQuestion.visibility = View.GONE
+                binding.containerMyQuestionEmpty.visibility = View.GONE
             } else {
                 binding.containerMyQuestionEmpty.visibility = View.GONE
-                binding.rvMyQuestion.visibility = View.VISIBLE
+                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
             }
-            questionAdapter.submitList(myQuestions)
-            questionAdapter.notifyDataSetChanged()
+
+            binding.dvMyQuestion.visibility =
+                if (fastestReserved.isEmpty() || pendings.isEmpty()) View.GONE
+                else View.VISIBLE
+
+            if (fastestReserved.isEmpty() && pendings.isEmpty()) {
+                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
+                binding.containerMyQuestionNotEmpty.visibility = View.GONE
+            } else {
+                binding.containerMyQuestionEmpty.visibility = View.GONE
+                binding.containerMyQuestionNotEmpty.visibility = View.VISIBLE
+            }
+
         }
+    }
+
+    private fun getFastestReserved(questions: List<QuestionGetResponseVO>): List<QuestionGetResponseVO> {
+        val fastestReserved = questions.filter { it.status == "reserved" }
+            .sortedWith { q1, q2 ->
+                val d1 = q1.reservedStart ?: return@sortedWith 1
+                val d2 = q2.reservedStart ?: return@sortedWith -1
+                return@sortedWith if (toLocalDateTime(d1) < toLocalDateTime(d2)) 1 else -1
+            }.filter {
+                it.reservedStart ?: return@filter false
+                val ldt = toLocalDateTime(it.reservedStart!!)
+                ldt < LocalDateTime.now().plusDays(1L)
+            }.take(1)
+        return fastestReserved
     }
 
     private fun observeTutoring() {

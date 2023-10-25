@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
+import org.softwaremaestro.presenter.util.Util.toLocalDateTime
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val EMPTY_STRING = "-"
 
@@ -52,12 +55,7 @@ class StudentQuestionAdapter(
                     else -> {
                         containerTime.visibility = View.VISIBLE
                         tvTime.visibility = View.VISIBLE
-//                        val ldt = toLocalDateTime(item.reservedTime)
-//                        val date = if (ldt == LocalDateTime.now()) "오늘"
-//                        else if (ldt == LocalDateTime.now().plusDays(1L)) "내일"
-//                        else "${ldt.monthValue}월 ${ldt.dayOfMonth}일"
-//                        val time = ldt.format(DateTimeFormatter.ofPattern("hh:mm")
-//                        tvTimeText.text = date + time
+                        item.reservedStart?.let { setTimeText(it) }
                     }
                 }
 
@@ -69,6 +67,14 @@ class StudentQuestionAdapter(
             }
         }
 
+        private fun setTimeText(reservedStart: String) {
+            val ldt = toLocalDateTime(reservedStart)
+            val date = if (ldt == LocalDateTime.now()) "오늘"
+            else if (ldt == LocalDateTime.now().plusDays(1L)) "내일"
+            else "${ldt.monthValue}. ${ldt.dayOfMonth}"
+            val time = ldt.format(DateTimeFormatter.ofPattern("hh:mm"))
+            binding.tvTimeText.text = "$date $time"
+        }
     }
 }
 
