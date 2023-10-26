@@ -4,8 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,7 +92,6 @@ class TeacherHomeFragment : Fragment() {
         initReviewRecyclerView()
         setEventRecyclerView()
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
-        setRefreshContainer()
         observe()
     }
 
@@ -207,7 +204,7 @@ class TeacherHomeFragment : Fragment() {
     private fun setReservedQuestionRecyclerView() {
         questionReservedAdapter =
             TeacherQuestionAdapter {
-                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.id)
             }
 
         binding.rvMyReservedQuestion.apply {
@@ -220,7 +217,7 @@ class TeacherHomeFragment : Fragment() {
     private fun setPendingQuestionRecyclerView() {
         questionPendingAdapter =
             TeacherQuestionAdapter {
-                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.id)
             }
 
         binding.rvMyPendingQuestion.apply {
@@ -313,27 +310,6 @@ class TeacherHomeFragment : Fragment() {
         rv.setPadding(padding, 0, padding, 0)
     }
 
-    private fun setRefreshContainer() {
-        binding.containerMyQuestionEmpty.setOnClickListener {
-            binding.tvRefresh1.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            binding.tvRefresh2.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            binding.tvRefresh3.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            binding.ivRefresh.backgroundTintList = resources.getColorStateList(
-                R.color.sub_text_grey, null
-            )
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.tvRefresh1.setTextColor(resources.getColor(R.color.black, null))
-                binding.tvRefresh2.setTextColor(resources.getColor(R.color.black, null))
-                binding.tvRefresh3.setTextColor(resources.getColor(R.color.primary_blue, null))
-                binding.ivRefresh.backgroundTintList =
-                    resources.getColorStateList(R.color.primary_blue, null)
-            }, 500L)
-
-            questionsViewModel.getQuestions()
-        }
-    }
-
     private fun observe() {
         observeQuestions()
         observeOfferRemove()
@@ -349,7 +325,7 @@ class TeacherHomeFragment : Fragment() {
             val pendings = getPendings(questions)
             binding.containerMyPendingQuestion.visibility =
                 if (pendings.isNotEmpty()) View.VISIBLE else View.GONE
-            binding.tvNumMyPendingQuestion.text = "${pendings.size}"
+
             questionPendingAdapter.submitList(pendings)
             questionPendingAdapter.notifyDataSetChanged()
 
