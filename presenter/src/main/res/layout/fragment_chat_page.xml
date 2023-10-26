@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:text="답변 가능한 선생님"
+                android:text="수업을 제안한 선생님"
                 android:textStyle="bold" />
 
             <TextView
@@ -159,8 +159,8 @@
                     android:layout_marginLeft="16dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:maxLines="2"
-                    android:text="아직 답변 가능한 선생님이 없어요."
-                    android:textColor="@color/black"
+                    android:text="아직 수업을 제안한\n선생님이 없어요."
+                    android:textColor="@color/hint"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/cv_image_offering"

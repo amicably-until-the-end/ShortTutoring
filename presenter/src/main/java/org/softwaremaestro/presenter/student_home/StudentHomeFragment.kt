@@ -117,7 +117,7 @@ class StudentHomeFragment : Fragment() {
             },
             onUnfollow = { teacherId ->
                 followUserViewModel.unfollowUser(teacherId)
-                Toast.makeText(requireContext(), "선생님을 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
                 bestTeacherViewModel.getTeachers()
             },
@@ -348,6 +348,9 @@ class StudentHomeFragment : Fragment() {
             putExtra(SUBJECT, tutoringVO.schoolSubject)
             putExtra(DESCRIPTION, tutoringVO.description)
             tutoringVO.recordFileUrl?.get(0)?.let { putExtra(RECORDING_FILE_URL, it) }
+//            putExtra(TEACHER_ID, tutoringVO.teacherId)
+//            val following = SocketManager.userId != null && SocketManager.userId in tutoringVO.teacherId
+//            putExtra(FOLLOWING, following)
         }
         startActivity(intent)
     }
@@ -585,7 +588,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     companion object {
-        private const val QUESTION_UPLOAD_RESULT = 1001
+        const val QUESTION_UPLOAD_RESULT = 1001
         const val CLASSROOM_END_RESULT = 1002
         private const val EVENT_ITEM_WIDTH = 360
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
@@ -598,5 +601,7 @@ class StudentHomeFragment : Fragment() {
         const val SUBJECT = "subject"
         const val DESCRIPTION = "description"
         const val RECORDING_FILE_URL = "recording-file-url"
+        const val TEACHER_ID = "teacher-id"
+        const val FOLLOWING = "following"
     }
 }
