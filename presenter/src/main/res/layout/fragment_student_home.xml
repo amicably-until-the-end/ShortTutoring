@@ -239,70 +239,6 @@
 
                 </LinearLayout>
 
-                <!--
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="#ecf1fb"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="30dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/section_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="수학 개념, 잘 알고 있는지 확인해볼까요?" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="다른 학생들이 했던 질문을 통해 알아봐요"
-                            android:textColor="#0f4bdf"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/background_light_blue"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingVertical="20dp">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_event"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false" />
-
-                    <LinearLayout
-                        android:id="@+id/container_event_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/container_my_question_section"
                     android:layout_width="match_parent"
@@ -322,7 +258,7 @@
                         android:id="@+id/container_my_question"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
+                        android:layout_marginTop="14dp">
 
                         <LinearLayout
                             android:id="@+id/container_my_question_empty"
@@ -339,7 +275,8 @@
                                 android:background="@drawable/bg_radius_10_stroke_dotted"
                                 android:gravity="center"
                                 android:text="내가 올린 질문이\n여기에 표시돼요"
-                                android:textColor="@color/hint" />
+                                android:textColor="@color/hint"
+                                android:visibility="gone" />
 
                         </LinearLayout>
 
@@ -431,6 +368,71 @@
                         </LinearLayout>
 
                     </FrameLayout>
+
+                </LinearLayout>
+
+                <!--
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="#ecf1fb"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="30dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/section_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="수학 개념, 잘 알고 있는지 확인해볼까요?" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="다른 학생들이 했던 질문을 통해 알아봐요"
+                            android:textColor="#0f4bdf"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@color/background_light_blue"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingVertical="20dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_event"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false" />
+
+                    <LinearLayout
+                        android:id="@+id/container_event_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

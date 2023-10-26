@@ -100,6 +100,8 @@ class QuestionDetailActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "이미 신청한 수업입니다", Toast.LENGTH_SHORT).show()
             }
+
+            viewModel.resetAnswer()
         }
     }
 

@@ -406,11 +406,8 @@ class StudentHomeFragment : Fragment() {
     private fun observeMyQuestions() {
         questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
             val fastestReserved = getFastestReserved(questions)
-            if (fastestReserved.isNotEmpty()) {
-                binding.containerMyReservedQuestion.visibility = View.VISIBLE
-            } else {
-                binding.containerMyReservedQuestion.visibility = View.GONE
-            }
+            binding.containerMyReservedQuestion.visibility =
+                if (fastestReserved.isNotEmpty()) View.VISIBLE else View.GONE
 
             questionReservedAdapter.submitList(fastestReserved)
             questionPendingAdapter.notifyDataSetChanged()
@@ -422,14 +419,6 @@ class StudentHomeFragment : Fragment() {
 
             questionPendingAdapter.submitList(pendings)
             questionPendingAdapter.notifyDataSetChanged()
-
-            if (fastestReserved.isEmpty() && pendings.isEmpty()) {
-                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
-                binding.containerMyQuestionEmpty.visibility = View.GONE
-            } else {
-                binding.containerMyQuestionEmpty.visibility = View.GONE
-                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
-            }
 
             binding.dvMyQuestion.visibility =
                 if (fastestReserved.isEmpty() || pendings.isEmpty()) View.GONE
