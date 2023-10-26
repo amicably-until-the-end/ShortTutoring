@@ -16,7 +16,7 @@ import org.softwaremaestro.data.chat.entity.MessageEntity
 
 @Database(
     entities = [ChatRoomEntity::class, MessageEntity::class],
-    version = 3,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converter::class)
@@ -33,7 +33,7 @@ abstract class ChatDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE ChatRoomEntity ADD COLUMN lastMessageTime TEXT DEFAULT '2021-09-02T14:56:20.669'")
             }
         }
-        
+
         @Synchronized
         fun getInstance(context: Context): ChatDatabase? {
             if (instance == null) {

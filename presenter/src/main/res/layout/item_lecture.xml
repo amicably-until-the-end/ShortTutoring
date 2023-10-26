@@ -20,6 +20,7 @@
             android:background="@color/light_grey" />
 
         <ImageView
+            android:id="@+id/iv_play"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginLeft="10dp"
@@ -69,9 +70,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_regular"
+                    android:text=" · "
                     android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    tools:text=" · " />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_time"

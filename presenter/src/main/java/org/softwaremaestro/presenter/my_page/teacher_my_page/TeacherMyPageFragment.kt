@@ -83,6 +83,7 @@ class TeacherMyPageFragment : Fragment() {
 
     private fun observeReview() {
         reviewViewModel.reviews.observe(requireActivity()) { reviews ->
+            reviews ?: return@observe
             val reviewsNotEmpty =
                 reviews.filter { it.reviewComment != null && it.reviewComment!!.length >= 3 }
 

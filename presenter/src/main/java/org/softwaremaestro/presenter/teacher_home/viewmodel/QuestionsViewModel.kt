@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.teacher_home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.question_get.usecase.QuestionGetUseCase
+import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,13 +24,33 @@ class QuestionsViewModel @Inject constructor(private val questionGetUseCase: Que
         viewModelScope.launch {
             questionGetUseCase.execute()
                 .catch { exception ->
-                    // Todo: 추후에 에러 어떻게 처리할지 생각해보기
-                    Log.d("Error", exception.message.toString())
+                    logError(this@QuestionsViewModel::class.java, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> _questions.value = result.data
-                        is BaseResult.Error -> Log.d("Error", result.toString())
+                        is BaseResult.Error -> logError(
+                            this@QuestionsViewModel::class.java,
+                            result.toString()
+                        )
+                    }
+                }
+        }
+    }
+
+    fun getMyQuestions() {
+        viewModelScope.launch {
+            questionGetUseCase.getMyQuestions()
+                .catch { exception ->
+                    logError(this@QuestionsViewModel::class.java, exception.message ?: "")
+                }
+                .collect { result ->
+                    when (result) {
+                        is BaseResult.Success -> _questions.value = result.data
+                        is BaseResult.Error -> logError(
+                            this@QuestionsViewModel::class.java,
+                            result.toString()
+                        )
                     }
                 }
         }

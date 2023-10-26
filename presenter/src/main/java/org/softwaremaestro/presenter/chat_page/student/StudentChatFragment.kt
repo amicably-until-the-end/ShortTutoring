@@ -271,7 +271,6 @@ class StudentChatFragment : ChatFragment() {
             visibility = View.VISIBLE
             setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
             isEnabled = true
-            text = "선생님 선택하기"
             setTextColor(resources.getColor(R.color.white, null))
             setOnClickListener {
                 datePickerDialog.show(parentFragmentManager, "datePicker")

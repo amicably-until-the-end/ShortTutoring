@@ -40,4 +40,8 @@ class AnswerViewModel @Inject constructor(private val answerUploadUseCase: Answe
                 }
         }
     }
+
+    fun resetAnswer() {
+        _answer.postValue(null)
+    }
 }
