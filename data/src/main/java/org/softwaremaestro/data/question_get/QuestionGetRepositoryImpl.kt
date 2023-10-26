@@ -40,4 +40,20 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
             } ?: emit(BaseResult.Error("error"))
         }
     }
+
+    override suspend fun getMyQuestions(): Flow<BaseResult<List<QuestionGetResponseVO>, String>> {
+        return flow {
+            //updateRoomStatus()
+            var response = questionGetApi.getMyQuestionList("all", "all")
+            if (response.body()?.success == true) {
+                val data = response.body()!!.data ?: return@flow
+                val vos = data.map { it.asDomain() }
+                emit(BaseResult.Success(vos))
+            } else {
+                val errorString = "error in ${this@QuestionGetRepositoryImpl::class.java.name}\n" +
+                        "message: ${response.message()}"
+                emit(BaseResult.Error(errorString))
+            }
+        }
+    }
 }

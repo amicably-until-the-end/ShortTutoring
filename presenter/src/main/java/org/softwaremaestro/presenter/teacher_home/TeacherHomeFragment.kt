@@ -4,6 +4,8 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,13 +41,14 @@ import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.CHAT_ID
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.OFFER_RESULT
 import org.softwaremaestro.presenter.teacher_home.QuestionDetailActivity.Companion.OFFER_SUCCESS
-import org.softwaremaestro.presenter.teacher_home.adapter.QuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.teacher_home.adapter.TeacherQuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
 import org.softwaremaestro.presenter.util.Util
+import java.time.LocalDateTime
 
 private const val REFRESHING_TIME_INTERVAL = 10000L
 
@@ -63,7 +66,9 @@ class TeacherHomeFragment : Fragment() {
     private val reviewsViewModel: ReviewViewModel by activityViewModels()
     private lateinit var requestActivity: ActivityResultLauncher<Intent>
 
-    private lateinit var questionAdapter: QuestionAdapter
+    private lateinit var questionAdapter: TeacherQuestionAdapter
+    private lateinit var questionReservedAdapter: TeacherQuestionAdapter
+    private lateinit var questionPendingAdapter: TeacherQuestionAdapter
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var eventAdapter: EventAdapter
     private lateinit var waitingSnackbar: Snackbar
@@ -89,6 +94,7 @@ class TeacherHomeFragment : Fragment() {
         initReviewRecyclerView()
         setEventRecyclerView()
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
+        setRefreshContainer()
         observe()
     }
 
@@ -171,6 +177,12 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initQuestionRecyclerView() {
 
+        setQuestionRecyclerView()
+        setReservedQuestionRecyclerView()
+        setPendingQuestionRecyclerView()
+    }
+
+    private fun setQuestionRecyclerView() {
         val onQuestionClickListener = { question: QuestionGetResponseVO ->
 
             val hopeTime =
@@ -178,17 +190,41 @@ class TeacherHomeFragment : Fragment() {
                     ?.joinToString(", ")
 
             startQuestionDetailActivity(question, hopeTime)
-
-
         }
 
         questionAdapter =
-            QuestionAdapter(onQuestionClickListener).apply {
+            TeacherQuestionAdapter(onQuestionClickListener).apply {
                 setHasStableIds(true)
             }
 
-        binding.rvQuestion.apply {
+        binding.rvMyQuestion.apply {
             adapter = questionAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setReservedQuestionRecyclerView() {
+        questionReservedAdapter =
+            TeacherQuestionAdapter {
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+            }
+
+        binding.rvMyReservedQuestion.apply {
+            adapter = questionReservedAdapter
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setPendingQuestionRecyclerView() {
+        questionPendingAdapter =
+            TeacherQuestionAdapter {
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+            }
+
+        binding.rvMyPendingQuestion.apply {
+            adapter = questionPendingAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -277,9 +313,29 @@ class TeacherHomeFragment : Fragment() {
         rv.setPadding(padding, 0, padding, 0)
     }
 
+    private fun setRefreshContainer() {
+        binding.containerMyQuestionEmpty.setOnClickListener {
+            binding.tvRefresh1.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            binding.tvRefresh2.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            binding.tvRefresh3.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            binding.ivRefresh.backgroundTintList = resources.getColorStateList(
+                R.color.sub_text_grey, null
+            )
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.tvRefresh1.setTextColor(resources.getColor(R.color.black, null))
+                binding.tvRefresh2.setTextColor(resources.getColor(R.color.black, null))
+                binding.tvRefresh3.setTextColor(resources.getColor(R.color.primary_blue, null))
+                binding.ivRefresh.backgroundTintList =
+                    resources.getColorStateList(R.color.primary_blue, null)
+            }, 500L)
+
+            questionsViewModel.getQuestions()
+        }
+    }
+
     private fun observe() {
         observeQuestions()
-        observeAnswer()
         observeOfferRemove()
         //observeCheck()
         observeMyProfile()
@@ -289,20 +345,98 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeQuestions() {
         questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
-            questionAdapter.submitList(questions)
+            questions ?: return@observe
+            val pendings = getPendings(questions)
+            binding.containerMyPendingQuestion.visibility =
+                if (pendings.isNotEmpty()) View.VISIBLE else View.GONE
+            binding.tvNumMyPendingQuestion.text = "${pendings.size}"
+            questionPendingAdapter.submitList(pendings)
+            questionPendingAdapter.notifyDataSetChanged()
+
+            val fastestReserved = getFastestReserved(questions)
+            binding.containerMyReservedQuestion.visibility =
+                if (fastestReserved.isNotEmpty()) View.VISIBLE else View.GONE
+
+            questionReservedAdapter.submitList(fastestReserved)
+            questionPendingAdapter.notifyDataSetChanged()
+
+            binding.containerMyQuestionSection.visibility =
+                if (pendings.isEmpty() && fastestReserved.isEmpty()) View.GONE else View.VISIBLE
+
+
+            binding.dvMyQuestion.visibility =
+                if (pendings.isEmpty() || fastestReserved.isEmpty()) View.GONE else View.VISIBLE
+
+            val questionsNotOffered = getQuestionsNotOffered(questions)
+
+            questionAdapter.submitList(questionsNotOffered)
             if (isCalledFirstTime) {
                 isCalledFirstTime = false
-                binding.rvQuestion.scrollToPosition(0)
+                binding.rvMyQuestion.scrollToPosition(0)
             }
-            binding.tvNumOfQuestions.text =
-                if (questions.isNotEmpty()) "${questions.size}명의 학생이 선생님을 기다리고 있어요"
-                else "아직 질문이 올라오지 않았어요"
+            if (questionsNotOffered.isNotEmpty()) {
+                binding.tvNumOfQuestions.text = "${questions.size}명의 학생이 선생님을 기다리고 있어요"
+                binding.containerMyQuestionEmpty.visibility = View.GONE
+                binding.rvMyQuestion.visibility = View.VISIBLE
+            } else {
+                binding.tvNumOfQuestions.text = "아직 질문이 올라오지 않았어요"
+                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
+                binding.rvMyQuestion.visibility = View.GONE
+            }
         }
     }
 
-    private fun observeAnswer() {
-        answerViewModel.answer.observe(viewLifecycleOwner) {
+    private fun getPendings(questions: List<QuestionGetResponseVO>): List<QuestionGetResponseVO> {
+        val userId = SocketManager.userId ?: run {
+            Toast.makeText(requireContext(), "사용자의 ID를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            return emptyList()
         }
+
+        val pendings = questions.filter {
+            it.status == "pending"
+        }.filter {
+            it.offerTeachers ?: return@filter false
+            userId in it.offerTeachers!!
+        }.sortedWith { q1, q2 ->
+            val d1 = q1.reservedStart ?: return@sortedWith 1
+            val d2 = q2.reservedStart ?: return@sortedWith -1
+            return@sortedWith if (Util.toLocalDateTime(d1) < Util.toLocalDateTime(d2)) 1 else -1
+        }
+        return pendings
+    }
+
+    private fun getFastestReserved(questions: List<QuestionGetResponseVO>): List<QuestionGetResponseVO> {
+        val fastestReserved = questions.filter { it.status == "reserved" }
+            .sortedWith { q1, q2 ->
+                val d1 = q1.reservedStart ?: return@sortedWith 1
+                val d2 = q2.reservedStart ?: return@sortedWith -1
+                return@sortedWith if (Util.toLocalDateTime(d1) < Util.toLocalDateTime(d2)) 1 else -1
+            }.filter {
+                it.reservedStart ?: return@filter false
+                val ldt = Util.toLocalDateTime(it.reservedStart!!)
+                ldt < LocalDateTime.now().plusDays(1L)
+            }.take(1)
+        return fastestReserved
+    }
+
+    private fun getQuestionsNotOffered(questions: List<QuestionGetResponseVO>): List<QuestionGetResponseVO> {
+        val userId = SocketManager.userId ?: run {
+            Toast.makeText(requireContext(), "사용자의 ID를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            return emptyList()
+        }
+
+        val questionsNotOffered = questions.filter {
+            it.status == "pending"
+        }.filter {
+            it.offerTeachers ?: return@filter false
+            userId !in it.offerTeachers!!
+        }.sortedWith { q1, q2 ->
+            val d1 = q1.reservedStart ?: return@sortedWith 1
+            val d2 = q2.reservedStart ?: return@sortedWith -1
+            return@sortedWith if (Util.toLocalDateTime(d1) < Util.toLocalDateTime(d2)) 1 else -1
+        }
+
+        return questionsNotOffered
     }
 
     private fun observeOfferRemove() {
@@ -333,6 +467,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun observeReview() {
         reviewsViewModel.reviews.observe(viewLifecycleOwner) {
+            it ?: return@observe
             val reviews = it.filter {
                 val comments = it.reviewComment
                 comments != null && comments.length >= 3

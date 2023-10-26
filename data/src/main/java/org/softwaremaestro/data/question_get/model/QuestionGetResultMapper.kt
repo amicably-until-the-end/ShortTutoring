@@ -25,8 +25,11 @@ object QuestionGetResultMapper {
                 createdAt = createdAt,
                 problemDescription = problemDto?.description,
                 offerTeachers = offerTeachers,
+                isSelect = isSelect,
                 status = status,
-                tutoringId = tutoringId
+                tutoringId = tutoringId,
+                chattingId = chattingId,
+                reservedStart = reservedStart
             )
         }
     }

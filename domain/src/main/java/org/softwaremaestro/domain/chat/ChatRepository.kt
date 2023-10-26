@@ -7,6 +7,7 @@ import org.softwaremaestro.domain.chat.entity.MessageVO
 import org.softwaremaestro.domain.common.BaseResult
 
 interface ChatRepository {
+
     suspend fun getRoomList(
         isTeacher: Boolean,
         currentRoomId: String?

@@ -91,15 +91,15 @@ class QuestionDetailActivity : AppCompatActivity() {
 
     private fun setObserver() {
         viewModel.answer.observe(this) {
-            if (it != null) {
-                val intent = intent
-                intent.putExtra(OFFER_RESULT, OFFER_SUCCESS)
-                intent.putExtra(CHAT_ID, it.chatRoomId)
-                setResult(RESULT_OK, intent)
-                finish()
-            } else {
-                Toast.makeText(this, "이미 신청한 수업입니다", Toast.LENGTH_SHORT).show()
-            }
+            it ?: return@observe
+
+            val intent = intent
+            intent.putExtra(OFFER_RESULT, OFFER_SUCCESS)
+            intent.putExtra(CHAT_ID, it.chatRoomId)
+            setResult(RESULT_OK, intent)
+            finish()
+
+            viewModel.resetAnswer()
         }
     }
 

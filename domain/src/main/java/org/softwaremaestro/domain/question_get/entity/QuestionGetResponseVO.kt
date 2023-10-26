@@ -15,7 +15,10 @@ data class QuestionGetResponseVO(
     val problemSubject: String?,
     val problemDescription: String?,
     val offerTeachers: List<String>?,
+    val isSelect: Boolean?,
     val status: String?,
     val createdAt: String?,
-    val tutoringId: String?
+    val tutoringId: String?,
+    val chattingId: String?,
+    val reservedStart: String?
 )
