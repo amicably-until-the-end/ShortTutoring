@@ -111,15 +111,17 @@
                     android:background="@drawable/bg_radius_5_grad_blue">
 
                     <ImageView
+                        android:id="@+id/iv_camera"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="15dp"
-                        android:src="@drawable/ic_camera_outline"
+                        android:background="@drawable/ic_camera_outline"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/iv_arrow_right"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="15dp"
@@ -129,6 +131,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/tv_question"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"

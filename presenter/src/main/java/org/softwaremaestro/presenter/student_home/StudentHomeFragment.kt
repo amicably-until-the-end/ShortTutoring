@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -367,12 +369,35 @@ class StudentHomeFragment : Fragment() {
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
             startQuestionUploadActivity()
+
+            disableQuestionBtnFor(500L)
         }
     }
 
     private fun startQuestionUploadActivity() {
         val intent = Intent(requireContext(), QuestionUploadActivity::class.java)
         startActivityForResult(intent, QUESTION_UPLOAD_RESULT)
+    }
+
+    private fun disableQuestionBtnFor(l: Long) {
+        binding.btnQuestion.isEnabled = false
+        binding.btnQuestion.setBackgroundColor(
+            resources.getColor(R.color.background_light_blue, null)
+        )
+        binding.tvQuestion.setTextColor(resources.getColor(R.color.primary_blue, null))
+        binding.ivCamera.backgroundTintList =
+            resources.getColorStateList(R.color.primary_blue, null)
+        binding.ivArrowRight.backgroundTintList =
+            resources.getColorStateList(R.color.primary_blue, null)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.btnQuestion.isEnabled = true
+            binding.btnQuestion.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+            binding.tvQuestion.setTextColor(resources.getColor(R.color.white, null))
+            binding.ivCamera.backgroundTintList = resources.getColorStateList(R.color.white, null)
+            binding.ivArrowRight.backgroundTintList =
+                resources.getColorStateList(R.color.white, null)
+        }, l)
     }
 
     private fun observeFollowing() {
