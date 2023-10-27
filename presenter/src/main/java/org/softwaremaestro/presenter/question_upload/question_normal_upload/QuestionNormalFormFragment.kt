@@ -244,12 +244,13 @@ class QuestionNormalFormFragment : Fragment() {
     }
 
 
-    private fun observeQuestionId() {
+    private fun observeQuestionUploadState() {
         viewModel.questionUploadState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Loading -> {
-                    binding.btnSubmit.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
-                    binding.tvSubmit.setTextColor(resources.getColor(R.color.white, null))
+                    binding.btnSubmit.isEnabled = false
+                    binding.btnSubmit.setBackgroundResource(R.drawable.bg_radius_5_background_light_blue)
+                    binding.tvSubmit.setTextColor(resources.getColor(R.color.primary_blue, null))
                     binding.cbCoin.visibility = View.VISIBLE
                     loadingDialog = LoadingDialog(requireContext())
                     loadingDialog.show()
@@ -332,7 +333,7 @@ class QuestionNormalFormFragment : Fragment() {
         observeImages()
         observeSchoolLevel()
         observeSubject()
-        observeQuestionId()
+        observeQuestionUploadState()
         observeHopeTutoringTime()
         observeInputProper()
         observeCoinFreeReceiveState()
@@ -352,13 +353,7 @@ class QuestionNormalFormFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            myProfileViewModel.amount.value ?: run {
-                Toast.makeText(
-                    requireContext(),
-                    "보유한 코인을 가져오는데 실패했습니다.\n잠시 후 다시 시도해주세요.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                myProfileViewModel.getMyProfile()
+            if (hasErrorGettingProfile()) {
                 return@setOnClickListener
             }
 
@@ -402,6 +397,18 @@ class QuestionNormalFormFragment : Fragment() {
                 Toast.makeText(requireContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun hasErrorGettingProfile(): Boolean {
+        val value = myProfileViewModel.amount.value
+        if (value != null) return false
+        Toast.makeText(
+            requireContext(),
+            "보유한 코인을 가져오는데 실패했습니다.\n잠시 후 다시 시도해주세요.",
+            Toast.LENGTH_SHORT
+        ).show()
+        myProfileViewModel.getMyProfile()
+        return true
     }
 
     private fun setToolBar() {

@@ -1,13 +1,17 @@
 package org.softwaremaestro.presenter.question_upload
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentQuestionCameraBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionUploadActivity
@@ -21,6 +25,7 @@ import org.softwaremaestro.presenter.util.moveBack
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+@AndroidEntryPoint
 class QuestionCameraFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionCameraBinding
@@ -82,9 +87,24 @@ class QuestionCameraFragment : Fragment() {
             if (previewAdapter.items.size > 0) {
                 questionUploadViewModel._images.postValue(previewAdapter.items)
                 questionSelectedUploadViewModel.setImages(previewAdapter.items)
-                navigateToQuestionForm()
+                navigateToQuestionFormAfter(200L)
+                disableNextButtonFor(500L)
+            } else {
+                Toast.makeText(requireActivity(), "문제 사진을 촬영해주세요", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun disableNextButtonFor(l: Long) {
+        binding.btnNext.backgroundTintList =
+            resources.getColorStateList(R.color.background_light_blue, null)
+        binding.btnNext.setTextColor(resources.getColor(R.color.primary_blue, null))
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.btnNext.backgroundTintList =
+                resources.getColorStateList(R.color.primary_blue, null)
+            binding.btnNext.setTextColor(resources.getColor(R.color.white, null))
+        }, l)
     }
 
     private fun setPreviewRecyclerView() {
@@ -119,15 +139,17 @@ class QuestionCameraFragment : Fragment() {
         }
     }
 
-    private fun navigateToQuestionForm() {
-        findNavController().navigate(
-            when (requireActivity()) {
-                // 일반 질문
-                is QuestionUploadActivity -> R.id.action_questionCameraFragment_to_questionNormalFormFragment
-                // 지정 질문
-                else -> R.id.action_questionCameraFragment_to_questionSelectedFormFragment
-            }
+    private fun navigateToQuestionFormAfter(l: Long) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            findNavController().navigate(
+                when (requireActivity()) {
+                    // 일반 질문
+                    is QuestionUploadActivity -> R.id.action_questionCameraFragment_to_questionNormalFormFragment
+                    // 지정 질문
+                    else -> R.id.action_questionCameraFragment_to_questionSelectedFormFragment
+                }
 
-        )
+            )
+        }, l)
     }
 }
