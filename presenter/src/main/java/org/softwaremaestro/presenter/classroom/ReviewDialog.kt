@@ -59,7 +59,7 @@ class ReviewDialog(
 
     private fun setSimpleRatingBar() {
         binding.containerReview.setOnClickListener {
-            showKeyboardAndRequestFocus(binding.srbRating)
+            showKeyboardAndRequestFocus(binding.etReview)
         }
         binding.srbRating.onClick = { numOfFilled ->
             mNumOfFilled = numOfFilled + 1

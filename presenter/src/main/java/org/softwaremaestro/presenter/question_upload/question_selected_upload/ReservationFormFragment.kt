@@ -133,7 +133,27 @@ class ReservationFormFragment : Fragment() {
                             description = "코인을 충전한 후 다시 질문해주세요"
                         }.show(parentFragmentManager, "coin is insufficient")
                     } else {
-                        findNavController().navigate(R.id.action_reservationFormFragment_to_questionCameraFragment)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            findNavController().navigate(R.id.action_reservationFormFragment_to_questionCameraFragment)
+                        }, 200L)
+
+
+                        binding.btnSubmit.background = resources.getDrawable(
+                            R.drawable.bg_radius_5_background_light_blue,
+                            null
+                        )
+                        binding.tvSubmit.setTextColor(
+                            resources.getColor(
+                                R.color.primary_blue,
+                                null
+                            )
+                        )
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.btnSubmit.background =
+                                resources.getDrawable(R.drawable.bg_radius_5_grad_blue, null)
+                            binding.tvSubmit.setTextColor(resources.getColor(R.color.white, null))
+                        }, 500L)
                     }
                 }
             } else {
