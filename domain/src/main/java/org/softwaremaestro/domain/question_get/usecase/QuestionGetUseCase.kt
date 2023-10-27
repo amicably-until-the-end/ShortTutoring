@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class QuestionGetUseCase @Inject constructor(private val repository: QuestionGetRepository) {
 
-    suspend fun execute(): Flow<BaseResult<List<QuestionGetResponseVO>, String>> {
+    suspend fun getQuestions(): Flow<BaseResult<List<QuestionGetResponseVO>, String>> {
         return repository.getQuestions()
     }
 

@@ -15,8 +15,8 @@ interface QuestionGetApi {
     @GET("/question/info/{questionId}")
     suspend fun getQuestionInfo(@Path("questionId") questionId: String): Response<WrappedResponse<QuestionsGetResultDto>>
 
-    @GET("/student/question/list/my")
-    suspend fun getMyQuestionList(
+    @GET("/question/list/my")
+    suspend fun getMyQuestions(
         @Query("status") status: String,
         @Query("type") type: String
     ): Response<WrappedListResponse<QuestionsGetResultDto>>

@@ -66,7 +66,7 @@ class ChatRepositoryImpl @Inject constructor(
                 //학생이면 그룹화
                 val group = proposedNormal.groupBy { it.questionId }
                 try {
-                    val questions = questionApi.getMyQuestionList(
+                    val questions = questionApi.getMyQuestions(
                         QuestionState.PROPOSED.value,
                         QuestionType.NORMAL.value
                     ).body()?.data

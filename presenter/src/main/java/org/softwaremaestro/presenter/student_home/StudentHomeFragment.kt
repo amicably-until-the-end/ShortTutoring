@@ -42,7 +42,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
-import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.util.Util.toLocalDateTime
@@ -64,7 +64,7 @@ class StudentHomeFragment : Fragment() {
     private val tutoringViewModel: TutoringViewModel by activityViewModels()
     private val eventViewModel: EventViewModel by activityViewModels()
     private val reviewsViewModel: ReviewViewModel by activityViewModels()
-    private val questionsViewModel: QuestionsViewModel by viewModels()
+    private val questionViewModel: QuestionViewModel by viewModels()
 
     private lateinit var teacherFollowingAdapter: TeacherCircularAdapter
     private lateinit var teacherOnlineAdapter: TeacherCircularAdapter
@@ -101,7 +101,7 @@ class StudentHomeFragment : Fragment() {
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         teacherOnlineViewModel.getTeacherOnlines()
         eventViewModel.getEvents()
-        questionsViewModel.getMyQuestions()
+        questionViewModel.getMyQuestions()
     }
 
     private fun initTeacherProfileDialog() {
@@ -445,7 +445,8 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun observeMyQuestions() {
-        questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
+        questionViewModel.myQuestions.observe(viewLifecycleOwner) { questions ->
+            questions ?: return@observe
             val fastestReserved = getFastestReserved(questions)
             binding.containerMyReservedQuestion.visibility =
                 if (fastestReserved.isNotEmpty()) View.VISIBLE else View.GONE

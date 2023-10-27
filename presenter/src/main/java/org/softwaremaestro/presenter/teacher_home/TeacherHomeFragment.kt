@@ -46,8 +46,9 @@ import org.softwaremaestro.presenter.teacher_home.adapter.TeacherQuestionAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
-import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionsViewModel
+import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.logError
 import java.time.LocalDateTime
 
 private const val REFRESHING_TIME_INTERVAL = 10000L
@@ -56,7 +57,7 @@ private const val REFRESHING_TIME_INTERVAL = 10000L
 class TeacherHomeFragment : Fragment() {
 
     private lateinit var binding: FragmentTeacherHomeBinding
-    private val questionsViewModel: QuestionsViewModel by viewModels()
+    private val questionViewModel: QuestionViewModel by viewModels()
     private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val answerViewModel: AnswerViewModel by viewModels()
     private val offerRemoveViewModel: OfferRemoveViewModel by viewModels()
@@ -330,12 +331,13 @@ class TeacherHomeFragment : Fragment() {
                     resources.getColorStateList(R.color.primary_blue, null)
             }, 500L)
 
-            questionsViewModel.getQuestions()
+            questionViewModel.getQuestions()
         }
     }
 
     private fun observe() {
         observeQuestions()
+        observeMyQuestions()
         observeOfferRemove()
         //observeCheck()
         observeMyProfile()
@@ -344,8 +346,38 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun observeQuestions() {
-        questionsViewModel.questions.observe(viewLifecycleOwner) { questions ->
-            questions ?: return@observe
+        questionViewModel.questions.observe(viewLifecycleOwner) { questions ->
+            questions ?: run {
+                logError(this@TeacherHomeFragment::class.java, "myQuestions is null")
+                return@observe
+            }
+            val questionsNotOffered = getQuestionsNotOffered(questions)
+
+            questionAdapter.submitList(questionsNotOffered)
+            questionAdapter.notifyDataSetChanged()
+
+            if (isCalledFirstTime) {
+                isCalledFirstTime = false
+                binding.rvMyQuestion.scrollToPosition(0)
+            }
+            if (questionsNotOffered.isNotEmpty()) {
+                binding.tvNumOfQuestions.text = "${questionsNotOffered.size}명의 학생이 선생님을 기다리고 있어요"
+                binding.containerMyQuestionEmpty.visibility = View.GONE
+                binding.rvMyQuestion.visibility = View.VISIBLE
+            } else {
+                binding.tvNumOfQuestions.text = "아직 질문이 올라오지 않았어요"
+                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
+                binding.rvMyQuestion.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun observeMyQuestions() {
+        questionViewModel.questions.observe(viewLifecycleOwner) { questions ->
+            questions ?: run {
+                logError(this@TeacherHomeFragment::class.java, "questions is null")
+                return@observe
+            }
             val pendings = getPendings(questions)
             binding.containerMyPendingQuestion.visibility =
                 if (pendings.isNotEmpty()) View.VISIBLE else View.GONE
@@ -366,23 +398,6 @@ class TeacherHomeFragment : Fragment() {
 
             binding.dvMyQuestion.visibility =
                 if (pendings.isEmpty() || fastestReserved.isEmpty()) View.GONE else View.VISIBLE
-
-            val questionsNotOffered = getQuestionsNotOffered(questions)
-
-            questionAdapter.submitList(questionsNotOffered)
-            if (isCalledFirstTime) {
-                isCalledFirstTime = false
-                binding.rvMyQuestion.scrollToPosition(0)
-            }
-            if (questionsNotOffered.isNotEmpty()) {
-                binding.tvNumOfQuestions.text = "${questions.size}명의 학생이 선생님을 기다리고 있어요"
-                binding.containerMyQuestionEmpty.visibility = View.GONE
-                binding.rvMyQuestion.visibility = View.VISIBLE
-            } else {
-                binding.tvNumOfQuestions.text = "아직 질문이 올라오지 않았어요"
-                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
-                binding.rvMyQuestion.visibility = View.GONE
-            }
         }
     }
 
@@ -510,7 +525,7 @@ class TeacherHomeFragment : Fragment() {
     private fun keepGettingQuestions(timeInterval: Long) {
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                questionsViewModel.getQuestions()
+                questionViewModel.getQuestions()
                 delay(timeInterval)
             }
         }
