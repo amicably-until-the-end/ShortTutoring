@@ -116,6 +116,12 @@
         <item name="cardCornerRadius">15dp</item>
     </style>
 
+    <style name="strokeWidthPallet">
+        <item name="cardBackgroundColor">@color/sub_text_grey</item>
+        <item name="android:layout_marginHorizontal">7dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
     <style name="imagePallet">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">100dp</item>

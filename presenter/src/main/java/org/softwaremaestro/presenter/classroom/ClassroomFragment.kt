@@ -17,16 +17,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import com.herewhite.sdk.Room
@@ -89,6 +92,7 @@ class ClassroomFragment : Fragment() {
 
     private var colorPallet: Dialog? = null
     private var imagePallet: Dialog? = null
+    private var selectorPallet: PopupWindow? = null
 
 
     private var whiteBoardRoom: Room? = null
@@ -210,14 +214,27 @@ class ClassroomFragment : Fragment() {
                         var color = with(background) {
                             intArrayOf(Color.red(this), Color.green(this), Color.blue(this))
                         }
-                        Log.d("pallet", color.toString())
                         var memberState = MemberState()
                         memberState.currentApplianceName = "pencil"
                         currentApplianceName = ApplianceName.PENCIL
                         memberState.strokeColor = color
                         whiteBoardRoom?.memberState = memberState
                     } catch (e: Exception) {
-                        Log.d("pallet", e.toString())
+                    }
+                    dismiss()
+                }
+            }
+            var strokeRoot = findViewById<ConstraintLayout>(R.id.container_stroke_pallet)
+            var strokeWidth = doubleArrayOf(1.6, 2.3, 3.0, 3.7, 4.3)
+            for (i in 0 until strokeRoot.childCount) {
+                strokeRoot.getChildAt(i).setOnClickListener {
+                    try {
+                        var memberState = MemberState()
+                        memberState.currentApplianceName = "pencil"
+                        currentApplianceName = ApplianceName.PENCIL
+                        memberState.strokeWidth = strokeWidth[i]
+                        whiteBoardRoom?.memberState = memberState
+                    } catch (e: Exception) {
                     }
                     dismiss()
                 }
@@ -288,6 +305,7 @@ class ClassroomFragment : Fragment() {
                 if (whiteBoardInfo.isTeacher) {
                     wRoom.setViewMode(ViewMode.Broadcaster)
                 }
+                wRoom.disableEraseImage(true)
                 setWhiteBoard()
 
 
@@ -454,8 +472,31 @@ class ClassroomFragment : Fragment() {
     private fun observeQuestionInfo() {
         viewModel.questionInfo.observe(viewLifecycleOwner) {
             initProblemImagePallet()
-            Log.d("images", viewModel.questionInfo.value?.images.toString())
         }
+    }
+
+    private fun initSelectorPallet() {
+        val pallet = requireActivity().layoutInflater.inflate(R.layout.dialog_selector_pallet, null)
+        selectorPallet = PopupWindow(
+            pallet,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        pallet.findViewById<MaterialButton>(R.id.btn_erase_object).setOnClickListener {
+            whiteBoardRoom?.deleteOperation()
+        }
+    }
+
+    private fun showSelectorPallet() {
+        if (selectorPallet == null) initSelectorPallet()
+        val rect = Rect()
+        binding.btnSelector.getGlobalVisibleRect(rect)
+        selectorPallet?.showAtLocation(
+            binding.root,
+            Gravity.NO_GRAVITY,
+            rect.left - (selectorPallet?.width?.let { it } ?: 0),
+            rect.bottom + 10
+        )
     }
 
     private fun initProblemImagePallet(): Dialog {
@@ -474,7 +515,6 @@ class ClassroomFragment : Fragment() {
             }
             var root = findViewById<LinearLayout>(R.id.container_images)
             for (i in 0 until (viewModel.questionInfo.value?.images?.size ?: 1)) {
-                Log.d("images", viewModel.questionInfo.value?.images?.get(i).toString())
                 root.getChildAt(i).apply {
                     try {
                         Glide.with(requireContext())
@@ -500,6 +540,7 @@ class ClassroomFragment : Fragment() {
         currentApplianceName = ApplianceName.SELECTOR
         memberState.currentApplianceName = ApplianceName.SELECTOR.value
         whiteBoardRoom?.memberState = memberState
+        showSelectorPallet()
         setCurrentApplianceButton(ApplianceName.SELECTOR)
     }
 
@@ -620,6 +661,9 @@ class ClassroomFragment : Fragment() {
             ApplianceName.PENCIL -> binding.btnColorPen.isChecked = true
             ApplianceName.ERASER -> binding.btnColorErase.isChecked = true
             ApplianceName.SELECTOR -> binding.btnSelector.isChecked = true
+        }
+        if (current != ApplianceName.SELECTOR) {
+            selectorPallet?.dismiss()
         }
     }
 
