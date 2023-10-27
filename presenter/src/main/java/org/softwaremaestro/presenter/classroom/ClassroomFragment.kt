@@ -42,6 +42,7 @@ import com.herewhite.sdk.domain.Region
 import com.herewhite.sdk.domain.RoomPhase
 import com.herewhite.sdk.domain.RoomState
 import com.herewhite.sdk.domain.SDKError
+import com.herewhite.sdk.domain.ViewMode
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -284,6 +285,9 @@ class ClassroomFragment : Fragment() {
                 memberState.strokeColor = IntArray(3) { 255;0;0; }
                 wRoom.memberState = memberState
                 wRoom.disableSerialization(false)
+                if (whiteBoardInfo.isTeacher) {
+                    wRoom.setViewMode(ViewMode.Broadcaster)
+                }
                 setWhiteBoard()
 
 
