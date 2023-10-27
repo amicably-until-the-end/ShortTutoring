@@ -47,6 +47,7 @@ import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewMo
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.util.Util.toLocalDateTime
 import org.softwaremaestro.presenter.util.Util.toPx
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 import java.time.LocalDateTime
 
@@ -343,13 +344,21 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun watchRecordFile(tutoringVO: TutoringVO) {
+        val tutoringUrl = tutoringVO.recordFileUrl?.get(0) ?: run {
+            SimpleAlertDialog().apply {
+                title = "아직 영상이 생성되는 중입니다"
+                description = "잠시 후 다시 시도해주세요"
+            }.show(parentFragmentManager, "making video")
+            return
+        }
+
         val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
             putExtra(PROFILE_IMAGE, tutoringVO.opponentProfileImage)
             putExtra(STUDENT_NAME, tutoringVO.opponentName)
             putExtra(SCHOOL_LEVEL, tutoringVO.schoolLevel)
             putExtra(SUBJECT, tutoringVO.schoolSubject)
             putExtra(DESCRIPTION, tutoringVO.description)
-            tutoringVO.recordFileUrl?.get(0)?.let { putExtra(RECORDING_FILE_URL, it) }
+            putExtra(RECORDING_FILE_URL, tutoringUrl)
 //            putExtra(TEACHER_ID, tutoringVO.teacherId)
 //            val following = SocketManager.userId != null && SocketManager.userId in tutoringVO.teacherId
 //            putExtra(FOLLOWING, following)
