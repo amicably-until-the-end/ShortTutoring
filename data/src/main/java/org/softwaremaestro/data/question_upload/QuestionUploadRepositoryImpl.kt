@@ -1,5 +1,6 @@
 package org.softwaremaestro.data.question_upload
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.common.utils.toStringWithTimeZone
@@ -16,7 +17,9 @@ import javax.inject.Inject
 
 private const val EMPTY_STRING = "undefined"
 
-class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploadApi: QuestionUploadApi) :
+class QuestionUploadRepositoryImpl @Inject constructor(
+    private val questionUploadApi: QuestionUploadApi
+) :
     QuestionUploadRepository {
 
     override suspend fun uploadQuestion(questionUploadVO: QuestionUploadVO): Flow<BaseResult<QuestionUploadResultVO, String>> {
@@ -24,8 +27,14 @@ class QuestionUploadRepositoryImpl @Inject constructor(private val questionUploa
             val dto = questionUploadVO.asDto()
             val response = questionUploadApi.uploadQuestion(dto)
             if (response.isSuccessful) {
-                val body = response.body()
-                val resultVO = QuestionUploadResultVO(body?.data?.questionId ?: "")
+                val data = response.body()?.data ?: run {
+                    Log.e(
+                        this@QuestionUploadRepositoryImpl::class.java.name,
+                        "can't find question id"
+                    )
+                    return@flow
+                }
+                val resultVO = QuestionUploadResultVO(data.questionId)
                 emit(BaseResult.Success(resultVO))
             } else {
                 val errorString = "error"

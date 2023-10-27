@@ -83,7 +83,7 @@
                 tools:text="undefined" />
 
             <TextView
-                android:id="@+id/tv_subject"
+                android:id="@+id/tv_school_level_and_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#B3FFFFFF"

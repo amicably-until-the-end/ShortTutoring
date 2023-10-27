@@ -44,11 +44,11 @@ class TeacherQuestionAdapter(
                 Glide.with(root.context).load(item.mainImage)
                     .centerCrop()
                     .into(ivPhoto)
-
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
-
-                tvSubject.text = item.problemSubject ?: EMPTY_STRING
-
+                tvSchoolLevelAndSubject.text =
+                    if (item.problemSchoolLevel != null && item.problemSubject != null) {
+                        "${item.problemSchoolLevel} ${item.problemSubject}"
+                    } else EMPTY_STRING
                 // 이미 신청한 수업인 경우
                 if (SocketManager.userId != null && item.offerTeachers != null &&
                     SocketManager.userId!! in item.offerTeachers!!
@@ -74,7 +74,6 @@ class TeacherQuestionAdapter(
                     }"
                     tvTimeText.text = times
                 }
-
                 root.setOnClickListener {
                     if (item.id != null && item.images != null) {
                         onItemClickListener(item)

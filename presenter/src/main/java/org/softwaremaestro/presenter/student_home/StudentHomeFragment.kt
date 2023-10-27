@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +47,7 @@ import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewMo
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.util.Util.toLocalDateTime
 import org.softwaremaestro.presenter.util.Util.toPx
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 import java.time.LocalDateTime
 
@@ -341,13 +344,21 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun watchRecordFile(tutoringVO: TutoringVO) {
+        val tutoringUrl = tutoringVO.recordFileUrl?.get(0) ?: run {
+            SimpleAlertDialog().apply {
+                title = "아직 영상이 생성되는 중입니다"
+                description = "잠시 후 다시 시도해주세요"
+            }.show(parentFragmentManager, "making video")
+            return
+        }
+
         val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
             putExtra(PROFILE_IMAGE, tutoringVO.opponentProfileImage)
             putExtra(STUDENT_NAME, tutoringVO.opponentName)
             putExtra(SCHOOL_LEVEL, tutoringVO.schoolLevel)
             putExtra(SUBJECT, tutoringVO.schoolSubject)
             putExtra(DESCRIPTION, tutoringVO.description)
-            tutoringVO.recordFileUrl?.get(0)?.let { putExtra(RECORDING_FILE_URL, it) }
+            putExtra(RECORDING_FILE_URL, tutoringUrl)
 //            putExtra(TEACHER_ID, tutoringVO.teacherId)
 //            val following = SocketManager.userId != null && SocketManager.userId in tutoringVO.teacherId
 //            putExtra(FOLLOWING, following)
@@ -367,12 +378,35 @@ class StudentHomeFragment : Fragment() {
     private fun setQuestionButton() {
         binding.btnQuestion.setOnClickListener {
             startQuestionUploadActivity()
+
+            disableQuestionBtnFor(500L)
         }
     }
 
     private fun startQuestionUploadActivity() {
         val intent = Intent(requireContext(), QuestionUploadActivity::class.java)
         startActivityForResult(intent, QUESTION_UPLOAD_RESULT)
+    }
+
+    private fun disableQuestionBtnFor(l: Long) {
+        binding.btnQuestion.isEnabled = false
+        binding.btnQuestion.setBackgroundColor(
+            resources.getColor(R.color.background_light_blue, null)
+        )
+        binding.tvQuestion.setTextColor(resources.getColor(R.color.primary_blue, null))
+        binding.ivCamera.backgroundTintList =
+            resources.getColorStateList(R.color.primary_blue, null)
+        binding.ivArrowRight.backgroundTintList =
+            resources.getColorStateList(R.color.primary_blue, null)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.btnQuestion.isEnabled = true
+            binding.btnQuestion.setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
+            binding.tvQuestion.setTextColor(resources.getColor(R.color.white, null))
+            binding.ivCamera.backgroundTintList = resources.getColorStateList(R.color.white, null)
+            binding.ivArrowRight.backgroundTintList =
+                resources.getColorStateList(R.color.white, null)
+        }, l)
     }
 
     private fun observeFollowing() {

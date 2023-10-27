@@ -44,7 +44,10 @@ class StudentQuestionAdapter(
                     .into(ivPhoto)
 
                 tvDesciption.text = item.problemDescription ?: EMPTY_STRING
-                tvSubject.text = item.problemSubject ?: EMPTY_STRING
+                tvSchoolLevelAndSubject.text =
+                    if (item.problemSchoolLevel != null && item.problemSubject != null) {
+                        "${item.problemSchoolLevel} ${item.problemSubject}"
+                    } else EMPTY_STRING
                 ivCheck.visibility = View.GONE
 
                 when (item.status) {
