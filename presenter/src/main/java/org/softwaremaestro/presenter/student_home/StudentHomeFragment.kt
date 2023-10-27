@@ -80,7 +80,6 @@ class StudentHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
         getRemoteData()
         initTeacherProfileDialog()
