@@ -127,9 +127,6 @@ class TeacherHomeFragment : Fragment() {
                         .show()
                     val chatId = it.data?.getStringExtra(CHAT_ID)
                     (activity as TeacherHomeActivity).moveToChatTab(chatId)
-                } else {
-                    Toast.makeText(requireActivity(), "수업 제안에 실패했습니다.", Toast.LENGTH_SHORT)
-                        .show()
                 }
             }
     }
