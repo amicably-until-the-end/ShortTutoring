@@ -116,7 +116,6 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="30dp"
                 android:background="@drawable/ic_heart_empty"
-                android:backgroundTint="@color/white"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/container_profile" />
 

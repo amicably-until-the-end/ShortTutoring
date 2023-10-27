@@ -74,7 +74,7 @@ class StudentHomeFragment : Fragment() {
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var eventAdapter: EventAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
-
+    private lateinit var followings: List<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -359,9 +359,10 @@ class StudentHomeFragment : Fragment() {
             putExtra(SUBJECT, tutoringVO.schoolSubject)
             putExtra(DESCRIPTION, tutoringVO.description)
             putExtra(RECORDING_FILE_URL, tutoringUrl)
-//            putExtra(TEACHER_ID, tutoringVO.teacherId)
-//            val following = SocketManager.userId != null && SocketManager.userId in tutoringVO.teacherId
-//            putExtra(FOLLOWING, following)
+            val teacherId = tutoringVO.opponentId
+            val following = teacherId in followings
+            putExtra(TEACHER_ID, teacherId)
+            putExtra(FOLLOWING, following)
         }
         startActivity(intent)
     }
@@ -411,6 +412,9 @@ class StudentHomeFragment : Fragment() {
 
     private fun observeFollowing() {
         followingViewModel.following.observe(viewLifecycleOwner) {
+            it ?: return@observe
+
+            followings = it.map { it.teacherId }.filterNotNull()
             if (it.isNotEmpty()) {
                 binding.containerMyTeacherSection.visibility = View.VISIBLE
                 binding.nsTeacherFollowing.visibility = View.VISIBLE

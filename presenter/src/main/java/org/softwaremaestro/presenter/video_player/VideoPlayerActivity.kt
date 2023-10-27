@@ -132,7 +132,11 @@ class VideoPlayerActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_subject).text = "${schoolLevel} ${subject}"
         val imgView = findViewById<ImageView>(R.id.iv_profile_image)
         Glide.with(this).load(profileImage).centerCrop().into(imgView)
-        findViewById<ImageView>(R.id.iv_heart).setOnClickListener {
+        val heartIv = findViewById<ImageView>(R.id.iv_heart)
+        heartIv.background =
+            if (mFollowing) resources.getDrawable(R.drawable.ic_heart_full, null)
+            else resources.getDrawable(R.drawable.ic_heart_empty, null)
+        heartIv.setOnClickListener {
             if (teacherId.isEmpty()) {
                 Toast.makeText(this, "선생님 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -160,6 +164,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     private fun observeFollowUserState() {
         followUserViewModel.followUserState.observe(this) { following ->
+            following ?: return@observe
             mFollowing = following
             findViewById<ImageView>(R.id.iv_heart).background =
                 if (following) resources.getDrawable(R.drawable.ic_heart_full, null)

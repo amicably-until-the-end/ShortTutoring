@@ -19,8 +19,8 @@ class FollowUserViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _followUserState = MutableLiveData(false)
-    val followUserState: MutableLiveData<Boolean> get() = _followUserState
+    private val _followUserState = MutableLiveData<Boolean?>()
+    val followUserState: MutableLiveData<Boolean?> get() = _followUserState
 
     fun followUser(userId: String) {
         viewModelScope.launch {
@@ -49,7 +49,7 @@ class FollowUserViewModel @Inject constructor(
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _followUserState.postValue(true)
+                        is BaseResult.Success -> _followUserState.postValue(false)
 
                         is BaseResult.Error -> logError(
                             this@FollowUserViewModel::class.java,

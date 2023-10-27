@@ -12,5 +12,6 @@ data class TutoringGetResDto(
     @SerializedName("opponentName") val opponentName: String?,
     @SerializedName("opponentProfileImage") val opponentProfileImage: String?,
     @SerializedName("recordFileUrl") val recordFileUrl: List<String>?,
-    @SerializedName("questionImage") val questionImage: String?
+    @SerializedName("questionImage") val questionImage: String?,
+    @SerializedName("opponentId") val opponentId: String?
 )

@@ -15,6 +15,7 @@ object Mapper {
                 tutoringDate = tutoringDate,
                 opponentName = opponentName,
                 opponentProfileImage = opponentProfileImage,
+                opponentId = opponentId,
                 questionImage = questionImage
             )
         }

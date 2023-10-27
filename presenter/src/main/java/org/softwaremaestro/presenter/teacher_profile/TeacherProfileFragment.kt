@@ -123,7 +123,7 @@ class TeacherProfileFragment : Fragment() {
     }
 
     private fun observeFollowUserState() {
-        followUserViewModel.followUserState.observe(requireActivity()) {
+        followUserViewModel.followUserState.observe(viewLifecycleOwner) {
             profileViewModel.getProfile(selectedUserId)
         }
     }

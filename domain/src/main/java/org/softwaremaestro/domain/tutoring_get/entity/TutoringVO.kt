@@ -10,5 +10,6 @@ data class TutoringVO(
     val tutoringDate: String?,
     val opponentName: String?,
     val opponentProfileImage: String?,
+    val opponentId: String?,
     val questionImage: String?
 )
