@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -75,11 +79,14 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var waitingSnackbar: Snackbar
     private var isCalledFirstTime = true
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
+        firebaseAnalytics = Firebase.analytics
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
         registerOfferResult()
         return binding.root
@@ -87,6 +94,16 @@ class TeacherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.ivLogo.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString(FirebaseAnalytics.Param.ITEM_ID, "example id")
+                putString(FirebaseAnalytics.Param.ITEM_NAME, "example name")
+                putString(FirebaseAnalytics.Param.CONTENT_TYPE, "example image")
+            }
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
+            Log.d("hhcc", "logging event")
+        }
+
         getRemoteData()
         setTexts()
         initWaitingSnackbar()
@@ -102,6 +119,7 @@ class TeacherHomeFragment : Fragment() {
         myProfileViewModel.getMyProfile()
         eventViewModel.getEvents()
         SocketManager.userId?.let { reviewsViewModel.getReviews(it) }
+        questionViewModel.getMyQuestions()
     }
 
     private fun setTexts() {
@@ -204,7 +222,7 @@ class TeacherHomeFragment : Fragment() {
     private fun setReservedQuestionRecyclerView() {
         questionReservedAdapter =
             TeacherQuestionAdapter {
-                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
         binding.rvMyReservedQuestion.apply {
@@ -217,7 +235,7 @@ class TeacherHomeFragment : Fragment() {
     private fun setPendingQuestionRecyclerView() {
         questionPendingAdapter =
             TeacherQuestionAdapter {
-                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
         binding.rvMyPendingQuestion.apply {
@@ -369,7 +387,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun observeMyQuestions() {
-        questionViewModel.questions.observe(viewLifecycleOwner) { questions ->
+        questionViewModel.myQuestions.observe(viewLifecycleOwner) { questions ->
             questions ?: run {
                 logError(this@TeacherHomeFragment::class.java, "questions is null")
                 return@observe

@@ -307,7 +307,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionReservedRecyclerView() {
         questionReservedAdapter = StudentQuestionAdapter {
-            (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.chattingId ?: it.id)
         }
 
         binding.rvMyReservedQuestion.apply {
@@ -319,7 +319,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionPendingRecyclerView() {
         questionPendingAdapter = StudentQuestionAdapter {
-            (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.chattingId ?: it.id)
         }
 
         binding.rvMyPendingQuestion.apply {
