@@ -425,7 +425,8 @@ class TeacherHomeFragment : Fragment() {
             }.filter {
                 it.reservedStart ?: return@filter false
                 val ldt = Util.toLocalDateTime(it.reservedStart!!)
-                ldt < LocalDateTime.now().plusDays(1L)
+                val now = LocalDateTime.now()
+                ldt >= now && ldt < now.plusDays(1L)
             }.take(1)
         return fastestReserved
     }
