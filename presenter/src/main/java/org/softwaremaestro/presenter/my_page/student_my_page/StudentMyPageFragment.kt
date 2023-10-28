@@ -166,7 +166,7 @@ class StudentMyPageFragment : Fragment() {
     }
 
     companion object {
-        private const val SERVICE_CENTER_URL = "https://www.form.short-tutoring.com"
+        private const val SERVICE_CENTER_URL = "http://www.form.short-tutoring.com"
     }
 
     private fun setLogOutContainer() {

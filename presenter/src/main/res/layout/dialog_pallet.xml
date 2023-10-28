@@ -6,44 +6,116 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
     app:layout_constraintLeft_toLeftOf="@id/container_tool_appliances"
-    app:layout_constraintTop_toBottomOf="parent">
+    app:layout_constraintTop_toBottomOf="parent"
+    app:strokeColor="@color/primary_blue"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:id="@+id/container_color_pallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_pen_red"
-            style="@style/colorPallet"
-            app:cardBackgroundColor="@color/pen_red" />
+        <LinearLayout
+            android:id="@+id/container_color_pallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_pen_orange"
-            style="@style/colorPallet"
-            app:cardBackgroundColor="@color/pen_orange" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_pen_red"
+                style="@style/colorPallet"
+                app:cardBackgroundColor="@color/pen_red" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_pen_yellow"
-            style="@style/colorPallet"
-            app:cardBackgroundColor="@color/pen_yellow" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_pen_orange"
+                style="@style/colorPallet"
+                app:cardBackgroundColor="@color/pen_orange" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_pen_green"
-            style="@style/colorPallet"
-            app:cardBackgroundColor="@color/pen_green" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_pen_yellow"
+                style="@style/colorPallet"
+                app:cardBackgroundColor="@color/pen_yellow" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_color_black"
-            style="@style/colorPallet"
-            app:cardBackgroundColor="@color/pen_black" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_pen_green"
+                style="@style/colorPallet"
+                app:cardBackgroundColor="@color/pen_green" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_pen_purple"
-            style="@style/colorPallet"
-            app:cardBackgroundColor="@color/pen_purple" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_color_black"
+                style="@style/colorPallet"
+                app:cardBackgroundColor="@color/pen_black" />
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_pen_purple"
+                style="@style/colorPallet"
+                app:cardBackgroundColor="@color/pen_purple" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_stroke_pallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_stroke_1"
+                style="@style/strokeWidthPallet"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_stroke_2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_stroke_2"
+                style="@style/strokeWidthPallet"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_stroke_1"
+                app:layout_constraintRight_toLeftOf="@id/btn_stroke_3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_stroke_3"
+                style="@style/strokeWidthPallet"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                app:cardCornerRadius="13dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_stroke_2"
+                app:layout_constraintRight_toLeftOf="@id/btn_stroke_4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_stroke_4"
+                style="@style/strokeWidthPallet"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_stroke_3"
+                app:layout_constraintRight_toLeftOf="@id/btn_stroke_5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_stroke_5"
+                style="@style/strokeWidthPallet"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:cardCornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_stroke_4"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
