@@ -54,6 +54,7 @@ import org.softwaremaestro.presenter.classroom.adapter.SceneAdapter
 import org.softwaremaestro.presenter.classroom.item.SerializedVoiceRoomInfo
 import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
+import org.softwaremaestro.presenter.classroom.widget.DialogGuideline
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
@@ -108,6 +109,7 @@ class ClassroomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentClassroomBinding.inflate(layoutInflater)
+        showGuideline()
         setTutoringArgument() // Extra Argument 반드시 맨 처음에 실행
         permissionCheck()
         setAgora()
@@ -117,6 +119,10 @@ class ClassroomFragment : Fragment() {
         observeQuestionInfo()
         initLoadingDialog()
         return binding.root
+    }
+
+    private fun showGuideline() {
+        DialogGuideline().show(parentFragmentManager, "dialog guideline")
     }
 
     private fun initDialog() {

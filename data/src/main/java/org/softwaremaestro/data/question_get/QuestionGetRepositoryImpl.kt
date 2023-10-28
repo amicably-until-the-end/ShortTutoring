@@ -44,7 +44,7 @@ class QuestionGetRepositoryImpl @Inject constructor(private val questionGetApi: 
     override suspend fun getMyQuestions(): Flow<BaseResult<List<QuestionGetResponseVO>, String>> {
         return flow {
             //updateRoomStatus()
-            var response = questionGetApi.getMyQuestionList("all", "all")
+            var response = questionGetApi.getMyQuestions("all", "all")
             if (response.body()?.success == true) {
                 val data = response.body()!!.data ?: return@flow
                 val vos = data.map { it.asDomain() }

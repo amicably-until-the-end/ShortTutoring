@@ -14,23 +14,26 @@ import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionsViewModel @Inject constructor(private val questionGetUseCase: QuestionGetUseCase) :
+class QuestionViewModel @Inject constructor(private val questionGetUseCase: QuestionGetUseCase) :
     ViewModel() {
 
-    private val _questions: MutableLiveData<List<QuestionGetResponseVO>> = MutableLiveData()
-    val questions: LiveData<List<QuestionGetResponseVO>> get() = _questions
+    private val _questions: MutableLiveData<List<QuestionGetResponseVO>?> = MutableLiveData()
+    val questions: LiveData<List<QuestionGetResponseVO>?> get() = _questions
+
+    private val _myQuestions: MutableLiveData<List<QuestionGetResponseVO>?> = MutableLiveData()
+    val myQuestions: LiveData<List<QuestionGetResponseVO>?> get() = _myQuestions
 
     fun getQuestions() {
         viewModelScope.launch {
-            questionGetUseCase.execute()
+            questionGetUseCase.getQuestions()
                 .catch { exception ->
-                    logError(this@QuestionsViewModel::class.java, exception.message.toString())
+                    logError(this@QuestionViewModel::class.java, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> _questions.value = result.data
                         is BaseResult.Error -> logError(
-                            this@QuestionsViewModel::class.java,
+                            this@QuestionViewModel::class.java,
                             result.toString()
                         )
                     }
@@ -42,13 +45,13 @@ class QuestionsViewModel @Inject constructor(private val questionGetUseCase: Que
         viewModelScope.launch {
             questionGetUseCase.getMyQuestions()
                 .catch { exception ->
-                    logError(this@QuestionsViewModel::class.java, exception.message ?: "")
+                    logError(this@QuestionViewModel::class.java, exception.message ?: "")
                 }
                 .collect { result ->
                     when (result) {
-                        is BaseResult.Success -> _questions.value = result.data
+                        is BaseResult.Success -> _myQuestions.value = result.data
                         is BaseResult.Error -> logError(
-                            this@QuestionsViewModel::class.java,
+                            this@QuestionViewModel::class.java,
                             result.toString()
                         )
                     }
