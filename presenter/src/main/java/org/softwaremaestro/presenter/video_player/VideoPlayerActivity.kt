@@ -28,6 +28,7 @@ import org.softwaremaestro.presenter.student_home.StudentHomeFragment.Companion.
 import org.softwaremaestro.presenter.student_home.StudentHomeFragment.Companion.TEACHER_ID
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
 
 @AndroidEntryPoint
 class VideoPlayerActivity : AppCompatActivity() {
@@ -49,6 +50,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     private val followUserViewModel: FollowUserViewModel by viewModels()
     private lateinit var unfollowDialog: DetailAlertDialog
+    private var startTime: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         setControllerTexts()
         initUnfollowDialog()
         observeFollowUserState()
+        startTime = System.currentTimeMillis()
     }
 
     override fun onStart() {
@@ -87,6 +90,13 @@ class VideoPlayerActivity : AppCompatActivity() {
         super.onStop()
         if (Util.SDK_INT >= 24) {
             releasePlayer()
+        }
+        if (startTime != null) {
+            val lectureTime = (System.currentTimeMillis() - startTime!!) / 1000L
+            STTFirebaseAnalytics.logEvent(
+                STTFirebaseAnalytics.EVENT.TOTAL_LECTURE_TIME,
+                lectureTime
+            )
         }
     }
 

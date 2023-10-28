@@ -21,10 +21,10 @@ class STTFirebaseAnalytics {
     }
 
     enum class EVENT(val mName: String, val key: String) {
-        NUM_QUESTION_NORMAL("num_question", "num_question_normal"),
-        NUM_QUESTION_RESERVED("num_question", "num_question_reserved"),
+        NUM_QUESTION_NORMAL("num_question_normal", "num_question_normal"),
+        NUM_QUESTION_RESERVED("num_question_reserved", "num_question_reserved"),
         NUM_TUTORING("num_tutoring", "num_tutoring"),
         TOTAL_TUTORING_TIME("total_tutoring_duration", "total_tutoring_duration"),
-        NUM_LECTURE_PLAYED("num_lecture_played", "num_lecture_played")
+        TOTAL_LECTURE_TIME("total_lecture_time", "total_lecture_time")
     }
 }
