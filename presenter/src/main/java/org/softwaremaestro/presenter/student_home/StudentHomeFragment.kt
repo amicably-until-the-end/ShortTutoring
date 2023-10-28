@@ -21,9 +21,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
@@ -78,21 +75,11 @@ class StudentHomeFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
     private lateinit var followings: List<String>
-
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
-        firebaseAnalytics = Firebase.analytics
-        binding.ivLogo.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString("ex_property", "ex value")
-            }
-            firebaseAnalytics.logEvent("click_logo", bundle)
-        }
         getRemoteData()
         initTeacherProfileDialog()
         setCoinButton()
