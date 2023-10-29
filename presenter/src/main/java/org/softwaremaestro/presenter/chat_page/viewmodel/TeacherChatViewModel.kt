@@ -11,17 +11,18 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.usecase.DeclineQuestionUseCase
-import org.softwaremaestro.domain.answer_upload.usecase.StudentPickUseCase
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.schedule_offer.usecase.ScheduleOfferUseCase
 import org.softwaremaestro.presenter.util.UIState
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class TeacherChatViewModel @Inject constructor(
-    private val studentPickUseCase: StudentPickUseCase,
+    private val scheduleOfferUseCase: ScheduleOfferUseCase,
     private val declineQuestionUseCase: DeclineQuestionUseCase
 ) : ViewModel() {
 
@@ -40,12 +41,14 @@ class TeacherChatViewModel @Inject constructor(
         try {
             var startTime = LocalDateTime.of(tutoringDate, tutoringStart)
             var endTime = startTime?.plusMinutes(tutoringDuration!!.toLong())!!
+            val startTimeISO = startTime.format(DateTimeFormatter.ISO_DATE_TIME)
+            val endTimeISO = endTime.format(DateTimeFormatter.ISO_DATE_TIME)
             viewModelScope.launch {
                 Log.d(
                     "TeacherChatViewModel",
                     "pickStudent: $questionId, $startTime, $endTime, $chattingId"
                 )
-                studentPickUseCase.execute(questionId, startTime, endTime, chattingId)
+                scheduleOfferUseCase.execute(startTimeISO, endTimeISO, chattingId, questionId)
                     .onStart { _pickStudentResult.value = UIState.Loading }
                     .catch { exception ->
                         _pickStudentResult.value = UIState.Failure
