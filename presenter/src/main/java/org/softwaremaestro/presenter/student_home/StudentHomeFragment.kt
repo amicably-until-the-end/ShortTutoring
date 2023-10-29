@@ -75,7 +75,6 @@ class StudentHomeFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
     private lateinit var followings: List<String>
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -307,7 +306,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionReservedRecyclerView() {
         questionReservedAdapter = StudentQuestionAdapter {
-            (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.chattingId ?: it.id)
         }
 
         binding.rvMyReservedQuestion.apply {
@@ -319,7 +318,7 @@ class StudentHomeFragment : Fragment() {
 
     private fun setQuestionPendingRecyclerView() {
         questionPendingAdapter = StudentQuestionAdapter {
-            (requireActivity() as StudentHomeActivity).moveToChatTab(it.id)
+            (requireActivity() as StudentHomeActivity).moveToChatTab(it.chattingId ?: it.id)
         }
 
         binding.rvMyPendingQuestion.apply {

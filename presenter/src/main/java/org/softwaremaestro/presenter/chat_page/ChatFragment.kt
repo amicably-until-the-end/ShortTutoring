@@ -42,6 +42,8 @@ import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics.EVENT
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import javax.inject.Inject
 
@@ -72,6 +74,7 @@ abstract class ChatFragment : Fragment() {
     lateinit var socketManager: SocketManager
 
     protected lateinit var tutoringId: String
+    private var startTime: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -685,6 +688,7 @@ abstract class ChatFragment : Fragment() {
                 putExtra("voiceRoomInfo", voiceRoomInfo)
             }
             startActivityForResult(intent, CLASSROOM_END_RESULT)
+            startTime = System.currentTimeMillis()
         }
     }
 
@@ -872,6 +876,12 @@ abstract class ChatFragment : Fragment() {
                             )
 
                         }.show(parentFragmentManager, "reviewDialog")
+                    }
+                    STTFirebaseAnalytics.logEvent(EVENT.NUM_TUTORING, 1L)
+                    if (startTime != null) {
+                        val tutoringTime = (System.currentTimeMillis() - startTime!!) / 1000L
+                        STTFirebaseAnalytics.logEvent(EVENT.TOTAL_TUTORING_TIME, tutoringTime)
+                        startTime = null
                     }
                 }
             }

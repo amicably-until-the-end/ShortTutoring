@@ -79,7 +79,6 @@ class TeacherHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentTeacherHomeBinding.inflate(layoutInflater)
         registerOfferResult()
         return binding.root
@@ -102,6 +101,7 @@ class TeacherHomeFragment : Fragment() {
         myProfileViewModel.getMyProfile()
         eventViewModel.getEvents()
         SocketManager.userId?.let { reviewsViewModel.getReviews(it) }
+        questionViewModel.getMyQuestions()
     }
 
     private fun setTexts() {
@@ -204,7 +204,7 @@ class TeacherHomeFragment : Fragment() {
     private fun setReservedQuestionRecyclerView() {
         questionReservedAdapter =
             TeacherQuestionAdapter {
-                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
         binding.rvMyReservedQuestion.apply {
@@ -217,7 +217,7 @@ class TeacherHomeFragment : Fragment() {
     private fun setPendingQuestionRecyclerView() {
         questionPendingAdapter =
             TeacherQuestionAdapter {
-                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId)
+                (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
         binding.rvMyPendingQuestion.apply {
@@ -369,7 +369,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun observeMyQuestions() {
-        questionViewModel.questions.observe(viewLifecycleOwner) { questions ->
+        questionViewModel.myQuestions.observe(viewLifecycleOwner) { questions ->
             questions ?: run {
                 logError(this@TeacherHomeFragment::class.java, "questions is null")
                 return@observe

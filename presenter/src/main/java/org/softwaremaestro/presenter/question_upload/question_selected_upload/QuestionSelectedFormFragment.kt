@@ -32,6 +32,8 @@ import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics.EVENT
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import java.time.LocalDateTime
 
@@ -191,6 +193,7 @@ class QuestionSelectedFormFragment : Fragment() {
                 }
 
                 is UIState.Success -> {
+                    STTFirebaseAnalytics.logEvent(EVENT.NUM_QUESTION_RESERVED, 1L)
                     loadingDialog.dismiss()
                     val intent = Intent()
                     intent.putExtra(QUESTION_UPLOAD_RESULT, it.data)
