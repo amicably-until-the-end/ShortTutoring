@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.answer_upload.usecase.DeclineQuestionUseCase
 import org.softwaremaestro.domain.common.BaseResult
+import org.softwaremaestro.domain.schedule_offer.entity.ScheduleOfferResVO
 import org.softwaremaestro.domain.schedule_offer.usecase.ScheduleOfferUseCase
 import org.softwaremaestro.presenter.util.UIState
 import java.time.LocalDate
@@ -34,10 +35,13 @@ class TeacherChatViewModel @Inject constructor(
     private val _tutoringTimeAndDurationProper = MediatorLiveData<Boolean>()
     val tutoringTimeAndDurationProper: MediatorLiveData<Boolean> get() = _tutoringTimeAndDurationProper
 
-    val _pickStudentResult = MutableLiveData<UIState<Boolean>>()
-    val pickStudentResult: LiveData<UIState<Boolean>> get() = _pickStudentResult
+    val _pickStudentResult = MutableLiveData<UIState<ScheduleOfferResVO>>()
+    val pickStudentResult: LiveData<UIState<ScheduleOfferResVO>> get() = _pickStudentResult
 
-    fun pickStudent(questionId: String, chattingId: String) {
+    val _declineQuestionResult = MutableLiveData<UIState<Boolean?>>()
+    val declineQuestionResult: LiveData<UIState<Boolean?>> get() = declineQuestionResult
+
+    fun offerSchedule(questionId: String, chattingId: String) {
         try {
             var startTime = LocalDateTime.of(tutoringDate, tutoringStart)
             var endTime = startTime?.plusMinutes(tutoringDuration!!.toLong())!!
@@ -60,7 +64,7 @@ class TeacherChatViewModel @Inject constructor(
                     .collect { result ->
                         when (result) {
                             is BaseResult.Success -> {
-                                _pickStudentResult.value = UIState.Success(true)
+                                _pickStudentResult.value = UIState.Success(result.data)
                             }
 
                             is BaseResult.Error -> {
@@ -78,19 +82,19 @@ class TeacherChatViewModel @Inject constructor(
     fun declineQuestion(tutoringId: String) {
         viewModelScope.launch {
             declineQuestionUseCase.execute(tutoringId)
-                .onStart { _pickStudentResult.value = UIState.Loading }
+                .onStart { _declineQuestionResult.value = UIState.Loading }
                 .catch { exception ->
-                    _pickStudentResult.value = UIState.Failure
+                    _declineQuestionResult.value = UIState.Failure
                     Log.e(this@TeacherChatViewModel::class.java.name, exception.message.toString())
                 }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> {
-                            _pickStudentResult.value = UIState.Success(true)
+                            _declineQuestionResult.value = UIState.Success(true)
                         }
 
                         is BaseResult.Error -> {
-                            _pickStudentResult.value = UIState.Failure
+                            _declineQuestionResult.value = UIState.Failure
                         }
                     }
                 }

@@ -288,7 +288,6 @@ class TeacherChatFragment : ChatFragment() {
                 else -> {}
             }
             teacherViewModel._pickStudentResult.value = UIState.Empty
-
         }
     }
 
@@ -315,7 +314,7 @@ class TeacherChatFragment : ChatFragment() {
     private fun initNumberPickerDialog() {
         numberPickerDialog = NumberPickerBottomDialog { number ->
             teacherViewModel.tutoringDuration = number
-            teacherViewModel.pickStudent(currentChatRoom?.questionId!!, currentChatRoom?.id!!)
+            teacherViewModel.offerSchedule(currentChatRoom?.questionId!!, currentChatRoom?.id!!)
         }.apply {
             setTitle("수업을 몇 분간 진행할까요?")
             setBtnText("입력하기")

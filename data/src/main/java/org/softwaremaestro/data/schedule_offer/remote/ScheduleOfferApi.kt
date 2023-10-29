@@ -2,6 +2,7 @@ package org.softwaremaestro.data.schedule_offer.remote
 
 import org.softwaremaestro.data.common.utils.WrappedResponse
 import org.softwaremaestro.data.question_upload.model.TeacherPickReqDto
+import org.softwaremaestro.data.schedule_offer.model.ScheduleOfferResDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -12,5 +13,5 @@ interface ScheduleOfferApi {
     suspend fun offerSchedule(
         @Path("questionId") questionId: String,
         @Body teacherPickReqDto: TeacherPickReqDto
-    ): Response<WrappedResponse<String>>
+    ): Response<WrappedResponse<ScheduleOfferResDto>>
 }
