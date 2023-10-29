@@ -39,8 +39,8 @@ class StudentChatFragment : ChatFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        observePickTeacherResultState()
-        observeTutoringTimeAndDurationProper()
+        //observePickTeacherResultState()
+        //observeTutoringTimeAndDurationProper()
         observeClassroomInfo() // 강의실 입장하기 버튼을 눌렀을 때의 결과 observe
         observeTutoringInfo() //예약하기 질문의 noti 세팅을 위한 과외 정보 observe
         initDialog()
@@ -49,6 +49,12 @@ class StudentChatFragment : ChatFragment() {
 
     override fun isTeacher(): Boolean {
         return false
+    }
+
+    override fun pickTeacher(startTime: LocalDateTime, endTime: LocalDateTime) {
+        currentChatRoom?.let {
+            studentViewModel.pickTeacher(it.id, it.questionId, startTime, endTime)
+        }
     }
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
@@ -204,7 +210,7 @@ class StudentChatFragment : ChatFragment() {
     private fun onProposedNormalQuestionSelect() {
         setNotiVisible(false)
         enableSendMessage()
-        enablePickTeacherButton()
+        //enablePickTeacherButton()
     }
 
     private fun onReservedRoomSelect() {
@@ -315,17 +321,17 @@ class StudentChatFragment : ChatFragment() {
         }
     }
 
-    private fun observeTutoringTimeAndDurationProper() {
-        studentViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
-            if (proper) {
-                currentChatRoom?.let {
-                    studentViewModel.pickTeacher(it.id, it.questionId)
-                }
-                studentViewModel.setTutoringTime(null)
-                studentViewModel.setTutoringDuration(null)
-            }
-        }
-    }
+//    private fun observeTutoringTimeAndDurationProper() {
+//        studentViewModel.tutoringTimeAndDurationProper.observe(viewLifecycleOwner) { proper ->
+//            if (proper) {
+//                currentChatRoom?.let {
+//                    studentViewModel.pickTeacher(it.id, it.questionId)
+//                }
+//                studentViewModel.setTutoringTime(null)
+//                studentViewModel.setTutoringDuration(null)
+//            }
+//        }
+//    }
 
     override fun enablePickStudentBtn() {
         return

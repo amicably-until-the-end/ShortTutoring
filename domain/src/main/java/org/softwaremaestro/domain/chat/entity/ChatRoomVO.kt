@@ -90,6 +90,13 @@ sealed class MessageBodyVO {
         val endAt: String?,
     ) : MessageBodyVO()
 
+    @Serializable
+    data class ScheduleTime(
+        val startTime: String?,
+        val endTime: String?,
+    ) : MessageBodyVO(
+    )
+
 }
 
 enum class QuestionType(val value: String) {

@@ -84,6 +84,10 @@ class TeacherChatFragment : ChatFragment() {
         return true
     }
 
+    override fun pickTeacher(startTime: LocalDateTime, endTime: LocalDateTime) {
+        return
+    }
+
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         enableChatting(true)

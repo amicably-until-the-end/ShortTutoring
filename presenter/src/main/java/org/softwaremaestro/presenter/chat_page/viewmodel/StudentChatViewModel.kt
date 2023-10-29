@@ -54,13 +54,12 @@ class StudentChatViewModel @Inject constructor(
         }
     }
 
-    fun pickTeacher(chattingId: String, questionId: String) {
-        var startTime = _tutoringTime.value
-        var endTime = _tutoringTime.value?.plusMinutes(_tutoringDuration.value!!.toLong())
-        if (startTime == null || endTime == null) {
-            pickTeacherResult.postValue(UIState.Failure)
-            return
-        }
+    fun pickTeacher(
+        chattingId: String,
+        questionId: String,
+        startTime: LocalDateTime,
+        endTime: LocalDateTime
+    ) {
         viewModelScope.launch {
             teacherPickUseCase.execute(startTime, endTime, chattingId, questionId)
                 .onStart { pickTeacherResult.value = UIState.Loading }

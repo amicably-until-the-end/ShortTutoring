@@ -84,6 +84,11 @@ class Mapper {
                         MessageBodyVO.TutoringFinished::class.java
                     )
 
+                    "schedule-time" -> gson.fromJson(
+                        body,
+                        MessageBodyVO.ScheduleTime::class.java
+                    )
+
                     else -> MessageBodyVO.Text(body)
                 }
             } catch (e: Exception) {
