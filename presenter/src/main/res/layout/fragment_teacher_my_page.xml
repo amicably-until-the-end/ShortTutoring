@@ -38,6 +38,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/baseline_notifications_24"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -48,6 +49,7 @@
                     android:layout_height="30dp"
                     android:layout_marginRight="15dp"
                     android:src="@drawable/ic_more_horizontal"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/iv_notification"
                     app:layout_constraintTop_toTopOf="parent" />
