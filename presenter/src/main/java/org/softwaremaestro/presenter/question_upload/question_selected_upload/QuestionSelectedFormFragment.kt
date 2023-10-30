@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -28,6 +27,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.widg
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
@@ -268,15 +268,15 @@ class QuestionSelectedFormFragment : Fragment() {
     private fun alertEmptyField() {
         with(binding) {
             if (questionSelectedUploadViewModel.images.value.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "사진을 등록해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "사진을 등록해주세요").show()
             } else if (etQuestionDesc.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "질문 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "질문 내용을 입력해주세요").show()
             } else if (tvSchoolSelected.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "학교를 선택해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "학교를 선택해주세요").show()
             } else if (tvSubjectSelected.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "과목을 선택해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "과목을 선택해주세요").show()
             } else {
-                Toast.makeText(requireContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "모든 항목을 입력해주세요").show()
             }
         }
     }

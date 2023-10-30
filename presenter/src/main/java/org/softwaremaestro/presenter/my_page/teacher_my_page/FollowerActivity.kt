@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +9,7 @@ import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ActivityFollowerBinding
 import org.softwaremaestro.presenter.my_page.adapter.StudentAdapter
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.Util.logError
 
 @AndroidEntryPoint
@@ -66,7 +66,7 @@ class FollowerActivity : AppCompatActivity() {
         if (SocketManager.userId != null) {
             followerViewModel.getFollower(SocketManager.userId!!)
         } else {
-            Toast.makeText(this, "사용자의 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            Util.createToast(this, "사용자의 아이디를 가져오는데 실패했습니다").show()
             logError(this::class.java, "userId is null")
         }
     }

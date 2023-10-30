@@ -16,7 +16,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherSearchBinding
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.teacher_search.viewmodel.TeacherSearchViewModel
-import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.Util.hideKeyboardAndRemoveFocus
 
 @AndroidEntryPoint
 class TeacherSearchFragment : Fragment() {

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -16,8 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterTeacherInfoBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.Util.toPx
-import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import java.lang.Integer.min
 
 // 회원가입 두 번째 화면.
@@ -88,7 +88,7 @@ class RegisterTeacherInfoFragment : Fragment() {
 //                findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_univAuthFragment)
                 findNavController().navigate(R.id.action_registerTeacherInfoFragment_to_completeTeacherProfileFragment)
             } else {
-                Toast.makeText(requireContext(), "출신 대학과 학과를 입력해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "출신 대학과 학과를 입력해주세요").show()
             }
         }
     }

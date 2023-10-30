@@ -409,8 +409,8 @@
 
                             <TextView
                                 style="@style/section_title"
-                                android:layout_width="182dp"
-                                android:layout_height="160dp"
+                                android:layout_width="340dp"
+                                android:layout_height="130dp"
                                 android:background="@drawable/bg_radius_10_stroke_dotted"
                                 android:gravity="center"
                                 android:text="학생이 남긴 리뷰가\n여기에 표시돼요"

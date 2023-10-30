@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterStudentInfoBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
+import org.softwaremaestro.presenter.util.Util
 
 @AndroidEntryPoint
 class RegisterStudentInfoFragment : Fragment() {
@@ -65,7 +65,7 @@ class RegisterStudentInfoFragment : Fragment() {
             if (registerEnabled) {
                 findNavController().navigate(R.id.action_registerStudentInfoFragment_to_completeStudentProfileFragment)
             } else {
-                Toast.makeText(requireContext(), "학교와 학년을 선택해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "학교와 학년을 선택해주세요").show()
             }
         }
     }

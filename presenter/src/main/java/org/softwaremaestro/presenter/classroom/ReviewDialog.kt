@@ -10,8 +10,8 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import org.softwaremaestro.presenter.databinding.DialogRatingBinding
-import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
-import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
+import org.softwaremaestro.presenter.util.Util.hideKeyboardAndRemoveFocus
+import org.softwaremaestro.presenter.util.Util.showKeyboardAndRequestFocus
 
 private const val NUM_STAR = 5
 

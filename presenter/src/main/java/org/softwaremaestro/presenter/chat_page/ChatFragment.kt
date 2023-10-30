@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.updateLayoutParams
@@ -39,8 +38,9 @@ import org.softwaremaestro.presenter.student_home.StudentHomeFragment.Companion.
 import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
-import org.softwaremaestro.presenter.util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
 import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics.EVENT
@@ -254,7 +254,7 @@ abstract class ChatFragment : Fragment() {
 
     fun getClassRoomInfo() {
         if (currentChatRoom?.questionId == null) {
-            Toast.makeText(requireContext(), "잘못된 접근입니다.", Toast.LENGTH_SHORT).show()
+            Util.createToast(requireActivity(), "잘못된 접근입니다.").show()
             return
         }
         chatViewModel.getClassroomInfo(currentChatRoom?.questionId!!)

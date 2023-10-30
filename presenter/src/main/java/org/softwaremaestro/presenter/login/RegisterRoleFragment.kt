@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterRoleBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
+import org.softwaremaestro.presenter.util.Util
 
 // 로그인 화면에서 회원 가입을 누르면 나오는 화면.
 // 유저는 학생과 선생님 중에서 선택한다.
@@ -61,7 +61,7 @@ class RegisterRoleFragment : Fragment() {
             if (dest != null) {
                 findNavController().navigate(dest)
             } else {
-                Toast.makeText(requireContext(), "계정 정보를 선택해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "계정 정보를 선택해주세요").show()
             }
 
         }

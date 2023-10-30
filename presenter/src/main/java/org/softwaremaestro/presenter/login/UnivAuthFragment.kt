@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentUnivAuthBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 
 @AndroidEntryPoint
@@ -142,7 +143,7 @@ class UnivAuthFragment : Fragment() {
             if (it) {
                 binding.btnSendMail.setEnabledAndChangeColor(false)
             } else {
-                Toast.makeText(requireContext(), "올바른 학교 메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "올바른 학교 메일을 입력해주세요.").show()
             }
         }
     }
@@ -152,10 +153,9 @@ class UnivAuthFragment : Fragment() {
 
             binding.btnNext.setEnabledAndChangeColor(it)
             if (it) {
-                Toast.makeText(
-                    requireContext(),
-                    "인증번호가 일치합니다.",
-                    Toast.LENGTH_SHORT
+                Util.createToast(
+                    requireActivity(),
+                    "인증번호가 일치합니다."
                 ).show()
             }
         }
