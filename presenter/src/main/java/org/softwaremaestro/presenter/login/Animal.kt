@@ -14,5 +14,10 @@ enum class Animal(val resId: Int, val mName: String) {
     companion object {
         fun toName(resId: Int) = values().find { it.resId == resId }!!.mName
         fun toResId(mName: String) = values().find { it.mName == mName }!!.resId
+
+        fun getRandom(): Animal {
+            val seed = (Math.random() * values().size).toInt()
+            return Animal.values()[seed]
+        }
     }
 }

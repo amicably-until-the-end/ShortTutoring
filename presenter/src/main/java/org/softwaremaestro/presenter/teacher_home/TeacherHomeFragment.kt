@@ -370,8 +370,8 @@ class TeacherHomeFragment : Fragment() {
                 logError(this@TeacherHomeFragment::class.java, "questions is null")
                 return@observe
             }
-//            val pendings = getPendings(questions)
-            val pendings = emptyList<QuestionGetResponseVO>()
+            val pendings = getPendings(questions)
+//            val pendings = emptyList<QuestionGetResponseVO>()
             binding.containerMyPendingQuestion.visibility =
                 if (pendings.isNotEmpty()) View.VISIBLE else View.GONE
             binding.tvNumMyPendingQuestion.text = "${pendings.size}"

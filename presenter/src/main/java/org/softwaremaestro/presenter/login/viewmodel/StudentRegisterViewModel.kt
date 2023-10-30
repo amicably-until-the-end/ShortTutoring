@@ -13,6 +13,7 @@ import org.softwaremaestro.domain.common.BaseResult.Error
 import org.softwaremaestro.domain.common.BaseResult.Success
 import org.softwaremaestro.domain.login.entity.StudentRegisterVO
 import org.softwaremaestro.domain.login.usecase.StudentRegisterUseCase
+import org.softwaremaestro.presenter.login.Animal
 import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
@@ -50,7 +51,7 @@ class StudentRegisterViewModel @Inject constructor(
     private val _bio = MutableLiveData<String>("student-bio")
     val bio: LiveData<String> get() = _bio
 
-    val _image: MutableLiveData<String> = MutableLiveData()
+    val _image: MutableLiveData<String> = MutableLiveData(Animal.getRandom().mName)
     val image: LiveData<String> get() = _image
 
     private val _studentSignupState = MutableLiveData<UIState<String>>()
