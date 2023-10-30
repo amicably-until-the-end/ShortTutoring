@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -19,6 +18,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.Util.logError
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
@@ -141,7 +141,7 @@ class TeacherProfileDialog(
 
     private fun setFollowBtn() {
         mItem.teacherId ?: run {
-            Toast.makeText(requireContext(), "선생님의 아이디가 확인되지 않습니다", Toast.LENGTH_SHORT)
+            Util.createToast(requireActivity(), "선생님의 아이디가 확인되지 않습니다")
             logError(
                 this@TeacherProfileDialog::class.java,
                 "teacherId == null in setFollowBtn()"
@@ -161,7 +161,7 @@ class TeacherProfileDialog(
                 unfollowDialog.show(parentFragmentManager, "unfollowDialog")
             } else {
                 mItem.teacherId ?: run {
-                    Toast.makeText(requireContext(), "선생님 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT)
+                    Util.createToast(requireActivity(), "선생님 아이디를 가져오는데 실패했습니다")
                         .show()
                 }
 

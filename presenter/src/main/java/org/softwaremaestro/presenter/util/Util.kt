@@ -12,9 +12,13 @@ import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -58,6 +62,38 @@ object Util {
     fun logError(clazz: Class<*>, message: String) {
         Log.e(clazz.name, message)
     }
+
+    fun createToast(activity: Activity, message: String): Toast {
+        val inflater = LayoutInflater.from(activity)
+        val root = inflater.inflate(
+            R.layout.item_custom_toast,
+            activity.findViewById(R.id.container_custom_toast)
+        )
+        val messageTv = root.findViewById<TextView>(R.id.tv_message)
+        messageTv.text = message
+
+        return Toast(activity).apply {
+            duration = Toast.LENGTH_SHORT
+            setGravity(0, 0, Gravity.CENTER)
+            view = root
+        }
+    }
+
+    fun showKeyboardAndRequestFocus(view: View) {
+        view.requestFocus()
+        val imm: InputMethodManager =
+            view.context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, 0)
+    }
+
+    fun hideKeyboardAndRemoveFocus(view: View) {
+        val imm =
+            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        view.clearFocus()
+    }
+
+    fun nowInKorea() = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 }
 
 fun Float.toRating() = String.format("%.1f", this)
@@ -182,22 +218,6 @@ fun LocalDateTime.toKoreanString(): String {
 fun LocalDateTime.toClockString(): String {
     return "${this.hour}:${String.format("%02d", this.minute)}분"
 }
-
-fun showKeyboardAndRequestFocus(view: View) {
-    view.requestFocus()
-    val imm: InputMethodManager =
-        view.context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.showSoftInput(view, 0)
-}
-
-fun hideKeyboardAndRemoveFocus(view: View) {
-    val imm =
-        view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
-    view.clearFocus()
-}
-
-fun nowInKorea() = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 
 fun RecyclerView.getVerticalSpaceDecoration(
     space: Int,

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTosBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
+import org.softwaremaestro.presenter.util.Util
 
 @AndroidEntryPoint
 class ToSFragment : Fragment() {
@@ -87,7 +87,7 @@ class ToSFragment : Fragment() {
             if (agreeAll) {
                 findNavController().navigate(R.id.action_toSFragment_to_registerRoleFragment)
             } else {
-                Toast.makeText(requireContext(), "약관에 동의해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "약관에 동의해주세요").show()
             }
         }
     }

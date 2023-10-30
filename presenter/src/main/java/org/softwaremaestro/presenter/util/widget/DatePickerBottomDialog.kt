@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogDatePickerBinding
-import org.softwaremaestro.presenter.util.nowInKorea
+import org.softwaremaestro.presenter.util.Util.nowInKorea
 import java.time.LocalDate
 
 class DatePickerBottomDialog(private val onReturnClick: ((LocalDate) -> Unit)) :

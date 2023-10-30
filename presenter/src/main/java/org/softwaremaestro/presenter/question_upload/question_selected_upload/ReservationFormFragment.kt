@@ -16,6 +16,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentReservationFormBinding
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.adapter.TimeRangePickerAdapter
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
@@ -112,10 +113,9 @@ class ReservationFormFragment : Fragment() {
         questionReservationViewModel.isReqDateAfterToday.observe(viewLifecycleOwner) {
             if (!it && questionReservationViewModel.inputNotNull.value == true) {
                 val now = LocalDateTime.now()
-                Toast.makeText(
-                    requireContext(),
-                    "${now.hour}시 ${now.minute}분 이후의 시간을 선택해주세요",
-                    Toast.LENGTH_SHORT
+                Util.createToast(
+                    requireActivity(),
+                    "${now.hour}시 ${now.minute}분 이후의 시간을 선택해주세요"
                 ).show()
             }
         }

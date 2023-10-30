@@ -97,7 +97,7 @@ class FollowingActivity : AppCompatActivity() {
             followingViewModel.getFollowing(SocketManager.userId!!)
             //teacherRecommendsViewModel.getTeachers()
         } else {
-            Toast.makeText(this, "사용자의 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            Util.createToast(this, "사용자의 아이디를 가져오는데 실패했습니다").show()
             Util.logError(this::class.java, "userId is null")
         }
     }

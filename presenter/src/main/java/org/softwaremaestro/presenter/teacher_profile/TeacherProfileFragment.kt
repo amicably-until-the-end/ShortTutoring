@@ -47,7 +47,7 @@ class TeacherProfileFragment : Fragment() {
             description = "선생님에게 예약 질문을 할 수 없게 됩니다"
         ) {
             followUserViewModel.unfollowUser(selectedUserId)
-            Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+            Util.createToast(requireActivity(), "선생님을 찜했습니다").show()
         }
     }
 
@@ -81,7 +81,7 @@ class TeacherProfileFragment : Fragment() {
                 unfollowDialog.show(parentFragmentManager, "unfollowDialog")
             } else {
                 followUserViewModel.followUser(selectedUserId)
-                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "선생님 찜하기가 해제되었습니다").show()
             }
         }
     }
@@ -91,7 +91,7 @@ class TeacherProfileFragment : Fragment() {
             if (following)
                 findNavController().navigate(R.id.action_teacherProfileFragment_to_reservationFormFragment)
             else
-                Toast.makeText(requireContext(), "예약 질문은 찜한 선생님에게만 할 수 있어요", Toast.LENGTH_SHORT)
+                Util.createToast(requireActivity(), "예약 질문은 찜한 선생님에게만 할 수 있어요")
                     .show()
         }
     }

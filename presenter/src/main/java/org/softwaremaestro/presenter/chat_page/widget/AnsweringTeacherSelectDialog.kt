@@ -43,7 +43,7 @@ class AnsweringTeacherSelectDialog(questionId: String) :
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = TeacherSelectAdapter(
                 teachers
-            ) { teacherId -> Toast.makeText(context, teacherId, Toast.LENGTH_SHORT).show() }
+            ) { teacherId -> Util.createToast(requireActivity(), teacherId).show() }
             addItemDecoration(getVerticalSpaceDecoration(15, requireContext()))
         }
     }

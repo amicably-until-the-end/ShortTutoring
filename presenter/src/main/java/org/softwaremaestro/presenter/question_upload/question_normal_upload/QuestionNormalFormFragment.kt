@@ -29,6 +29,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.widg
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
@@ -171,7 +172,7 @@ class QuestionNormalFormFragment : Fragment() {
                 if (items.size < 3) {
                     val picker = TimePickerBottomDialog { time ->
                         viewModel.addHopeTutoringTime(time) {
-                            Toast.makeText(requireContext(), "이미 추가된 시간입니다", Toast.LENGTH_SHORT)
+                            Util.createToast(requireActivity(), "이미 추가된 시간입니다")
                                 .show()
                         }
                     }.apply {
@@ -179,10 +180,9 @@ class QuestionNormalFormFragment : Fragment() {
                     }
                     picker.show(parentFragmentManager, "timePicker")
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다",
-                        Toast.LENGTH_SHORT
+                    Util.createToast(
+                        requireActivity(),
+                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다"
                     ).show()
                 }
             },
@@ -205,15 +205,14 @@ class QuestionNormalFormFragment : Fragment() {
         binding.toggleAnswerNow.setOnCheckedChangeListener { btn, checked ->
             if (checked) {
                 if (times.size >= 3) {
-                    Toast.makeText(
-                        requireContext(),
-                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다",
-                        Toast.LENGTH_SHORT
+                    Util.createToast(
+                        requireActivity(),
+                        "희망 수업 시간은 3개 이내로 설정할 수 있습니다"
                     ).show()
                     btn.isChecked = false
                 } else {
                     viewModel.addHopeTutoringTime(nowTime) {
-                        Toast.makeText(requireContext(), "이미 추가된 시간입니다", Toast.LENGTH_SHORT)
+                        Util.createToast(requireActivity(), "이미 추가된 시간입니다")
                             .show()
                     }
                 }
@@ -386,18 +385,18 @@ class QuestionNormalFormFragment : Fragment() {
     private fun alertEmptyField() {
         with(binding) {
             if (viewModel.images.value.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "사진을 등록해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "사진을 등록해주세요").show()
             } else if (etQuestionDesc.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "질문 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "질문 내용을 입력해주세요").show()
             } else if (tvSchoolSelected.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "학교를 선택해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "학교를 선택해주세요").show()
             } else if (tvSubjectSelected.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "과목을 선택해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "과목을 선택해주세요").show()
             } else if (!toggleAnswerNow.isChecked || timeSelectAdapter?.items.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "희망 답변 시간을 선택해주세요", Toast.LENGTH_SHORT)
+                Util.createToast(requireActivity(), "희망 답변 시간을 선택해주세요")
                     .show()
             } else {
-                Toast.makeText(requireContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "모든 항목을 입력해주세요").show()
             }
         }
     }
@@ -405,10 +404,9 @@ class QuestionNormalFormFragment : Fragment() {
     private fun hasErrorGettingProfile(): Boolean {
         val value = myProfileViewModel.amount.value
         if (value != null) return false
-        Toast.makeText(
-            requireContext(),
-            "보유한 코인을 가져오는데 실패했습니다.\n잠시 후 다시 시도해주세요.",
-            Toast.LENGTH_SHORT
+        Util.createToast(
+            requireActivity(),
+            "보유한 코인을 가져오는데 실패했습니다.\n잠시 후 다시 시도해주세요."
         ).show()
         myProfileViewModel.getMyProfile()
         return true

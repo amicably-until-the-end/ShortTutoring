@@ -25,6 +25,7 @@ import android.view.TextureView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.softwaremaestro.presenter.util.Util
 
 
 class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
@@ -94,7 +95,7 @@ class CameraTextureView(var mContext: Context, attrs: AttributeSet?) :
                     cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                 if (map == null) {
                     Log.e(this@CameraTextureView::class.java.name, "Fail to get configuration")
-                    Toast.makeText(context, "Fail to open Camera!", Toast.LENGTH_SHORT).show()
+                    Util.createToast(context as Activity, "Fail to open Camera!").show()
                     return null
                 }
                 val previewSize = map.getOutputSizes(
