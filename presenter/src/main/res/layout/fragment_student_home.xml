@@ -265,21 +265,45 @@
 
                         <LinearLayout
                             android:id="@+id/container_my_question_empty"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                            android:layout_width="match_parent"
+                            android:layout_height="160dp"
+                            android:layout_marginHorizontal="@dimen/section_horizontal_padding_default"
+                            android:background="@drawable/bg_shadow_1_stroke_background_grey"
+                            android:gravity="center"
+                            android:orientation="vertical"
                             android:visibility="gone">
 
                             <TextView
                                 style="@style/section_title"
-                                android:layout_width="240dp"
-                                android:layout_height="160dp"
-                                android:background="@drawable/bg_radius_10_stroke_dotted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="내가 올린 질문이\n여기에 표시돼요"
+                                android:text="아직 질문을 올리지 않았어요"
                                 android:textColor="@color/hint" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="@style/section_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="지금 질문하러 가기"
+                                    android:textColor="@color/primary_blue" />
+
+                                <ImageView
+                                    android:layout_width="8dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginLeft="6dp"
+                                    android:background="@drawable/ic_arrow_right"
+                                    android:backgroundTint="@color/primary_blue" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
