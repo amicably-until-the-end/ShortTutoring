@@ -25,7 +25,7 @@ class TeacherSearchViewModel @Inject constructor() : ViewModel() {
                         univ = "피식대학교",
                         rating = -1F,
                         followers = listOf(),
-                        reservationCnt = 1,
+                        reservationCnt = 0,
                     )
                 )
             }

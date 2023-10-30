@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemTimeRangePickerItemBinding
+import java.time.LocalDateTime
 
 class TimeRangePickerAdapter(
     private val minuteInterval: Int,
@@ -21,13 +22,14 @@ class TimeRangePickerAdapter(
 
     private fun initializeDateItem() {
         items = mutableListOf()
+        val now = LocalDateTime.now()
+        var mNow = now.withMinute(now.minute / 10 * 10)
         for (hour in 0 until 24) {
             for (minute in 0 until 60 step minuteInterval) { // 10분 간격으로 생성
                 val isAvailable = true // 원하는 조건을 여기에 추가할 수 있습니다.
-//                val mHour = (LocalDateTime.now().hour + hour) % 24
-//                val mMinute = ((LocalDateTime.now().minute / 10 * 10) + minute) % 60
-//                val timeItem = TimeItem(mHour, mMinute, isAvailable)
-
+//                val timeItem = TimeItem(mNow.hour, mNow.minute, isAvailable)
+//                if (mNow.dayOfMonth != now.dayOfMonth) break
+//                mNow = mNow.plusMinutes(10)
                 val timeItem = TimeItem(hour, minute, isAvailable)
                 items.add(timeItem)
             }
