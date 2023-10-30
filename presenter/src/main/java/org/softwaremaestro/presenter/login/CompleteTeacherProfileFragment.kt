@@ -1,6 +1,5 @@
 package org.softwaremaestro.presenter.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteTeacherProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
-import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
@@ -213,7 +211,7 @@ class CompleteTeacherProfileFragment : Fragment() {
 
                 is UIState.Success -> {
                     loadingDialog.dismiss()
-                    startActivity(Intent(requireActivity(), TeacherHomeActivity::class.java))
+                    findNavController().navigate(R.id.action_completeTeacherProfileFragment_to_loginFragment)
                 }
 
                 else -> {

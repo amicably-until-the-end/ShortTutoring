@@ -7,14 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
+import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
+import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
+import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
 
 // 앱에 들어왔을 때 보이는 첫 화면.
@@ -26,6 +30,8 @@ class LoginFragment @Inject constructor() :
     private lateinit var binding: FragmentLoginBinding
 
     private val viewModel: LoginViewModel by viewModels()
+    private val studentRegisterViewModel: StudentRegisterViewModel by activityViewModels()
+    private val teacherRegisterViewModel: TeacherRegisterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,17 +40,7 @@ class LoginFragment @Inject constructor() :
     ): View {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
-
-//        binding.tvLogo.setOnClickListener {
-//            val intent = Intent(activity, StudentHomeActivity::class.java)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            startActivity(intent)
-//        }
-
         setKakaoButton()
-//        setGoogleButton()
-
         return binding.root
     }
 
@@ -124,5 +120,28 @@ class LoginFragment @Inject constructor() :
     private fun setObserver() {
         observeLoginResult()
         observeKakaoLogin()
+        observeRegisterState()
+    }
+
+    private fun observeRegisterState() {
+        studentRegisterViewModel.studentSignupState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    viewModel.login()
+                }
+
+                else -> {}
+            }
+        }
+
+        teacherRegisterViewModel.teacherSignupState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    viewModel.login()
+                }
+
+                else -> {}
+            }
+        }
     }
 }
