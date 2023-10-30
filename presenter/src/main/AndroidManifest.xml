@@ -7,10 +7,6 @@
 
     <application android:usesCleartextTraffic="true">
         <activity
-            android:name=".video_player.DecorationVideoActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".video_player.VideoPlayerActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

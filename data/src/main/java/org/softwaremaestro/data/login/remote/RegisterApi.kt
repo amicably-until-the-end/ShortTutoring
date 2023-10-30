@@ -4,9 +4,9 @@ import org.softwaremaestro.data.common.utils.WrappedResponse
 import org.softwaremaestro.data.login.model.RegisterResDto
 import org.softwaremaestro.data.login.model.StudentRegisterReqDto
 import org.softwaremaestro.data.login.model.TeacherRegisterReqDto
-import org.softwaremaestro.domain.login.entity.StudentRegisterVO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RegisterApi {
@@ -15,4 +15,7 @@ interface RegisterApi {
 
     @POST("/teacher/signup")
     suspend fun registerTeacher(@Body teacherRegisterReqDto: TeacherRegisterReqDto): Response<WrappedResponse<RegisterResDto>>
+
+    @GET("/user/withdraw")
+    suspend fun withdraw(): Response<WrappedResponse<Boolean>>
 }

@@ -69,4 +69,15 @@ class RegisterRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun withdraw(): Flow<BaseResult<Boolean, String>> {
+        return flow {
+            val response = registerApi.withdraw()
+            val body = response.body() ?: return@flow
+            if (body.success == true) {
+                emit(BaseResult.Success(true))
+            } else {
+                emit(BaseResult.Error("error"))
+            }
+        }
+    }
 }

@@ -464,14 +464,9 @@ class StudentHomeFragment : Fragment() {
                 if (fastestReserved.isEmpty() || pendings.isEmpty()) View.GONE
                 else View.VISIBLE
 
-            if (fastestReserved.isEmpty() && pendings.isEmpty()) {
-                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
-                binding.containerMyQuestionNotEmpty.visibility = View.GONE
-            } else {
-                binding.containerMyQuestionEmpty.visibility = View.GONE
-                binding.containerMyQuestionNotEmpty.visibility = View.VISIBLE
-            }
-
+            binding.containerMyQuestionSection.visibility =
+                if (fastestReserved.isEmpty() && pendings.isEmpty()) View.GONE
+                else View.VISIBLE
         }
     }
 
