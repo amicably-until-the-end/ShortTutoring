@@ -170,12 +170,6 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        chatViewModel._currentChattingRoomVO.postValue(null)
-        if (homeViewModel.chattingId == null) currentChatRoom = null
-    }
-
     private fun observeChatRoomChange() {
         //TODO: 채팅방 전체 갱신 안하고 하나씩 새로고침하는 리팩토링 용도
         chatViewModel.changedChatRoom.observe(viewLifecycleOwner) {
