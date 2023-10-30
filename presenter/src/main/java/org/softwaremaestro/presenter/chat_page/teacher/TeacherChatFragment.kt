@@ -84,6 +84,10 @@ class TeacherChatFragment : ChatFragment() {
         return true
     }
 
+    override fun pickTeacher(startTime: LocalDateTime, endTime: LocalDateTime) {
+        return
+    }
+
 
     override fun onChatRoomStateChange(chatRoomVO: ChatRoomVO) {
         enableChatting(true)
@@ -133,7 +137,7 @@ class TeacherChatFragment : ChatFragment() {
 
     private fun onProposedNormalRoomEnter() {
         setNotiVisible(false)
-        setChatRoomBtnsVisible(false)
+        enableOfferSchedule()
         enableSendMessage()
     }
 
@@ -163,7 +167,7 @@ class TeacherChatFragment : ChatFragment() {
     private fun onProposedSelectRoomEnter() {
         setNotiVisible(false)
         enableSendMessage()
-        setChatRoomBtnsVisible(false)
+        enableOfferSchedule()
         enablePickStudentBtn()
         enableDeclineBtn()
     }
@@ -288,7 +292,6 @@ class TeacherChatFragment : ChatFragment() {
                 else -> {}
             }
             teacherViewModel._pickStudentResult.value = UIState.Empty
-
         }
     }
 
@@ -315,10 +318,24 @@ class TeacherChatFragment : ChatFragment() {
     private fun initNumberPickerDialog() {
         numberPickerDialog = NumberPickerBottomDialog { number ->
             teacherViewModel.tutoringDuration = number
-            teacherViewModel.pickStudent(currentChatRoom?.questionId!!, currentChatRoom?.id!!)
+            teacherViewModel.offerSchedule(currentChatRoom?.questionId!!, currentChatRoom?.id!!)
         }.apply {
             setTitle("수업을 몇 분간 진행할까요?")
             setBtnText("입력하기")
+        }
+    }
+
+    private fun enableOfferSchedule() {
+        binding.btnChatRoomLeft.visibility = View.GONE
+        binding.btnChatRoomRight.apply {
+            visibility = View.VISIBLE
+            text = "시간 정하기"
+            setTextColor(resources.getColor(R.color.white, null))
+            setBackgroundResource(R.drawable.bg_radius_100_grad_blue)
+            isEnabled = true
+            setOnClickListener {
+                datePickerDialog.show(parentFragmentManager, "datePicker")
+            }
         }
     }
 }

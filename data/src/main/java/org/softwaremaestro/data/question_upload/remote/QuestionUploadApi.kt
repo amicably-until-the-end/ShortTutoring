@@ -1,10 +1,10 @@
 package org.softwaremaestro.data.question_upload.remote
 
 import org.softwaremaestro.data.common.utils.WrappedResponse
-import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadRequestDto
 import org.softwaremaestro.data.question_upload.model.QuestionUploadResultDto
 import org.softwaremaestro.data.question_upload.model.TeacherListDto
+import org.softwaremaestro.data.question_upload.model.TeacherPickReqDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,7 +23,7 @@ interface QuestionUploadApi {
     @POST("/student/offer/accept/{questionId}")
     suspend fun pickTeacher(
         @Path("questionId") questionId: String,
-        @Body pickTeacherReqDto: PickTeacherReqDto
+        @Body teacherPickReqDto: TeacherPickReqDto
     ): Response<WrappedResponse<Unit>>
 
 

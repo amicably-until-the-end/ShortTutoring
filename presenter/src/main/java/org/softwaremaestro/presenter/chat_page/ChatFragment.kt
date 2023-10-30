@@ -45,6 +45,7 @@ import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
 import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics.EVENT
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -431,6 +432,8 @@ abstract class ChatFragment : Fragment() {
         }
     }
 
+    abstract fun pickTeacher(startTime: LocalDateTime, endTime: LocalDateTime)
+
     private fun toggleQuestionType(isSelect: Boolean) {
         if (isSelect) {
             isNormalQuestionTab = false
@@ -581,6 +584,8 @@ abstract class ChatFragment : Fragment() {
                     putExtra(QUESTION_ID, currentChatRoom?.questionId)
                 }
                 startActivity(intent)
+            }, acceptSchedule = { startTime, endTime ->
+                pickTeacher(startTime, endTime)
             }
         )
         binding.rvMsgs.apply {

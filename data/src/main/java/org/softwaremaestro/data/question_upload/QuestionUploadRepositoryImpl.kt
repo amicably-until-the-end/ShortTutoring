@@ -4,7 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.softwaremaestro.data.common.utils.toStringWithTimeZone
-import org.softwaremaestro.data.question_upload.model.PickTeacherReqDto
+import org.softwaremaestro.data.question_upload.model.TeacherPickReqDto
 import org.softwaremaestro.data.question_upload.model.asDto
 import org.softwaremaestro.data.question_upload.remote.QuestionUploadApi
 import org.softwaremaestro.domain.common.BaseResult
@@ -73,7 +73,7 @@ class QuestionUploadRepositoryImpl @Inject constructor(
             val response =
                 questionUploadApi.pickTeacher(
                     questionId = questionId,
-                    PickTeacherReqDto(
+                    TeacherPickReqDto(
                         startTime = startTime.toStringWithTimeZone(),
                         endTime = endTime.toStringWithTimeZone(),
                         chattingId = chattingId

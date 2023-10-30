@@ -13,6 +13,8 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.ItemChatButtonsBinding
 import org.softwaremaestro.presenter.databinding.ItemChatQuestionBinding
 import org.softwaremaestro.presenter.databinding.ItemChatTextBinding
+import org.softwaremaestro.presenter.util.toKoreanString
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -23,6 +25,7 @@ class MessageListAdapter(
     private val onBtn1Click: () -> Unit,
     private val onBtn2Click: () -> Unit,
     private val onImageClick: () -> Unit,
+    private val acceptSchedule: ((LocalDateTime, LocalDateTime) -> Unit)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<MessageVO> = emptyList()
@@ -69,6 +72,11 @@ class MessageListAdapter(
             is MessageBodyVO.RequestDecline -> TYPE_TEXT
             is MessageBodyVO.ReserveConfirm -> TYPE_TEXT
             is MessageBodyVO.TutoringFinished -> TYPE_TEXT
+            is MessageBodyVO.ScheduleTime -> {
+                if (!isTeacher) TYPE_BUTTONS
+                else TYPE_TEXT
+            }
+
             else -> TYPE_TEXT
         }
     }
@@ -168,6 +176,12 @@ class MessageListAdapter(
                     )
                 }"
                 when (item.bodyVO) {
+                    is MessageBodyVO.ScheduleTime -> {
+                        var body = item.bodyVO as MessageBodyVO.ScheduleTime
+                        val startTime = body.startTime?.parseToLocalDateTime()
+                        tvText.text = "학생에게 ${startTime?.toKoreanString()}에 수업을 제안했습니다."
+                    }
+
                     is MessageBodyVO.Text -> {
                         var body = item.bodyVO as MessageBodyVO.Text
                         tvText.text = body.text
@@ -196,7 +210,7 @@ class MessageListAdapter(
                         var endAt =
                             body.endAt?.parseToLocalDateTime() ?: LocalDateTime.now()
                         tvText.text =
-                            "수업이 종료 되었습니다.\n ${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분 ~.\n" +
+                            "수업이 종료 되었습니다.\n ${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분 ~\n" +
                                     " ${endAt.monthValue}월 ${endAt.dayOfMonth}일 ${endAt.hour}시 ${endAt.minute}분"
                     }
 
@@ -268,6 +282,26 @@ class MessageListAdapter(
                         applyTo(root)
                     }
                     when (item.bodyVO) {
+
+                        is MessageBodyVO.ScheduleTime -> {
+                            var body = item.bodyVO as MessageBodyVO.ScheduleTime
+                            val startTime = body.startTime?.parseToLocalDateTime()
+                            val endTime = body.endTime?.parseToLocalDateTime()
+                            Log.d("duration", "${startTime} ${endTime}")
+                            tvText.text = "선생님이 ${startTime?.toKoreanString()}부터 ${
+                                Duration.between(startTime, endTime)
+                                    .formatDurationInKorean()
+                            }간 수업을 제안했습니다."
+                            btn1.visibility = Button.VISIBLE
+                            btn1.text = "수락하기"
+
+                            btn1.setOnClickListener {
+                                acceptSchedule?.invoke(startTime!!, endTime!!)
+                            }
+
+                            btn2.visibility = Button.GONE
+                            btn3.visibility = Button.GONE
+                        }
 
 
                         is MessageBodyVO.RequestDecline -> {
@@ -385,13 +419,11 @@ class MessageListAdapter(
 
     fun String.parseToLocalDateTime(): LocalDateTime? {
         try {
-            Log.d("parseToLocalDateTime", this)
             val formatter = DateTimeFormatter.ISO_DATE_TIME
             val zonedDateTime = ZonedDateTime.parse(this, formatter)
             val kstZoneId = ZoneId.of("Asia/Seoul")
             return zonedDateTime.withZoneSameInstant(kstZoneId).toLocalDateTime()
         } catch (e: Exception) {
-            Log.e("parseToLocalDateTime", e.toString())
             return null
         }
     }
@@ -400,5 +432,27 @@ class MessageListAdapter(
         const val TYPE_TEXT = 0
         const val TYPE_BUTTONS = 1
         const val TYPE_QUESTION = 2
+    }
+
+    fun Duration.formatDurationInKorean(): String {
+        Log.d("duration", this.toString())
+        val days = this.toDays()
+        val hours = this.toHours() % 24
+        val minutes = this.toMinutes() % 60
+
+        val formattedDuration = StringBuilder()
+
+        if (days > 0) {
+            formattedDuration.append("${days}일 ")
+        }
+        if (hours > 0) {
+            formattedDuration.append("${hours}시간 ")
+        }
+        if (minutes > 0) {
+            formattedDuration.append("${minutes}분")
+        }
+        Log.d("duration", formattedDuration.toString())
+
+        return formattedDuration.toString()
     }
 }
