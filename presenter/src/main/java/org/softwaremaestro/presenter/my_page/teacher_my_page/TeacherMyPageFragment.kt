@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +26,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
@@ -119,8 +119,7 @@ class TeacherMyPageFragment : Fragment() {
         withdrawViewModel.withdrawState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Success -> {
-                    Toast.makeText(requireContext(), "그동안 숏과외를 이용해주셔서 감사합니다", Toast.LENGTH_SHORT)
-                        .show()
+                    Util.createToast(requireActivity(), "그동안 숏과외를 이용해주셔서 감사합니다").show()
                     val intent = Intent(activity, LoginActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -130,11 +129,7 @@ class TeacherMyPageFragment : Fragment() {
                 }
 
                 is UIState.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Util.createToast(requireActivity(), "오류가 발생했습니다. 잠시 후 다시 시도해주세요.").show()
                 }
 
                 else -> {}

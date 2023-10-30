@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.children
 import androidx.core.view.isNotEmpty
@@ -45,6 +44,7 @@ import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.Util.toLocalDateTime
 import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
@@ -118,13 +118,13 @@ class StudentHomeFragment : Fragment() {
             },
             onUnfollow = { teacherId ->
                 followUserViewModel.unfollowUser(teacherId)
-                Toast.makeText(requireContext(), "선생님 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "선생님 찜하기가 해제되었습니다").show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
                 bestTeacherViewModel.getTeachers()
             },
             onFollow = { teacherId ->
                 followUserViewModel.followUser(teacherId)
-                Toast.makeText(requireContext(), "선생님을 찜했습니다", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "선생님을 찜했습니다").show()
                 // teacher의 followers를 갱신하기 위해 getTeachers() 호출
                 bestTeacherViewModel.getTeachers()
             },
