@@ -210,7 +210,7 @@ class MessageListAdapter(
                         var endAt =
                             body.endAt?.parseToLocalDateTime() ?: LocalDateTime.now()
                         tvText.text =
-                            "수업이 종료 되었습니다.\n ${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분 ~.\n" +
+                            "수업이 종료 되었습니다.\n ${startAt.monthValue}월 ${startAt.dayOfMonth}일 ${startAt.hour}시 ${startAt.minute}분 ~\n" +
                                     " ${endAt.monthValue}월 ${endAt.dayOfMonth}일 ${endAt.hour}시 ${endAt.minute}분"
                     }
 
@@ -287,9 +287,10 @@ class MessageListAdapter(
                             var body = item.bodyVO as MessageBodyVO.ScheduleTime
                             val startTime = body.startTime?.parseToLocalDateTime()
                             val endTime = body.endTime?.parseToLocalDateTime()
-                            tvText.text = "선생님이 ${startTime}부터 ${
-                                Duration.between(endTime, startTime)
-                                    .formatDurationInKorean(Duration.between(endTime, startTime))
+                            Log.d("duration", "${startTime} ${endTime}")
+                            tvText.text = "선생님이 ${startTime?.toKoreanString()}부터 ${
+                                Duration.between(startTime, endTime)
+                                    .formatDurationInKorean()
                             }간 수업을 제안했습니다."
                             btn1.visibility = Button.VISIBLE
                             btn1.text = "수락하기"
@@ -433,10 +434,11 @@ class MessageListAdapter(
         const val TYPE_QUESTION = 2
     }
 
-    fun Duration.formatDurationInKorean(duration: Duration): String {
-        val days = duration.toDays()
-        val hours = duration.toHours() % 24
-        val minutes = duration.toMinutes() % 60
+    fun Duration.formatDurationInKorean(): String {
+        Log.d("duration", this.toString())
+        val days = this.toDays()
+        val hours = this.toHours() % 24
+        val minutes = this.toMinutes() % 60
 
         val formattedDuration = StringBuilder()
 
@@ -449,6 +451,7 @@ class MessageListAdapter(
         if (minutes > 0) {
             formattedDuration.append("${minutes}분")
         }
+        Log.d("duration", formattedDuration.toString())
 
         return formattedDuration.toString()
     }
