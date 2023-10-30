@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentLoginBinding
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
+import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeActivity
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeActivity
@@ -29,7 +30,8 @@ class LoginFragment @Inject constructor() :
     private lateinit var binding: FragmentLoginBinding
 
     private val viewModel: LoginViewModel by viewModels()
-    private val registerViewModel: TeacherRegisterViewModel by activityViewModels()
+    private val studentRegisterViewModel: StudentRegisterViewModel by activityViewModels()
+    private val teacherRegisterViewModel: TeacherRegisterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -122,7 +124,17 @@ class LoginFragment @Inject constructor() :
     }
 
     private fun observeRegisterState() {
-        registerViewModel.teacherSignupState.observe(viewLifecycleOwner) {
+        studentRegisterViewModel.studentSignupState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    viewModel.login()
+                }
+
+                else -> {}
+            }
+        }
+
+        teacherRegisterViewModel.teacherSignupState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Success -> {
                     viewModel.login()
