@@ -269,7 +269,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingHorizontal="@dimen/section_horizontal_padding_default">
+                            android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                            android:visibility="gone">
 
                             <TextView
                                 style="@style/section_title"
@@ -278,8 +279,7 @@
                                 android:background="@drawable/bg_radius_10_stroke_dotted"
                                 android:gravity="center"
                                 android:text="내가 올린 질문이\n여기에 표시돼요"
-                                android:textColor="@color/hint"
-                                android:visibility="gone" />
+                                android:textColor="@color/hint" />
 
                         </LinearLayout>
 
