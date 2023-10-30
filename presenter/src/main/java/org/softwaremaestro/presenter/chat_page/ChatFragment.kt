@@ -173,7 +173,7 @@ abstract class ChatFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         chatViewModel._currentChattingRoomVO.postValue(null)
-        currentChatRoom = null
+        if (homeViewModel.chattingId == null) currentChatRoom = null
     }
 
     private fun observeChatRoomChange() {
