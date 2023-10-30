@@ -189,6 +189,7 @@
                             android:background="@drawable/bg_radius_5_stroke_blue"
                             android:gravity="center"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
