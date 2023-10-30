@@ -3,7 +3,6 @@ package org.softwaremaestro.presenter.util.widget
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -69,7 +68,6 @@ class SimpleDatePicker(context: Context, attrs: AttributeSet?) :
             for (date in 1..mFirstDay.lengthOfMonth()) {
                 val id =
                     "${mYear}${"%02d".format(mMonth)}${"%02d".format(date)}".toLong()
-                Log.d("hhcc", "id: ${id}")
                 val viewHolder = binding.rvCalendar.findViewHolderForItemId(id)
                 if (viewHolder != null) {
                     (viewHolder as CalendarDateAdapter.ViewHolder).onBind(

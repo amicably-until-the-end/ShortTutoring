@@ -80,7 +80,9 @@ class CompleteStudentProfileFragment : Fragment() {
                     viewModel._image.value = Animal.toName(image)
                     dialog.dismiss()
                 },
-            )
+            ).apply {
+                isCancelable = false
+            }
             dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
         }
     }
@@ -152,6 +154,14 @@ class CompleteStudentProfileFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                p0 ?: return
+                if (p0.isNotEmpty()) {
+                    binding.etStudentName.hint = ""
+                    binding.etProfileStudentName.hint = ""
+                } else {
+                    binding.etStudentName.hint = "선생님 닉네임"
+                    binding.etProfileStudentName.hint = "선생님 닉네임"
+                }
                 viewModel.setName(p0.toString())
             }
 
