@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
@@ -193,7 +192,7 @@ class TeacherHomeFragment : Fragment() {
                 setHasStableIds(true)
             }
 
-        binding.rvMyQuestion.apply {
+        binding.rvQuestion.apply {
             adapter = questionAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
@@ -310,18 +309,16 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setRefreshContainer() {
-        binding.containerMyQuestionEmpty.setOnClickListener {
-            binding.tvRefresh1.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            binding.tvRefresh2.setTextColor(resources.getColor(R.color.sub_text_grey, null))
-            binding.tvRefresh3.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+        binding.containerQuestionEmpty.setOnClickListener {
+            binding.tvNotiQuestion.setTextColor(resources.getColor(R.color.sub_text_grey, null))
+            binding.tvRefresh.setTextColor(resources.getColor(R.color.sub_text_grey, null))
             binding.ivRefresh.backgroundTintList = resources.getColorStateList(
                 R.color.sub_text_grey, null
             )
 
             Handler(Looper.getMainLooper()).postDelayed({
-                binding.tvRefresh1.setTextColor(resources.getColor(R.color.black, null))
-                binding.tvRefresh2.setTextColor(resources.getColor(R.color.black, null))
-                binding.tvRefresh3.setTextColor(resources.getColor(R.color.primary_blue, null))
+                binding.tvNotiQuestion.setTextColor(resources.getColor(R.color.black, null))
+                binding.tvRefresh.setTextColor(resources.getColor(R.color.primary_blue, null))
                 binding.ivRefresh.backgroundTintList =
                     resources.getColorStateList(R.color.primary_blue, null)
             }, 500L)
@@ -347,22 +344,22 @@ class TeacherHomeFragment : Fragment() {
                 return@observe
             }
             val questionsNotOffered = getQuestionsNotOffered(questions)
-
+//            val questionsNotOffered = emptyList<QuestionGetResponseVO>()
             questionAdapter.submitList(questionsNotOffered)
             questionAdapter.notifyDataSetChanged()
 
             if (isCalledFirstTime) {
                 isCalledFirstTime = false
-                binding.rvMyQuestion.scrollToPosition(0)
+                binding.rvQuestion.scrollToPosition(0)
             }
             if (questionsNotOffered.isNotEmpty()) {
                 binding.tvNumOfQuestions.text = "${questionsNotOffered.size}명의 학생이 선생님을 기다리고 있어요"
-                binding.containerMyQuestionEmpty.visibility = View.GONE
-                binding.rvMyQuestion.visibility = View.VISIBLE
+                binding.containerQuestionEmpty.visibility = View.GONE
+                binding.rvQuestion.visibility = View.VISIBLE
             } else {
                 binding.tvNumOfQuestions.text = "아직 질문이 올라오지 않았어요"
-                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
-                binding.rvMyQuestion.visibility = View.GONE
+                binding.containerQuestionEmpty.visibility = View.VISIBLE
+                binding.rvQuestion.visibility = View.GONE
             }
         }
     }
@@ -373,7 +370,8 @@ class TeacherHomeFragment : Fragment() {
                 logError(this@TeacherHomeFragment::class.java, "questions is null")
                 return@observe
             }
-            val pendings = getPendings(questions)
+//            val pendings = getPendings(questions)
+            val pendings = emptyList<QuestionGetResponseVO>()
             binding.containerMyPendingQuestion.visibility =
                 if (pendings.isNotEmpty()) View.VISIBLE else View.GONE
             binding.tvNumMyPendingQuestion.text = "${pendings.size}"
@@ -381,15 +379,20 @@ class TeacherHomeFragment : Fragment() {
             questionPendingAdapter.notifyDataSetChanged()
 
             val fastestReserved = getFastestReserved(questions)
+//            val fastestReserved = emptyList<QuestionGetResponseVO>()
             binding.containerMyReservedQuestion.visibility =
                 if (fastestReserved.isNotEmpty()) View.VISIBLE else View.GONE
 
             questionReservedAdapter.submitList(fastestReserved)
             questionPendingAdapter.notifyDataSetChanged()
 
-            binding.containerMyQuestionSection.visibility =
-                if (pendings.isEmpty() && fastestReserved.isEmpty()) View.GONE else View.VISIBLE
-
+            if (pendings.isEmpty() && fastestReserved.isEmpty()) {
+                binding.containerMyQuestionEmpty.visibility = View.VISIBLE
+                binding.containerMyQuestionNotEmpty.visibility = View.GONE
+            } else {
+                binding.containerMyQuestionEmpty.visibility = View.GONE
+                binding.containerMyQuestionNotEmpty.visibility = View.VISIBLE
+            }
 
             binding.dvMyQuestion.visibility =
                 if (pendings.isEmpty() || fastestReserved.isEmpty()) View.GONE else View.VISIBLE
