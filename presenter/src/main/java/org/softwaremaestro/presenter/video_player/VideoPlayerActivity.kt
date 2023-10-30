@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -120,7 +119,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     private fun getExtraValues() {
         intent.extras ?: run {
-            Toast.makeText(this, "영상을 재생할 수 없습니다", Toast.LENGTH_SHORT).show()
+            org.softwaremaestro.presenter.util.Util.createToast(this, "영상을 재생할 수 없습니다").show()
             finish()
         }
         with(intent.extras!!) {
@@ -148,7 +147,8 @@ class VideoPlayerActivity : AppCompatActivity() {
             else resources.getDrawable(R.drawable.ic_heart_empty, null)
         heartIv.setOnClickListener {
             if (teacherId.isEmpty()) {
-                Toast.makeText(this, "선생님 아이디를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+                org.softwaremaestro.presenter.util.Util.createToast(this, "선생님 아이디를 가져오는데 실패했습니다")
+                    .show()
                 return@setOnClickListener
             }
 
@@ -168,7 +168,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             followUserViewModel.unfollowUser(teacherId)
             findViewById<ImageView>(R.id.iv_heart).background =
                 resources.getDrawable(R.drawable.ic_heart_empty, null)
-            Toast.makeText(this, "선생님 찜하기가 해제되었습니다", Toast.LENGTH_SHORT).show()
+            org.softwaremaestro.presenter.util.Util.createToast(this, "선생님 찜하기가 해제되었습니다").show()
         }
     }
 

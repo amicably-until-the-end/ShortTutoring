@@ -5,13 +5,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.databinding.ActivityQuestionUploadBinding
+import org.softwaremaestro.presenter.util.Util
 
 @AndroidEntryPoint
 class QuestionUploadActivity : AppCompatActivity() {
@@ -55,7 +55,7 @@ class QuestionUploadActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setContentView(binding.root)
                 } else {
-                    Toast.makeText(this, "권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                    Util.createToast(this, "권한을 허용해주세요").show()
                     finish()
                 }
             }

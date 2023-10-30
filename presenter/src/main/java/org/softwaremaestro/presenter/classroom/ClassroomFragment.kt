@@ -59,6 +59,7 @@ import org.softwaremaestro.presenter.classroom.item.SerializedWhiteBoardRoomInfo
 import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.classroom.widget.DialogGuideline
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
@@ -318,7 +319,7 @@ class ClassroomFragment : Fragment() {
             }
 
             override fun catchEx(t: SDKError?) {
-                Toast.makeText(requireContext(), "화이트보드 서버 접속 실패", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "화이트보드 서버 접속 실패").show()
             }
         }
         var roomListener = object : RoomListener {
@@ -412,18 +413,6 @@ class ClassroomFragment : Fragment() {
         // You need to specify the user ID yourself, and ensure that it is unique in the channel.
         voiceEngine.joinChannel(voiceInfo.token, voiceInfo.channelId, voiceInfo.uid, options)
         setVoiceFunctions()
-    }
-
-
-    fun showMessage(message: String?) {
-        requireActivity().runOnUiThread {
-            Toast.makeText(
-                requireContext(),
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
     }
 
     private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
@@ -649,10 +638,10 @@ class ClassroomFragment : Fragment() {
             with(it as ToggleButton) {
                 if (isChecked) {
                     voiceEngine.enableLocalAudio(true)
-                    Toast.makeText(requireContext(), "마이크가 켜졌습니다.", Toast.LENGTH_SHORT).show()
+                    Util.createToast(requireActivity(), "마이크가 켜졌습니다.").show()
                 } else {
                     voiceEngine.enableLocalAudio(false)
-                    Toast.makeText(requireContext(), "마이크가 꺼졌습니다.", Toast.LENGTH_SHORT).show()
+                    Util.createToast(requireActivity(), "마이크가 꺼졌습니다.").show()
                 }
             }
         }

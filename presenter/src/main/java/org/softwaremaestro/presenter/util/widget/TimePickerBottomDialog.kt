@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.softwaremaestro.presenter.databinding.DialogTimePickerBinding
-import org.softwaremaestro.presenter.util.nowInKorea
+import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.nowInKorea
 import java.time.LocalDateTime
 
 class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)) :
@@ -42,10 +42,9 @@ class TimePickerBottomDialog(private val onReturnClick: ((SpecificTime) -> Unit)
         binding.timePicker.setOnTimeChangedListener { tp, hour, minute ->
             val isTimeValid = now.hour < hour || (now.hour == hour && now.minute <= minute)
             if (!isTimeValid) {
-                Toast.makeText(
-                    context,
-                    "${now.hour}:${now.minute} 이후의 시간을 설정해주세요",
-                    Toast.LENGTH_SHORT
+                Util.createToast(
+                    requireActivity(),
+                    "${now.hour}:${now.minute} 이후의 시간을 설정해주세요"
                 ).show()
             }
         }

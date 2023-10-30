@@ -1,7 +1,6 @@
 package org.softwaremaestro.presenter.teacher_home
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import org.softwaremaestro.presenter.teacher_home.TeacherHomeFragment.Companion.
 import org.softwaremaestro.presenter.teacher_home.TeacherHomeFragment.Companion.SUBJECT
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionDetailImagesAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
+import org.softwaremaestro.presenter.util.Util
 
 @AndroidEntryPoint
 class QuestionDetailActivity : AppCompatActivity() {
@@ -53,8 +53,10 @@ class QuestionDetailActivity : AppCompatActivity() {
                 setBackgroundResource(R.drawable.bg_radius_5_grey)
                 setTextColor(resources.getColor(R.color.sub_text_grey, null))
                 setOnClickListener {
-                    Toast.makeText(this@QuestionDetailActivity, "이미 신청한 수업입니다", Toast.LENGTH_SHORT)
-                        .show()
+                    Util.createToast(
+                        this@QuestionDetailActivity,
+                        "이미 신청한 수업입니다"
+                    ).show()
                 }
             }
         } else {

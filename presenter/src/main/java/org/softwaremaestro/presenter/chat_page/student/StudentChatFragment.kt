@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.chat.entity.ChatRoomState
@@ -14,6 +13,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.chat_page.ChatFragment
 import org.softwaremaestro.presenter.chat_page.viewmodel.StudentChatViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toKoreanString
 import org.softwaremaestro.presenter.util.widget.DatePickerBottomDialog
@@ -158,7 +158,7 @@ class StudentChatFragment : ChatFragment() {
 
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
-                    Toast.makeText(requireContext(), "강의실 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
+                    Util.createToast(requireActivity(), "강의실 정보를 가져오지 못했습니다.")
                         .show()
                 }
 
@@ -191,7 +191,7 @@ class StudentChatFragment : ChatFragment() {
                 }
 
                 is UIState.Failure -> {
-                    Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Util.createToast(requireActivity(), "다시 시도해주세요.").show()
                 }
 
                 else -> {}
@@ -236,7 +236,7 @@ class StudentChatFragment : ChatFragment() {
                 is UIState.Failure -> {
                     loadingDialog.dismiss()
                     //setChatNoti(null, null)
-                    Toast.makeText(requireContext(), "예약 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT)
+                    Util.createToast(requireActivity(), "예약 정보를 가져오지 못했습니다.")
                         .show()
                 }
 
@@ -342,7 +342,7 @@ class StudentChatFragment : ChatFragment() {
             }
             setOnClickListenerToBtnPositive {
                 if (chatViewModel.tutoringInfo.value?._data?.status == "finished") {
-                    Toast.makeText(requireContext(), "이미 종료된 수업입니다.", Toast.LENGTH_SHORT).show()
+                    Util.createToast(requireActivity(), "이미 종료된 수업입니다.").show()
                     return@setOnClickListenerToBtnPositive
                 }
                 tutoringId?.let { chatViewModel.getClassroomInfo(it) }

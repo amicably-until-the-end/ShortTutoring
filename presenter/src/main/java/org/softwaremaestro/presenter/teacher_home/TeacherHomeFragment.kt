@@ -123,8 +123,7 @@ class TeacherHomeFragment : Fragment() {
                         0
                     ) == OFFER_SUCCESS
                 ) {
-                    Toast.makeText(requireActivity(), "수업을 제안했습니다.", Toast.LENGTH_SHORT)
-                        .show()
+                    Util.createToast(requireActivity(), "수업을 제안했습니다.").show()
                     val chatId = it.data?.getStringExtra(CHAT_ID)
                     (activity as TeacherHomeActivity).moveToChatTab(chatId)
                 }
@@ -399,7 +398,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun getPendings(questions: List<QuestionGetResponseVO>): List<QuestionGetResponseVO> {
         val userId = SocketManager.userId ?: run {
-            Toast.makeText(requireContext(), "사용자의 ID를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            Util.createToast(requireActivity(), "사용자의 ID를 가져오는데 실패했습니다").show()
             return emptyList()
         }
 
@@ -433,7 +432,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun getQuestionsNotOffered(questions: List<QuestionGetResponseVO>): List<QuestionGetResponseVO> {
         val userId = SocketManager.userId ?: run {
-            Toast.makeText(requireContext(), "사용자의 ID를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            Util.createToast(requireActivity(), "사용자의 ID를 가져오는데 실패했습니다").show()
             return emptyList()
         }
 

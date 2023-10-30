@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -18,6 +17,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.Ques
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.CapturePreviewAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel.QuestionUploadViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
+import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.moveBack
 
 // TODO: Rename parameter arguments, choose names that match
@@ -90,7 +90,7 @@ class QuestionCameraFragment : Fragment() {
                 navigateToQuestionFormAfter(200L)
                 disableNextButtonFor(500L)
             } else {
-                Toast.makeText(requireActivity(), "문제 사진을 촬영해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "문제 사진을 촬영해주세요").show()
             }
         }
     }

@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -14,8 +13,9 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteTeacherProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.TeacherRegisterViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.showKeyboardAndRequestFocus
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
-import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -154,7 +154,7 @@ class CompleteTeacherProfileFragment : Fragment() {
         } else {
             "프로필 이미지를 설정해주세요"
         }
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        Util.createToast(requireActivity(), msg).show()
     }
 
     private fun observe() {
@@ -217,7 +217,7 @@ class CompleteTeacherProfileFragment : Fragment() {
                 else -> {
                     loadingDialog.dismiss()
                     binding.btnComplete.setEnabledAndChangeColor(true)
-                    Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Util.createToast(requireActivity(), "다시 시도해주세요.").show()
                 }
             }
         }

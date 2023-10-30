@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -15,8 +14,9 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentCompleteStudentProfileBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.showKeyboardAndRequestFocus
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
-import org.softwaremaestro.presenter.util.showKeyboardAndRequestFocus
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 
@@ -130,7 +130,7 @@ class CompleteStudentProfileFragment : Fragment() {
                 else -> {
                     loadingDialog.dismiss()
                     binding.btnComplete.setEnabledAndChangeColor(true)
-                    Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Util.createToast(requireActivity(), "다시 시도해주세요.").show()
                 }
             }
         }
@@ -170,7 +170,8 @@ class CompleteStudentProfileFragment : Fragment() {
             if (isBtnCompleteEnabled) {
                 viewModel.registerStudent()
             } else {
-                Toast.makeText(requireContext(), "닉네임과 프로필 이미지를 설정해주세요", Toast.LENGTH_SHORT).show()
+                Util.createToast(requireActivity(), "닉네임과 프로필 이미지를 설정해주세요")
+                    .show()
             }
         }
     }
