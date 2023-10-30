@@ -17,7 +17,6 @@ import org.softwaremaestro.domain.common.BaseResult.Success
 import org.softwaremaestro.domain.login.entity.TeacherRegisterVO
 import org.softwaremaestro.domain.login.usecase.TeacherRegisterUseCase
 import org.softwaremaestro.presenter.BuildConfig
-import org.softwaremaestro.presenter.login.Animal
 import org.softwaremaestro.presenter.login.univGet.UnivGetService
 import org.softwaremaestro.presenter.util.UIState
 import javax.inject.Inject
@@ -43,7 +42,7 @@ class TeacherRegisterViewModel @Inject constructor(
     val _bio: MutableLiveData<String> = MutableLiveData("모든 학생이 깨달음을 얻을 수 있도록!")
     val bio: LiveData<String> get() = _bio
 
-    val _image: MutableLiveData<String> = MutableLiveData(Animal.getRandom().mName)
+    val _image: MutableLiveData<String> = MutableLiveData()
     val image: LiveData<String> get() = _image
 
     val _schoolNameAndMajorProper = MediatorLiveData<Boolean>()

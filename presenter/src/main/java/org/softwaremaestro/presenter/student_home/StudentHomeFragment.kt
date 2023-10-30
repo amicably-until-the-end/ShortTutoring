@@ -17,14 +17,10 @@ import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
@@ -241,9 +237,8 @@ class StudentHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             setEventButton()
-            smoothScrollToPosition(0)
         }
-        setAutoScrollToEventRecycler()
+
         setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
     }
 
@@ -281,17 +276,6 @@ class StudentHomeFragment : Fragment() {
             ).apply {
                 marginStart = toPx(2, requireContext())
                 marginEnd = toPx(2, requireContext())
-            }
-        }
-    }
-
-    private fun setAutoScrollToEventRecycler() {
-        var pos = 0
-        viewLifecycleOwner.lifecycleScope.launch {
-            while (NonCancellable.isActive) {
-                binding.rvEvent.smoothScrollToPosition(pos)
-                delay(10000L)
-                pos = (pos + 1) % eventAdapter.itemCount
             }
         }
     }

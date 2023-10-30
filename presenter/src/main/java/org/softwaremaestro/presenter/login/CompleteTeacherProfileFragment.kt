@@ -85,9 +85,7 @@ class CompleteTeacherProfileFragment : Fragment() {
                     viewModel._image.value = Animal.toName(image)
                     dialog.dismiss()
                 },
-            ).apply {
-                isCancelable = false
-            }
+            )
             dialog.show(parentFragmentManager, "profileImageSelectBottomDialog")
         }
     }
@@ -119,14 +117,6 @@ class CompleteTeacherProfileFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                p0 ?: return
-                if (p0.isNotEmpty()) {
-                    binding.etTeacherName.hint = ""
-                    binding.etProfileTeacherName.hint = ""
-                } else {
-                    binding.etTeacherName.hint = "선생님 닉네임"
-                    binding.etProfileTeacherName.hint = "선생님 닉네임"
-                }
                 viewModel._name.value = p0.toString()
             }
 

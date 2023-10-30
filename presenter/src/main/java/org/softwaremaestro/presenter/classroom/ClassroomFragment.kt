@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatImageButton
@@ -581,6 +582,7 @@ class ClassroomFragment : Fragment() {
     private fun setSelectorButton() {
         binding.btnSelector.setOnClickListener {
             changeApplianceToSelector()
+
         }
     }
 
