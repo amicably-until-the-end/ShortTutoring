@@ -125,7 +125,7 @@ class LoginFragment @Inject constructor() :
         registerViewModel.teacherSignupState.observe(viewLifecycleOwner) {
             when (it) {
                 is UIState.Success -> {
-                    viewModel.loginWithKakao(requireContext())
+                    viewModel.login()
                 }
 
                 else -> {}

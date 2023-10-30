@@ -10,7 +10,6 @@ import org.softwaremaestro.domain.common.BaseResult
 import org.softwaremaestro.domain.login.RegisterRepository
 import org.softwaremaestro.domain.login.entity.StudentRegisterVO
 import org.softwaremaestro.domain.login.entity.TeacherRegisterVO
-import org.softwaremaestro.domain.login.entity.WithdrawResVO
 import javax.inject.Inject
 
 class RegisterRepositoryImpl @Inject constructor(
@@ -70,14 +69,12 @@ class RegisterRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun withdraw(): Flow<BaseResult<WithdrawResVO, String>> {
+    override suspend fun withdraw(): Flow<BaseResult<Boolean, String>> {
         return flow {
             val response = registerApi.withdraw()
             val body = response.body() ?: return@flow
-            if (body.success == true && body.data != null) {
-                val dto = body.data!!
-                val vo = WithdrawResVO(dto.userId, dto.vendor)
-                emit(BaseResult.Success(vo))
+            if (body.success == true) {
+                emit(BaseResult.Success(true))
             } else {
                 emit(BaseResult.Error("error"))
             }

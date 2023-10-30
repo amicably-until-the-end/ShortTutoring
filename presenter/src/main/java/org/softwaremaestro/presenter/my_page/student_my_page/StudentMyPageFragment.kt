@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,13 +16,16 @@ import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.FragmentStudentMyPageBinding
 import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
+import org.softwaremaestro.presenter.login.viewmodel.WithdrawViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeFragment
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
 @AndroidEntryPoint
@@ -33,6 +37,8 @@ class StudentMyPageFragment : Fragment() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private val followerViewModel: FollowerViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val withdrawViewModel: WithdrawViewModel by viewModels()
+
 
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -57,6 +63,7 @@ class StudentMyPageFragment : Fragment() {
         setFollowingMenu()
         setServiceCenterMenu()
         setLogOutContainer()
+        setWithdrawMenu()
 
         observe()
     }
@@ -64,6 +71,7 @@ class StudentMyPageFragment : Fragment() {
     private fun observe() {
         observeTutoring()
         observeProfile()
+        observeWithdrawState()
     }
 
     private fun observeTutoring() {
@@ -100,6 +108,35 @@ class StudentMyPageFragment : Fragment() {
 
         profileViewModel.followers.observe(viewLifecycleOwner) {
             binding.btnFollow.text = "찜한 선생님 ${it.size}명"
+        }
+    }
+
+    private fun observeWithdrawState() {
+        withdrawViewModel.withdrawState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    Toast.makeText(requireContext(), "그동안 숏과외를 이용해주셔서 감사합니다", Toast.LENGTH_SHORT)
+                        .show()
+                    val intent = Intent(activity, LoginActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    loginViewModel.clearJWT()
+                    startActivity(intent)
+                }
+
+                is UIState.Failure -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                else -> {}
+            }
+
+            withdrawViewModel.resetWithdrawState()
         }
     }
 
@@ -165,10 +202,6 @@ class StudentMyPageFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val SERVICE_CENTER_URL = "http://www.form.short-tutoring.com"
-    }
-
     private fun setLogOutContainer() {
         binding.containerLogOut.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java).apply {
@@ -178,5 +211,20 @@ class StudentMyPageFragment : Fragment() {
             loginViewModel.clearJWT()
             startActivity(intent)
         }
+    }
+
+    private fun setWithdrawMenu() {
+        binding.containerWithdraw.setOnClickListener {
+            SimpleConfirmDialog {
+                withdrawViewModel.withdraw()
+            }.apply {
+                title = "정말 숏과외를 탈퇴할까요?"
+                description = "회원을 탈퇴하면 회원 정보가 삭제됩니다"
+            }.show(parentFragmentManager, "withdraw")
+        }
+    }
+
+    companion object {
+        private const val SERVICE_CENTER_URL = "http://www.form.short-tutoring.com"
     }
 }

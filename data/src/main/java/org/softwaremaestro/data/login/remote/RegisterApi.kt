@@ -4,7 +4,6 @@ import org.softwaremaestro.data.common.utils.WrappedResponse
 import org.softwaremaestro.data.login.model.RegisterResDto
 import org.softwaremaestro.data.login.model.StudentRegisterReqDto
 import org.softwaremaestro.data.login.model.TeacherRegisterReqDto
-import org.softwaremaestro.data.login.model.WithdrawResDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,5 +17,5 @@ interface RegisterApi {
     suspend fun registerTeacher(@Body teacherRegisterReqDto: TeacherRegisterReqDto): Response<WrappedResponse<RegisterResDto>>
 
     @GET("/user/withdraw")
-    suspend fun withdraw(): Response<WrappedResponse<WithdrawResDto>>
+    suspend fun withdraw(): Response<WrappedResponse<Boolean>>
 }

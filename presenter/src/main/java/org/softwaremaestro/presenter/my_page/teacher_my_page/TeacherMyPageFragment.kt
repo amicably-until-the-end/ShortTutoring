@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTeacherMyPageBinding
 import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
+import org.softwaremaestro.presenter.login.viewmodel.WithdrawViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeFragment
@@ -24,8 +26,10 @@ import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
+import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
 @AndroidEntryPoint
@@ -38,6 +42,7 @@ class TeacherMyPageFragment : Fragment() {
     private val followerViewModel: FollowerViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val tutoringViewModel: TutoringViewModel by viewModels()
+    private val withdrawViewModel: WithdrawViewModel by viewModels()
 
 
     private lateinit var reviewAdapter: ReviewAdapter
@@ -66,6 +71,7 @@ class TeacherMyPageFragment : Fragment() {
         setFollowerMenu()
         setServiceCenterMenu()
         setLogOutContainer()
+        setWithdrawMenu()
         observe()
     }
 
@@ -79,6 +85,7 @@ class TeacherMyPageFragment : Fragment() {
         observeProfile()
         observeReview()
         observeTutoring()
+        observeWithdrawState()
     }
 
     private fun observeReview() {
@@ -105,6 +112,35 @@ class TeacherMyPageFragment : Fragment() {
             lectureAdapter.setItem(it)
             lectureAdapter.notifyDataSetChanged()
             binding.tvNumOfClip.text = it.size.toString()
+        }
+    }
+
+    private fun observeWithdrawState() {
+        withdrawViewModel.withdrawState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UIState.Success -> {
+                    Toast.makeText(requireContext(), "그동안 숏과외를 이용해주셔서 감사합니다", Toast.LENGTH_SHORT)
+                        .show()
+                    val intent = Intent(activity, LoginActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    loginViewModel.clearJWT()
+                    startActivity(intent)
+                }
+
+                is UIState.Failure -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                else -> {}
+            }
+
+            withdrawViewModel.resetWithdrawState()
         }
     }
 
@@ -255,6 +291,17 @@ class TeacherMyPageFragment : Fragment() {
             }
             loginViewModel.clearJWT()
             startActivity(intent)
+        }
+    }
+
+    private fun setWithdrawMenu() {
+        binding.containerWithdraw.setOnClickListener {
+            SimpleConfirmDialog {
+                withdrawViewModel.withdraw()
+            }.apply {
+                title = "정말 숏과외를 탈퇴할까요?"
+                description = "회원을 탈퇴하면 회원 정보가 삭제됩니다"
+            }.show(parentFragmentManager, "withdraw")
         }
     }
 
