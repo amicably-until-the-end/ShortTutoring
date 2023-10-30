@@ -253,9 +253,8 @@ class TeacherHomeFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             setEventButton()
-            smoothScrollToPosition(0)
         }
-        setAutoScrollToEventRecycler()
+
         setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
     }
 
@@ -295,17 +294,6 @@ class TeacherHomeFragment : Fragment() {
             ).apply {
                 marginStart = Util.toPx(2, requireContext())
                 marginEnd = Util.toPx(2, requireContext())
-            }
-        }
-    }
-
-    private fun setAutoScrollToEventRecycler() {
-        var pos = 0
-        viewLifecycleOwner.lifecycleScope.launch {
-            while (NonCancellable.isActive) {
-                binding.rvEvent.smoothScrollToPosition(pos)
-                delay(10000L)
-                pos = (pos + 1) % eventAdapter.itemCount
             }
         }
     }
@@ -382,8 +370,8 @@ class TeacherHomeFragment : Fragment() {
                 logError(this@TeacherHomeFragment::class.java, "questions is null")
                 return@observe
             }
-            val pendings = getPendings(questions)
-//            val pendings = emptyList<QuestionGetResponseVO>()
+//            val pendings = getPendings(questions)
+            val pendings = emptyList<QuestionGetResponseVO>()
             binding.containerMyPendingQuestion.visibility =
                 if (pendings.isNotEmpty()) View.VISIBLE else View.GONE
             binding.tvNumMyPendingQuestion.text = "${pendings.size}"

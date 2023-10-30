@@ -14,7 +14,7 @@ object Mapper {
                 major = school?.schoolDepartment,
                 rating = rating,
                 followers = followers,
-                reservationCnt = 0
+                reservationCnt = -1
             )
         }
     }
