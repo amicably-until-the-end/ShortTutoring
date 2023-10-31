@@ -18,6 +18,7 @@ import org.softwaremaestro.presenter.util.Util.showKeyboardAndRequestFocus
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
 
 
 class CompleteTeacherProfileFragment : Fragment() {
@@ -221,6 +222,11 @@ class CompleteTeacherProfileFragment : Fragment() {
 
                 is UIState.Success -> {
                     loadingDialog.dismiss()
+                    STTFirebaseAnalytics.logEvent(
+                        STTFirebaseAnalytics.EVENT.REGISTER,
+                        "role",
+                        "teacher"
+                    )
                     findNavController().navigate(R.id.action_completeTeacherProfileFragment_to_loginFragment)
                 }
 

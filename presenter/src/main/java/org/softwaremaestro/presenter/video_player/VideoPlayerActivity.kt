@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.video_player
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -91,10 +92,11 @@ class VideoPlayerActivity : AppCompatActivity() {
             releasePlayer()
         }
         if (startTime != null) {
-            val lectureTime = (System.currentTimeMillis() - startTime!!) / 1000L
+            val lectureDuration = (System.currentTimeMillis() - startTime!!) / 1000L
             STTFirebaseAnalytics.logEvent(
-                STTFirebaseAnalytics.EVENT.TOTAL_LECTURE_TIME,
-                lectureTime
+                STTFirebaseAnalytics.EVENT.LECTURE_DURATION,
+                key = "lecture_duration",
+                value = lectureDuration.toString()
             )
         }
     }
@@ -131,6 +133,11 @@ class VideoPlayerActivity : AppCompatActivity() {
             tutoringUrl = getString(RECORDING_FILE_URL, "")
             teacherId = getString(TEACHER_ID, "")
             mFollowing = getBoolean(FOLLOWING)
+        }
+
+        if (teacherId.isEmpty()) {
+            val heartIv = findViewById<ImageView>(R.id.iv_heart)
+            heartIv.visibility = View.GONE
         }
     }
 

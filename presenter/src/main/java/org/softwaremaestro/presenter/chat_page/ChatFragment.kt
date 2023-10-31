@@ -876,10 +876,13 @@ abstract class ChatFragment : Fragment() {
 
                         }.show(parentFragmentManager, "reviewDialog")
                     }
-                    STTFirebaseAnalytics.logEvent(EVENT.NUM_TUTORING, 1L)
                     if (startTime != null) {
                         val tutoringTime = (System.currentTimeMillis() - startTime!!) / 1000L
-                        STTFirebaseAnalytics.logEvent(EVENT.TOTAL_TUTORING_TIME, tutoringTime)
+                        STTFirebaseAnalytics.logEvent(
+                            EVENT.TUTORING_DURATION,
+                            key = "tutoring_duration",
+                            value = tutoringTime.toString()
+                        )
                         startTime = null
                     }
                 }

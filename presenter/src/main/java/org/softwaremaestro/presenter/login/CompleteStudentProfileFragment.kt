@@ -19,6 +19,8 @@ import org.softwaremaestro.presenter.util.Util.showKeyboardAndRequestFocus
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
+import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics.EVENT
 
 @AndroidEntryPoint
 class CompleteStudentProfileFragment : Fragment() {
@@ -126,6 +128,7 @@ class CompleteStudentProfileFragment : Fragment() {
 
                 is UIState.Success -> {
                     loadingDialog.dismiss()
+                    STTFirebaseAnalytics.logEvent(EVENT.REGISTER, "role", "student")
                     findNavController().navigate(R.id.action_completeStudentProfileFragment_to_loginFragment)
                 }
 

@@ -7,16 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.databinding.FragmentStudentMyPageBinding
 import org.softwaremaestro.presenter.login.LoginActivity
 import org.softwaremaestro.presenter.login.viewmodel.LoginViewModel
 import org.softwaremaestro.presenter.login.viewmodel.WithdrawViewModel
-import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
+import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.my_page.viewmodel.ProfileViewModel
 import org.softwaremaestro.presenter.student_home.StudentHomeFragment
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
@@ -25,6 +27,7 @@ import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
+import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
 import org.softwaremaestro.presenter.video_player.VideoPlayerActivity
 
@@ -33,9 +36,9 @@ class StudentMyPageFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentMyPageBinding
 
+    private val followingViewModel: FollowingViewModel by activityViewModels()
     private val tutoringViewModel: TutoringViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
-    private val followerViewModel: FollowerViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val withdrawViewModel: WithdrawViewModel by viewModels()
 
@@ -44,6 +47,7 @@ class StudentMyPageFragment : Fragment() {
     private lateinit var lectureAdapter: LectureAdapter
 
     private lateinit var dialog: ProfileImageSelectBottomDialog
+    private lateinit var followings: List<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +61,7 @@ class StudentMyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profileViewModel.getMyProfile()
+        SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         initLectureRecyclerView()
 
         setBtnEditTeacherImg()
@@ -71,6 +76,7 @@ class StudentMyPageFragment : Fragment() {
     private fun observe() {
         observeTutoring()
         observeProfile()
+        observeFollowing()
         observeWithdrawState()
     }
 
@@ -108,6 +114,13 @@ class StudentMyPageFragment : Fragment() {
 
         profileViewModel.followers.observe(viewLifecycleOwner) {
             binding.btnFollow.text = "찜한 선생님 ${it.size}명"
+        }
+    }
+
+    private fun observeFollowing() {
+        followingViewModel.following.observe(viewLifecycleOwner) {
+            it ?: return@observe
+            followings = it.map { it.teacherId }.filterNotNull()
         }
     }
 
@@ -154,14 +167,25 @@ class StudentMyPageFragment : Fragment() {
     }
 
     private fun watchRecordFile(tutoringVO: TutoringVO) {
+        val tutoringUrl = tutoringVO.recordFileUrl?.get(0) ?: run {
+            SimpleAlertDialog().apply {
+                title = "아직 영상이 생성되는 중입니다"
+                description = "잠시 후 다시 시도해주세요"
+            }.show(parentFragmentManager, "making video")
+            return
+        }
+
         val intent = Intent(requireActivity(), VideoPlayerActivity::class.java).apply {
             putExtra(StudentHomeFragment.PROFILE_IMAGE, tutoringVO.opponentProfileImage)
             putExtra(StudentHomeFragment.STUDENT_NAME, tutoringVO.opponentName)
             putExtra(StudentHomeFragment.SCHOOL_LEVEL, tutoringVO.schoolLevel)
             putExtra(StudentHomeFragment.SUBJECT, tutoringVO.schoolSubject)
             putExtra(StudentHomeFragment.DESCRIPTION, tutoringVO.description)
-            tutoringVO.recordFileUrl?.get(0)
-                ?.let { putExtra(StudentHomeFragment.RECORDING_FILE_URL, it) }
+            putExtra(StudentHomeFragment.RECORDING_FILE_URL, tutoringUrl)
+            val teacherId = tutoringVO.opponentId
+            val following = teacherId in followings
+            putExtra(StudentHomeFragment.TEACHER_ID, teacherId)
+            putExtra(StudentHomeFragment.FOLLOWING, following)
         }
         startActivity(intent)
     }

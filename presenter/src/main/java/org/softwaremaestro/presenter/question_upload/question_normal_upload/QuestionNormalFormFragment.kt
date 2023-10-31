@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -258,7 +257,7 @@ class QuestionNormalFormFragment : Fragment() {
                 }
 
                 is UIState.Success -> {
-                    STTFirebaseAnalytics.logEvent(EVENT.NUM_QUESTION_NORMAL, 1L)
+                    STTFirebaseAnalytics.logEvent(EVENT.QUESTION_NORMAL)
                     loadingDialog.dismiss()
                     val intent = Intent()
                     intent.putExtra(QUESTION_UPLOAD_RESULT, it.data.questionId)

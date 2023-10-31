@@ -3,28 +3,29 @@ package org.softwaremaestro.presenter.util.widget
 import android.os.Bundle
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import org.softwaremaestro.domain.socket.SocketManager
 
 class STTFirebaseAnalytics {
     companion object {
         private var firebaseAnalytics = Firebase.analytics
 
-        fun logEvent(event: EVENT, value: Any) {
+        fun logEvent(event: EVENT, key: String? = null, value: String? = null) {
+            SocketManager.userId ?: return
             val bundle = Bundle().apply {
-                when (value) {
-                    is String -> putString(event.key, value)
-                    is Long -> putLong(event.key, value)
-                    else -> return
+                putString("user_id", SocketManager.userId)
+                if (key != null && value != null) {
+                    putString(key, value)
                 }
             }
-            firebaseAnalytics.logEvent(event.mName, bundle)
+            firebaseAnalytics.logEvent(event.key, bundle)
         }
     }
 
-    enum class EVENT(val mName: String, val key: String) {
-        NUM_QUESTION_NORMAL("num_question_normal", "num_question_normal"),
-        NUM_QUESTION_RESERVED("num_question_reserved", "num_question_reserved"),
-        NUM_TUTORING("num_tutoring", "num_tutoring"),
-        TOTAL_TUTORING_TIME("total_tutoring_duration", "total_tutoring_duration"),
-        TOTAL_LECTURE_TIME("total_lecture_time", "total_lecture_time")
+    enum class EVENT(val key: String) {
+        QUESTION_NORMAL("question_normal"),
+        QUESTION_RESERVED("question_reserved"),
+        TUTORING_DURATION("tutoring_duration"),
+        LECTURE_DURATION("lecture_duration"),
+        REGISTER("register")
     }
 }
