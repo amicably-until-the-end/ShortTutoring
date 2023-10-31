@@ -31,7 +31,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:fontFamily="@font/pretendard_medium"
             android:gravity="center"
             android:text="선택하고 이동합니다."
@@ -41,14 +40,13 @@
         <Button
             android:id="@+id/btn_erase_object"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_radius_18_grad_blue"
             android:backgroundTint="@null"
             android:fontFamily="@font/pretendard_medium"
             android:minHeight="0dp"
             android:paddingHorizontal="10dp"
-            android:paddingVertical="6dp"
             android:text="선택된 항목 지우기"
             android:textColor="@color/white"
             android:textSize="14sp" />
