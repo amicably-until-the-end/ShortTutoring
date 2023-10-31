@@ -32,7 +32,7 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
         android:paddingHorizontal="70dp"
-        android:text="10명의 선생님을 찜했어요"
+        android:text="아직 찜한 선생님이 없어요"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
@@ -71,7 +71,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:layout_marginTop="40dp"
-                android:background="@color/background_grey" />
+                android:background="@color/background_grey"
+                android:visibility="invisible" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +82,8 @@
                 android:paddingHorizontal="70dp"
                 android:text="관심 선생님을 찾아볼까요?"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="invisible" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_teacher_recommend"
@@ -89,7 +91,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp"
                 android:clipToPadding="false"
-                android:paddingHorizontal="70dp" />
+                android:paddingHorizontal="70dp"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

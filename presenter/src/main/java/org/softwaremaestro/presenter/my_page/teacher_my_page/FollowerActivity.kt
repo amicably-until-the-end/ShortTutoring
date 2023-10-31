@@ -1,6 +1,7 @@
 package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,12 +51,15 @@ class FollowerActivity : AppCompatActivity() {
     private fun observeFollower() {
         followerViewModel.follower.observe(this) {
             it?.let {
-                binding.tvFollower.text =
-                    if (it.isNotEmpty()) {
-                        "${it.size}명의 학생이 나를 찜했어요"
-                    } else {
-                        "아직 나를 찜한 학생이 없어요"
-                    }
+                if (it.isNotEmpty()) {
+                    binding.tvFollower.text = "${it.size}명의 학생이 나를 찜했어요"
+                    binding.rvFollowers.visibility = View.VISIBLE
+                    binding.containerFollowingEmpty.visibility = View.GONE
+                } else {
+                    binding.tvFollower.text = "아직 나를 찜한 학생이 없어요"
+                    binding.rvFollowers.visibility = View.GONE
+                    binding.containerFollowingEmpty.visibility = View.VISIBLE
+                }
                 followersAdapter.setItem(it)
                 followersAdapter.notifyDataSetChanged()
             }
