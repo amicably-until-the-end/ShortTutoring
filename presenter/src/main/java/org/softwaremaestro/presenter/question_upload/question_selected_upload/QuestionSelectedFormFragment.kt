@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.softwaremaestro.domain.question_selected_upload.entity.QuestionSelectedUploadVO
 import org.softwaremaestro.presenter.R
+import org.softwaremaestro.presenter.coin.viewModel.CoinViewModel
 import org.softwaremaestro.presenter.databinding.FragmentQuestionSelectedFormBinding
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.FormImageAdapter
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.adapter.TimeSelectAdapter
@@ -26,11 +27,13 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.widg
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.widget.DialogSchoolSubject
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionReservationViewModel
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
+import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.setEnabledAndChangeColor
 import org.softwaremaestro.presenter.util.toBase64
+import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics
 import org.softwaremaestro.presenter.util.widget.STTFirebaseAnalytics.EVENT
@@ -46,6 +49,8 @@ class QuestionSelectedFormFragment : Fragment() {
     private lateinit var dialogSchoolSubject: DialogSchoolSubject
 
     lateinit var binding: FragmentQuestionSelectedFormBinding
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
+    private val coinViewModel: CoinViewModel by activityViewModels()
     private val questionSelectedUploadViewModel: QuestionSelectedUploadViewModel by activityViewModels()
     private val questionReservationViewModel: QuestionReservationViewModel by activityViewModels()
 
@@ -72,6 +77,7 @@ class QuestionSelectedFormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDialog()
+        myProfileViewModel.getMyProfile()
         resetViewModelValue()
         parseMathSubjectJson()
         setObserver()
@@ -213,6 +219,33 @@ class QuestionSelectedFormFragment : Fragment() {
         }
     }
 
+    private fun observeCoinFreeReceiveState() {
+        coinViewModel.coinFreeReceiveState.observe(viewLifecycleOwner) {
+            it ?: return@observe
+
+            myProfileViewModel.amount.value ?: run {
+                Util.createToast(requireActivity(), "사용자의 코인을 가져오는데 실패했습니다").show()
+                return@observe
+            }
+
+            // 무료 코인 받기 성공
+            if (it) {
+                SimpleAlertDialog().apply {
+                    title = "오늘의 코인을 받았습니다"
+                    description =
+                        "현재 ${(myProfileViewModel.amount.value!! + 2) * 100}개의 코인을 보유하고 있어요"
+                }.show(parentFragmentManager, "receive free coin success")
+                // 코인을 업데이트하기 위해 getMyProfile() 호출
+                myProfileViewModel.getMyProfile()
+            } else {
+                SimpleAlertDialog().apply {
+                    title = "이미 오늘의 코인을 받았습니다"
+                    description = "기본 코인은 매일 200개씩 제공돼요"
+                }.show(parentFragmentManager, "receive free coin fail")
+            }
+            coinViewModel.resetCoinFreeReceiveState()
+        }
+    }
 
     private fun setObserver() {
         observeImages()
@@ -220,7 +253,7 @@ class QuestionSelectedFormFragment : Fragment() {
         observeSubject()
         observeInputProper()
         observeQuestionUploadState()
-
+        observeCoinFreeReceiveState()
     }
 
     private fun observeInputProper() {
@@ -240,6 +273,22 @@ class QuestionSelectedFormFragment : Fragment() {
         binding.btnSubmit.apply {
             setOnClickListener {
 //                if (isAllFieldsEntered()) {
+
+                myProfileViewModel.amount.value ?: run {
+                    Util.createToast(requireActivity(), "사용자의 코인을 가져오는데 실패했습니다").show()
+                    return@setOnClickListener
+                }
+
+                if (myProfileViewModel.amount.value!! * 100 < QUESTION_UPLOAD_COST) {
+                    DetailAlertDialog(
+                        title = "코인이 부족합니다",
+                        description = "매일 200코인이 기본 제공돼요.\n오늘의 코인을 받을까요?",
+                        confirm = "코인 받기",
+                        onConfirm = { coinViewModel.receiveCoinFree() }
+                    ).show(parentFragmentManager, "coin is insufficient")
+                    return@setOnClickListener
+                }
+
                 //버튼 여러번 눌러지는 거 방지
                 val questionSelectedUploadVO = QuestionSelectedUploadVO(
                     description = binding.etQuestionDesc.text.toString(),
@@ -318,5 +367,7 @@ class QuestionSelectedFormFragment : Fragment() {
         private const val TEACHER_ID = "teacherId"
 
         private const val QUESTION_ID = "questionId"
+
+        private const val QUESTION_UPLOAD_COST = 100
     }
 }
