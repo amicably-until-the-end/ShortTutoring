@@ -18,6 +18,7 @@ import org.softwaremaestro.domain.login.usecase.AutoLoginUseCase
 import org.softwaremaestro.domain.login.usecase.LoginUseCase
 import org.softwaremaestro.domain.login.usecase.SaveKakaoJWTUseCase
 import org.softwaremaestro.presenter.util.UIState
+import org.softwaremaestro.presenter.util.Util.logError
 import javax.inject.Inject
 
 @HiltViewModel
@@ -96,12 +97,16 @@ class LoginViewModel @Inject constructor(
             autoLoginUseCase.execute()
                 .catch {
                     _saveRole.postValue(UIState.Failure)
+                    logError(this@LoginViewModel::class.java, it.message.toString())
                 }
                 .onStart { _saveRole.postValue(UIState.Loading) }
                 .collect { result ->
                     when (result) {
                         is BaseResult.Success -> _saveRole.postValue(UIState.Success(result.data))
-                        else -> _saveRole.postValue(UIState.Failure)
+                        else -> {
+                            _saveRole.postValue(UIState.Failure)
+                            logError(this@LoginViewModel::class.java, result.toString())
+                        }
                     }
                 }
         }
@@ -151,7 +156,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun clearJWT() {
-        loginUseCase.clearFCMToken()
+        loginUseCase.clearJWT()
     }
 
 }

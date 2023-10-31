@@ -16,7 +16,7 @@ class RequestInterceptor constructor(private val prefs: SharedPrefs) : Intercept
     override fun intercept(chain: Interceptor.Chain): Response {
         val jwt = getJWT(chain.request().url.pathSegments[0])
 
-        var newRequest = if (jwt != null) {
+        var newRequest = if (jwt.isNotEmpty()) {
             chain.request().newBuilder()
                 .addHeader("Authorization", "Bearer $jwt")
                 .build()
