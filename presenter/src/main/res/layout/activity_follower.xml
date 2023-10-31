@@ -32,7 +32,7 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
         android:paddingHorizontal="70dp"
-        android:text="10명의 학생들이 나를 찜했어요"
+        android:text="아직 나를 찜한 학생이 없어요"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
