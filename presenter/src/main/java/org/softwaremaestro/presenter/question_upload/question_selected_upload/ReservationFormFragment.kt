@@ -29,7 +29,6 @@ class ReservationFormFragment : Fragment() {
     private lateinit var binding: FragmentReservationFormBinding
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val questionReservationViewModel: QuestionReservationViewModel by activityViewModels()
-    private var cost: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,8 +99,6 @@ class ReservationFormFragment : Fragment() {
                     val timeDuration = end.plusMinute(10).toTime() - start.toTime()
                     binding.tvSelectedTime.text =
                         "${start} ~ ${end.plusMinute(10)} (${timeDuration}분)"
-                    cost = timeDuration * 10
-                    binding.tvQuestionCost.text = "${cost}"
                 })
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
@@ -129,8 +126,12 @@ class ReservationFormFragment : Fragment() {
             if (proper) {
                 setBtnSubmit(true)
                 binding.btnSubmit.setOnClickListener {
+                    myProfileViewModel.amount.value ?: run {
+                        Util.createToast(requireActivity(), "사용자의 코인을 가져오는데 실패했습니다")
+                    }
+
                     // 보유한 코인이 부족한 경우
-                    if (cost > myProfileViewModel.amount.value!!) {
+                    if (myProfileViewModel.amount.value!! < 100) {
                         SimpleAlertDialog().apply {
                             title = "코인이 부족합니다"
                             description = "코인을 충전한 후 다시 질문해주세요"
