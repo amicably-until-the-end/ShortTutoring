@@ -72,28 +72,28 @@ class StudentQuestionAdapter(
 
         private fun setTimeText(reservedStart: String) {
             val ldt = toLocalDateTime(reservedStart)
-            val date = if (ldt == LocalDateTime.now()) "오늘"
-            else if (ldt == LocalDateTime.now().plusDays(1L)) "내일"
+            val date = if (ldt.dayOfMonth == LocalDateTime.now().dayOfMonth) "오늘"
+            else if (ldt.dayOfMonth == LocalDateTime.now().plusDays(1L).dayOfMonth) "내일"
             else "${ldt.monthValue}. ${ldt.dayOfMonth}"
             val time = ldt.format(DateTimeFormatter.ofPattern("hh:mm"))
             binding.tvTimeText.text = "$date $time"
         }
     }
-}
 
-object QuestionDiffUtil : DiffUtil.ItemCallback<QuestionGetResponseVO>() {
+    object QuestionDiffUtil : DiffUtil.ItemCallback<QuestionGetResponseVO>() {
 
-    override fun areItemsTheSame(
-        oldItem: QuestionGetResponseVO,
-        newItem: QuestionGetResponseVO
-    ): Boolean {
-        return oldItem == newItem
-    }
+        override fun areItemsTheSame(
+            oldItem: QuestionGetResponseVO,
+            newItem: QuestionGetResponseVO
+        ): Boolean {
+            return oldItem == newItem
+        }
 
-    override fun areContentsTheSame(
-        oldItem: QuestionGetResponseVO,
-        newItem: QuestionGetResponseVO
-    ): Boolean {
-        return oldItem.id == newItem.id
+        override fun areContentsTheSame(
+            oldItem: QuestionGetResponseVO,
+            newItem: QuestionGetResponseVO
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
     }
 }

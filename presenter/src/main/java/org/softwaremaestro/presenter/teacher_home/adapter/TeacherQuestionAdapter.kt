@@ -10,6 +10,9 @@ import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
+import org.softwaremaestro.presenter.util.Util
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val EMPTY_STRING = "-"
 
@@ -53,9 +56,19 @@ class TeacherQuestionAdapter(
                 if (SocketManager.userId != null && item.offerTeachers != null &&
                     SocketManager.userId!! in item.offerTeachers!!
                 ) {
-                    tvTime.visibility = View.GONE
-                    ivCheck.visibility = View.VISIBLE
-                    tvTimeText.text = "신청 완료"
+                    when (item.status) {
+                        "pending" -> {
+                            tvTime.visibility = View.GONE
+                            ivCheck.visibility = View.VISIBLE
+                            tvTimeText.text = "신청 완료"
+                        }
+
+                        "reserved" -> {
+                            containerTime.visibility = View.VISIBLE
+                            tvTime.visibility = View.VISIBLE
+                            item.reservedStart?.let { setTimeText(it) }
+                        }
+                    }
                 }
                 // 신청하지 않은 수업인 경우
                 else {
@@ -80,6 +93,15 @@ class TeacherQuestionAdapter(
                     }
                 }
             }
+        }
+
+        private fun setTimeText(reservedStart: String) {
+            val ldt = Util.toLocalDateTime(reservedStart)
+            val date = if (ldt.dayOfMonth == LocalDateTime.now().dayOfMonth) "오늘"
+            else if (ldt.dayOfMonth == LocalDateTime.now().plusDays(1L).dayOfMonth) "내일"
+            else "${ldt.monthValue}. ${ldt.dayOfMonth}"
+            val time = ldt.format(DateTimeFormatter.ofPattern("hh:mm"))
+            binding.tvTimeText.text = "$date $time"
         }
     }
 
