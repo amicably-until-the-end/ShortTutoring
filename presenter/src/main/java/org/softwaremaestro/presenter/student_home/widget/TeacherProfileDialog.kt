@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -103,6 +104,13 @@ class TeacherProfileDialog(
             mItem.rating?.let { tvTeacherRating.text = it.toRating() }
             btnFollow.text = "찜한 학생 ${followerCnt}"
             tvReservationCnt.text = "${mItem.reservationCnt ?: 0}"
+        }
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            super.show(manager, tag)
+        } catch (_: Exception) {
         }
     }
 

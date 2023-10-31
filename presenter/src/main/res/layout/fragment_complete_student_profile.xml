@@ -49,7 +49,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/pretendard_medium"
-        android:text="닉네임과 프로필 이미지를 "
+        android:text="선생님에게 보이는 프로필은 아래와 같아요"
         android:textColor="@color/sub_text_grey"
         android:textSize="13dp"
         app:layout_constraintLeft_toLeftOf="parent"
