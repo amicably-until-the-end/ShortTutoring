@@ -26,7 +26,25 @@
             android:screenDensity="xxhdpi"
             android:screenSize="xlarge" />
         <screen
+            android:screenDensity="340"
+            android:screenSize="xlarge" />
+        <screen
             android:screenDensity="xxxhdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="280"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="360"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="420"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="480"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="560"
             android:screenSize="xlarge" />
         <!-- some of large size screens -->
         <screen
@@ -40,6 +58,21 @@
             android:screenSize="large" />
         <screen
             android:screenDensity="xxxhdpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="280"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="360"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="420"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="480"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="560"
             android:screenSize="large" />
     </compatible-screens>
 
