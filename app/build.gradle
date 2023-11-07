@@ -19,8 +19,8 @@ android {
         applicationId "org.softwaremaestro.shorttutoring"
         minSdk 26
         targetSdk 33
-        versionCode 5
-        versionName "1.2.2"
+        versionCode 6
+        versionName "1.2.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "KAKAO_APP_KEY", "\"${KAKAO_APP_KEY}\""
         manifestPlaceholders = [KAKAO_APP_KEY: KAKAO_APP_KEY]
