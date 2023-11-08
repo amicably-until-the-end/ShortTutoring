@@ -2,7 +2,9 @@ package org.softwaremaestro.presenter.chat_page
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -76,6 +78,7 @@ abstract class ChatFragment : Fragment() {
 
     protected lateinit var tutoringId: String
     private var startTime: Long? = null
+    private var isSmallScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +86,7 @@ abstract class ChatFragment : Fragment() {
     ): View? {
 
         binding = FragmentChatPageBinding.inflate(inflater, container, false)
-
+        supportSmallSizeScreen()
         setProposedRecyclerView()
         setReservedRecyclerView()
         setChatMsgRecyclerView()
@@ -102,6 +105,35 @@ abstract class ChatFragment : Fragment() {
 
         return binding.root
 
+    }
+
+    private fun supportSmallSizeScreen() {
+        val width: Int?
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            width = Util.toDp(Resources.getSystem().displayMetrics.widthPixels, requireContext())
+        } else {
+            @Suppress("DEPRECATION")
+            val display = requireActivity().windowManager.defaultDisplay.apply {
+                getMetrics(DisplayMetrics())
+            }
+            @Suppress("DEPRECATION")
+            width = Util.toDp(display.width, requireContext())
+        }
+
+        isSmallScreen = width < 600
+        if (isSmallScreen) {
+            binding.containerOfferingTeacher.layoutParams =
+                ConstraintLayout.LayoutParams(0, 0).apply {
+                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                    leftToRight = binding.containerIconSideSection.id
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+//            binding.containerTutoringList.layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.MATCH_PARENT
+//            )
+        }
     }
 
 
