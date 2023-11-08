@@ -237,6 +237,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
+        if (eventAdapter.itemCount == 0) return
         eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW

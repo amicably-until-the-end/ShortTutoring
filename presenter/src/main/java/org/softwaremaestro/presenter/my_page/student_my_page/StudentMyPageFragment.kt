@@ -247,6 +247,6 @@ class StudentMyPageFragment : Fragment() {
     }
 
     companion object {
-        private const val SERVICE_CENTER_URL = "http://www.form.short-tutoring.com"
+        private const val SERVICE_CENTER_URL = "http://form.short-tutoring.com"
     }
 }

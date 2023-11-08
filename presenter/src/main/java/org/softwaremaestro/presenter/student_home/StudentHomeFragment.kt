@@ -286,6 +286,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
+        if (eventAdapter.itemCount == 0) return
         var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
