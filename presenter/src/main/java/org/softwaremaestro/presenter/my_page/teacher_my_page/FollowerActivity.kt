@@ -39,11 +39,12 @@ class FollowerActivity : AppCompatActivity() {
         val width = getWidth(this)
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            binding.tvFollower.setPadding(20, 0, 20, 0)
-            binding.rvFollowers.setPadding(20, 0, 20, 0)
+            val paddingValue = 20
+            binding.tvFollower.setPadding(paddingValue, 0, paddingValue, 0)
+            binding.rvFollowers.setPadding(paddingValue, 0, paddingValue, 0)
             (binding.tvFollowerEmpty.layoutParams as LinearLayout.LayoutParams).apply {
-                leftMargin = 20
-                rightMargin = 20
+                leftMargin = paddingValue
+                rightMargin = paddingValue
             }
         }
     }
