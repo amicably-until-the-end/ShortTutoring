@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Service
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -94,6 +95,21 @@ object Util {
     }
 
     fun nowInKorea() = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+
+    fun getWidth(activity: Activity): Int {
+        val width: Int?
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            width = toDp(Resources.getSystem().displayMetrics.widthPixels, activity)
+        } else {
+            @Suppress("DEPRECATION")
+            val display = activity.windowManager.defaultDisplay.apply {
+                getMetrics(DisplayMetrics())
+            }
+            @Suppress("DEPRECATION")
+            width = toDp(display.width, activity)
+        }
+        return width
+    }
 }
 
 fun Float.toRating() = String.format("%.1f", this)
