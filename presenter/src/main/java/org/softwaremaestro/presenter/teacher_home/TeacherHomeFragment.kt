@@ -237,7 +237,6 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
-        if (eventAdapter.itemCount == 0) return
         eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
@@ -301,6 +300,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
+        if (eventAdapter.itemCount == 0) return
         var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
