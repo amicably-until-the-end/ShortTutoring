@@ -14,6 +14,7 @@ import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.Util.getWidth
 import org.softwaremaestro.presenter.util.Util.logError
+import org.softwaremaestro.presenter.util.Util.toDp
 
 @AndroidEntryPoint
 class FollowerActivity : AppCompatActivity() {
@@ -39,7 +40,7 @@ class FollowerActivity : AppCompatActivity() {
         val width = getWidth(this)
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            val paddingValue = 20
+            val paddingValue = toDp(20, this)
             binding.tvFollower.setPadding(paddingValue, 0, paddingValue, 0)
             binding.rvFollowers.setPadding(paddingValue, 0, paddingValue, 0)
             (binding.tvFollowerEmpty.layoutParams as LinearLayout.LayoutParams).apply {

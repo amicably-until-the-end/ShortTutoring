@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentTosBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.getWidth
 
 @AndroidEntryPoint
 class ToSFragment : Fragment() {
@@ -20,6 +22,7 @@ class ToSFragment : Fragment() {
     private lateinit var binding: FragmentTosBinding
     private var agreeAll = false
     private val viewModel: StudentRegisterViewModel by viewModels()
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +35,7 @@ class ToSFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        supportSmallScreenSize()
         setToolBar()
         setToggleButtons()
         observe()
@@ -39,6 +43,23 @@ class ToSFragment : Fragment() {
         setNextButton()
         setTosContainer()
         setPrivacyPolicyContainer()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toDp(20, requireContext())
+            binding.tvTos.setPadding(paddingValue, 0, paddingValue, 0)
+            (binding.tbAgreeOnTos.layoutParams as LinearLayout.LayoutParams).leftMargin =
+                paddingValue
+            (binding.tbAgreeOnPrivacyPolicy.layoutParams as LinearLayout.LayoutParams).leftMargin =
+                paddingValue
+            (binding.containerTos.layoutParams as LinearLayout.LayoutParams).rightMargin =
+                paddingValue
+            (binding.containerPrivacyPolicy.layoutParams as LinearLayout.LayoutParams).rightMargin =
+                paddingValue
+        }
     }
 
     private fun setToolBar() {

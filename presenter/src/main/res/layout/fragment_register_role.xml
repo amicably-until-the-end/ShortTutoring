@@ -31,9 +31,9 @@
         android:id="@+id/tv_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
+        android:paddingHorizontal="70dp"
         android:text="계정 정보를 선택해주세요."
         android:textColor="@color/black"
         android:textSize="18dp"
@@ -41,11 +41,12 @@
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
     <RadioGroup
+        android:id="@+id/rg_role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="70dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_question">
 

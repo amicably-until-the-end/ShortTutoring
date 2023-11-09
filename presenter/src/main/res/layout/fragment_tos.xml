@@ -54,10 +54,11 @@
 
             <ToggleButton
                 android:id="@+id/tb_agree_on_tos"
-                android:layout_width="22dp"
+                android:layout_width="24dp"
                 android:layout_height="22dp"
                 android:layout_marginLeft="70dp"
                 android:background="@drawable/selector_check_toggle"
+                android:paddingRight="12dp"
                 android:textOff=""
                 android:textOn=""
                 app:layout_constraintBottom_toBottomOf="parent"

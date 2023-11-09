@@ -12,6 +12,8 @@ import org.softwaremaestro.presenter.R
 import org.softwaremaestro.presenter.databinding.FragmentRegisterRoleBinding
 import org.softwaremaestro.presenter.login.viewmodel.StudentRegisterViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.getWidth
+import org.softwaremaestro.presenter.util.Util.toDp
 
 // 로그인 화면에서 회원 가입을 누르면 나오는 화면.
 // 유저는 학생과 선생님 중에서 선택한다.
@@ -20,6 +22,7 @@ class RegisterRoleFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterRoleBinding
     private val viewModel: StudentRegisterViewModel by viewModels()
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +32,7 @@ class RegisterRoleFragment : Fragment() {
 
         binding = FragmentRegisterRoleBinding.inflate(inflater, container, false)
 
+        supportSmallScreenSize()
         setTvStudent()
         setTvTeacher()
         setBtnNext()
@@ -36,6 +40,16 @@ class RegisterRoleFragment : Fragment() {
         observe()
 
         return binding.root
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = toDp(20, requireContext())
+            binding.tvQuestion.setPadding(paddingValue, 0, paddingValue, 0)
+            binding.rgRole.setPadding(paddingValue, 0, paddingValue, 0)
+        }
     }
 
     private fun setTvStudent() {
