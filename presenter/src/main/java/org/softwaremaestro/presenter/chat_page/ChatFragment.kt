@@ -129,10 +129,6 @@ abstract class ChatFragment : Fragment() {
                     topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                 }
-//            binding.containerTutoringList.layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.MATCH_PARENT
-//            )
         }
     }
 
@@ -766,6 +762,14 @@ abstract class ChatFragment : Fragment() {
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
+        if (isSmallScreen) {
+            binding.containerChatRoom.layoutParams = ConstraintLayout.LayoutParams(0, 0).apply {
+                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+            }
+        }
         loadingDialog.dismiss() // 로딩중에 방이 바뀌는 경우에 대비해서 로딩중인 다이얼로그를 닫는다.
         currentChatRoom = chatRoomVO
         onChatRoomStateChange(chatRoomVO)
