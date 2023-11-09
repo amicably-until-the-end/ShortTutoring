@@ -19,13 +19,14 @@ class RegisterStudentInfoFragment : Fragment() {
     private lateinit var binding: FragmentRegisterStudentInfoBinding
     private val viewModel: StudentRegisterViewModel by activityViewModels()
     private var registerEnabled = false
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegisterStudentInfoBinding.inflate(layoutInflater)
-
+        supportSmallScreenSize()
         setRgSchoolLevel()
         setRgSchoolGrade()
         setBtnNext()
@@ -33,6 +34,24 @@ class RegisterStudentInfoFragment : Fragment() {
         observe()
 
         return binding.root
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toDp(20, requireContext())
+            binding.tvSchoolLevel.setPadding(paddingValue, 0, paddingValue, 0)
+            binding.rgSchoolLevel.setPadding(paddingValue, 0, paddingValue, 0)
+            binding.tvGrade.setPadding(paddingValue, 0, paddingValue, 0)
+            binding.rgGrade.setPadding(paddingValue, 0, paddingValue, 0)
+        }
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setRgSchoolLevel() {
