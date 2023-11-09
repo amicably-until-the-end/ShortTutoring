@@ -2,7 +2,7 @@ package org.softwaremaestro.presenter.my_page.student_my_page
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +13,7 @@ import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_search.adapter.TeacherAdapter
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.toPx
 
 @AndroidEntryPoint
 class FollowingActivity : AppCompatActivity() {
@@ -23,10 +24,12 @@ class FollowingActivity : AppCompatActivity() {
     private val followingViewModel: FollowingViewModel by viewModels()
     private lateinit var followingAdapter: TeacherAdapter
     private lateinit var bestTeacherAdapter: TeacherAdapter
+    private var isSmallSizeScreen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFollowingBinding.inflate(layoutInflater)
+        supportSmallScreenSize()
         setContentView(binding.root)
 
         setFollowingRecyclerView()
@@ -34,6 +37,20 @@ class FollowingActivity : AppCompatActivity() {
         setObserver()
         getRemoteData()
         setToolbar()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(this)
+        isSmallSizeScreen = width < 600
+        val paddingValue = toPx(20, this)
+        if (isSmallSizeScreen) {
+            binding.tvFollowing.setPadding(paddingValue, 0, paddingValue, 0)
+            binding.rvFollowing.setPadding(paddingValue, 0, paddingValue, 0)
+            (binding.tvFollowingEmpty.layoutParams as LinearLayout.LayoutParams).apply {
+                leftMargin = paddingValue
+                rightMargin = paddingValue
+            }
+        }
     }
 
     private fun setFollowingRecyclerView() {
