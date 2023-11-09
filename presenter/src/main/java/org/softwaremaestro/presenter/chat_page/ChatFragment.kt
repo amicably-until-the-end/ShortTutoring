@@ -2,9 +2,7 @@ package org.softwaremaestro.presenter.chat_page
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +39,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.getWidth
 import org.softwaremaestro.presenter.util.Util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
@@ -78,7 +77,7 @@ abstract class ChatFragment : Fragment() {
 
     protected lateinit var tutoringId: String
     private var startTime: Long? = null
-    private var isSmallScreen = false
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -108,20 +107,9 @@ abstract class ChatFragment : Fragment() {
     }
 
     private fun supportSmallSizeScreen() {
-        val width: Int?
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            width = Util.toDp(Resources.getSystem().displayMetrics.widthPixels, requireContext())
-        } else {
-            @Suppress("DEPRECATION")
-            val display = requireActivity().windowManager.defaultDisplay.apply {
-                getMetrics(DisplayMetrics())
-            }
-            @Suppress("DEPRECATION")
-            width = Util.toDp(display.width, requireContext())
-        }
-
-        isSmallScreen = width < 600
-        if (isSmallScreen) {
+        val width = getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
             binding.containerOfferingTeacher.layoutParams =
                 ConstraintLayout.LayoutParams(0, 0).apply {
                     rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
@@ -762,7 +750,7 @@ abstract class ChatFragment : Fragment() {
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
-        if (isSmallScreen) {
+        if (isSmallSizeScreen) {
             binding.containerChatRoom.layoutParams = ConstraintLayout.LayoutParams(0, 0).apply {
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                 bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID

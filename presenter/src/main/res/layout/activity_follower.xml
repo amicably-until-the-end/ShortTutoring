@@ -51,16 +51,18 @@
             android:paddingHorizontal="70dp" />
 
         <LinearLayout
-            android:id="@+id/container_following_empty"
+            android:id="@+id/container_follower_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/tv_follower_empty"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:layout_marginHorizontal="70dp"
+                android:layout_marginLeft="70dp"
+                android:layout_marginRight="70dp"
                 android:background="@drawable/bg_radius_10_stroke_dotted"
                 android:fontFamily="@font/pretendard_medium"
                 android:gravity="center"

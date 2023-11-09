@@ -2,6 +2,7 @@ package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import org.softwaremaestro.presenter.databinding.ActivityFollowerBinding
 import org.softwaremaestro.presenter.my_page.adapter.StudentAdapter
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowerViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.getWidth
 import org.softwaremaestro.presenter.util.Util.logError
 
 @AndroidEntryPoint
@@ -19,16 +21,31 @@ class FollowerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowerBinding
     private val followerViewModel: FollowerViewModel by viewModels()
     private lateinit var followersAdapter: StudentAdapter
+    private var isSmallSizeScreen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFollowerBinding.inflate(layoutInflater)
+        supportSmallScreenSize()
         setContentView(binding.root)
 
         setFollowersRecyclerView()
         observeFollower()
         getRemoteData()
         setToolbar()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = getWidth(this)
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            binding.tvFollower.setPadding(20, 0, 20, 0)
+            binding.rvFollowers.setPadding(20, 0, 20, 0)
+            (binding.tvFollowerEmpty.layoutParams as LinearLayout.LayoutParams).apply {
+                leftMargin = 20
+                rightMargin = 20
+            }
+        }
     }
 
     private fun setToolbar() {
@@ -54,11 +71,11 @@ class FollowerActivity : AppCompatActivity() {
                 if (it.isNotEmpty()) {
                     binding.tvFollower.text = "${it.size}명의 학생이 나를 찜했어요"
                     binding.rvFollowers.visibility = View.VISIBLE
-                    binding.containerFollowingEmpty.visibility = View.GONE
+                    binding.containerFollowerEmpty.visibility = View.GONE
                 } else {
                     binding.tvFollower.text = "아직 나를 찜한 학생이 없어요"
                     binding.rvFollowers.visibility = View.GONE
-                    binding.containerFollowingEmpty.visibility = View.VISIBLE
+                    binding.containerFollowerEmpty.visibility = View.VISIBLE
                 }
                 followersAdapter.setItem(it)
                 followersAdapter.notifyDataSetChanged()
