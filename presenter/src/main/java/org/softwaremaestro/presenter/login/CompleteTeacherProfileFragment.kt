@@ -27,6 +27,7 @@ class CompleteTeacherProfileFragment : Fragment() {
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
     private lateinit var dialog: ProfileImageSelectBottomDialog
     private var isBtnCompleteEnabled = false
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +39,7 @@ class CompleteTeacherProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        supportSmallScreenSize()
         hideButtonsUponDisplaySize()
         setViewModelValueToFields()
         setEtProfileTeacherName()
@@ -50,6 +51,16 @@ class CompleteTeacherProfileFragment : Fragment() {
         setBtnToolbarBack()
         setBtnComplete()
         observe()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toDp(20, requireContext())
+            binding.glLeft.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineBegin(paddingValue)
+        }
     }
 
     private fun hideButtonsUponDisplaySize() {

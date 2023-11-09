@@ -28,6 +28,7 @@ class RegisterTeacherInfoFragment : Fragment() {
     private lateinit var binding: FragmentRegisterTeacherInfoBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
     private var registerEnabled = false
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,12 +42,22 @@ class RegisterTeacherInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        supportSmallScreenSize()
         setAtvUniv()
         setEtTeacherMajor()
         setNextButton()
         setToolBar()
         observe()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toDp(20, requireContext())
+            binding.glLeft.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineBegin(paddingValue)
+        }
     }
 
     private fun setEtTeacherMajor() {

@@ -28,41 +28,53 @@
         android:background="@color/primary_blue"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="70dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="70dp" />
+
     <TextView
         android:id="@+id/tv_main_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
         android:text="선생님 프로필을 완성해주세요"
         android:textColor="@color/black"
         android:textSize="18dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
         app:layout_constraintTop_toBottomOf="@id/dv_toolbar" />
 
     <TextView
         android:id="@+id/tv_sub_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="학생에게 보이는 프로필은 아래와 같아요"
         android:textColor="@color/sub_text_grey"
         android:textSize="13dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
         app:layout_constraintTop_toBottomOf="@id/tv_main_question" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_teacher_profile"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="70dp"
         android:layout_marginTop="30dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
+        app:layout_constraintRight_toRightOf="@id/gl_right"
         app:layout_constraintTop_toBottomOf="@id/tv_sub_question"
         app:strokeColor="@color/primary_blue"
         app:strokeWidth="1dp">
@@ -245,24 +257,23 @@
         android:id="@+id/tv_teacher_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
         android:layout_marginTop="35dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="닉네임"
         android:textColor="@color/sub_text_grey"
         android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
         app:layout_constraintTop_toBottomOf="@id/cv_teacher_profile" />
 
     <LinearLayout
         android:id="@+id/container_teacher_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="70dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_radius_10_background_grey"
         android:gravity="center_vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
+        app:layout_constraintRight_toRightOf="@id/gl_right"
         app:layout_constraintTop_toBottomOf="@id/tv_teacher_name">
 
         <EditText
@@ -288,24 +299,23 @@
         android:id="@+id/tv_teacher_bio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="한줄 소개"
         android:textColor="@color/sub_text_grey"
         android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
         app:layout_constraintTop_toBottomOf="@id/container_teacher_name" />
 
     <LinearLayout
         android:id="@+id/container_teacher_bio"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="70dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_radius_10_background_grey"
         android:gravity="center_vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
+        app:layout_constraintRight_toRightOf="@id/gl_right"
         app:layout_constraintTop_toBottomOf="@id/tv_teacher_bio">
 
         <EditText
