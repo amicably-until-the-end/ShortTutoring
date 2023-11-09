@@ -48,6 +48,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionViewModel
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.Util.logError
+import org.softwaremaestro.presenter.util.Util.toPx
 import java.time.LocalDateTime
 
 private const val REFRESHING_TIME_INTERVAL = 10000L
@@ -73,6 +74,7 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
     private lateinit var waitingSnackbar: Snackbar
     private var isCalledFirstTime = true
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +87,7 @@ class TeacherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        supportSmallScreenSize()
         getRemoteData()
         setTexts()
         initWaitingSnackbar()
@@ -94,6 +97,34 @@ class TeacherHomeFragment : Fragment() {
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
         setRefreshContainer()
         observe()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            binding.tvNotiHead.textSize = 8f
+            binding.tvNoti.textSize = 12f
+            binding.containerNoti.setPadding(
+                toPx(4, requireContext()),
+                toPx(5, requireContext()),
+                toPx(4, requireContext()),
+                toPx(5, requireContext())
+            )
+            binding.tvNumOfQuestions.textSize = 15f
+            binding.tvMyQuestion.textSize = 15f
+            binding.tvMyQuestion.setPadding(
+                toPx(20, requireContext()),
+                0,
+                toPx(20, requireContext()),
+                toPx(10, requireContext())
+            )
+            binding.tvReview.textSize = 15f
+            binding.containerMyQuestionSection.setPadding(0, toPx(15, requireContext()), 0, 0)
+            (binding.containerEvent.layoutParams as LinearLayout.LayoutParams).topMargin =
+                toPx(15, requireContext())
+            binding.containerReview.setPadding(0, toPx(15, requireContext()), 0, 0)
+        }
     }
 
     private fun getRemoteData() {
@@ -188,7 +219,7 @@ class TeacherHomeFragment : Fragment() {
         }
 
         questionAdapter =
-            TeacherQuestionAdapter(onQuestionClickListener).apply {
+            TeacherQuestionAdapter(isSmallSizeScreen, onQuestionClickListener).apply {
                 setHasStableIds(true)
             }
 
@@ -201,7 +232,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun setReservedQuestionRecyclerView() {
         questionReservedAdapter =
-            TeacherQuestionAdapter {
+            TeacherQuestionAdapter(isSmallSizeScreen) {
                 (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
@@ -214,7 +245,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun setPendingQuestionRecyclerView() {
         questionPendingAdapter =
-            TeacherQuestionAdapter {
+            TeacherQuestionAdapter(isSmallSizeScreen) {
                 (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
@@ -276,13 +307,13 @@ class TeacherHomeFragment : Fragment() {
     private fun resetEventButton() {
         binding.containerEventBtn.children.forEach { child ->
             child.layoutParams = LinearLayout.LayoutParams(
-                Util.toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext()),
-                Util.toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext()),
+                toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
             ).apply {
                 marginStart =
-                    Util.toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                    toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
                 marginEnd =
-                    Util.toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                    toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
             }
         }
     }
@@ -290,11 +321,11 @@ class TeacherHomeFragment : Fragment() {
     private fun setFocusedToEventButtonAt(pos: Int) {
         binding.containerEventBtn.getChildAt(pos)?.let {
             it.layoutParams = LinearLayout.LayoutParams(
-                Util.toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext()),
-                Util.toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext()),
+                toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
             ).apply {
-                marginStart = Util.toPx(2, requireContext())
-                marginEnd = Util.toPx(2, requireContext())
+                marginStart = toPx(2, requireContext())
+                marginEnd = toPx(2, requireContext())
             }
         }
     }
@@ -316,7 +347,7 @@ class TeacherHomeFragment : Fragment() {
      */
     private fun setHorizontalPaddingTo(rv: RecyclerView, viewWidthDP: Int) {
         val displayWidth = resources.displayMetrics.widthPixels
-        val viewWidthPx = Util.toPx(viewWidthDP, requireContext())
+        val viewWidthPx = toPx(viewWidthDP, requireContext())
         val padding = (displayWidth - viewWidthPx) / 2
         rv.setPadding(padding, 0, padding, 0)
     }
@@ -513,16 +544,16 @@ class TeacherHomeFragment : Fragment() {
             binding.containerEventBtn.addView(
                 AppCompatButton(requireContext()).apply {
                     val size = if (it == 0) {
-                        Util.toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
                     } else {
-                        Util.toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
                     }
                     layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                        marginStart = Util.toPx(
+                        marginStart = toPx(
                             EVENT_BUTTON_SIZE_MARGIN,
                             requireContext()
                         )
-                        marginEnd = Util.toPx(
+                        marginEnd = toPx(
                             EVENT_BUTTON_SIZE_MARGIN,
                             requireContext()
                         )

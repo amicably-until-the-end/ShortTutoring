@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.presenter.databinding.ItemQuestionBinding
+import org.softwaremaestro.presenter.databinding.ItemQuestionW600Binding
 import org.softwaremaestro.presenter.util.Util
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -17,6 +19,7 @@ import java.time.format.DateTimeFormatter
 private const val EMPTY_STRING = "-"
 
 class TeacherQuestionAdapter(
+    private val isSmallSizeScreen: Boolean,
     private val onItemClickListener: (QuestionGetResponseVO) -> Unit,
 ) : ListAdapter<QuestionGetResponseVO, TeacherQuestionAdapter.ViewHolder>(QuestionDiffUtil) {
 
@@ -24,7 +27,11 @@ class TeacherQuestionAdapter(
     var selectedQuestionId: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = if (isSmallSizeScreen) {
+            ItemQuestionW600Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        } else {
+            ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        }
         return ViewHolder(view)
     }
 
@@ -36,60 +43,113 @@ class TeacherQuestionAdapter(
         return getItem(position).id.hashCode().toLong()
     }
 
-    inner class ViewHolder(private val binding: ItemQuestionBinding) :
+    inner class ViewHolder(private val binding: ViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         // 뷰홀더가 처음 생성될 때만 실행되는 코드
         fun bind(item: QuestionGetResponseVO) {
+            if (isSmallSizeScreen) {
+                with(binding as ItemQuestionW600Binding) {
 
-            with(binding) {
+                    Glide.with(root.context).load(item.mainImage)
+                        .centerCrop()
+                        .into(ivPhoto)
+                    tvDesciption.text = item.problemDescription ?: EMPTY_STRING
+                    tvSchoolLevelAndSubject.text =
+                        if (item.problemSchoolLevel != null && item.problemSubject != null) {
+                            "${item.problemSchoolLevel} ${item.problemSubject}"
+                        } else EMPTY_STRING
+                    // 이미 신청한 수업인 경우
+                    if (SocketManager.userId != null && item.offerTeachers != null &&
+                        SocketManager.userId!! in item.offerTeachers!!
+                    ) {
+                        when (item.status) {
+                            "pending" -> {
+                                tvTime.visibility = View.GONE
+                                ivCheck.visibility = View.VISIBLE
+                                tvTimeText.text = "신청 완료"
+                            }
 
-                Glide.with(root.context).load(item.mainImage)
-                    .centerCrop()
-                    .into(ivPhoto)
-                tvDesciption.text = item.problemDescription ?: EMPTY_STRING
-                tvSchoolLevelAndSubject.text =
-                    if (item.problemSchoolLevel != null && item.problemSubject != null) {
-                        "${item.problemSchoolLevel} ${item.problemSubject}"
-                    } else EMPTY_STRING
-                // 이미 신청한 수업인 경우
-                if (SocketManager.userId != null && item.offerTeachers != null &&
-                    SocketManager.userId!! in item.offerTeachers!!
-                ) {
-                    when (item.status) {
-                        "pending" -> {
-                            tvTime.visibility = View.GONE
-                            ivCheck.visibility = View.VISIBLE
-                            tvTimeText.text = "신청 완료"
+                            "reserved" -> {
+                                containerTime.visibility = View.VISIBLE
+                                tvTime.visibility = View.VISIBLE
+                                item.reservedStart?.let { setTimeText(it) }
+                            }
                         }
-
-                        "reserved" -> {
-                            containerTime.visibility = View.VISIBLE
-                            tvTime.visibility = View.VISIBLE
-                            item.reservedStart?.let { setTimeText(it) }
+                    }
+                    // 신청하지 않은 수업인 경우
+                    else {
+                        tvTime.visibility = View.VISIBLE
+                        ivCheck.visibility = View.GONE
+                        val times = "${
+                            item.hopeTutoringTime?.map {
+                                "${it.hour}:${
+                                    String.format(
+                                        "%02d",
+                                        it.minute
+                                    )
+                                }"
+                            }
+                                ?.joinToString(", ") ?: ""
+                        }"
+                        tvTimeText.text = times
+                    }
+                    root.setOnClickListener {
+                        if (item.id != null && item.images != null) {
+                            onItemClickListener(item)
                         }
                     }
                 }
-                // 신청하지 않은 수업인 경우
-                else {
-                    tvTime.visibility = View.VISIBLE
-                    ivCheck.visibility = View.GONE
-                    val times = "${
-                        item.hopeTutoringTime?.map {
-                            "${it.hour}:${
-                                String.format(
-                                    "%02d",
-                                    it.minute
-                                )
-                            }"
+            } else {
+                with(binding as ItemQuestionBinding) {
+
+                    Glide.with(root.context).load(item.mainImage)
+                        .centerCrop()
+                        .into(ivPhoto)
+                    tvDesciption.text = item.problemDescription ?: EMPTY_STRING
+                    tvSchoolLevelAndSubject.text =
+                        if (item.problemSchoolLevel != null && item.problemSubject != null) {
+                            "${item.problemSchoolLevel} ${item.problemSubject}"
+                        } else EMPTY_STRING
+                    // 이미 신청한 수업인 경우
+                    if (SocketManager.userId != null && item.offerTeachers != null &&
+                        SocketManager.userId!! in item.offerTeachers!!
+                    ) {
+                        when (item.status) {
+                            "pending" -> {
+                                tvTime.visibility = View.GONE
+                                ivCheck.visibility = View.VISIBLE
+                                tvTimeText.text = "신청 완료"
+                            }
+
+                            "reserved" -> {
+                                containerTime.visibility = View.VISIBLE
+                                tvTime.visibility = View.VISIBLE
+                                item.reservedStart?.let { setTimeText(it) }
+                            }
                         }
-                            ?.joinToString(", ") ?: ""
-                    }"
-                    tvTimeText.text = times
-                }
-                root.setOnClickListener {
-                    if (item.id != null && item.images != null) {
-                        onItemClickListener(item)
+                    }
+                    // 신청하지 않은 수업인 경우
+                    else {
+                        tvTime.visibility = View.VISIBLE
+                        ivCheck.visibility = View.GONE
+                        val times = "${
+                            item.hopeTutoringTime?.map {
+                                "${it.hour}:${
+                                    String.format(
+                                        "%02d",
+                                        it.minute
+                                    )
+                                }"
+                            }
+                                ?.joinToString(", ") ?: ""
+                        }"
+                        tvTimeText.text = times
+                    }
+                    root.setOnClickListener {
+                        if (item.id != null && item.images != null) {
+                            onItemClickListener(item)
+                        }
                     }
                 }
             }
@@ -101,7 +161,9 @@ class TeacherQuestionAdapter(
             else if (ldt.dayOfMonth == LocalDateTime.now().plusDays(1L).dayOfMonth) "내일"
             else "${ldt.monthValue}. ${ldt.dayOfMonth}"
             val time = ldt.format(DateTimeFormatter.ofPattern("hh:mm"))
-            binding.tvTimeText.text = "$date $time"
+            if (isSmallSizeScreen) (binding as ItemQuestionW600Binding).tvTimeText.text =
+                "$date $time"
+            else (binding as ItemQuestionBinding).tvTimeText.text = "$date $time"
         }
     }
 
