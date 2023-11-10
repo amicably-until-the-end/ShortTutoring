@@ -563,23 +563,23 @@ class TeacherHomeFragment : Fragment() {
 
     private fun initEventButton(numEvent: Int) {
         if (binding.containerEventBtn.isNotEmpty()) return
+        val fBtnSize =
+            if (isSmallSizeScreen) FOCUSED_EVENT_BUTTON_SIZE_W600 else FOCUSED_EVENT_BUTTON_SIZE
+        val nBtnSize =
+            if (isSmallSizeScreen) NORMAL_EVENT_BUTTON_SIZE_W600 else NORMAL_EVENT_BUTTON_SIZE
+        val margin =
+            if (isSmallSizeScreen) EVENT_BUTTON_SIZE_MARGIN_W600 else EVENT_BUTTON_SIZE_MARGIN
         repeat(numEvent) {
             binding.containerEventBtn.addView(
                 AppCompatButton(requireContext()).apply {
                     val size = if (it == 0) {
-                        toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(fBtnSize, requireContext())
                     } else {
-                        toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(nBtnSize, requireContext())
                     }
                     layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                        marginStart = toPx(
-                            EVENT_BUTTON_SIZE_MARGIN,
-                            requireContext()
-                        )
-                        marginEnd = toPx(
-                            EVENT_BUTTON_SIZE_MARGIN,
-                            requireContext()
-                        )
+                        marginStart = toPx(margin, requireContext())
+                        marginEnd = toPx(margin, requireContext())
                     }
                     setBackgroundResource(R.drawable.bg_radius_100_primary_blue)
                     stateListAnimator = null

@@ -621,17 +621,23 @@ class StudentHomeFragment : Fragment() {
 
     private fun initEventButton(numEvent: Int) {
         if (binding.containerEventBtn.isNotEmpty()) return
+        val fBtnSize =
+            if (isSmallScreenSize) FOCUSED_EVENT_BUTTON_SIZE_W600 else FOCUSED_EVENT_BUTTON_SIZE
+        val nBtnSize =
+            if (isSmallScreenSize) NORMAL_EVENT_BUTTON_SIZE_W600 else NORMAL_EVENT_BUTTON_SIZE
+        val margin =
+            if (isSmallScreenSize) EVENT_BUTTON_SIZE_MARGIN_W600 else EVENT_BUTTON_SIZE_MARGIN
         repeat(numEvent) {
             binding.containerEventBtn.addView(
                 AppCompatButton(requireContext()).apply {
                     val size = if (it == 0) {
-                        toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(fBtnSize, requireContext())
                     } else {
-                        toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(nBtnSize, requireContext())
                     }
                     layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                        marginStart = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
-                        marginEnd = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                        marginStart = toPx(margin, requireContext())
+                        marginEnd = toPx(margin, requireContext())
                     }
                     setBackgroundResource(R.drawable.bg_radius_100_primary_blue)
                     stateListAnimator = null
@@ -644,10 +650,14 @@ class StudentHomeFragment : Fragment() {
         const val QUESTION_UPLOAD_RESULT = 1001
         const val CLASSROOM_END_RESULT = 1002
         private const val EVENT_ITEM_WIDTH = 360
-        private const val EVENT_ITEM_WIDTH_W600 = 180
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
         private const val NORMAL_EVENT_BUTTON_SIZE = 9
         private const val EVENT_BUTTON_SIZE_MARGIN = 6
+
+        private const val EVENT_ITEM_WIDTH_W600 = 180
+        private const val FOCUSED_EVENT_BUTTON_SIZE_W600 = 9
+        private const val NORMAL_EVENT_BUTTON_SIZE_W600 = 7
+        private const val EVENT_BUTTON_SIZE_MARGIN_W600 = 3
 
         const val PROFILE_IMAGE = "profile-image"
         const val STUDENT_NAME = "student-name"
