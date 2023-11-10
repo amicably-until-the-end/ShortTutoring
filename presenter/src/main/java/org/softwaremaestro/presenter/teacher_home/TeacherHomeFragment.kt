@@ -76,6 +76,7 @@ class TeacherHomeFragment : Fragment() {
     private lateinit var waitingSnackbar: Snackbar
     private var isCalledFirstTime = true
     private var isSmallSizeScreen = false
+    private var eventScrollPos = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,7 +108,7 @@ class TeacherHomeFragment : Fragment() {
             1000,
             requireContext()
         )) / 2
-        binding.rvEvent.setPadding(paddingValue, 0, paddingValue, 0)
+        binding.rvEvent.setPadding(10000, 0, 0, 0)
     }
 
     private fun supportSmallScreenSize() {
@@ -132,9 +133,13 @@ class TeacherHomeFragment : Fragment() {
             )
             binding.tvReview.textSize = 15f
             binding.containerMyQuestionSection.setPadding(0, toPx(15, requireContext()), 0, 0)
-            (binding.containerEvent.layoutParams as LinearLayout.LayoutParams).topMargin =
-                toPx(15, requireContext())
             binding.containerReview.setPadding(0, toPx(15, requireContext()), 0, 0)
+            binding.containerEvent.apply {
+                (layoutParams as LinearLayout.LayoutParams).topMargin =
+                    toPx(15, requireContext())
+                setPadding(0, toPx(15, requireContext()), 0, toPx(15, requireContext()))
+            }
+            binding.containerEventBtn.setPadding(0, toPx(10, requireContext()), 0, 0)
         }
     }
 
@@ -298,7 +303,8 @@ class TeacherHomeFragment : Fragment() {
             smoothScrollToPosition(0)
         }
         setAutoScrollToEventRecycler()
-        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
+        val width = if (isSmallSizeScreen) EVENT_ITEM_WIDTH_W600 else EVENT_ITEM_WIDTH
+        setHorizontalPaddingTo(binding.rvEvent, width)
     }
 
     private fun setEventButton() {
@@ -307,33 +313,40 @@ class TeacherHomeFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     resetEventButton()
-                    val pos =
+                    eventScrollPos =
                         (binding.rvEvent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    setFocusedToEventButtonAt(pos)
+                    setFocusedToEventButtonAt(eventScrollPos)
                 }
             }
         })
     }
 
     private fun resetEventButton() {
+        val btnSize =
+            if (isSmallSizeScreen) NORMAL_EVENT_BUTTON_SIZE_W600
+            else NORMAL_EVENT_BUTTON_SIZE
+        val btnMargin =
+            if (isSmallSizeScreen) EVENT_BUTTON_SIZE_MARGIN_W600
+            else EVENT_BUTTON_SIZE_MARGIN
         binding.containerEventBtn.children.forEach { child ->
             child.layoutParams = LinearLayout.LayoutParams(
-                toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext()),
-                toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                toPx(btnSize, requireContext()),
+                toPx(btnSize, requireContext())
             ).apply {
-                marginStart =
-                    toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
-                marginEnd =
-                    toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                marginStart = toPx(btnMargin, requireContext())
+                marginEnd = toPx(btnMargin, requireContext())
             }
         }
     }
 
     private fun setFocusedToEventButtonAt(pos: Int) {
         binding.containerEventBtn.getChildAt(pos)?.let {
+            val btnSize =
+                if (isSmallSizeScreen) FOCUSED_EVENT_BUTTON_SIZE_W600
+                else FOCUSED_EVENT_BUTTON_SIZE
             it.layoutParams = LinearLayout.LayoutParams(
-                toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext()),
-                toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                toPx(btnSize, requireContext()),
+                toPx(btnSize, requireContext())
             ).apply {
                 marginStart = toPx(2, requireContext())
                 marginEnd = toPx(2, requireContext())
@@ -342,13 +355,12 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
-        var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                binding.rvEvent.smoothScrollToPosition(pos)
+                binding.rvEvent.smoothScrollToPosition(eventScrollPos)
                 delay(10000L)
                 if (eventAdapter.itemCount == 0) break
-                pos = (pos + 1) % eventAdapter.itemCount
+                eventScrollPos = (eventScrollPos + 1) % eventAdapter.itemCount
             }
         }
     }
@@ -599,5 +611,10 @@ class TeacherHomeFragment : Fragment() {
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
         private const val NORMAL_EVENT_BUTTON_SIZE = 9
         private const val EVENT_BUTTON_SIZE_MARGIN = 6
+
+        private const val EVENT_ITEM_WIDTH_W600 = 180
+        private const val FOCUSED_EVENT_BUTTON_SIZE_W600 = 9
+        private const val NORMAL_EVENT_BUTTON_SIZE_W600 = 7
+        private const val EVENT_BUTTON_SIZE_MARGIN_W600 = 3
     }
 }

@@ -80,6 +80,7 @@ class StudentHomeFragment : Fragment() {
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
     private lateinit var followings: List<String>
     private var isSmallScreenSize = false
+    private var eventScrollPos = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -246,7 +247,8 @@ class StudentHomeFragment : Fragment() {
             smoothScrollToPosition(0)
         }
         setAutoScrollToEventRecycler()
-        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
+        val width = if (isSmallScreenSize) EVENT_ITEM_WIDTH_W600 else EVENT_ITEM_WIDTH
+        setHorizontalPaddingTo(binding.rvEvent, width)
     }
 
     private fun setEventButton() {
@@ -255,9 +257,9 @@ class StudentHomeFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     resetEventButton()
-                    val pos =
+                    eventScrollPos =
                         (binding.rvEvent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    setFocusedToEventButtonAt(pos)
+                    setFocusedToEventButtonAt(eventScrollPos)
                 }
             }
         })
@@ -288,13 +290,12 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
-        var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                binding.rvEvent.smoothScrollToPosition(pos)
+                binding.rvEvent.smoothScrollToPosition(eventScrollPos)
                 delay(10000L)
                 if (eventAdapter.itemCount == 0) break
-                pos = (pos + 1) % eventAdapter.itemCount
+                eventScrollPos = (eventScrollPos + 1) % eventAdapter.itemCount
             }
         }
     }
@@ -643,6 +644,7 @@ class StudentHomeFragment : Fragment() {
         const val QUESTION_UPLOAD_RESULT = 1001
         const val CLASSROOM_END_RESULT = 1002
         private const val EVENT_ITEM_WIDTH = 360
+        private const val EVENT_ITEM_WIDTH_W600 = 180
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
         private const val NORMAL_EVENT_BUTTON_SIZE = 9
         private const val EVENT_BUTTON_SIZE_MARGIN = 6
