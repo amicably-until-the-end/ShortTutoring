@@ -40,84 +40,104 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_radius_20_20_0_0"
+            android:paddingTop="40dp"
             app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="30dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="144dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="30dp" />
 
             <TextView
                 android:id="@+id/tv_description_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="40dp"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="학생 설명"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_description"
+                app:layout_constraintLeft_toLeftOf="@id/gl_left"
+                app:layout_constraintTop_toTopOf="@id/tv_description" />
 
             <TextView
                 android:id="@+id/tv_subject_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="12dp"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="과목"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_description_desc" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_subject"
+                app:layout_constraintLeft_toLeftOf="@id/gl_left"
+                app:layout_constraintTop_toTopOf="@id/tv_subject" />
 
             <TextView
                 android:id="@+id/tv_hope_time_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="12dp"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="희망 수업 시간"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_subject_desc" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_hope_time"
+                app:layout_constraintLeft_toLeftOf="@id/gl_left"
+                app:layout_constraintTop_toTopOf="@id/tv_hope_time" />
 
             <TextView
                 android:id="@+id/tv_description"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="144dp"
+                android:layout_marginBottom="12dp"
                 android:fontFamily="@font/pretendard_medium"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_description_desc"
+                app:layout_constraintBottom_toTopOf="@id/tv_subject"
+                app:layout_constraintLeft_toLeftOf="@id/gl_middle"
+                app:layout_constraintRight_toRightOf="@id/gl_right"
                 tools:text="선생님 도와주세요." />
 
             <TextView
                 android:id="@+id/tv_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="144dp"
+                android:layout_marginBottom="12dp"
                 android:fontFamily="@font/pretendard_medium"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_subject_desc"
+                app:layout_constraintBottom_toTopOf="@id/tv_hope_time"
+                app:layout_constraintLeft_toLeftOf="@id/gl_middle"
                 tools:text="미적분" />
 
             <TextView
                 android:id="@+id/tv_hope_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="144dp"
                 android:fontFamily="@font/pretendard_medium"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_hope_time_desc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/gl_middle"
                 tools:text="지금 바로, 오늘 16:30, 오늘 19:00" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
