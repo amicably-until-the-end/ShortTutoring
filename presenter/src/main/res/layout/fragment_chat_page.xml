@@ -180,7 +180,6 @@
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never" />
 
-
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
@@ -663,6 +662,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="undefined" />
 
+            <ImageView
+                android:id="@+id/btn_back_to_question_list"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_arrow_back_48"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_chat_room_left"
                 android:layout_width="wrap_content"
@@ -676,7 +686,7 @@
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_back_to_question_list"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
 

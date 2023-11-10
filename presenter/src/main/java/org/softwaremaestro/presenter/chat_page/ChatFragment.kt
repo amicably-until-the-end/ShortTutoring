@@ -117,6 +117,23 @@ abstract class ChatFragment : Fragment() {
                     topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                 }
+            (binding.containerTutoringList.layoutParams as ConstraintLayout.LayoutParams).rightToRight =
+                ConstraintLayout.LayoutParams.PARENT_ID
+            binding.containerTutoringList.layoutParams.width = 0
+            binding.tvNormalQuestionTabDesc.textSize = 12f
+            binding.tvSelectedQuestionTabDesc.textSize = 12f
+            binding.btnBackToQuestionList.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    binding.containerTutoringList.visibility = View.VISIBLE
+                }
+            }
+            binding.containerChatRoom.layoutParams = ConstraintLayout.LayoutParams(0, 0).apply {
+                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+            }
         }
     }
 
@@ -751,12 +768,9 @@ abstract class ChatFragment : Fragment() {
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
         if (isSmallSizeScreen) {
-            binding.containerChatRoom.layoutParams = ConstraintLayout.LayoutParams(0, 0).apply {
-                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
-                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-            }
+            binding.containerIconSideSection.visibility = View.GONE
+            binding.containerOfferingTeacher.visibility = View.GONE
+            binding.containerTutoringList.visibility = View.GONE
         }
         loadingDialog.dismiss() // 로딩중에 방이 바뀌는 경우에 대비해서 로딩중인 다이얼로그를 닫는다.
         currentChatRoom = chatRoomVO
