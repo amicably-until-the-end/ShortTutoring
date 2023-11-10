@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +27,6 @@ import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util
-import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.ProfileImageSelectBottomDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
@@ -83,39 +79,7 @@ class TeacherMyPageFragment : Fragment() {
         val width = Util.getWidth(requireActivity())
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            binding.cvTeacherImg.layoutParams =
-                FrameLayout.LayoutParams(toPx(70, requireContext()), toPx(70, requireContext()))
-            binding.tvTeacherName.textSize = 15f
-            binding.tvTeacherRating.textSize = 13f
             binding.btnFollow.visibility = View.GONE
-            binding.containerTeacherInfo.setPadding(
-                toPx(15, requireContext()),
-                toPx(12, requireContext()),
-                toPx(15, requireContext()),
-                toPx(12, requireContext())
-            )
-            binding.tvMyInfo.textSize = 15f
-            binding.tvReview.textSize = 15f
-            binding.tvNumOfReview.textSize = 15f
-            binding.tvClip.textSize = 15f
-            binding.tvNumOfClip.textSize = 15f
-            binding.tvReviewEmpty.textSize = 13f
-            binding.tvClipEmpty.textSize = 13f
-            binding.containerFollower.layoutParams.height = toPx(40, requireContext())
-            binding.containerServiceCenter.layoutParams.height = toPx(40, requireContext())
-            binding.containerLogOut.layoutParams.height = toPx(40, requireContext())
-            binding.containerWithdraw.layoutParams.height = toPx(40, requireContext())
-            binding.tvFollower.textSize = 12f
-            binding.tvServiceCenter.textSize = 12f
-            binding.tvLogOut.textSize = 12f
-            binding.tvWithdraw.textSize = 12f
-
-            (binding.cvInfoBox.layoutParams as LinearLayout.LayoutParams).topMargin =
-                toPx(12, requireContext())
-            (binding.containerReviewAndClip.layoutParams as LinearLayout.LayoutParams).topMargin =
-                toPx(24, requireContext())
-            (binding.containerContentReviewAndClip.layoutParams as ConstraintLayout.LayoutParams).topMargin =
-                toPx(12, requireContext())
 
         }
     }

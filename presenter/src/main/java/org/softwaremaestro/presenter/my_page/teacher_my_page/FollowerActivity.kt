@@ -2,7 +2,6 @@ package org.softwaremaestro.presenter.my_page.teacher_my_page
 
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -41,9 +40,8 @@ class FollowerActivity : AppCompatActivity() {
         val width = getWidth(this)
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            val paddingValue = toPx(20, this)
+            val paddingValue = toPx(30, this)
             binding.tvFollower.apply {
-                textSize = 14f
                 setPadding(paddingValue, 0, paddingValue, 0)
             }
             binding.rvFollowers.setPadding(paddingValue, 0, paddingValue, 0)
@@ -51,10 +49,6 @@ class FollowerActivity : AppCompatActivity() {
                 leftMargin = paddingValue
                 rightMargin = paddingValue
             }
-            (binding.containerFollower.layoutParams as LinearLayout.LayoutParams).topMargin =
-                toPx(15, this)
-            (binding.rvFollowers.layoutParams as FrameLayout.LayoutParams).topMargin =
-                toPx(15, this)
         }
     }
 

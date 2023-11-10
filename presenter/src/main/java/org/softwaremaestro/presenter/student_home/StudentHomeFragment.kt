@@ -30,7 +30,6 @@ import org.softwaremaestro.domain.question_get.entity.QuestionGetResponseVO
 import org.softwaremaestro.domain.socket.SocketManager
 import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.classroom.ReviewDialog
 import org.softwaremaestro.presenter.databinding.FragmentStudentHomeBinding
 import org.softwaremaestro.presenter.my_page.viewmodel.FollowingViewModel
 import org.softwaremaestro.presenter.question_upload.question_normal_upload.QuestionNormalFormFragment
@@ -90,9 +89,6 @@ class StudentHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
-        binding.ivLogo.setOnClickListener {
-            ReviewDialog("a", null) { _, _ -> }.show(parentFragmentManager, "")
-        }
         supportSmallScreenSize()
         getRemoteData()
         initTeacherProfileDialog()
@@ -260,7 +256,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
-        eventAdapter = EventAdapter(false) { url ->
+        eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 addCategory(Intent.CATEGORY_BROWSABLE)

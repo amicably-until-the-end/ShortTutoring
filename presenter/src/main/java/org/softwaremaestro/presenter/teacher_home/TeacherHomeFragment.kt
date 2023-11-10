@@ -115,31 +115,7 @@ class TeacherHomeFragment : Fragment() {
         val width = getWidth(requireActivity())
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            binding.tvNotiHead.textSize = 8f
-            binding.tvNoti.textSize = 12f
-            binding.containerNoti.setPadding(
-                toPx(4, requireContext()),
-                toPx(5, requireContext()),
-                toPx(4, requireContext()),
-                toPx(5, requireContext())
-            )
-            binding.tvNumOfQuestions.textSize = 15f
-            binding.tvMyQuestion.textSize = 15f
-            binding.tvMyQuestion.setPadding(
-                toPx(20, requireContext()),
-                0,
-                toPx(20, requireContext()),
-                toPx(10, requireContext())
-            )
-            binding.tvReview.textSize = 15f
-            binding.containerMyQuestionSection.setPadding(0, toPx(15, requireContext()), 0, 0)
-            binding.containerReview.setPadding(0, toPx(15, requireContext()), 0, 0)
-            binding.containerEvent.apply {
-                (layoutParams as LinearLayout.LayoutParams).topMargin =
-                    toPx(15, requireContext())
-                setPadding(0, toPx(15, requireContext()), 0, toPx(15, requireContext()))
-            }
-            binding.containerEventBtn.setPadding(0, toPx(10, requireContext()), 0, 0)
+
         }
     }
 
@@ -235,7 +211,7 @@ class TeacherHomeFragment : Fragment() {
         }
 
         questionAdapter =
-            TeacherQuestionAdapter(isSmallSizeScreen, onQuestionClickListener).apply {
+            TeacherQuestionAdapter(onQuestionClickListener).apply {
                 setHasStableIds(true)
             }
 
@@ -248,7 +224,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun setReservedQuestionRecyclerView() {
         questionReservedAdapter =
-            TeacherQuestionAdapter(isSmallSizeScreen) {
+            TeacherQuestionAdapter {
                 (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
@@ -261,7 +237,7 @@ class TeacherHomeFragment : Fragment() {
 
     private fun setPendingQuestionRecyclerView() {
         questionPendingAdapter =
-            TeacherQuestionAdapter(isSmallSizeScreen) {
+            TeacherQuestionAdapter {
                 (requireActivity() as TeacherHomeActivity).moveToChatTab(it.chattingId ?: it.id)
             }
 
@@ -284,7 +260,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
-        eventAdapter = EventAdapter(isSmallSizeScreen) { url ->
+        eventAdapter = EventAdapter { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 addCategory(Intent.CATEGORY_BROWSABLE)
@@ -303,8 +279,7 @@ class TeacherHomeFragment : Fragment() {
             smoothScrollToPosition(0)
         }
         setAutoScrollToEventRecycler()
-        val width = if (isSmallSizeScreen) EVENT_ITEM_WIDTH_W600 else EVENT_ITEM_WIDTH
-        setHorizontalPaddingTo(binding.rvEvent, width)
+        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
     }
 
     private fun setEventButton() {
@@ -445,7 +420,8 @@ class TeacherHomeFragment : Fragment() {
             questionPendingAdapter.submitList(pendings)
             questionPendingAdapter.notifyDataSetChanged()
 
-            val fastestReserved = getFastestReserved(questions)
+            val fastestReserved =
+                if (!isSmallSizeScreen) getFastestReserved(questions) else emptyList()
 //            val fastestReserved = emptyList<QuestionGetResponseVO>()
             binding.containerMyReservedQuestion.visibility =
                 if (fastestReserved.isNotEmpty()) View.VISIBLE else View.GONE
@@ -611,8 +587,6 @@ class TeacherHomeFragment : Fragment() {
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
         private const val NORMAL_EVENT_BUTTON_SIZE = 9
         private const val EVENT_BUTTON_SIZE_MARGIN = 6
-
-        private const val EVENT_ITEM_WIDTH_W600 = 180
         private const val FOCUSED_EVENT_BUTTON_SIZE_W600 = 9
         private const val NORMAL_EVENT_BUTTON_SIZE_W600 = 7
         private const val EVENT_BUTTON_SIZE_MARGIN_W600 = 3

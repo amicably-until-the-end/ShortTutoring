@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.R
@@ -21,7 +20,7 @@ class ToSFragment : Fragment() {
 
     private lateinit var binding: FragmentTosBinding
     private var agreeAll = false
-    private val viewModel: StudentRegisterViewModel by viewModels()
+    private val viewModel: StudentRegisterViewModel by activityViewModels()
     private var isSmallSizeScreen = false
 
     override fun onCreateView(
@@ -36,6 +35,7 @@ class ToSFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         supportSmallScreenSize()
+        loadViewModelValue()
         setToolBar()
         setToggleButtons()
         observe()
@@ -49,16 +49,19 @@ class ToSFragment : Fragment() {
         val width = getWidth(requireActivity())
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            val paddingValue = Util.toDp(20, requireContext())
-            binding.tvTos.setPadding(paddingValue, 0, paddingValue, 0)
-            (binding.tbAgreeOnTos.layoutParams as LinearLayout.LayoutParams).leftMargin =
-                paddingValue
-            (binding.tbAgreeOnPrivacyPolicy.layoutParams as LinearLayout.LayoutParams).leftMargin =
-                paddingValue
-            (binding.containerTos.layoutParams as LinearLayout.LayoutParams).rightMargin =
-                paddingValue
-            (binding.containerPrivacyPolicy.layoutParams as LinearLayout.LayoutParams).rightMargin =
-                paddingValue
+            val paddingValue = Util.toPx(30, requireContext())
+            binding.glLeft.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineEnd(paddingValue)
+        }
+    }
+
+    private fun loadViewModelValue() {
+        if (viewModel.agreeAll.value == true) {
+            binding.tbAgreeOnTos.isChecked = true
+            binding.tbAgreeOnPrivacyPolicy.isChecked = true
+        } else {
+            binding.tbAgreeOnTos.isChecked = false
+            binding.tbAgreeOnPrivacyPolicy.isChecked = false
         }
     }
 
@@ -80,16 +83,16 @@ class ToSFragment : Fragment() {
 
     private fun observe() {
         viewModel.agreeAll.observe(viewLifecycleOwner) {
-            it ?: return@observe
             with(binding.btnNext) {
-                if (it) {
+                if (it == true) {
                     setBackgroundResource(R.drawable.bg_radius_5_grad_blue)
                     setTextColor(resources.getColor(R.color.white, null))
+                    agreeAll = true
                 } else {
                     setBackgroundResource(R.drawable.bg_radius_5_grey)
                     setTextColor(resources.getColor(R.color.sub_text_grey, null))
+                    agreeAll = false
                 }
-                agreeAll = it
             }
         }
     }
@@ -114,13 +117,13 @@ class ToSFragment : Fragment() {
     }
 
     private fun setTosContainer() {
-        binding.containerTos.setOnClickListener {
+        binding.containerTosBody.setOnClickListener {
             startActivity(Intent(requireActivity(), ToSNotionActivity::class.java))
         }
     }
 
     private fun setPrivacyPolicyContainer() {
-        binding.containerPrivacyPolicy.setOnClickListener {
+        binding.containerPrivacyPolicyBody.setOnClickListener {
             startActivity(Intent(requireActivity(), PrivacyPolicyNotionActivity::class.java))
         }
     }

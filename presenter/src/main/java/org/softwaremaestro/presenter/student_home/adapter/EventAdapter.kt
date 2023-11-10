@@ -10,10 +10,8 @@ import com.bumptech.glide.request.RequestOptions
 import org.softwaremaestro.domain.event.entity.EventVO
 import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.presenter.databinding.ItemEventBinding
-import org.softwaremaestro.presenter.util.Util.toPx
 
 class EventAdapter(
-    private val isSmallScreenSize: Boolean,
     private val onItemClick: (String) -> Unit
 ) :
     RecyclerView.Adapter<EventAdapter.ViewHolder>() {
@@ -22,12 +20,6 @@ class EventAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventAdapter.ViewHolder {
         val binding = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        if (isSmallScreenSize) {
-            binding.root.layoutParams.apply {
-                width = toPx(180, binding.root.context)
-                height = toPx(80, binding.root.context)
-            }
-        }
         return ViewHolder(binding)
     }
 

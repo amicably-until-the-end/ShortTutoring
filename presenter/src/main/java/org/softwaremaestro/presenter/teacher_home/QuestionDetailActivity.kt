@@ -1,10 +1,8 @@
 package org.softwaremaestro.presenter.teacher_home
 
 import android.os.Bundle
-import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,41 +53,12 @@ class QuestionDetailActivity : AppCompatActivity() {
         val width = Util.getWidth(this)
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            binding.btnClose.layoutParams =
-                ConstraintLayout.LayoutParams(toPx(24, this), toPx(24, this)).apply {
-                    topMargin = toPx(12, this@QuestionDetailActivity)
-                    rightMargin = toPx(10, this@QuestionDetailActivity)
-                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-            binding.containerDesc.setPadding(0, toPx(20, this), 0, 0)
-            binding.glLeft.setGuidelineBegin(toPx(15, this))
-            binding.tvDescriptionDesc.textSize = 12f
-            binding.tvSubjectDesc.textSize = 12f
-            binding.tvHopeTimeDesc.textSize = 12f
-            binding.glMiddle.setGuidelineBegin(toPx(100, this))
-            binding.tvDescription.textSize = 12f
-            binding.tvSubject.textSize = 12f
-            binding.tvHopeTime.textSize = 12f
-            binding.btnOffer.apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, toPx(40, this@QuestionDetailActivity)
-                ).apply {
-                    setMargins(
-                        toPx(15, this@QuestionDetailActivity),
-                        toPx(15, this@QuestionDetailActivity),
-                        toPx(15, this@QuestionDetailActivity),
-                        toPx(15, this@QuestionDetailActivity)
-                    )
-                }
-                textSize = 12f
-                setPadding(
-                    0,
-                    toPx(5, this@QuestionDetailActivity),
-                    0,
-                    toPx(5, this@QuestionDetailActivity)
-                )
-            }
+            binding.rvImages.setPadding(
+                toPx(20, this),
+                toPx(20, this),
+                toPx(20, this),
+                toPx(20, this)
+            )
         }
     }
 

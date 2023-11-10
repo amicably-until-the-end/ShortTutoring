@@ -51,7 +51,7 @@ class UnivAuthFragment : Fragment() {
         val width = Util.getWidth(requireActivity())
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
-            val paddingValue = Util.toDp(20, requireContext())
+            val paddingValue = Util.toPx(30, requireContext())
             binding.glLeft.setGuidelineBegin(paddingValue)
             binding.glRight.setGuidelineBegin(paddingValue)
         }

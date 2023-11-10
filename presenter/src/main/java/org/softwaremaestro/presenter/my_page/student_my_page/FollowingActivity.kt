@@ -42,7 +42,7 @@ class FollowingActivity : AppCompatActivity() {
     private fun supportSmallScreenSize() {
         val width = Util.getWidth(this)
         isSmallSizeScreen = width < 600
-        val paddingValue = toPx(20, this)
+        val paddingValue = toPx(30, this)
         if (isSmallSizeScreen) {
             binding.tvFollowing.setPadding(paddingValue, 0, paddingValue, 0)
             binding.rvFollowing.setPadding(paddingValue, 0, paddingValue, 0)
