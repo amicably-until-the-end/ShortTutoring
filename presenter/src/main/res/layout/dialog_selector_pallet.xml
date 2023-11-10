@@ -37,14 +37,15 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_erase_object"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_radius_18_grad_blue"
             android:backgroundTint="@null"
             android:fontFamily="@font/pretendard_medium"
+            android:gravity="center"
             android:minHeight="0dp"
             android:paddingHorizontal="10dp"
             android:text="선택된 항목 지우기"

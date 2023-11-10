@@ -53,7 +53,7 @@ class ReviewDialog(
     }
 
     private fun setTeacherInfo() {
-        binding.tvMain.text = "${teacherName ?: ""} 선생님과의 수업은 어땠나요?"
+        binding.tvMain.text = "선생님과의 수업은 어땠나요?"
         Glide.with(binding.root).load(teacherImg).centerCrop().into(binding.ivTeacherImg)
     }
 

@@ -50,14 +50,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_bold"
-                    android:text="유정현 선생님과의 수업은 어땠나요?"
+                    android:text="선생님과의 수업은 어땠나요?"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="별점은 랜덤한 기간 이후에 반영돼요."
                     android:textColor="@color/sub_text_grey"
@@ -79,10 +79,8 @@
                 android:id="@+id/srb_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 app:numOfStars="5"
-                app:starSize="24" />
+                app:starSize="32" />
 
             <TextView
                 android:id="@+id/tv_rating"
