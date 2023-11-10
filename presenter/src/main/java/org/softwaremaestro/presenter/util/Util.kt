@@ -223,8 +223,8 @@ fun Fragment.moveBack() {
  * LocalDateTime을 한국어로 변환 ex: 1월 1일 1시 1분
  */
 fun LocalDateTime.toKoreanString(): String {
-    return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시 ${
-        if (this.minute != 0) "${minute}분" else ""
+    return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시${
+        if (this.minute != 0) " ${minute}분" else ""
     }"
 }
 

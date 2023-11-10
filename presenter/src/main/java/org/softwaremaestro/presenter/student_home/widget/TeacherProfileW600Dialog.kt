@@ -6,16 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.domain.best_teacher_get.entity.TeacherVO
-import org.softwaremaestro.domain.review.entity.ReviewResVO
 import org.softwaremaestro.domain.socket.SocketManager
-import org.softwaremaestro.domain.tutoring_get.entity.TutoringVO
 import org.softwaremaestro.presenter.R
-import org.softwaremaestro.presenter.databinding.DialogTeacherProfileBinding
+import org.softwaremaestro.presenter.databinding.DialogTeacherProfileW600Binding
 import org.softwaremaestro.presenter.student_home.adapter.LectureAdapter
 import org.softwaremaestro.presenter.teacher_home.adapter.ReviewAdapter
 import org.softwaremaestro.presenter.util.Util
@@ -24,7 +21,7 @@ import org.softwaremaestro.presenter.util.toRating
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
 
 @AndroidEntryPoint
-class TeacherProfileDialog(
+class TeacherProfileW600Dialog(
     private val onProfileClick: (String) -> Unit,
     private val onUnfollow: (String) -> Unit,
     private val onFollow: (String) -> Unit,
@@ -33,7 +30,7 @@ class TeacherProfileDialog(
 ) :
     BottomSheetDialogFragment() {
 
-    private lateinit var binding: DialogTeacherProfileBinding
+    private lateinit var binding: DialogTeacherProfileW600Binding
     private lateinit var mItem: TeacherVO
     private var following = false
     private var followerCnt = 0
@@ -47,7 +44,7 @@ class TeacherProfileDialog(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogTeacherProfileBinding.inflate(layoutInflater)
+        binding = DialogTeacherProfileW600Binding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -58,7 +55,6 @@ class TeacherProfileDialog(
         setFollowBtn()
         setReserveBtn()
         bind()
-        setRecyclerViews()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -77,20 +73,6 @@ class TeacherProfileDialog(
         mItem = item
         following = SocketManager.userId in item.followers!!
         followerCnt = item.followers!!.size
-    }
-
-    fun setItemToReviewRecyclerView(reviews: List<ReviewResVO>) {
-        if (reviews.isEmpty()) {
-            binding.containerReviewAndTutoring.visibility = View.GONE
-        }
-        binding.tvNumOfReview.text = reviews.size.toString()
-        reviewAdapter.setItem(reviews)
-        reviewAdapter.notifyDataSetChanged()
-    }
-
-    fun setItemToTutoringRecyclerView(tutorings: List<TutoringVO>) {
-        tutoringAdapter.setItem(tutorings)
-        tutoringAdapter.notifyDataSetChanged()
     }
 
     private fun bind() {
@@ -113,33 +95,6 @@ class TeacherProfileDialog(
         }
     }
 
-    private fun setRecyclerViews() {
-        setTutoringRecyclerView()
-        setReviewRecyclerView()
-    }
-
-    private fun setTutoringRecyclerView() {
-        tutoringAdapter = LectureAdapter {
-            // 과외 영상 보여주기
-        }
-
-        with(binding.rvClip) {
-            adapter = tutoringAdapter
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
-    }
-
-    private fun setReviewRecyclerView() {
-        reviewAdapter = ReviewAdapter()
-
-        with(binding.rvReview) {
-            adapter = reviewAdapter
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        }
-    }
-
     private fun setProfileContainer() {
         binding.cvInfoBox.setOnClickListener {
             mItem.teacherId?.let { onProfileClick(it) }
@@ -150,7 +105,7 @@ class TeacherProfileDialog(
         mItem.teacherId ?: run {
             Util.createToast(requireActivity(), "선생님의 아이디가 확인되지 않습니다")
             logError(
-                this@TeacherProfileDialog::class.java,
+                this@TeacherProfileW600Dialog::class.java,
                 "teacherId == null in setFollowBtn()"
             )
         }
