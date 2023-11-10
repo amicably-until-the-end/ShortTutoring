@@ -87,6 +87,7 @@ class StudentHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
+        supportSmallScreenSize()
         getRemoteData()
         initTeacherProfileDialog()
         setCoinButton()
@@ -97,6 +98,14 @@ class StudentHomeFragment : Fragment() {
         setObserver()
 
         return binding.root
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallScreenSize = width < 600
+        if (isSmallScreenSize) {
+
+        }
     }
 
     private fun getRemoteData() {
@@ -228,7 +237,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
-        eventAdapter = EventAdapter(isSmallScreenSize) { url ->
+        eventAdapter = EventAdapter(false) { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 addCategory(Intent.CATEGORY_BROWSABLE)

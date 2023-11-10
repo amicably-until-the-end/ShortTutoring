@@ -78,6 +78,7 @@
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_icon_side"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/bright_grey"
@@ -183,6 +184,7 @@
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_offering_teacher"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/bright_grey"
@@ -624,6 +626,7 @@
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_tutoring_list"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/bright_grey"

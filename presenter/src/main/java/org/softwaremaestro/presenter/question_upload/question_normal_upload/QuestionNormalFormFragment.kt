@@ -29,6 +29,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.widg
 import org.softwaremaestro.presenter.student_home.viewmodel.MyProfileViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.moveBack
 import org.softwaremaestro.presenter.util.toBase64
 import org.softwaremaestro.presenter.util.widget.DetailAlertDialog
@@ -66,7 +67,7 @@ class QuestionNormalFormFragment : Fragment() {
     private val nowTime = TimePickerBottomDialog {}.SpecificTime(now.hour, now.minute)
 
     private var submitBtnEnabled = false
-
+    private var isSmallScreenSize = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +81,7 @@ class QuestionNormalFormFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        supportSmallScreenSize()
         myProfileViewModel.getMyProfile()
         resetViewModelValue()
         initDialog()
@@ -91,6 +92,32 @@ class QuestionNormalFormFragment : Fragment() {
         setDesiredTimeRecyclerView()
         setSubmitButton()
         setFields()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallScreenSize = width < 600
+        if (isSmallScreenSize) {
+            binding.rvQuestionImages.setPadding(
+                toPx(30, requireContext()),
+                0,
+                toPx(30, requireContext()),
+                0
+            )
+            binding.containerQuestionContent.setPadding(
+                toPx(30, requireContext()),
+                0,
+                toPx(30, requireContext()),
+                0
+            )
+            binding.containerQuestionTime.setPadding(
+                toPx(30, requireContext()),
+                0,
+                toPx(30, requireContext()),
+                0
+            )
+            binding.btnAnswerNow.visibility = View.GONE
+        }
     }
 
     private fun resetViewModelValue() {
