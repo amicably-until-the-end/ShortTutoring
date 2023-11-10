@@ -79,6 +79,8 @@ class StudentHomeFragment : Fragment() {
     private lateinit var eventAdapter: EventAdapter
     private lateinit var dialogTeacherProfile: TeacherProfileDialog
     private lateinit var followings: List<String>
+    private var isSmallScreenSize = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -225,7 +227,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
-        eventAdapter = EventAdapter { url ->
+        eventAdapter = EventAdapter(isSmallScreenSize) { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 addCategory(Intent.CATEGORY_BROWSABLE)
@@ -286,12 +288,12 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
-        if (eventAdapter.itemCount == 0) return
         var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 binding.rvEvent.smoothScrollToPosition(pos)
                 delay(10000L)
+                if (eventAdapter.itemCount == 0) break
                 pos = (pos + 1) % eventAdapter.itemCount
             }
         }

@@ -47,6 +47,7 @@ import org.softwaremaestro.presenter.teacher_home.viewmodel.CheckViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.OfferRemoveViewModel
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.getWidth
 import org.softwaremaestro.presenter.util.Util.logError
 import org.softwaremaestro.presenter.util.Util.toPx
 import java.time.LocalDateTime
@@ -93,14 +94,24 @@ class TeacherHomeFragment : Fragment() {
         initWaitingSnackbar()
         initQuestionRecyclerView()
         initReviewRecyclerView()
+        setEventContainer()
         setEventRecyclerView()
         keepGettingQuestions(REFRESHING_TIME_INTERVAL)
         setRefreshContainer()
         observe()
     }
 
+    private fun setEventContainer() {
+        val itemViewWidth = if (isSmallSizeScreen) 180 else 360
+        val paddingValue = (getWidth(requireActivity()) - toPx(
+            1000,
+            requireContext()
+        )) / 2
+        binding.rvEvent.setPadding(paddingValue, 0, paddingValue, 0)
+    }
+
     private fun supportSmallScreenSize() {
-        val width = Util.getWidth(requireActivity())
+        val width = getWidth(requireActivity())
         isSmallSizeScreen = width < 600
         if (isSmallSizeScreen) {
             binding.tvNotiHead.textSize = 8f
@@ -268,7 +279,7 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setEventRecyclerView() {
-        eventAdapter = EventAdapter { url ->
+        eventAdapter = EventAdapter(isSmallSizeScreen) { url ->
             val intent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 addCategory(Intent.CATEGORY_BROWSABLE)
@@ -331,12 +342,12 @@ class TeacherHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
-        if (eventAdapter.itemCount == 0) return
         var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
                 binding.rvEvent.smoothScrollToPosition(pos)
                 delay(10000L)
+                if (eventAdapter.itemCount == 0) break
                 pos = (pos + 1) % eventAdapter.itemCount
             }
         }
