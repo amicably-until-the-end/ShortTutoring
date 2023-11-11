@@ -28,14 +28,14 @@ class TeacherRegisterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    val _schoolName: MutableLiveData<String> = MutableLiveData()
-    val schoolName: LiveData<String> get() = _schoolName
+    val _schoolName: MutableLiveData<String?> = MutableLiveData(null)
+    val schoolName: LiveData<String?> get() = _schoolName
 
     val _schoolNameSuggestions = MutableLiveData<List<String>>()
     val schoolNameSuggestions: LiveData<List<String>> get() = _schoolNameSuggestions
 
-    val _major: MutableLiveData<String> = MutableLiveData()
-    val major: LiveData<String> get() = _major
+    val _major: MutableLiveData<String?> = MutableLiveData(null)
+    val major: LiveData<String?> get() = _major
 
     val _name: MutableLiveData<String> = MutableLiveData()
     val name: LiveData<String> get() = _name

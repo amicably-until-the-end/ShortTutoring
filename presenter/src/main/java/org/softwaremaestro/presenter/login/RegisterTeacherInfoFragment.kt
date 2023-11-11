@@ -43,6 +43,7 @@ class RegisterTeacherInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         supportSmallScreenSize()
+        loadViewModelValue()
         setAtvUniv()
         setEtTeacherMajor()
         setNextButton()
@@ -56,8 +57,13 @@ class RegisterTeacherInfoFragment : Fragment() {
         if (isSmallSizeScreen) {
             val paddingValue = toPx(30, requireContext())
             binding.glLeft.setGuidelineBegin(paddingValue)
-            binding.glRight.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineEnd(paddingValue)
         }
+    }
+
+    private fun loadViewModelValue() {
+        binding.atvUniv.setText(viewModel.schoolName.value)
+        binding.etTeacherMajor.setText(viewModel.major.value)
     }
 
     private fun setEtTeacherMajor() {

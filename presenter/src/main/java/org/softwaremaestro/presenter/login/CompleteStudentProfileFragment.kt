@@ -58,9 +58,9 @@ class CompleteStudentProfileFragment : Fragment() {
         if (isSmallSizeScreen) {
             val paddingValue = Util.toPx(30, requireContext())
             binding.glLeft.setGuidelineBegin(paddingValue)
-            binding.glRight.setGuidelineBegin(paddingValue)
-            binding.btnFollow.visibility = View.INVISIBLE
-            binding.containerReserve.visibility = View.INVISIBLE
+            binding.glRight.setGuidelineEnd(paddingValue)
+            binding.btnFollow.visibility = View.GONE
+            binding.containerReserve.visibility = View.GONE
         }
     }
 
