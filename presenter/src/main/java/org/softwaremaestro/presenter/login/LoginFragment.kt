@@ -40,9 +40,6 @@ class LoginFragment @Inject constructor() :
     ): View {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
-        binding.tvLogo.setOnClickListener {
-            startActivity(Intent(requireActivity(), StudentHomeActivity::class.java))
-        }
         setKakaoButton()
         return binding.root
     }
