@@ -35,10 +35,11 @@ class DialogSchoolSubject(
     }
 
     private fun setSubjects() {
-        subjects = when (schoolLevel) {
-            "중학교" -> subjects_middle
-            else -> subjects_high
-        }
+//        subjects = when (schoolLevel) {
+//            "중학교" -> subjects_middle
+//            else -> subjects_high
+//        }
+        subjects = subjects_school
     }
 
     private fun setSubjectNumberPicker() {
@@ -64,6 +65,9 @@ class DialogSchoolSubject(
         )
         private val subjects_high = arrayOf(
             "고등수학(상)", "고등수학(하)", "수학1", "수학2", "미적분", "확률과 통계", "기하", "모르겠어요"
+        )
+        private val subjects_school = arrayOf(
+            "수학", "과학", "국어", "영어", "기타"
         )
     }
 }
