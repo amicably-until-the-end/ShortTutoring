@@ -1,11 +1,17 @@
 package org.softwaremaestro.presenter.question_upload
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +25,7 @@ import org.softwaremaestro.presenter.question_upload.question_normal_upload.view
 import org.softwaremaestro.presenter.question_upload.question_selected_upload.viewmodel.QuestionSelectedUploadViewModel
 import org.softwaremaestro.presenter.util.Util
 import org.softwaremaestro.presenter.util.moveBack
+import java.lang.Integer.min
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +52,9 @@ class QuestionCameraFragment : Fragment() {
         setShutterListener()
         setPreviewRecyclerView()
         setNextButton()
+        setGalleryButton()
         setCloseBtn()
+        observeGalleryBitmap()
 
         return binding.root
     }
@@ -55,6 +64,15 @@ class QuestionCameraFragment : Fragment() {
         questionUploadViewModel._images.value?.let {
             previewAdapter.items = it.toMutableList()
             previewAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun observeGalleryBitmap() {
+        questionUploadViewModel.galleryBitmap.observe(viewLifecycleOwner) {
+            Log.d("QuestionUploadViewModel", "observeGalleryBitmap: $it")
+            previewAdapter.items = it.toMutableList()
+            previewAdapter.notifyDataSetChanged()
+            checkImagePresent()
         }
     }
 
@@ -69,15 +87,17 @@ class QuestionCameraFragment : Fragment() {
             }
             previewAdapter.notifyDataSetChanged()
 
-            binding.btnNext.apply {
-                if (previewAdapter.items.isNotEmpty()) {
-                    setBackgroundResource(R.drawable.bg_radius_18_grad_blue)
-                    setTextColor(resources.getColor(R.color.white, null))
-                } else {
-                    setBackgroundResource(R.drawable.bg_radius_18_background_grey)
-                    setTextColor(resources.getColor(R.color.sub_text_grey, null))
-                }
-            }
+            checkImagePresent()
+        }
+    }
+
+    private fun checkImagePresent() {
+        if (previewAdapter.items.isNotEmpty()) {
+            binding.btnNext.setBackgroundResource(R.drawable.bg_radius_18_grad_blue)
+            binding.btnNext.setTextColor(resources.getColor(R.color.white, null))
+        } else {
+            binding.btnNext.setBackgroundResource(R.drawable.bg_radius_18_background_grey)
+            binding.btnNext.setTextColor(resources.getColor(R.color.sub_text_grey, null))
         }
     }
 
@@ -93,6 +113,55 @@ class QuestionCameraFragment : Fragment() {
                 Util.createToast(requireActivity(), "문제 사진을 촬영해주세요").show()
             }
         }
+    }
+
+    private fun setGalleryButton() {
+        binding.btnGallery.setOnClickListener {
+            questionUploadViewModel._galleryBitmap.postValue(mutableListOf())
+            //get images from gallery
+            openGallery()
+        }
+    }
+
+    private fun openGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryIntent.type = "image/*"
+        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+
+        pickImages.launch(galleryIntent)
+    }
+
+    private val pickImages =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("QuestionUploadViewModel", "openGallery: success ${result.data}")
+                result.data?.let { data ->
+                    val clipData = data.clipData
+
+                    if (clipData != null) {
+                        if (clipData.itemCount > 5) {
+                            Util.createToast(requireActivity(), "사진은 최대 5장까지 선택 가능합니다").show()
+                        }
+                        // Multiple images selected
+                        (0 until min(clipData.itemCount, 5)).map { i ->
+                            clipData.getItemAt(i).uri
+                        }.let {
+                            handleSelectedImage(it)
+                        }
+                    } else {
+                        // Single image selected
+                        val uri: Uri = data.data!!
+                        handleSelectedImage(listOf(uri))
+                    }
+                }
+            } else {
+                Log.d("QuestionUploadViewModel", "openGallery: fail")
+            }
+        }
+
+    private fun handleSelectedImage(uris: List<Uri>) {
+        Log.d("QuestionUploadViewModel", "handleSelectedImage: $uris")
+        questionUploadViewModel.getBitmapFromUri(requireActivity().contentResolver, uris)
     }
 
     private fun disableNextButtonFor(l: Long) {
