@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softwaremaestro.presenter.chat_page.viewmodel.QuestionImageViewModel
 import org.softwaremaestro.presenter.databinding.ActivityQuestionImageBinding
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionDetailImagesAdapter
+import org.softwaremaestro.presenter.util.Util
 
 @AndroidEntryPoint
 class QuestionImageActivity : AppCompatActivity() {
@@ -19,10 +20,13 @@ class QuestionImageActivity : AppCompatActivity() {
 
 
     lateinit var adapter: QuestionDetailImagesAdapter
+    private var isSmallSizeScreen = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionImageBinding.inflate(layoutInflater)
+        supportSmallSizeScreen()
         setContentView(binding.root)
         setCloseButton()
         getIntentExtra()
@@ -30,6 +34,19 @@ class QuestionImageActivity : AppCompatActivity() {
         observeQuestionInfo()
         questionId?.let { viewModel.getImages(it) }
 
+    }
+
+    private fun supportSmallSizeScreen() {
+        val width = Util.getWidth(this)
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            binding.rvImages.setPadding(
+                Util.toPx(20, this),
+                Util.toPx(20, this),
+                Util.toPx(20, this),
+                Util.toPx(20, this)
+            )
+        }
     }
 
     private fun setCloseButton() {

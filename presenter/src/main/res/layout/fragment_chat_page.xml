@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_chat_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_grey"
@@ -77,6 +78,7 @@
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_icon_side"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/bright_grey"
@@ -179,10 +181,10 @@
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never" />
 
-
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_offering_teacher"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/bright_grey"
@@ -624,6 +626,7 @@
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_tutoring_list"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/bright_grey"
@@ -662,6 +665,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="undefined" />
 
+            <ImageView
+                android:id="@+id/btn_back_to_question_list"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_arrow_back_48"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_chat_room_left"
                 android:layout_width="wrap_content"
@@ -675,7 +689,7 @@
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_back_to_question_list"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
 

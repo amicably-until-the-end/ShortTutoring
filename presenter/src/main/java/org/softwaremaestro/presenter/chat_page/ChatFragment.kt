@@ -39,6 +39,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.HomeViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.util.UIState
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.getWidth
 import org.softwaremaestro.presenter.util.Util.hideKeyboardAndRemoveFocus
 import org.softwaremaestro.presenter.util.getVerticalSpaceDecoration
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
@@ -76,6 +77,7 @@ abstract class ChatFragment : Fragment() {
 
     protected lateinit var tutoringId: String
     private var startTime: Long? = null
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +85,7 @@ abstract class ChatFragment : Fragment() {
     ): View? {
 
         binding = FragmentChatPageBinding.inflate(inflater, container, false)
-
+        supportSmallSizeScreen()
         setProposedRecyclerView()
         setReservedRecyclerView()
         setChatMsgRecyclerView()
@@ -102,6 +104,41 @@ abstract class ChatFragment : Fragment() {
 
         return binding.root
 
+    }
+
+    private fun supportSmallSizeScreen() {
+        val width = getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            binding.containerOfferingTeacher.layoutParams =
+                ConstraintLayout.LayoutParams(0, 0).apply {
+                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                    leftToRight = binding.containerIconSideSection.id
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+            (binding.containerTutoringList.layoutParams as ConstraintLayout.LayoutParams).rightToRight =
+                ConstraintLayout.LayoutParams.PARENT_ID
+            binding.containerTutoringList.layoutParams.width = 0
+            binding.btnBackToQuestionList.visibility = View.VISIBLE
+            binding.btnBackToQuestionList.setOnClickListener {
+                currentChatRoom = null
+                binding.containerTutoringList.visibility = View.VISIBLE
+                binding.dvTutoringList.visibility = View.VISIBLE
+                binding.containerIconSideSection.visibility = View.GONE
+                binding.dvIconSide.visibility = View.GONE
+                binding.containerOfferingTeacher.visibility = View.GONE
+                binding.dvOfferingTeacher.visibility = View.GONE
+                binding.containerChatRoom.visibility = View.GONE
+                binding.containerChatRoom.layoutParams =
+                    ConstraintLayout.LayoutParams(0, 0).apply {
+                        leftToRight = binding.containerTutoringList.id
+                        rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                        bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+            }
+        }
     }
 
 
@@ -637,21 +674,28 @@ abstract class ChatFragment : Fragment() {
      */
     fun setOfferingTeacherMode() {
         binding.containerTutoringList.visibility = View.GONE
+        binding.dvTutoringList.visibility = View.GONE
         binding.containerIconSideSection.visibility = View.VISIBLE
+        binding.dvIconSide.visibility = View.VISIBLE
         binding.containerOfferingTeacher.visibility = View.VISIBLE
+        binding.dvOfferingTeacher.visibility = View.VISIBLE
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerOfferingTeacher.id
         }
-
+        if (isSmallSizeScreen) binding.containerChatRoom.visibility = View.GONE
     }
 
     /**
      * 학생이 일반질문에서 문제를 클릭하면 보게되는 이중탭을 숨긴다.
      */
     fun unSetOfferingTeacherMode() {
+        if (isSmallSizeScreen) binding.containerChatRoom.visibility = View.GONE
         binding.containerTutoringList.visibility = View.VISIBLE
+        binding.dvTutoringList.visibility = View.VISIBLE
         binding.containerIconSideSection.visibility = View.GONE
+        binding.dvIconSide.visibility = View.GONE
         binding.containerOfferingTeacher.visibility = View.GONE
+        binding.dvOfferingTeacher.visibility = View.GONE
         binding.containerChatRoom.updateLayoutParams<ConstraintLayout.LayoutParams> {
             leftToRight = binding.containerTutoringList.id
         }
@@ -721,6 +765,9 @@ abstract class ChatFragment : Fragment() {
 
     private val onQuestionRoomClick: (List<ChatRoomVO>, String, RecyclerView.Adapter<*>) -> Unit =
         { teacherList, questionId, caller ->
+            if (isSmallSizeScreen) {
+
+            }
             setOfferingTeacherListItems(teacherList)
             setOfferingTeacherMode()
             setSelectedRoomId(null)
@@ -734,6 +781,19 @@ abstract class ChatFragment : Fragment() {
         }
 
     fun enterChatRoom(chatRoomVO: ChatRoomVO) {
+        if (isSmallSizeScreen) {
+            binding.containerIconSideSection.visibility = View.GONE
+            binding.dvIconSide.visibility = View.GONE
+            binding.containerOfferingTeacher.visibility = View.GONE
+            binding.dvOfferingTeacher.visibility = View.GONE
+            binding.containerChatRoom.visibility = View.VISIBLE
+            binding.containerChatRoom.layoutParams = ConstraintLayout.LayoutParams(0, 0).apply {
+                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            }
+        }
         loadingDialog.dismiss() // 로딩중에 방이 바뀌는 경우에 대비해서 로딩중인 다이얼로그를 닫는다.
         currentChatRoom = chatRoomVO
         onChatRoomStateChange(chatRoomVO)

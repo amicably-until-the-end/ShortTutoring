@@ -19,13 +19,15 @@ class RegisterStudentInfoFragment : Fragment() {
     private lateinit var binding: FragmentRegisterStudentInfoBinding
     private val viewModel: StudentRegisterViewModel by activityViewModels()
     private var registerEnabled = false
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegisterStudentInfoBinding.inflate(layoutInflater)
-
+        supportSmallScreenSize()
+        loadViewModelValue()
         setRgSchoolLevel()
         setRgSchoolGrade()
         setBtnNext()
@@ -33,6 +35,56 @@ class RegisterStudentInfoFragment : Fragment() {
         observe()
 
         return binding.root
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toPx(30, requireContext())
+            binding.glLeft.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineEnd(paddingValue)
+        }
+    }
+
+    private fun setToolBar() {
+        binding.btnToolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun loadViewModelValue() {
+        when (viewModel.schoolLevel.value) {
+            "중학교" -> {
+                binding.rbHighSchool.isChecked = true
+            }
+
+            "고등학교" -> {
+                binding.rbMiddleSchool.isChecked = true
+            }
+
+            else -> {
+                binding.rgSchoolLevel.clearCheck()
+            }
+        }
+
+        when (viewModel.schoolGrade.value) {
+            1 -> {
+                binding.rbGrade0.isChecked = true
+            }
+
+            2 -> {
+                binding.rbGrade1.isChecked = true
+            }
+
+            3 -> {
+                binding.rbGrade2.isChecked = true
+            }
+
+            else -> {
+                binding.rgGrade.clearCheck()
+            }
+        }
     }
 
     private fun setRgSchoolLevel() {
@@ -78,16 +130,18 @@ class RegisterStudentInfoFragment : Fragment() {
 
     private fun observe() {
         observeSchoolLevel()
-        observeSchoolLevelAndGrade()
+        observeSchoolLevelAndGradeProper()
     }
 
     private fun observeSchoolLevel() {
         viewModel.schoolLevel.observe(viewLifecycleOwner) {
-            binding.containerSchoolGrade.visibility = View.VISIBLE
+            if (it != null) {
+                binding.containerSchoolGrade.visibility = View.VISIBLE
+            }
         }
     }
 
-    private fun observeSchoolLevelAndGrade() {
+    private fun observeSchoolLevelAndGradeProper() {
         viewModel.schoolLevelAndGradeProper.observe(viewLifecycleOwner) { proper ->
             with(binding.btnNext) {
                 if (proper) {

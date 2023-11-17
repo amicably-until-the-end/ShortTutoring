@@ -39,46 +39,14 @@ class ChargeCoinSecondFragment : Fragment() {
         setContainers()
         getRemoteDate()
         setObserver()
-
-
-        binding.btnChargeCoin.setOnClickListener {
-            if (chargeable) {
-                selectedContainer?.let {
-                    when (containers.indexOf(selectedContainer)) {
-                        // 무료 충전 버튼
-                        0 -> {
-                            coinViewModel.receiveCoinFree()
-                        }
-                        // 1개 충전 버튼, 5개 충전 버튼
-                        else -> {
-                            SimpleAlertDialog().apply {
-                                title = "아직 지원하지 않는 기능입니다"
-                                description = "12월 이후 서비스가 정규 운영될 예정입니다"
-                            }.show(parentFragmentManager, "unimplemented function")
-                            // UI 업데이트
-                            listOf(
-                                binding.ivRightArrow,
-                                binding.cbMyCoinAfterCharge
-                            ).forEach {
-                                it.visibility = View.INVISIBLE
-                            }
-                            resetContainers()
-                            chargeable = false
-                            coinViewModel.resetCoinFreeReceiveState()
-                        }
-                    }
-                }
-            } else {
-                Util.createToast(requireActivity(), "구매할 코인을 선택해주세요").show()
-            }
-        }
+        setChargeBtn()
     }
 
     private fun initContainers() {
         containers = listOf(
-            binding.containerFreeCharge,
-            binding.containerChargeOne,
-            binding.containerChargeFive
+            binding.containerFreeChargeBackground,
+            binding.containerChargeOneBackground,
+            binding.containerChargeFiveBackground
         )
     }
 
@@ -105,13 +73,14 @@ class ChargeCoinSecondFragment : Fragment() {
     private fun resetContainers() {
         containers.forEach { container ->
             container.apply {
-                setBackgroundResource(R.drawable.bg_radius_5_stroke_background_light_blue)
+                background =
+                    resources.getDrawable(R.drawable.bg_shadow_1_stroke_background_grey, null)
             }
         }
     }
 
     private fun selectContainer(view: View) {
-        view.setBackgroundResource(R.drawable.bg_radius_5_light_blue_and_stroke_blue)
+        view.background = resources.getDrawable(R.drawable.bg_shadow_1_stroke_primary_blue, null)
         selectedContainer = view
         setMyCoinAfterCharge()
     }
@@ -186,6 +155,40 @@ class ChargeCoinSecondFragment : Fragment() {
             resetContainers()
             chargeable = false
             coinViewModel.resetCoinFreeReceiveState()
+        }
+    }
+
+    private fun setChargeBtn() {
+        binding.btnChargeCoin.setOnClickListener {
+            if (chargeable) {
+                selectedContainer?.let {
+                    when (containers.indexOf(selectedContainer)) {
+                        // 무료 충전 버튼
+                        0 -> {
+                            coinViewModel.receiveCoinFree()
+                        }
+                        // 1개 충전 버튼, 5개 충전 버튼
+                        else -> {
+                            SimpleAlertDialog().apply {
+                                title = "아직 지원하지 않는 기능입니다"
+                                description = "12월 이후 서비스가 정규 운영될 예정입니다"
+                            }.show(parentFragmentManager, "unimplemented function")
+                            // UI 업데이트
+                            listOf(
+                                binding.ivRightArrow,
+                                binding.cbMyCoinAfterCharge
+                            ).forEach {
+                                it.visibility = View.INVISIBLE
+                            }
+                            resetContainers()
+                            chargeable = false
+                            coinViewModel.resetCoinFreeReceiveState()
+                        }
+                    }
+                }
+            } else {
+                Util.createToast(requireActivity(), "구매할 코인을 선택해주세요").show()
+            }
         }
     }
 }

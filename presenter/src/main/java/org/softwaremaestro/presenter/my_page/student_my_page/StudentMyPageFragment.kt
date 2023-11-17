@@ -48,6 +48,7 @@ class StudentMyPageFragment : Fragment() {
 
     private lateinit var dialog: ProfileImageSelectBottomDialog
     private lateinit var followings: List<String>
+    private var isSmallScreenSize = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,9 +62,9 @@ class StudentMyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profileViewModel.getMyProfile()
+        supportSmallScreenSize()
         SocketManager.userId?.let { followingViewModel.getFollowing(it) }
         initLectureRecyclerView()
-
         setBtnEditTeacherImg()
         setFollowingMenu()
         setServiceCenterMenu()
@@ -71,6 +72,14 @@ class StudentMyPageFragment : Fragment() {
         setWithdrawMenu()
 
         observe()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallScreenSize = width < 600
+        if (isSmallScreenSize) {
+            binding.btnFollow.visibility = View.GONE
+        }
     }
 
     private fun observe() {
@@ -247,6 +256,6 @@ class StudentMyPageFragment : Fragment() {
     }
 
     companion object {
-        private const val SERVICE_CENTER_URL = "http://www.form.short-tutoring.com"
+        private const val SERVICE_CENTER_URL = "http://form.short-tutoring.com"
     }
 }

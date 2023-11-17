@@ -59,6 +59,7 @@ import org.softwaremaestro.presenter.classroom.viewmodel.ClassroomViewModel
 import org.softwaremaestro.presenter.classroom.widget.DialogGuideline
 import org.softwaremaestro.presenter.databinding.FragmentClassroomBinding
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.toPx
 import org.softwaremaestro.presenter.util.widget.LoadingDialog
 import org.softwaremaestro.presenter.util.widget.SimpleAlertDialog
 import org.softwaremaestro.presenter.util.widget.SimpleConfirmDialog
@@ -106,13 +107,14 @@ class ClassroomFragment : Fragment() {
     private val REQUESTED_PERMISSIONS = arrayOf<String>(
         Manifest.permission.RECORD_AUDIO
     )
-
+    private var isSmallScreenSize = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentClassroomBinding.inflate(layoutInflater)
+        supportSmallScreenSize()
         showGuideline()
         setTutoringArgument() // Extra Argument 반드시 맨 처음에 실행
         permissionCheck()
@@ -123,6 +125,25 @@ class ClassroomFragment : Fragment() {
         observeQuestionInfo()
         initLoadingDialog()
         return binding.root
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallScreenSize = width < 600
+        if (isSmallScreenSize) {
+            binding.cvOnlineStatusContainer.visibility = View.GONE
+            binding.tvOnlineStatus.visibility = View.GONE
+            binding.cvRecordingStatus.visibility = View.GONE
+            binding.tvRecordingStatus.visibility = View.GONE
+            binding.btnUndo.visibility = View.GONE
+            binding.btnRedo.visibility = View.GONE
+            binding.containerBoard.setPadding(
+                toPx(20, requireContext()),
+                toPx(20, requireContext()),
+                toPx(20, requireContext()),
+                toPx(20, requireContext())
+            )
+        }
     }
 
     private fun showGuideline() {
@@ -194,8 +215,13 @@ class ClassroomFragment : Fragment() {
 
 
     private fun setClassroomInfoUI() {
+        val opponentName = with(whiteBoardInfo.opponentName) {
+            if (length > 6) substring(0, 6) + "..."
+            else this
+        }
         binding.tvRoomTitle.text =
-            "${whiteBoardInfo.opponentName} ${if (whiteBoardInfo.isTeacher) "학생과" else "선생님과"} 수업 중"
+            if (!isSmallScreenSize) "${opponentName} ${if (whiteBoardInfo.isTeacher) "학생과" else "선생님과"} 수업 중"
+            else "${opponentName} ${if (whiteBoardInfo.isTeacher) "학생" else "선생님"}"
         Glide.with(requireContext())
             .load(whiteBoardInfo.roomProfileImage)
             .into(binding.ivProfileImage)
@@ -565,6 +591,7 @@ class ClassroomFragment : Fragment() {
 
     private fun setImageButton() {
         binding.btnGetImage.setOnClickListener {
+            selectorPallet?.dismiss()
             imagePallet?.show() ?: initProblemImagePallet().show()
         }
 

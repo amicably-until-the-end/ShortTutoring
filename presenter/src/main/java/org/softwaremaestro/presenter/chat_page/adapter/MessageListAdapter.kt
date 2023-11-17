@@ -200,7 +200,7 @@ class MessageListAdapter(
                         var time =
                             body.startTime?.parseToLocalDateTime() ?: LocalDateTime.now()
                         tvText.text =
-                            "${time.monthValue}월 ${time.dayOfMonth}일 ${time.hour}시 ${time.minute}분에 수업 예약이 완료되었습니다."
+                            "${time.toKoreanString()}에 수업 예약이 완료되었습니다."
                     }
 
                     is MessageBodyVO.TutoringFinished -> {

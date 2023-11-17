@@ -24,31 +24,31 @@ class StudentRegisterViewModel @Inject constructor(
     ViewModel() {
 
     // ToSFragment에서 사용하는 변수
-    private val _agreeOnToS = MutableLiveData<Boolean?>()
+    private val _agreeOnToS = MutableLiveData<Boolean?>(null)
     val agreeOnToS: LiveData<Boolean?> get() = _agreeOnToS
 
-    private val _agreeOnPrivacyPolicy = MutableLiveData<Boolean?>()
+    private val _agreeOnPrivacyPolicy = MutableLiveData<Boolean?>(null)
     val agreeOnPrivacyPolicy: LiveData<Boolean?> get() = _agreeOnPrivacyPolicy
 
-    val agreeAll = MediatorLiveData<Boolean?>()
+    val agreeAll = MediatorLiveData<Boolean?>(null)
 
     // RegisterRoleFragment에서 사용하는 변수
-    private val _role = MutableLiveData<Int?>()
+    private val _role = MutableLiveData<Int?>(null)
     val role: LiveData<Int?> get() = _role
 
-    private val _schoolLevel = MutableLiveData<String>()
-    val schoolLevel: LiveData<String> get() = _schoolLevel
+    private val _schoolLevel = MutableLiveData<String?>(null)
+    val schoolLevel: LiveData<String?> get() = _schoolLevel
 
-    private val _schoolGrade = MutableLiveData<Int>()
-    val schoolGrade: LiveData<Int> get() = _schoolGrade
+    private val _schoolGrade = MutableLiveData<Int?>(null)
+    val schoolGrade: LiveData<Int?> get() = _schoolGrade
 
     private val _schoolLevelAndGradeProper = MediatorLiveData<Boolean>()
     val schoolLevelAndGradeProper: MediatorLiveData<Boolean> get() = _schoolLevelAndGradeProper
 
-    private val _name = MutableLiveData<String>()
-    val name: LiveData<String> get() = _name
+    private val _name = MutableLiveData<String?>(null)
+    val name: LiveData<String?> get() = _name
 
-    private val _bio = MutableLiveData<String>("student-bio")
+    private val _bio = MutableLiveData("student-bio")
     val bio: LiveData<String> get() = _bio
 
     val _image: MutableLiveData<String> = MutableLiveData(Animal.getRandom().mName)

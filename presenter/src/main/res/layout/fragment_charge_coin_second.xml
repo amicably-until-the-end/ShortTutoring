@@ -107,6 +107,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/container_free_charge_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
@@ -206,6 +207,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/container_charge_one_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
@@ -273,6 +275,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/container_charge_five_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"

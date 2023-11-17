@@ -29,6 +29,7 @@ class CompleteStudentProfileFragment : Fragment() {
     private val viewModel: StudentRegisterViewModel by activityViewModels()
     private lateinit var dialog: ProfileImageSelectBottomDialog
     private var isBtnCompleteEnabled = false
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +41,7 @@ class CompleteStudentProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        hideButtonsUponDisplaySize()
+        supportSmallScreenSize()
         setViewModelValueToFields()
         setEtProfileStudentName()
         setBtnEditTeacherImage()
@@ -52,12 +52,15 @@ class CompleteStudentProfileFragment : Fragment() {
         observe()
     }
 
-    private fun hideButtonsUponDisplaySize() {
-        val metrics = resources.displayMetrics
-        val screenWidth = metrics.widthPixels
-        if (screenWidth < 1200) {
-            binding.btnFollow.visibility = View.INVISIBLE
-            binding.containerReserve.visibility = View.INVISIBLE
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toPx(30, requireContext())
+            binding.glLeft.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineEnd(paddingValue)
+            binding.btnFollow.visibility = View.GONE
+            binding.containerReserve.visibility = View.GONE
         }
     }
 
@@ -66,7 +69,7 @@ class CompleteStudentProfileFragment : Fragment() {
             binding.etProfileStudentName.setText(it)
             binding.etStudentName.setText(it)
         }
-        viewModel._image.value?.let {
+        viewModel.image.value?.let {
             val resId = Animal.toResId(it)
             binding.ivStudentImg.setBackgroundResource(resId)
         }

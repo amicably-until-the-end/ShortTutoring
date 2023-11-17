@@ -27,30 +27,43 @@
         android:background="@color/primary_blue"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
-    <TextView
-        android:id="@+id/tv_question"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="70dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="70dp" />
+
+    <TextView
+        android:id="@+id/tv_question"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_bold"
         android:text="계정 정보를 선택해주세요."
         android:textColor="@color/black"
         android:textSize="18dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
     <RadioGroup
-        android:layout_width="wrap_content"
+        android:id="@+id/rg_role"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="70dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
         app:layout_constraintTop_toBottomOf="@id/tv_question">
 
         <RadioButton
-            android:id="@+id/tv_student"
+            android:id="@+id/rb_student"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_rb_corner_radius"
@@ -62,7 +75,7 @@
             android:textColor="@drawable/selector_rb_text_color" />
 
         <RadioButton
-            android:id="@+id/tv_teacher"
+            android:id="@+id/rb_teacher"
             style="button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

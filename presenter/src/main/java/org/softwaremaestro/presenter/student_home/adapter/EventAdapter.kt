@@ -11,14 +11,16 @@ import org.softwaremaestro.domain.event.entity.EventVO
 import org.softwaremaestro.domain.event.entity.EventsVO
 import org.softwaremaestro.presenter.databinding.ItemEventBinding
 
-class EventAdapter(private val onItemClick: (String) -> Unit) :
+class EventAdapter(
+    private val onItemClick: (String) -> Unit
+) :
     RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     private var items: EventsVO = EventsVO(0, emptyList())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventAdapter.ViewHolder {
-        val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(view)
+        val binding = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: EventAdapter.ViewHolder, position: Int) {

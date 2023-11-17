@@ -26,138 +26,147 @@
         android:background="@color/primary_blue"
         app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
 
-    <LinearLayout
-        android:id="@+id/container_content"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="70dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="70dp" />
+
+    <TextView
+        android:id="@+id/tv_tos"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_toolbar">
+        android:fontFamily="@font/pretendard_bold"
+        android:text="약관에 동의해주세요"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/gl_left"
+        app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_tos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
+        app:layout_constraintRight_toRightOf="@id/gl_right"
+        app:layout_constraintTop_toBottomOf="@id/tv_tos">
+
+        <ToggleButton
+            android:id="@+id/tb_agree_on_tos"
+            android:layout_width="24dp"
+            android:layout_height="22dp"
+            android:background="@drawable/selector_check_toggle"
+            android:paddingRight="12dp"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_tos"
+            android:id="@+id/tv_agree_on_tos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:paddingVertical="10dp"
+            android:text="이용약관 동의"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tb_agree_on_tos"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_tos_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_agree_on_tos"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_arrow_tos"
+                android:layout_width="4dp"
+                android:layout_height="8dp"
+                android:background="@drawable/ic_arrow_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_privacy_policy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="@id/gl_left"
+        app:layout_constraintRight_toRightOf="@id/gl_right"
+        app:layout_constraintTop_toBottomOf="@id/container_tos">
+
+        <ToggleButton
+            android:id="@+id/tb_agree_on_privacy_policy"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="@drawable/selector_check_toggle"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_agree_on_privacy_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="70dp"
-            android:fontFamily="@font/pretendard_bold"
-            android:text="약관에 동의해주세요"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:paddingVertical="10dp"
+            android:text="개인정보 수집 및 이용 동의"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/container_toolbar" />
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tb_agree_on_privacy_policy"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:id="@+id/container_privacy_policy_body"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_vertical">
+            android:paddingVertical="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_agree_on_privacy_policy"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ToggleButton
-                android:id="@+id/tb_agree_on_tos"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginLeft="70dp"
-                android:background="@drawable/selector_check_toggle"
-                android:textOff=""
-                android:textOn=""
+            <ImageView
+                android:id="@+id/iv_arrow_privacy_policy"
+                android:layout_width="4dp"
+                android:layout_height="8dp"
+                android:background="@drawable/ic_arrow_right"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_agree_on_tos"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:fontFamily="@font/pretendard_medium"
-                android:paddingVertical="10dp"
-                android:text="이용약관 동의"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tb_agree_on_tos"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_tos"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="70dp"
-                android:paddingVertical="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tv_agree_on_tos"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/iv_arrow_tos"
-                    android:layout_width="4dp"
-                    android:layout_height="8dp"
-                    android:background="@drawable/ic_arrow_right"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <ToggleButton
-                android:id="@+id/tb_agree_on_privacy_policy"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginLeft="70dp"
-                android:background="@drawable/selector_check_toggle"
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_agree_on_privacy_policy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:fontFamily="@font/pretendard_medium"
-                android:paddingVertical="10dp"
-                android:text="개인정보 수집 및 이용 동의"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tb_agree_on_privacy_policy"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/container_privacy_policy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="70dp"
-                android:paddingVertical="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tv_agree_on_privacy_policy"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/iv_arrow_privacy_policy"
-                    android:layout_width="4dp"
-                    android:layout_height="8dp"
-                    android:background="@drawable/ic_arrow_right"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_next"

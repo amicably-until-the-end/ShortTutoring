@@ -43,7 +43,7 @@ class TeacherMyPageFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val tutoringViewModel: TutoringViewModel by viewModels()
     private val withdrawViewModel: WithdrawViewModel by viewModels()
-
+    private var isSmallSizeScreen = false
 
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var lectureAdapter: LectureAdapter
@@ -60,7 +60,7 @@ class TeacherMyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        supportSmallScreenSize()
         getRemoteData()
         initReviewRecyclerView()
         initLectureRecyclerView()
@@ -73,6 +73,15 @@ class TeacherMyPageFragment : Fragment() {
         setLogOutContainer()
         setWithdrawMenu()
         observe()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            binding.btnFollow.visibility = View.GONE
+
+        }
     }
 
     private fun getRemoteData() {

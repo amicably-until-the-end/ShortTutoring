@@ -17,7 +17,6 @@ class StarRatingBar(private val context: Context, private val attrs: AttributeSe
 
     private val binding =
         WidgetStarRatingBarBinding.inflate(LayoutInflater.from(context), this, true)
-
     private var numOfStars = -1
     private var starSize = -1
     lateinit var onClick: (Int) -> Unit

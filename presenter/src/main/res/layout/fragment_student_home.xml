@@ -73,6 +73,7 @@
                     app:strokeWidth="1dp">
 
                     <LinearLayout
+                        android:id="@+id/container_noti"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -85,6 +86,7 @@
                             app:cardBackgroundColor="@color/black">
 
                             <TextView
+                                android:id="@+id/tv_noti_head"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="5dp"
@@ -96,6 +98,7 @@
                         </com.google.android.material.card.MaterialCardView>
 
                         <TextView
+                            android:id="@+id/tv_noti"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"

@@ -18,6 +18,7 @@ import org.softwaremaestro.presenter.teacher_home.TeacherHomeFragment.Companion.
 import org.softwaremaestro.presenter.teacher_home.adapter.QuestionDetailImagesAdapter
 import org.softwaremaestro.presenter.teacher_home.viewmodel.AnswerViewModel
 import org.softwaremaestro.presenter.util.Util
+import org.softwaremaestro.presenter.util.Util.toPx
 
 @AndroidEntryPoint
 class QuestionDetailActivity : AppCompatActivity() {
@@ -32,11 +33,12 @@ class QuestionDetailActivity : AppCompatActivity() {
     private var questionId: String? = null
     private var hopeTime: String? = null
     private var offeredAlready = false
-
+    private var isSmallSizeScreen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionDetailBinding.inflate(layoutInflater)
+        supportSmallSizeScreen()
         setContentView(binding.root)
         getIntentExtra()
         setQuestionContent()
@@ -45,6 +47,19 @@ class QuestionDetailActivity : AppCompatActivity() {
         setObserver()
         setCloseButton()
 
+    }
+
+    private fun supportSmallSizeScreen() {
+        val width = Util.getWidth(this)
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            binding.rvImages.setPadding(
+                toPx(20, this),
+                toPx(20, this),
+                toPx(20, this),
+                toPx(20, this)
+            )
+        }
     }
 
     private fun setOfferButton() {

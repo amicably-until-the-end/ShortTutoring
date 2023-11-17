@@ -41,7 +41,6 @@ class TeacherQuestionAdapter(
 
         // 뷰홀더가 처음 생성될 때만 실행되는 코드
         fun bind(item: QuestionGetResponseVO) {
-
             with(binding) {
 
                 Glide.with(root.context).load(item.mainImage)

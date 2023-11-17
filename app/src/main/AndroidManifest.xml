@@ -4,44 +4,10 @@
     package="org.softwaremaestro.shorttutoring">
 
     <supports-screens
-        android:largeScreens="false"
-        android:normalScreens="false"
+        android:largeScreens="true"
+        android:normalScreens="true"
         android:smallScreens="false"
         android:xlargeScreens="true" />
-    <compatible-screens>
-        <!-- all xlarge size screens -->
-        <screen
-            android:screenDensity="ldpi"
-            android:screenSize="xlarge" />
-        <screen
-            android:screenDensity="mdpi"
-            android:screenSize="xlarge" />
-        <screen
-            android:screenDensity="hdpi"
-            android:screenSize="xlarge" />
-        <screen
-            android:screenDensity="xhdpi"
-            android:screenSize="xlarge" />
-        <screen
-            android:screenDensity="xxhdpi"
-            android:screenSize="xlarge" />
-        <screen
-            android:screenDensity="xxxhdpi"
-            android:screenSize="xlarge" />
-        <!-- some of large size screens -->
-        <screen
-            android:screenDensity="hdpi"
-            android:screenSize="large" />
-        <screen
-            android:screenDensity="xhdpi"
-            android:screenSize="large" />
-        <screen
-            android:screenDensity="xxhdpi"
-            android:screenSize="large" />
-        <screen
-            android:screenDensity="xxxhdpi"
-            android:screenSize="large" />
-    </compatible-screens>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -55,6 +21,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />

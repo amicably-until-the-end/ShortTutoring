@@ -42,10 +42,10 @@
                 android:id="@+id/rv_question_images"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
-                android:clipToPadding="false" />
+                android:clipToPadding="false"
+                android:paddingHorizontal="70dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -53,10 +53,11 @@
                 android:background="@color/background_grey" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_question_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="70dp"
-                android:paddingTop="30dp">
+                android:layout_marginTop="30dp"
+                android:paddingHorizontal="70dp">
 
                 <TextView
                     android:id="@+id/tv_lets_question_desc"
@@ -179,6 +180,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_question_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"

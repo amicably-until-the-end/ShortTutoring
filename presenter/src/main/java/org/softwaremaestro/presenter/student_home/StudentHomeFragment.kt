@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -45,6 +46,7 @@ import org.softwaremaestro.presenter.student_home.viewmodel.ReviewViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TeacherOnlineViewModel
 import org.softwaremaestro.presenter.student_home.viewmodel.TutoringViewModel
 import org.softwaremaestro.presenter.student_home.widget.TeacherProfileDialog
+import org.softwaremaestro.presenter.student_home.widget.TeacherProfileW600Dialog
 import org.softwaremaestro.presenter.teacher_home.viewmodel.QuestionViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.BestTeacherViewModel
 import org.softwaremaestro.presenter.teacher_profile.viewmodel.FollowUserViewModel
@@ -77,13 +79,17 @@ class StudentHomeFragment : Fragment() {
     private lateinit var lectureAdapter: LectureAdapter
     private lateinit var teacherAdapter: TeacherSimpleAdapter
     private lateinit var eventAdapter: EventAdapter
-    private lateinit var dialogTeacherProfile: TeacherProfileDialog
+    private lateinit var dialogTeacherProfile: BottomSheetDialogFragment
     private lateinit var followings: List<String>
+    private var isSmallScreenSize = false
+    private var eventScrollPos = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStudentHomeBinding.inflate(layoutInflater)
+        supportSmallScreenSize()
         getRemoteData()
         initTeacherProfileDialog()
         setCoinButton()
@@ -94,6 +100,14 @@ class StudentHomeFragment : Fragment() {
         setObserver()
 
         return binding.root
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallScreenSize = width < 600
+        if (isSmallScreenSize) {
+
+        }
     }
 
     private fun getRemoteData() {
@@ -107,8 +121,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun initTeacherProfileDialog() {
-        dialogTeacherProfile = TeacherProfileDialog(
-            onProfileClick = { teacherId ->
+        val onProfileClick: (String) -> Unit = { teacherId ->
 //                startActivityForResult(
 //                    Intent(
 //                        requireActivity(),
@@ -119,39 +132,54 @@ class StudentHomeFragment : Fragment() {
 //                )
 //
 //                dialogTeacherProfile.dismiss()
-            },
-            onUnfollow = { teacherId ->
-                followUserViewModel.unfollowUser(teacherId)
-                Util.createToast(requireActivity(), "선생님 찜하기가 해제되었습니다").show()
-                // teacher의 followers를 갱신하기 위해 getTeachers() 호출
-                bestTeacherViewModel.getTeachers()
-            },
-            onFollow = { teacherId ->
-                followUserViewModel.followUser(teacherId)
-                Util.createToast(requireActivity(), "선생님을 찜했습니다").show()
-                // teacher의 followers를 갱신하기 위해 getTeachers() 호출
-                bestTeacherViewModel.getTeachers()
-            },
-            onReserve = { teacherId ->
-                startActivityForResult(
-                    Intent(
-                        requireActivity(),
-                        QuestionReserveActivity::class.java
-                    ).apply {
-                        putExtra("teacher-id", teacherId)
-                    }, QUESTION_UPLOAD_RESULT
-                )
+        }
+        val onUnfollow: (String) -> Unit = { teacherId ->
+            followUserViewModel.unfollowUser(teacherId)
+            Util.createToast(requireActivity(), "선생님 찜하기가 해제되었습니다").show()
+            // teacher의 followers를 갱신하기 위해 getTeachers() 호출
+            bestTeacherViewModel.getTeachers()
+        }
+        val onFollow: (String) -> Unit = { teacherId ->
+            followUserViewModel.followUser(teacherId)
+            Util.createToast(requireActivity(), "선생님을 찜했습니다").show()
+            // teacher의 followers를 갱신하기 위해 getTeachers() 호출
+            bestTeacherViewModel.getTeachers()
+        }
+        val onReserve: (String) -> Unit = { teacherId ->
+            startActivityForResult(
+                Intent(
+                    requireActivity(),
+                    QuestionReserveActivity::class.java
+                ).apply {
+                    putExtra("teacher-id", teacherId)
+                }, QUESTION_UPLOAD_RESULT
+            )
 
-                dialogTeacherProfile.dismiss()
-            },
-            onDismiss = {
-                // 선생님 뷰의 followers를 갱신하기 위해 ViewModel의 메서드 호출
-                teacherOnlineViewModel.getTeacherOnlines()
-                SocketManager.userId?.let {
-                    followingViewModel.getFollowing(it)
-                }
+            dialogTeacherProfile.dismiss()
+        }
+        val onDismiss: () -> Unit = {
+            // 선생님 뷰의 followers를 갱신하기 위해 ViewModel의 메서드 호출
+            teacherOnlineViewModel.getTeacherOnlines()
+            SocketManager.userId?.let {
+                followingViewModel.getFollowing(it)
             }
-        )
+        }
+
+        dialogTeacherProfile =
+            if (!isSmallScreenSize) TeacherProfileDialog(
+                onProfileClick = onProfileClick,
+                onUnfollow = onUnfollow,
+                onFollow = onFollow,
+                onReserve = onReserve,
+                onDismiss = onDismiss
+            )
+            else TeacherProfileW600Dialog(
+                onProfileClick = onProfileClick,
+                onUnfollow = onUnfollow,
+                onFollow = onFollow,
+                onReserve = onReserve,
+                onDismiss = onDismiss
+            )
     }
 
     private fun setOthersQuestionRecyclerView() {
@@ -171,7 +199,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherFollowingRecyclerView() {
         teacherFollowingAdapter = TeacherCircularAdapter {
-            dialogTeacherProfile.setItem(it)
+            if (!isSmallScreenSize) (dialogTeacherProfile as TeacherProfileDialog).setItem(it)
+            else (dialogTeacherProfile as TeacherProfileW600Dialog).setItem(it)
             it.teacherId?.let {
                 reviewsViewModel.getReviews(it)
             }
@@ -188,7 +217,8 @@ class StudentHomeFragment : Fragment() {
 
     private fun setTeacherOnlineRecyclerView() {
         teacherOnlineAdapter = TeacherCircularAdapter {
-            dialogTeacherProfile.setItem(it)
+            if (!isSmallScreenSize) (dialogTeacherProfile as TeacherProfileDialog).setItem(it)
+            else (dialogTeacherProfile as TeacherProfileW600Dialog).setItem(it)
             it.teacherId?.let {
                 reviewsViewModel.getReviews(it)
                 // Todo: 선생님 tutoring 가져올 수 있게 되면 변경
@@ -208,7 +238,8 @@ class StudentHomeFragment : Fragment() {
     private fun setTeacherRecyclerView() {
 
         teacherAdapter = TeacherSimpleAdapter { teacherVO ->
-            dialogTeacherProfile.setItem(teacherVO)
+            if (!isSmallScreenSize) (dialogTeacherProfile as TeacherProfileDialog).setItem(teacherVO)
+            else (dialogTeacherProfile as TeacherProfileW600Dialog).setItem(teacherVO)
             teacherVO.teacherId?.let {
                 reviewsViewModel.getReviews(it)
                 // Todo: 선생님 tutoring 가져올 수 있게 되면 변경
@@ -244,7 +275,8 @@ class StudentHomeFragment : Fragment() {
             smoothScrollToPosition(0)
         }
         setAutoScrollToEventRecycler()
-        setHorizontalPaddingTo(binding.rvEvent, EVENT_ITEM_WIDTH)
+        val width = if (isSmallScreenSize) EVENT_ITEM_WIDTH_W600 else EVENT_ITEM_WIDTH
+        setHorizontalPaddingTo(binding.rvEvent, width)
     }
 
     private fun setEventButton() {
@@ -253,9 +285,9 @@ class StudentHomeFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     resetEventButton()
-                    val pos =
+                    eventScrollPos =
                         (binding.rvEvent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    setFocusedToEventButtonAt(pos)
+                    setFocusedToEventButtonAt(eventScrollPos)
                 }
             }
         })
@@ -286,12 +318,12 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun setAutoScrollToEventRecycler() {
-        var pos = 0
         viewLifecycleOwner.lifecycleScope.launch {
             while (NonCancellable.isActive) {
-                binding.rvEvent.smoothScrollToPosition(pos)
+                binding.rvEvent.smoothScrollToPosition(eventScrollPos)
                 delay(10000L)
-                pos = (pos + 1) % eventAdapter.itemCount
+                if (eventAdapter.itemCount == 0) break
+                eventScrollPos = (eventScrollPos + 1) % eventAdapter.itemCount
             }
         }
     }
@@ -461,7 +493,8 @@ class StudentHomeFragment : Fragment() {
     private fun observeMyQuestions() {
         questionViewModel.myQuestions.observe(viewLifecycleOwner) { questions ->
             questions ?: return@observe
-            val fastestReserved = getFastestReserved(questions)
+            val fastestReserved =
+                if (!isSmallScreenSize) getFastestReserved(questions) else emptyList()
             binding.containerMyReservedQuestion.visibility =
                 if (fastestReserved.isNotEmpty()) View.VISIBLE else View.GONE
 
@@ -610,24 +643,32 @@ class StudentHomeFragment : Fragment() {
             reviews ?: return@observe
             val reviewsNotEmpty =
                 reviews.filter { it.reviewComment != null && it.reviewComment!!.length >= 3 }
-            dialogTeacherProfile.setItemToReviewRecyclerView(reviewsNotEmpty)
+            if (!isSmallScreenSize) (dialogTeacherProfile as TeacherProfileDialog).setItemToReviewRecyclerView(
+                reviewsNotEmpty
+            )
             reviewsViewModel.setReviews(null)
         }
     }
 
     private fun initEventButton(numEvent: Int) {
         if (binding.containerEventBtn.isNotEmpty()) return
+        val fBtnSize =
+            if (isSmallScreenSize) FOCUSED_EVENT_BUTTON_SIZE_W600 else FOCUSED_EVENT_BUTTON_SIZE
+        val nBtnSize =
+            if (isSmallScreenSize) NORMAL_EVENT_BUTTON_SIZE_W600 else NORMAL_EVENT_BUTTON_SIZE
+        val margin =
+            if (isSmallScreenSize) EVENT_BUTTON_SIZE_MARGIN_W600 else EVENT_BUTTON_SIZE_MARGIN
         repeat(numEvent) {
             binding.containerEventBtn.addView(
                 AppCompatButton(requireContext()).apply {
                     val size = if (it == 0) {
-                        toPx(FOCUSED_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(fBtnSize, requireContext())
                     } else {
-                        toPx(NORMAL_EVENT_BUTTON_SIZE, requireContext())
+                        toPx(nBtnSize, requireContext())
                     }
                     layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                        marginStart = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
-                        marginEnd = toPx(EVENT_BUTTON_SIZE_MARGIN, requireContext())
+                        marginStart = toPx(margin, requireContext())
+                        marginEnd = toPx(margin, requireContext())
                     }
                     setBackgroundResource(R.drawable.bg_radius_100_primary_blue)
                     stateListAnimator = null
@@ -643,6 +684,11 @@ class StudentHomeFragment : Fragment() {
         private const val FOCUSED_EVENT_BUTTON_SIZE = 12
         private const val NORMAL_EVENT_BUTTON_SIZE = 9
         private const val EVENT_BUTTON_SIZE_MARGIN = 6
+
+        private const val EVENT_ITEM_WIDTH_W600 = 180
+        private const val FOCUSED_EVENT_BUTTON_SIZE_W600 = 9
+        private const val NORMAL_EVENT_BUTTON_SIZE_W600 = 7
+        private const val EVENT_BUTTON_SIZE_MARGIN_W600 = 3
 
         const val PROFILE_IMAGE = "profile-image"
         const val STUDENT_NAME = "student-name"

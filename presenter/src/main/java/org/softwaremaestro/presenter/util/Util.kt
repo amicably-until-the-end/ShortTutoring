@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Service
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -94,6 +95,21 @@ object Util {
     }
 
     fun nowInKorea() = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+
+    fun getWidth(activity: Activity): Int {
+        val width: Int?
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            width = toDp(Resources.getSystem().displayMetrics.widthPixels, activity)
+        } else {
+            @Suppress("DEPRECATION")
+            val display = activity.windowManager.defaultDisplay.apply {
+                getMetrics(DisplayMetrics())
+            }
+            @Suppress("DEPRECATION")
+            width = toDp(display.width, activity)
+        }
+        return width
+    }
 }
 
 fun Float.toRating() = String.format("%.1f", this)
@@ -207,8 +223,8 @@ fun Fragment.moveBack() {
  * LocalDateTime을 한국어로 변환 ex: 1월 1일 1시 1분
  */
 fun LocalDateTime.toKoreanString(): String {
-    return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시 ${
-        if (this.minute != 0) "${minute}분" else ""
+    return "${this.monthValue}월 ${this.dayOfMonth}일 ${this.hour}시${
+        if (this.minute != 0) " ${minute}분" else ""
     }"
 }
 

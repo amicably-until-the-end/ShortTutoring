@@ -9,41 +9,6 @@
     android:orientation="vertical"
     tools:context=".teacher_home.TeacherHomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_toolbar"
-        style="@style/ToolBar">
-
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="109dp"
-            android:layout_height="52dp"
-            android:src="@drawable/logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_toolbar_notification"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/baseline_notifications_24"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <org.softwaremaestro.presenter.util.widget.CoinBalance
-            android:id="@+id/cb_coin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:coin="1350" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -56,9 +21,44 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_toolbar"
+                style="@style/ToolBar">
+
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="109dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_toolbar_notification"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/baseline_notifications_24"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <org.softwaremaestro.presenter.util.widget.CoinBalance
+                    android:id="@+id/cb_coin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:coin="1350" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="10dp"
@@ -68,8 +68,10 @@
                 app:strokeWidth="1dp">
 
                 <LinearLayout
+                    android:id="@+id/container_noti"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="9dp">
@@ -80,6 +82,7 @@
                         app:cardBackgroundColor="@color/black">
 
                         <TextView
+                            android:id="@+id/tv_noti_head"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
@@ -91,10 +94,13 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
+                        android:id="@+id/tv_noti"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="현재 이벤트가 진행 중입니다. 이벤트 배너를 확인해주세요." />
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="현재 이벤트가 진행 중입니다."
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -212,8 +218,8 @@
                     style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="14dp"
                     android:paddingHorizontal="@dimen/section_horizontal_padding_default"
+                    android:paddingBottom="14dp"
                     android:text="내가 제안한 수업" />
 
                 <FrameLayout
@@ -332,6 +338,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/container_event"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -350,9 +357,9 @@
                     android:id="@+id/container_event_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp">
 
                 </LinearLayout>
 
@@ -410,6 +417,7 @@
                 android:paddingTop="30dp">
 
                 <TextView
+                    android:id="@+id/tv_review"
                     style="@style/section_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

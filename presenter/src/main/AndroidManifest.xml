@@ -95,7 +95,6 @@
             android:name=".question_upload.question_normal_upload.QuestionUploadActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".login.LoginActivity"

@@ -1,12 +1,18 @@
 package org.softwaremaestro.presenter.question_upload.question_normal_upload.viewmodel
 
+import android.content.ContentResolver
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -50,6 +56,9 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     val inputs = listOf(
         _description, _school, _subject, _imagesBase64, _hopeTutoringTime
     )
+
+    val _galleryBitmap = MutableLiveData<List<Bitmap>>()
+    val galleryBitmap: LiveData<List<Bitmap>> get() = _galleryBitmap
 
     init {
         _images.postValue(listOf())
@@ -112,5 +121,33 @@ class QuestionUploadViewModel @Inject constructor(private val questionUploadUseC
     fun resetInputs() {
         inputs.forEach { it.postValue(null) }
         _hopeTutoringTime.postValue(mutableListOf())
+    }
+
+    fun getBitmapFromUri(contentResolver: ContentResolver, uris: List<Uri>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d("QuestionUploadViewModel", "getBitmapFromUri: $uris")
+            try {
+                val bitmaps = mutableListOf<Bitmap>()
+                // Use ContentResolver to open an InputStream from the URI
+
+                uris.forEach {
+                    val inputStream = contentResolver.openInputStream(it)
+
+                    // Decode the InputStream into a Bitmap
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                    // Close the InputStream
+
+                    bitmaps.add(bitmap)
+                    inputStream?.close()
+
+                }
+
+                _galleryBitmap.postValue(bitmaps)
+            } catch (e: Exception) {
+                // Handle exceptions, such as IOException
+                e.printStackTrace()
+            }
+        }
     }
 }

@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +24,7 @@ class UnivAuthFragment : Fragment() {
     private lateinit var binding: FragmentUnivAuthBinding
     private val viewModel: TeacherRegisterViewModel by activityViewModels()
     private lateinit var univAndMails: HashMap<String, HashMap<String, String>>
+    private var isSmallSizeScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +36,7 @@ class UnivAuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        supportSmallScreenSize()
         setToolBar()
         initUnivAndMails()
         setEtUnivMailHeader()
@@ -45,6 +45,16 @@ class UnivAuthFragment : Fragment() {
         setEtAuthCode()
         setNextButton()
         observe()
+    }
+
+    private fun supportSmallScreenSize() {
+        val width = Util.getWidth(requireActivity())
+        isSmallSizeScreen = width < 600
+        if (isSmallSizeScreen) {
+            val paddingValue = Util.toPx(30, requireContext())
+            binding.glLeft.setGuidelineBegin(paddingValue)
+            binding.glRight.setGuidelineBegin(paddingValue)
+        }
     }
 
     private fun setToolBar() {
