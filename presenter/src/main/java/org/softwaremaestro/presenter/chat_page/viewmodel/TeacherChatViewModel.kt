@@ -50,7 +50,9 @@ class TeacherChatViewModel @Inject constructor(
             var zonedEndDateTime = endTime.atZone(java.time.ZoneId.of("Asia/Seoul"))
 
             val startTimeISO = zonedStartDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
+                .replace("[${zonedStartDateTime.zone}]", "")
             val endTimeISO = zonedEndDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
+                .replace("[${zonedStartDateTime.zone}]", "")
 
             viewModelScope.launch {
                 Log.d(
