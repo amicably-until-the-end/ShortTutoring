@@ -45,12 +45,17 @@ class TeacherChatViewModel @Inject constructor(
         try {
             var startTime = LocalDateTime.of(tutoringDate, tutoringStart)
             var endTime = startTime?.plusMinutes(tutoringDuration!!.toLong())!!
-            val startTimeISO = startTime.format(DateTimeFormatter.ISO_DATE_TIME)
-            val endTimeISO = endTime.format(DateTimeFormatter.ISO_DATE_TIME)
+
+            var zonedStartDateTime = startTime.atZone(java.time.ZoneId.of("Asia/Seoul"))
+            var zonedEndDateTime = endTime.atZone(java.time.ZoneId.of("Asia/Seoul"))
+
+            val startTimeISO = zonedStartDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
+            val endTimeISO = zonedEndDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
+
             viewModelScope.launch {
                 Log.d(
                     "TeacherChatViewModel",
-                    "pickStudent: $questionId, $startTime, $endTime, $chattingId"
+                    "pickStudent: $questionId, $startTimeISO, $endTimeISO, $chattingId"
                 )
                 scheduleOfferUseCase.execute(startTimeISO, endTimeISO, chattingId, questionId)
                     .onStart { _pickStudentResult.value = UIState.Loading }
