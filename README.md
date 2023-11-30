@@ -19,8 +19,6 @@
 # Architecture
 [공식 앱 아키텍처 가이드]에 따라 View를 담당하는 Presenter 계층, Data를 담당하는 Data 계층, 비즈니스 로직을 담당하는 Domain 계층으로 구성됩니다.
 
-
-
 ## Domain Layer
 서버 또는 사용자 기기와 Data를 주고 받습니다. Repository, Model(DTO)을 갖습니다.
 [공식 앱 아키텍처 가이드]:(https://developer.android.com/topic/architecture?hl=ko)
