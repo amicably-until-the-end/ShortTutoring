@@ -36,28 +36,25 @@ View를 구성하고, 사용자와 상호작용합니다. MVVM 패턴을 활용�
 
 # Tech Stack
 - Minimum SDK level 26
-- __[Coroutines](https://github.com/Kotlin/kotlinx.coroutines)__, __[Flow]__: 처리하는 데에 시간이 오래 걸리는 작업을 비동기 처리합니다.
+- __[Coroutines](https://github.com/Kotlin/kotlinx.coroutines)__, __[Flow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)__: 처리하는 데에 시간이 오래 걸리는 작업을 비동기 처리합니다.
 - __Clean Architecture__
   - __ViewModel, LiveData__: UI와 로직을 분리합니다.
   - __Lifecycle__: Activity/Fragment의 생명주기에 따라 기능을 수행합니다.
-- __[Retrofit2,OkHttp3]__: 클라이언트와 서버 사이의 통신을 담당합니다.
-- __[Room]__: 로그인 정보, 채팅 메시지 등의 내용을 사용자 기기에 저장합니다.
-- __[Hilt]__: 의존성을 주입합니다.
-- __[Agora]__: 화이트보드 솔루션입니다. 강의실을 생성하고, 화면과 음성을 공유합니다. 
-- __[Socket.IO]__: 학생과 선생님이 수업 일정을 협의할 때 채팅을 이용합니다. 채팅 시에 Socket을 통해 메시지를 주고 받습니다.
-- __[ExoPlayer]__: 수업을 복습할 수 있는 동영샹 플레이어를 제공합니다.
+- __[Retrofit2,OkHttp3](https://github.com/square/retrofit)__: 클라이언트와 서버 사이의 통신을 담당합니다.
+- __Room__: 로그인 정보, 채팅 메시지 등의 내용을 사용자 기기에 저장합니다.
+- __[Hilt](https://dagger.dev/hilt/)__: 의존성을 주입합니다.
+- __[Agora](https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=android)__: 화이트보드 솔루션입니다. 강의실을 생성하고, 화면과 음성을 공유합니다. 
+- __[Socket.IO](https://socket.io/docs/v4/tutorial/introduction)__: 학생과 선생님이 수업 일정을 협의할 때 채팅을 이용합니다. 채팅 시에 Socket을 통해 메시지를 주고 받습니다.
+- __[ExoPlayer](https://github.com/google/ExoPlayer)__: 수업을 복습할 수 있는 동영샹 플레이어를 제공합니다.
 - __[Firebase]__: 푸시 메시지 전송, Google Analytics를 통한 이벤트 기록 등을 담당합니다.
 - __Navigation, ViewBinding__: 보일러 플레이트 코드를 없애 코드의 가독성을 높입니다.
-- __[Glide]__: 이미지 파일을 수신하고 변환하여 View에 적용합니다.
-- __[Gson]__: Java Object와 Json Object를 변환합니다.
-[Flow]:(https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-[Retrofit2,OkHttp3]:(https://github.com/square/retrofit)
-[Hilt]:(https://dagger.dev/hilt/)
-[Agora]:(https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=android)
-[Socket.IO]:(https://socket.io/docs/v4/tutorial/introduction)
-[ExoPlayer]:(https://github.com/google/ExoPlayer)
-[Glide]:(https://github.com/google/gson](https://github.com/bumptech/glide)
-[Gson]:(https://github.com/google/gson)
+- __[Glide](https://github.com/google/gson](https://github.com/bumptech/glide)__: 이미지 파일을 수신하고 변환하여 View에 적용합니다.
+- __[Gson](https://github.com/google/gson)__: Java Object와 Json Object를 변환합니다.
+
+
+
+
+
 
 # Contributers
 |Github Profile|Contact|
