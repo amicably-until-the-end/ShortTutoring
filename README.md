@@ -6,7 +6,7 @@
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
 
 # Key Function
-![홈](//Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185448.jpg “홈”)
+![홈](//Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185448.jpg)
 ![마이페이지](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185433.jpg “마이페이지”)
 ![복습 화면](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 388.jpg “복습”)
 ![채팅](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 389.jpg “채팅”)
