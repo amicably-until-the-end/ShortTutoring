@@ -1,9 +1,10 @@
 # 숏과외
-필요한 문제만 질문하고 싶다면?  
-질문하고 싶은 학생🙋과 답변할 수 있는 선생님👨‍🏫을 위한 온라인 과외 플랫폼  
-  
+🙋 <U>질문</U>하고 싶은 학생과 <u>답변</u> 할 수 있는 선생님을 위한 온라인 과외 플랫폼 👨‍🏫  
+<br/>
 # Download
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
+
+<u>안녕</u>
 
 # Key Function
 <img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340" width=40%>
