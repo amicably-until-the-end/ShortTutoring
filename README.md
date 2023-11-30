@@ -6,10 +6,10 @@
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
 
 # Key Function
-![홈](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/3315b780-9e1a-4a9e-bd95-3b3ddebcea24)
-![마이페이지](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/2ba19a16-5f8b-4d00-a8d2-dc25df9de8a2)
-![채팅](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/41f3a4f5-1a6b-493d-b9d3-efea8403b9f8)
-![복습](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/5524f330-9ed9-432a-a814-a531caf72c42)
+![홈](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340)
+![채팅](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/1f241725-e585-4aa2-86b2-6482a6058b9f)
+![복습](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/0b053b07-a3bc-4aeb-bccf-bde7d2751ea8)
+![마이페이지](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/4984e48e-1207-4d4d-8755-1eeee1dbb2b2)
 
 ## 1. 수업 예약
 - 학생이 질문을 업로드하면 선생님의 질문을 보고, 수업을 제안할 수 있습니다
