@@ -3,25 +3,28 @@
 질문하고 싶은 학생과 답변할 수 있는 선생님을 위한 온라인 과외 플랫폼
 
 # Download
-[for Android](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
+[for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
 
 # Key Function
+![홈](//Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185448.png “홈”)
+![마이페이지](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185433.png “마이페이지”)
+![복습 화면](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 388.png “복습”)
+![채팅](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 389.png “채팅”)
 ## 1. 수업 예약
-- 학생이 질문을 업로드하면 선생님의 질문을 보고, 수업을 제안할 수 있음
-- 일정을 자유롭게 조정할 수 있도록 채팅 이용
-- 빠르게 답변받기 위한 일반 질문과, 원하는 선생님에게 질문하는 지정 질문이 있음
+- 학생이 질문을 업로드하면 선생님의 질문을 보고, 수업을 제안할 수 있습니다
+- 일정을 자유롭게 조정할 수 있도록 __채팅__을 이용합니다
+- 빠르게 답변받기 위한 __모든 선생님__께 질문하거나, __원하는 선생님__이 있다면 지정해서 질문할 수 있습니다.
 
 ## 2. 강의실
-- 기본적인 필기 기능이 제공되고, 화이트 보드 및 음성을 공유하며 수업 진행
-- 수업이 끝난 후에는 학생이 선생님과의 수업을 평가
-- 수업 영상은 자동 저장되어 원할 때마다 재시청할 수 있음
+- 화이트 보드 및 음성을 공유하며 수업을 진행합니다
+- 수업이 끝난 후에는 학생이 선생님과의 수업을 별점으로 평가합니다
+- 수업 영상은 자동 저장되어 원할 때마다 다시 시청하며 복습할 수 있습니다
 
 # Architecture
-[공식 앱 아키텍처 가이드]에 따라 View를 담당하는 Presenter 계층, Data를 담당하는 Data 계층, 비즈니스 로직을 담당하는 Domain 계층으로 구성됩니다.
+[공식 앱 아키텍처 가이드](https://developer.android.com/topic/architecture?hl=ko)에 따라 View를 담당하는 Presenter 계층, Data를 담당하는 Data 계층, 비즈니스 로직을 담당하는 Domain 계층으로 구성됩니다.
 
 ## Domain Layer
 서버 또는 사용자 기기와 Data를 주고 받습니다. Repository, Model(DTO)을 갖습니다.
-[공식 앱 아키텍처 가이드]:(https://developer.android.com/topic/architecture?hl=ko)
 
 이미지
 
@@ -44,15 +47,10 @@ View를 구성하고, 사용자와 상호작용합니다. MVVM 패턴을 활용�
 - __[Agora](https://docs.agora.io/en/video-calling/get-started/get-started-sdk?platform=android)__: 화이트보드 솔루션입니다. 강의실을 생성하고, 화면과 음성을 공유합니다. 
 - __[Socket.IO](https://socket.io/docs/v4/tutorial/introduction)__: 학생과 선생님이 수업 일정을 협의할 때 채팅을 이용합니다. 채팅 시에 Socket을 통해 메시지를 주고 받습니다.
 - __[ExoPlayer](https://github.com/google/ExoPlayer)__: 수업을 복습할 수 있는 동영샹 플레이어를 제공합니다.
-- __[Firebase]__: 푸시 메시지 전송, Google Analytics를 통한 이벤트 기록 등을 담당합니다.
+- __Firebase__: 푸시 메시지 전송, Google Analytics를 통한 이벤트 기록 등을 담당합니다.
 - __Navigation, ViewBinding__: 보일러 플레이트 코드를 없애 코드의 가독성을 높입니다.
-- __[Glide](https://github.com/google/gson](https://github.com/bumptech/glide)__: 이미지 파일을 수신하고 변환하여 View에 적용합니다.
+- __[Glide](https://github.com/bumptech/glide)__: 이미지 파일을 수신하고 변환하여 View에 적용합니다.
 - __[Gson](https://github.com/google/gson)__: Java Object와 Json Object를 변환합니다.
-
-
-
-
-
 
 # Contributers
 |Github Profile|Contact|
@@ -61,4 +59,4 @@ View를 구성하고, 사용자와 상호작용합니다. MVVM 패턴을 활용�
 |[haechan29](https://github.com/haechan29)|haechan29@naver.com|
 
 # Support
-한국정보산업연합회에서 운영하는 __소프트웨어 마에스트로__의 지원을 받아 제작되었습니다.
+한국정보산업연합회에서 운영하는 __[소프트웨어 마에스트로](https://www.swmaestro.org/sw/main/main.do)__의 지원을 받아 제작되었습니다.
