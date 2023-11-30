@@ -6,10 +6,10 @@
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
 
 # Key Function
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340" width=25%>
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/1f241725-e585-4aa2-86b2-6482a6058b9f" width=25%>
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/0b053b07-a3bc-4aeb-bccf-bde7d2751ea8" width=25%>
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/4984e48e-1207-4d4d-8755-1eeee1dbb2b2" width=25%>
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340" width=20%>
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/1f241725-e585-4aa2-86b2-6482a6058b9f" width=20%>
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/0b053b07-a3bc-4aeb-bccf-bde7d2751ea8" width=20%>
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/4984e48e-1207-4d4d-8755-1eeee1dbb2b2" width=20%>
 
 ## 1. 수업 예약
 - 학생이 질문을 업로드하면 선생님의 질문을 보고, 수업을 제안할 수 있습니다
