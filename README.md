@@ -6,10 +6,10 @@
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
 
 # Key Function
-![홈](//Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185448.png “홈”)
-![마이페이지](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185433.png “마이페이지”)
-![복습 화면](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 388.png “복습”)
-![채팅](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 389.png “채팅”)
+![홈](//Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185448.jpg “홈”)
+![마이페이지](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185433.jpg “마이페이지”)
+![복습 화면](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 388.jpg “복습”)
+![채팅](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 389.jpg “채팅”)
 ## 1. 수업 예약
 - 학생이 질문을 업로드하면 선생님의 질문을 보고, 수업을 제안할 수 있습니다
 - 일정을 자유롭게 조정할 수 있도록 __채팅__을 이용합니다
