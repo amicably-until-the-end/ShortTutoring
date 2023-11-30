@@ -6,10 +6,11 @@
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
 
 # Key Function
-![홈](//Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185448.jpg)
-![마이페이지](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Screenshot_20231128_185433.jpg “마이페이지”)
-![복습 화면](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 388.jpg “복습”)
-![채팅](/Users/haechan29/Downloads/ReadMe ShortTutoring/display/Group 389.jpg “채팅”)
+![홈](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/3315b780-9e1a-4a9e-bd95-3b3ddebcea24)
+![마이페이지](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/2ba19a16-5f8b-4d00-a8d2-dc25df9de8a2)
+![채팅](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/41f3a4f5-1a6b-493d-b9d3-efea8403b9f8)
+![복습](https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/5524f330-9ed9-432a-a814-a531caf72c42)
+
 ## 1. 수업 예약
 - 학생이 질문을 업로드하면 선생님의 질문을 보고, 수업을 제안할 수 있습니다
 - 일정을 자유롭게 조정할 수 있도록 __채팅__을 이용합니다
