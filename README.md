@@ -1,6 +1,6 @@
 # 숏과외
 "필요한 문제만 질문하자"
-질문하고 싶은 학생과 답변할 수 있는 선생님을 위한 온라인 과외 플랫폼
+질문하고 싶은 학생과 답변할 수 있는 선생님을 위한 온라인 과외 플랫폼  
   
 # Download
 [for Android ❤️](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring)
