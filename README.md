@@ -36,7 +36,7 @@ View를 구성하고, 사용자와 상호작용합니다. MVVM 패턴을 활용�
 
 # Tech Stack
 - Minimum SDK level 26
-- [Coroutines](https://github.com/Kotlin/kotlinx.coroutines), __[Flow]__: 처리하는 데에 시간이 오래 걸리는 작업을 비동기 처리합니다.
+- __[Coroutines](https://github.com/Kotlin/kotlinx.coroutines)__, __[Flow]__: 처리하는 데에 시간이 오래 걸리는 작업을 비동기 처리합니다.
 - __Clean Architecture__
   - __ViewModel, LiveData__: UI와 로직을 분리합니다.
   - __Lifecycle__: Activity/Fragment의 생명주기에 따라 기능을 수행합니다.
