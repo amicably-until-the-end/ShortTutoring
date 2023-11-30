@@ -50,7 +50,7 @@ View를 구성하고, 사용자와 상호작용합니다. MVVM 패턴을 활용�
 - __Navigation, ViewBinding__: 보일러 플레이트 코드를 없애 코드의 가독성을 높입니다.
 - __[Glide]__: 이미지 파일을 수신하고 변환하여 View에 적용합니다.
 - __[Gson]__: Java Object와 Json Object를 변환합니다.
-[Coroutines]:(https://github.com/Kotlin/kotlinx.coroutines)
+[Coroutines]: https://github.com/Kotlin/kotlinx.coroutines “https://github.com/Kotlin/kotlinx.coroutines”
 [Flow]:(https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
 [Retrofit2,OkHttp3]:(https://github.com/square/retrofit)
 [Hilt]:(https://dagger.dev/hilt/)
