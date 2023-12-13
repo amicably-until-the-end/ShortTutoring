@@ -6,9 +6,9 @@
 <br/>
 
 # Key Function
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340" width=30%>
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/1f241725-e585-4aa2-86b2-6482a6058b9f" width=30%>
-<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/0b053b07-a3bc-4aeb-bccf-bde7d2751ea8" width=30%>  
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340" height="470" width=30%>
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/1f241725-e585-4aa2-86b2-6482a6058b9f" height="470" width=30%>
+<img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/0b053b07-a3bc-4aeb-bccf-bde7d2751ea8" height="470" width=30%>  
 <br/><br/>
 
 ## 1. 수업 예약
