@@ -1,9 +1,6 @@
 # 숏과외
 🙋 **질문**하고 싶은 학생과 **답변**할 수 있는 선생님을 위한 **온라인 과외 플랫폼** 👨‍🏫  
 <br/>
-# Download
-[for Android](https://play.google.com/store/apps/details?id=org.softwaremaestro.shorttutoring) ❤️  
-<br/>
 
 # Key Function
 <img src="https://github.com/amicably-until-the-end/ShortTutoring/assets/63138511/bc650a6a-c9a4-424e-b000-82bdfd248340" height="430" width=30%>
